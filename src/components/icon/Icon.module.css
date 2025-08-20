@@ -1,0 +1,163 @@
+/* Icon component styles following untitledui design patterns */
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  transition: all 0.1s ease-linear;
+}
+
+/* Size variants */
+.size-xs {
+  width: 12px;
+  height: 12px;
+}
+
+.size-sm {
+  width: 16px;
+  height: 16px;
+}
+
+.size-md {
+  width: 20px;
+  height: 20px;
+}
+
+.size-lg {
+  width: 24px;
+  height: 24px;
+}
+
+.size-xl {
+  width: 32px;
+  height: 32px;
+}
+
+/* Color variants */
+.color-default {
+  color: var(--Gray-500, #697586);
+}
+
+.color-primary {
+  color: var(--Primary-600, #1a1aba);
+}
+
+.color-secondary {
+  color: var(--Gray-600, #4b5565);
+}
+
+.color-success {
+  color: var(--Success-500, #12b76a);
+}
+
+.color-warning {
+  color: var(--Warning-500, #f79009);
+}
+
+.color-error {
+  color: var(--Error-500, #f04438);
+}
+
+.color-white {
+  color: white;
+}
+
+.color-black {
+  color: var(--Gray-900, #101828);
+}
+
+/* Interactive states */
+.clickable {
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 2px;
+  margin: -2px;
+}
+
+.clickable:hover {
+  background-color: var(--Gray-50, #f8fafc);
+  transform: scale(1.1);
+}
+
+.clickable:active {
+  background-color: var(--Gray-100, #eef2f6);
+  transform: scale(1.05);
+}
+
+.clickable:focus {
+  outline: 2px solid var(--Primary, #1a1aba);
+  outline-offset: 2px;
+}
+
+/* Hover color changes */
+.clickable.color-default:hover {
+  color: var(--Gray-700, #364152);
+}
+
+.clickable.color-primary:hover {
+  color: var(--Primary-700, #1a1aba);
+}
+
+.clickable.color-secondary:hover {
+  color: var(--Gray-700, #364152);
+}
+
+.clickable.color-success:hover {
+  color: var(--Success-600, #039855);
+}
+
+.clickable.color-warning:hover {
+  color: var(--Warning-600, #dc6803);
+}
+
+.clickable.color-error:hover {
+  color: var(--Error-600, #d92d20);
+}
+
+/* Ensure SVGs inherit the icon size and color */
+.icon svg {
+  width: 100%;
+  height: 100%;
+  color: inherit;
+}
+
+/* Animation for loading states */
+.icon.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Disabled state */
+.icon.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Icon in button context */
+.icon[data-icon="leading"],
+.icon[data-icon="trailing"] {
+  flex-shrink: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .size-xl {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .size-lg {
+    width: 20px;
+    height: 20px;
+  }
+}

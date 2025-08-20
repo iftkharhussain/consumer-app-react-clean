@@ -1,0 +1,120 @@
+/* Auth page styles - extracted from global CSS */
+
+.authPageWrap {
+  height: 100%;
+  margin: 0;
+}
+
+.wrapperHeader,
+.wrapperContent {
+  position: relative;
+  max-width: 1040px;
+  text-align: center;
+  min-height: 200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.groupHeader {
+  max-width: 220px;
+  min-height: 200px;
+  display: flex;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.groupHeader img {
+  display: block;
+  margin: auto;
+  max-width: 200px;
+}
+
+.bgImg {
+  background-image: linear-gradient(to bottom right, #e4edf3, #ffffff);
+}
+
+/* Logout Box */
+.logoutBox {
+  padding: 40px 15px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  background: #ffffffa3;
+  border-radius: 5px;
+  border: 1px solid #ececec;
+  width: 450px;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.logoutBox .headerRow img {
+  max-width: 150px;
+  margin-bottom: 50px;
+}
+
+.checkIcon:before {
+  background: #c4c4c4;
+  content: '';
+  height: 1px;
+  position: absolute;
+  left: 15px;
+  right: 15px;
+  z-index: -1;
+  top: 46%;
+}
+
+.checkIcon img {
+  background: #f9f9f9;
+  padding: 0 20px;
+  max-width: 100px;
+}
+
+.logoutBox h5 {
+  margin-top: 50px;
+  font-weight: 400;
+}
+
+.logoutBox h6,
+.logoutBox p {
+  color: silver;
+}
+
+.logoutBox p {
+  font-size: 14px;
+}
+
+/* Reset Password Auth Page */
+.resetPasswordAuthPage {
+  width: 600px;
+  display: flex;
+  justify-content: center;
+}
+
+.resetPasswordAuthPage .inputContent {
+  width: 300px;
+}
+
+.pageLogoAlign {
+  margin-bottom: 55px;
+  width: 200px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  .logoutBox {
+    width: 90%;
+    max-width: 450px;
+  }
+  
+  .resetPasswordAuthPage {
+    width: 90%;
+    max-width: 600px;
+  }
+}

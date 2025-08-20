@@ -1,0 +1,41 @@
+/* Scoped Banner styles from banner/index.css */
+
+.root {
+  width: 100%;
+}
+
+.banner {
+  width: 100%;
+  padding: 20px 24px;
+}
+
+.bannerRes {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.info h1 {
+  color: var(--Gray-900, #121926);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 28px;
+  margin: 0;
+}
+
+.info p {
+  color: var(--Gray-600, #4B5565);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.bottomActionsRow {
+  width: 100%;
+}

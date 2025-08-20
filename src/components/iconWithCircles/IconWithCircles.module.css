@@ -1,0 +1,343 @@
+/* IconWithCircles component styles following untitledui design patterns */
+
+.iconWrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Outer circle - lighter background with transparency */
+.outerCircle {
+  position: relative;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Inner circle - main background color */
+.innerCircle {
+  position: relative;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Icon styles */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+}
+
+.icon svg {
+  width: 100%;
+  height: 100%;
+  color: inherit;
+}
+
+/* Size variants */
+.size-xs {
+  width: 32px;
+  height: 32px;
+}
+
+.size-xs .outerCircle {
+  width: 32px;
+  height: 32px;
+}
+
+.size-xs .innerCircle {
+  width: 24px;
+  height: 24px;
+}
+
+.size-xs .icon {
+  width: 12px;
+  height: 12px;
+}
+
+.size-sm {
+  width: 40px;
+  height: 40px;
+}
+
+.size-sm .outerCircle {
+  width: 40px;
+  height: 40px;
+}
+
+.size-sm .innerCircle {
+  width: 32px;
+  height: 32px;
+}
+
+.size-sm .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.size-md {
+  width: 48px;
+  height: 48px;
+}
+
+.size-md .outerCircle {
+  width: 48px;
+  height: 48px;
+}
+
+.size-md .innerCircle {
+  width: 40px;
+  height: 40px;
+}
+
+.size-md .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.size-lg {
+  width: 56px;
+  height: 56px;
+}
+
+.size-lg .outerCircle {
+  width: 56px;
+  height: 56px;
+}
+
+.size-lg .innerCircle {
+  width: 48px;
+  height: 48px;
+}
+
+.size-lg .icon {
+  width: 24px;
+  height: 24px;
+}
+
+.size-xl {
+  width: 64px;
+  height: 64px;
+}
+
+.size-xl .outerCircle {
+  width: 64px;
+  height: 64px;
+}
+
+.size-xl .innerCircle {
+  width: 56px;
+  height: 56px;
+}
+
+.size-xl .icon {
+  width: 32px;
+  height: 32px;
+}
+
+/* Color variants */
+/* Primary variant */
+.variant-primary .outerCircle {
+  background-color: rgba(26, 26, 186, 0.1);
+}
+
+.variant-primary .innerCircle {
+  background-color: var(--Primary-600, #1a1aba);
+}
+
+/* Secondary variant */
+.variant-secondary .outerCircle {
+  background-color: rgba(75, 85, 101, 0.1);
+}
+
+.variant-secondary .innerCircle {
+  background-color: var(--Gray-600, #4b5565);
+}
+
+/* Success variant */
+.variant-success .outerCircle {
+  background-color: rgba(18, 183, 106, 0.1);
+}
+
+.variant-success .innerCircle {
+  background-color: var(--Success-500, #12b76a);
+}
+
+/* Warning variant */
+.variant-warning .outerCircle {
+  background-color: rgba(247, 144, 9, 0.1);
+}
+
+.variant-warning .innerCircle {
+  background-color: var(--Warning-500, #f79009);
+}
+
+/* Error variant */
+.variant-error .outerCircle {
+  background-color: rgba(240, 68, 56, 0.1);
+}
+
+.variant-error .innerCircle {
+  background-color: var(--Error-500, #f04438);
+}
+
+/* Info variant */
+.variant-info .outerCircle {
+  background-color: rgba(13, 148, 136, 0.1);
+}
+
+.variant-info .innerCircle {
+  background-color: var(--Info-500, #0d9488);
+}
+
+/* Icon color variants */
+.icon-color-white {
+  color: white;
+}
+
+.icon-color-primary {
+  color: var(--Primary-600, #1a1aba);
+}
+
+.icon-color-secondary {
+  color: var(--Gray-600, #4b5565);
+}
+
+.icon-color-success {
+  color: var(--Success-500, #12b76a);
+}
+
+.icon-color-warning {
+  color: var(--Warning-500, #f79009);
+}
+
+.icon-color-error {
+  color: var(--Error-500, #f04438);
+}
+
+.icon-color-black {
+  color: var(--Gray-900, #101828);
+}
+
+/* Interactive states */
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover .outerCircle {
+  transform: scale(1.05);
+}
+
+.clickable:hover .innerCircle {
+  transform: scale(0.95);
+}
+
+.clickable:active .outerCircle {
+  transform: scale(1.02);
+}
+
+.clickable:active .innerCircle {
+  transform: scale(0.98);
+}
+
+.clickable:focus {
+  outline: 2px solid var(--Primary, #1a1aba);
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+
+/* Hover color changes for variants */
+.clickable.variant-primary:hover .innerCircle {
+  background-color: var(--Primary-700, #1919b8);
+}
+
+.clickable.variant-secondary:hover .innerCircle {
+  background-color: var(--Gray-700, #364152);
+}
+
+.clickable.variant-success:hover .innerCircle {
+  background-color: var(--Success-600, #039855);
+}
+
+.clickable.variant-warning:hover .innerCircle {
+  background-color: var(--Warning-600, #dc6803);
+}
+
+.clickable.variant-error:hover .innerCircle {
+  background-color: var(--Error-600, #d92d20);
+}
+
+.clickable.variant-info:hover .innerCircle {
+  background-color: var(--Info-600, #0f766e);
+}
+
+/* Disabled state */
+.iconWrapper.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Animation for loading states */
+.iconWrapper.spinning .icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .size-xl {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .size-xl .outerCircle {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .size-xl .innerCircle {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .size-xl .icon {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .size-lg {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .size-lg .outerCircle {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .size-lg .innerCircle {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .size-lg .icon {
+    width: 20px;
+    height: 20px;
+  }
+}

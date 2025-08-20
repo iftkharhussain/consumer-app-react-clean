@@ -1,0 +1,8 @@
+.custom-form-switch > span {
+  color: var(--Gray-600, #4B5565);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 21px;
+  margin-top: -3px;
+  margin-right: 16px;
+}

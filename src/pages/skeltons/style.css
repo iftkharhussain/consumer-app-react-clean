@@ -1,0 +1,15 @@
+
+/* ================== Analytics =================== */
+.analytics.skelton .card-box {
+  background: #fff;
+  border-radius: 3px;
+  flex: 1 1;
+  min-height: 180px;
+  padding: 10px;
+}
+.analytics.skelton .stats-row {
+  margin-top: 30px;
+}
+.analytics.skelton .stats-row .card-box:not(:last-child) {
+  margin-right: 30px;
+}

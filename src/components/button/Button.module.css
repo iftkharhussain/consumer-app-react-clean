@@ -1,0 +1,329 @@
+/* Button component styles using UntitledUI design tokens */
+
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.1s ease-linear;
+  font-weight: 600;
+  border-radius: var(--radius-lg);
+  font-family: var(--font-body);
+  box-shadow: var(--shadow-xs);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-fg-brand-primary);
+  outline-offset: 2px;
+}
+
+/* Size variants using design tokens */
+.size-sm {
+  gap: calc(var(--spacing) * 1);
+  padding: calc(var(--spacing) * 2) calc(var(--spacing) * 3);
+  font-size: var(--text-sm);
+  line-height: var(--text-sm--line-height);
+}
+
+.size-sm.iconOnly {
+  padding: calc(var(--spacing) * 2);
+}
+
+.size-md {
+  gap: calc(var(--spacing) * 1.5);
+  padding: calc(var(--spacing) * 2.5) calc(var(--spacing) * 4);
+  font-size: var(--text-sm);
+  line-height: var(--text-sm--line-height);
+}
+
+.size-md.iconOnly {
+  padding: calc(var(--spacing) * 2.5);
+}
+
+.size-lg {
+  gap: calc(var(--spacing) * 1.5);
+  padding: calc(var(--spacing) * 2.5) calc(var(--spacing) * 4);
+  font-size: var(--text-md);
+  line-height: var(--text-md--line-height);
+}
+
+.size-lg.iconOnly {
+  padding: calc(var(--spacing) * 3);
+}
+
+.size-xl {
+  gap: calc(var(--spacing) * 1.5);
+  padding: calc(var(--spacing) * 3) calc(var(--spacing) * 5);
+  font-size: var(--text-md);
+  line-height: var(--text-md--line-height);
+}
+
+.size-xl.iconOnly {
+  padding: calc(var(--spacing) * 3.5);
+}
+
+/* Color variants using UntitledUI design tokens */
+.color-primary {
+  background-color: var(--color-bg-brand-solid);
+  border: 1px solid var(--color-bg-brand-solid);
+  color: var(--color-text-white);
+  box-shadow: var(--shadow-xs);
+}
+
+.color-primary:hover {
+  background-color: var(--color-bg-brand-solid_hover);
+  border-color: var(--color-bg-brand-solid_hover);
+}
+
+.color-primary:active {
+  background-color: var(--color-bg-brand-solid_hover);
+  border-color: var(--color-bg-brand-solid_hover);
+  box-shadow: 0 0 0 4px var(--color-bg-brand-primary);
+}
+
+.color-secondary {
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border-primary);
+  color: var(--color-fg-secondary);
+  box-shadow: var(--shadow-xs);
+}
+
+.color-secondary:hover {
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-border-primary);
+  color: var(--color-fg-primary);
+}
+
+.color-secondary:active {
+  background-color: var(--color-bg-secondary);
+  box-shadow: 0 0 0 4px var(--color-bg-tertiary);
+}
+
+.color-tertiary {
+  background-color: transparent;
+  border: none;
+  color: var(--color-fg-tertiary);
+}
+
+.color-tertiary:hover {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-fg-secondary);
+}
+
+.color-tertiary:active {
+  background-color: var(--color-bg-secondary);
+}
+
+.linkGray,
+.color-link-gray {
+  background-color: transparent;
+  border: none;
+  color: var(--color-fg-tertiary);
+  text-decoration: none;
+  padding: 0;
+  justify-content: flex-start;
+}
+
+.linkGray:hover,
+.color-link-gray:hover {
+  color: var(--color-fg-quaternary_hover);
+  text-decoration: underline;
+  background-color: transparent;
+}
+
+.linkColor,
+.color-link-color {
+  background-color: transparent;
+  border: none;
+  color: var(--color-fg-brand-primary);
+  text-decoration: none;
+  padding: 0;
+  justify-content: flex-start;
+}
+
+.linkColor:hover,
+.color-link-color:hover {
+  color: var(--color-fg-brand-secondary_hover);
+  text-decoration: underline;
+  background-color: transparent;
+}
+
+.color-primary-destructive {
+  background-color: var(--color-bg-error-solid);
+  border: 1px solid var(--color-bg-error-solid);
+  color: var(--color-text-white);
+  box-shadow: var(--shadow-xs);
+}
+
+.color-primary-destructive:hover {
+  background-color: var(--Error-700);
+  border-color: var(--Error-700);
+}
+
+.color-secondary-destructive {
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border-error_subtle);
+  color: var(--Error-700);
+  box-shadow: var(--shadow-xs);
+}
+
+.color-secondary-destructive:hover {
+  background-color: var(--color-bg-error-primary);
+  border-color: var(--color-border-error_subtle);
+  color: var(--Error-800);
+}
+
+.color-tertiary-destructive {
+  background-color: transparent;
+  border: none;
+  color: var(--color-fg-error-primary);
+}
+
+.color-tertiary-destructive:hover {
+  background-color: var(--color-bg-error-primary);
+  color: var(--color-fg-error-secondary);
+}
+
+.color-link-destructive {
+  background-color: transparent;
+  border: none;
+  color: var(--color-fg-error-primary);
+  text-decoration: none;
+  padding: 0;
+  justify-content: flex-start;
+}
+
+.color-link-destructive:hover {
+  color: var(--color-fg-error-secondary);
+  text-decoration: underline;
+  background-color: transparent;
+}
+
+/* Icon styles */
+.iconLeading,
+.iconTrailing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconLeading svg,
+.iconTrailing svg {
+  width: 16px;
+  height: 16px;
+}
+
+.size-lg .iconLeading svg,
+.size-lg .iconTrailing svg,
+.size-xl .iconLeading svg,
+.size-xl .iconTrailing svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Text wrapper */
+.text {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Loading state */
+.loading {
+  pointer-events: none;
+}
+
+.loading .text,
+.loading .iconLeading,
+.loading .iconTrailing {
+  opacity: 0.7;
+}
+
+/* Disabled state */
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.disabled:hover {
+  transform: none;
+}
+
+/* Override Antd styles */
+.button.ant-btn {
+  height: auto;
+  padding: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  border-radius: inherit;
+  font-weight: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button.ant-btn:not(.ant-btn-link) {
+  border: inherit;
+}
+
+.button.ant-btn-primary {
+  background-color: inherit;
+  border-color: inherit;
+}
+
+.button.ant-btn-primary:hover {
+  background-color: inherit;
+  border-color: inherit;
+}
+
+.button.ant-btn-default {
+  background-color: inherit;
+  border-color: inherit;
+  color: inherit;
+}
+
+.button.ant-btn-default:hover {
+  background-color: inherit;
+  border-color: inherit;
+  color: inherit;
+}
+
+.button.ant-btn-text {
+  background-color: inherit;
+  border: inherit;
+  color: inherit;
+}
+
+.button.ant-btn-text:hover {
+  background-color: inherit;
+  color: inherit;
+}
+
+.button.ant-btn-link {
+  background-color: inherit;
+  border: inherit;
+  color: inherit;
+  padding: inherit;
+  text-decoration: inherit;
+}
+
+.button.ant-btn-link:hover {
+  background-color: inherit;
+  color: inherit;
+  text-decoration: inherit;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .size-xl {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+  
+  .size-lg {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+}

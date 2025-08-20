@@ -1,0 +1,207 @@
+/* Badge component styles following untitledui design patterns */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  border-radius: 6px;
+  font-weight: 500;
+  font-family: "Inter", sans-serif;
+  transition: all 0.1s ease-linear;
+}
+
+/* Size variants */
+.size-sm {
+  height: 22px;
+  padding: 2px 8px;
+  font-size: 12px;
+  line-height: 18px;
+  gap: 4px;
+}
+
+.size-md {
+  height: 24px;
+  padding: 2px 10px;
+  font-size: 14px;
+  line-height: 20px;
+  gap: 6px;
+}
+
+.size-lg {
+  height: 28px;
+  padding: 4px 12px;
+  font-size: 14px;
+  line-height: 20px;
+  gap: 6px;
+}
+
+/* Dot variant */
+.dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border-radius: 50%;
+  min-width: 8px;
+}
+
+/* Color variants - Primary */
+.variant-primary {
+  background-color: var(--Primary-50, #f3f5f4);
+  color: var(--Primary-700, #1a1aba);
+  border: 1px solid var(--Primary-200, #c7d2fe);
+}
+
+.variant-primary.dot {
+  background-color: var(--Primary-600, #1a1aba);
+}
+
+/* Color variants - Secondary */
+.variant-secondary {
+  background-color: var(--Gray-50, #f8fafc);
+  color: var(--Gray-700, #364152);
+  border: 1px solid var(--Gray-200, #e3e8ef);
+}
+
+.variant-secondary.dot {
+  background-color: var(--Gray-400, #9aa3b2);
+}
+
+/* Color variants - Success */
+.variant-success {
+  background-color: var(--Success-50, #ecfdf3);
+  color: var(--Success-700, #027a48);
+  border: 1px solid var(--Success-200, #abefc6);
+}
+
+.variant-success.dot {
+  background-color: var(--Success-500, #12b76a);
+}
+
+/* Color variants - Warning */
+.variant-warning {
+  background-color: var(--Warning-50, #fffaeb);
+  color: var(--Warning-700, #b54708);
+  border: 1px solid var(--Warning-200, #fedf89);
+}
+
+.variant-warning.dot {
+  background-color: var(--Warning-500, #f79009);
+}
+
+/* Color variants - Error */
+.variant-error {
+  background-color: var(--Error-50, #fef3f2);
+  color: var(--Error-700, #b42318);
+  border: 1px solid var(--Error-200, #fecaca);
+}
+
+.variant-error.dot {
+  background-color: var(--Error-500, #f04438);
+}
+
+/* Color variants - Gray */
+.variant-gray {
+  background-color: var(--Gray-50, #f8fafc);
+  color: var(--Gray-600, #4b5565);
+  border: 1px solid var(--Gray-200, #e3e8ef);
+}
+
+.variant-gray.dot {
+  background-color: var(--Gray-300, #cdd5df);
+}
+
+/* Icon styles */
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon svg {
+  width: 12px;
+  height: 12px;
+}
+
+.size-md .icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.size-lg .icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Text wrapper */
+.text {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Close button */
+.closable {
+  padding-right: 6px;
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  margin-left: 4px;
+  border-radius: 4px;
+  transition: all 0.1s ease-linear;
+}
+
+.closeButton:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.closeButton:active {
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+.closeButton svg {
+  width: 10px;
+  height: 10px;
+}
+
+/* Hover states for interactive badges */
+.badge:hover {
+  transform: translateY(-1px);
+}
+
+.closable:hover {
+  transform: none;
+}
+
+/* Override Antd badge styles when used */
+.badge.ant-badge {
+  display: inline-flex;
+}
+
+.badge .ant-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  box-shadow: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .size-lg {
+    height: 24px;
+    padding: 2px 10px;
+    font-size: 14px;
+  }
+  
+  .size-md {
+    height: 22px;
+    padding: 2px 8px;
+    font-size: 12px;
+  }
+}

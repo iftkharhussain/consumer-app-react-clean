@@ -1,0 +1,14 @@
+.not-found-404-component {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.not-found-404-component img {
+  width: 100px;
+  margin-bottom: 5px;
+}
+.not-found-404-component h3 {
+  margin-bottom: 0px;
+  font-size: 30px;
+}

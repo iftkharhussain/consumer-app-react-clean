@@ -1,0 +1,232 @@
+/* UntitledUI Badge Component - Using Your Exact Brand Colors */
+/* Primary: #1A1ABA, Primary-Text: #2121DD */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+}
+
+.text {
+  line-height: 1;
+}
+
+/* Size Variations */
+.sm {
+  gap: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
+  line-height: 18px;
+  
+  .icon {
+    width: 12px;
+    height: 12px;
+  }
+  
+  &.dot {
+    width: 6px;
+    height: 6px;
+    padding: 0;
+    border-radius: 50%;
+  }
+}
+
+.md {
+  gap: 4px;
+  padding: 4px 10px;
+  font-size: 14px;
+  line-height: 20px;
+  
+  .icon {
+    width: 14px;
+    height: 14px;
+  }
+  
+  &.dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border-radius: 50%;
+  }
+}
+
+.lg {
+  gap: 6px;
+  padding: 4px 12px;
+  font-size: 14px;
+  line-height: 20px;
+  border-radius: 8px;
+  
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
+  
+  &.dot {
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    border-radius: 50%;
+  }
+}
+
+/* Color Variants */
+.primary {
+  background: var(--Primary); /* Your exact #1A1ABA */
+  color: #ffffff;
+  border-color: var(--Primary);
+  
+  .icon {
+    color: #ffffff;
+  }
+  
+  &.dot {
+    background: var(--Primary);
+    border-color: var(--Primary);
+  }
+}
+
+.secondary {
+  background: var(--gray-50, #F8FAFC);
+  color: var(--gray-700, #364152);
+  border-color: var(--gray-200, #E3E8EF);
+  
+  .icon {
+    color: var(--gray-500, #697586);
+  }
+  
+  &.dot {
+    background: var(--gray-400, #9AA3B2);
+    border-color: var(--gray-400, #9AA3B2);
+  }
+}
+
+.success {
+  background: var(--success-50, #ECFDF3);
+  color: var(--success-700, #027A48);
+  border-color: var(--success-200, #BBF7D0);
+  
+  .icon {
+    color: var(--success-500, #12B76A);
+  }
+  
+  &.dot {
+    background: var(--success-500, #12B76A);
+    border-color: var(--success-500, #12B76A);
+  }
+}
+
+.warning {
+  background: var(--warning-50, #FFFAEB);
+  color: var(--warning-700, #B54708);
+  border-color: var(--warning-200, #FEDF89);
+  
+  .icon {
+    color: var(--warning-500, #F79009);
+  }
+  
+  &.dot {
+    background: var(--warning-500, #F79009);
+    border-color: var(--warning-500, #F79009);
+  }
+}
+
+.error {
+  background: var(--error-50, #FEF3F2);
+  color: var(--error-700, #B42318);
+  border-color: var(--error-200, #FECDCA);
+  
+  .icon {
+    color: var(--error-500, #F04438);
+  }
+  
+  &.dot {
+    background: var(--error-500, #F04438);
+    border-color: var(--error-500, #F04438);
+  }
+}
+
+/* Additional Color Options */
+.blue {
+  background: #EFF8FF;
+  color: #1D4ED8;
+  border-color: #BFDBFE;
+  
+  .icon {
+    color: #3B82F6;
+  }
+  
+  &.dot {
+    background: #3B82F6;
+    border-color: #3B82F6;
+  }
+}
+
+.indigo {
+  background: #EEF2FF;
+  color: #4338CA;
+  border-color: #C7D2FE;
+  
+  .icon {
+    color: #6366F1;
+  }
+  
+  &.dot {
+    background: #6366F1;
+    border-color: #6366F1;
+  }
+}
+
+.purple {
+  background: #FAF5FF;
+  color: #7C3AED;
+  border-color: #DDD6FE;
+  
+  .icon {
+    color: #8B5CF6;
+  }
+  
+  &.dot {
+    background: #8B5CF6;
+    border-color: #8B5CF6;
+  }
+}
+
+.pink {
+  background: #FDF2F8;
+  color: #BE185D;
+  border-color: #FBCFE8;
+  
+  .icon {
+    color: #EC4899;
+  }
+  
+  &.dot {
+    background: #EC4899;
+    border-color: #EC4899;
+  }
+}
+
+.orange {
+  background: #FFF7ED;
+  color: #C2410C;
+  border-color: #FED7AA;
+  
+  .icon {
+    color: #F97316;
+  }
+  
+  &.dot {
+    background: #F97316;
+    border-color: #F97316;
+  }
+}

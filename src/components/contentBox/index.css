@@ -1,0 +1,23 @@
+.content-box {
+  gap: 16px;
+  flex: 1 0 0;
+  display: flex;
+  padding: 24px;
+  align-self: stretch;
+  border-radius: 12px;
+  flex-direction: column;
+  align-items: flex-start;
+  background: var(--Base-White, #FFF);
+  border: 1px solid var(--Gray-200, #E3E8EF);
+  box-shadow: 0px 1px 3px 0px rgba(16, 24, 40, 0.10), 0px 1px 2px 0px rgba(16, 24, 40, 0.06);
+}
+
+.content-box > div{
+  width: 100%;
+}
+.content-box.lead-card{
+  gap: 0 !important;
+}
+.content-box.lead-card .ant-form-item{
+margin-bottom: 16px !important;
+}

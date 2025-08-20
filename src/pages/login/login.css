@@ -1,0 +1,254 @@
+/* Login Page Styles */
+.login-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9fafb;
+  padding: 20px;
+  position: relative;
+}
+
+.login-logo {
+  /* position: absolute; */
+  top: 60px;
+  width: 200px;
+  z-index: 2;
+  margin-bottom: 40px;
+}
+
+.login-title {
+  font-size: 33px;
+  font-weight: 600;
+  color: #111827;
+  text-align: center;
+  margin-bottom: 8px;
+  line-height: 1.2;
+  margin-top: 50px;
+}
+
+.login-subtitle {
+  font-size: 16px;
+  color: #6b7280;
+  text-align: center;
+  margin-bottom: 32px;
+  line-height: 1.4;
+}
+
+.login-card {
+  width: 440px;
+  min-height: 344px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 32px 40px;
+  border: 1px solid #f3f4f6;
+  margin-bottom: 24px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form .ant-form-item {
+  margin-bottom: 16px;
+}
+
+.login-form .ant-form-item:last-child {
+  margin-bottom: 0;
+}
+
+.login-input {
+  height: 44px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  background-color: #ffffff;
+}
+
+.login-input:hover {
+  border-color: #9ca3af;
+}
+
+.login-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  outline: none;
+}
+
+.login-input::placeholder {
+  color: #9ca3af;
+  font-size: 16px;
+}
+
+.password-input {
+  height: 44px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  background-color: #ffffff;
+}
+
+.password-input:hover {
+  border-color: #9ca3af;
+}
+
+.password-input:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.password-input .ant-input {
+  border: none;
+  padding: 10px 14px;
+  font-size: 16px;
+  height: 42px;
+  background-color: transparent;
+}
+
+.password-input .ant-input:focus {
+  box-shadow: none;
+}
+
+.password-input .ant-input::placeholder {
+  color: #9ca3af;
+  font-size: 16px;
+}
+
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  margin-top: 16px;
+  gap: 16px;
+}
+
+.remember-checkbox {
+  color: #374151;
+  font-size: 14px;
+}
+
+.remember-checkbox .ant-checkbox-wrapper {
+  color: #374151;
+}
+
+.remember-checkbox .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #2563eb;
+  border-color: #2563eb;
+}
+
+.forgot-link {
+  color: var(--Primary-Text);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.forgot-link:hover {
+  color: var(--Primary-Text);
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+.login-button {
+  height: 44px;
+  background: #2563eb;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  transition: all 0.2s ease;
+  /* margin-top: 24px; */
+}
+
+.login-button:hover {
+  background: #1d4ed8;
+  color: white;
+}
+
+.login-button:focus {
+  background: #1d4ed8;
+  color: white;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.login-button.ant-btn-loading {
+  background: #2563eb;
+  color: white;
+}
+
+.signup-link {
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.signup-link a {
+  color: var(--Primary-Text);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.signup-link a:hover {
+  color: var(--Primary-Text);
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+/* Form validation styles */
+.login-form .ant-form-item-has-error .login-input,
+.login-form .ant-form-item-has-error .password-input {
+  border-color: #ef4444;
+}
+
+.login-form .ant-form-item-has-error .login-input:focus,
+.login-form .ant-form-item-has-error .password-input:focus-within {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.login-form .ant-form-item-explain-error {
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 4px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .login-card {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    padding: 32px 24px;
+  }
+  
+  .login-title {
+    font-size: 24px;
+  }
+  
+  .login-subtitle {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 16px;
+  }
+  
+  .login-card {
+    padding: 24px 20px;
+  }
+  
+  .login-logo {
+    width: 160px;
+  }
+}

@@ -1,0 +1,92 @@
+/* Tooltip component styles following untitledui design patterns */
+
+.tooltip {
+  font-family: "Inter", sans-serif;
+}
+
+/* Override Antd tooltip styles */
+:global(.ant-tooltip) {
+  z-index: 9999;
+}
+
+:global(.ant-tooltip-inner) {
+  background-color: var(--Gray-900, #101828);
+  color: white;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  font-family: "Inter", sans-serif;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--Gray-800, #1f2a37);
+}
+
+:global(.ant-tooltip-arrow::before) {
+  background-color: var(--Gray-900, #101828);
+  border: 1px solid var(--Gray-800, #1f2a37);
+}
+
+/* Light theme variant */
+.tooltip.light :global(.ant-tooltip-inner) {
+  background-color: white;
+  color: var(--Gray-900, #101828);
+  border: 1px solid var(--Gray-200, #e3e8ef);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.tooltip.light :global(.ant-tooltip-arrow::before) {
+  background-color: white;
+  border: 1px solid var(--Gray-200, #e3e8ef);
+}
+
+/* Success variant */
+.tooltip.success :global(.ant-tooltip-inner) {
+  background-color: var(--Success-600, #039855);
+  color: white;
+  border: 1px solid var(--Success-700, #027a48);
+}
+
+.tooltip.success :global(.ant-tooltip-arrow::before) {
+  background-color: var(--Success-600, #039855);
+  border: 1px solid var(--Success-700, #027a48);
+}
+
+/* Warning variant */
+.tooltip.warning :global(.ant-tooltip-inner) {
+  background-color: var(--Warning-500, #f79009);
+  color: white;
+  border: 1px solid var(--Warning-600, #dc6803);
+}
+
+.tooltip.warning :global(.ant-tooltip-arrow::before) {
+  background-color: var(--Warning-500, #f79009);
+  border: 1px solid var(--Warning-600, #dc6803);
+}
+
+/* Error variant */
+.tooltip.error :global(.ant-tooltip-inner) {
+  background-color: var(--Error-500, #f04438);
+  color: white;
+  border: 1px solid var(--Error-600, #d92d20);
+}
+
+.tooltip.error :global(.ant-tooltip-arrow::before) {
+  background-color: var(--Error-500, #f04438);
+  border: 1px solid var(--Error-600, #d92d20);
+}
+
+/* Animation improvements */
+:global(.ant-tooltip) {
+  animation-duration: 0.15s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  :global(.ant-tooltip-inner) {
+    font-size: 12px;
+    line-height: 18px;
+    padding: 6px 10px;
+  }
+}

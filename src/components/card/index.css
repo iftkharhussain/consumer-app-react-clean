@@ -1,0 +1,39 @@
+/* 
+
+
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #1f2937;
+}
+.card-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 4px 0 0 0;
+}
+
+.menu-button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 4px;
+  color: #6b7280;
+}
+
+.card-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+} */
