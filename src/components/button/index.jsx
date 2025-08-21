@@ -11,6 +11,7 @@ const Button = ({
   isLoading = false,
   isDisabled = false,
   showTextWhileLoading = false,
+  stretch = false,
   className = '',
   onClick,
   htmlType = 'button',
@@ -62,6 +63,7 @@ const Button = ({
     isIconOnly ? styles.iconOnly : '',
     isLoading ? styles.loading : '',
     isDisabled ? styles.disabled : '',
+    stretch ? styles.stretch : '',
     antdProps.className || '',
     className
   ].filter(Boolean).join(' ');

@@ -41,6 +41,13 @@ import CheckCircle from "@untitled-ui/icons-react/build/cjs/CheckCircle";
 import XCircle from "@untitled-ui/icons-react/build/cjs/XCircle";
 import Target01 from "@untitled-ui/icons-react/build/cjs/Target01";
 import Flag05 from "@untitled-ui/icons-react/build/cjs/Flag05";
+import Home01 from "@untitled-ui/icons-react/build/cjs/Home01";
+
+// New icons for sidebar design
+import ImageUser from "@untitled-ui/icons-react/build/cjs/ImageUser";
+import MessageChatSquare from "@untitled-ui/icons-react/build/cjs/MessageChatSquare";
+import FileSearch02 from "@untitled-ui/icons-react/build/cjs/FileSearch02";
+import Cube01 from "@untitled-ui/icons-react/build/cjs/Cube01";
 
 export {
     BarChartSquare02,
@@ -85,5 +92,11 @@ export {
     CheckCircle,
     XCircle,
     Target01,
-    Flag05
+    Flag05,
+    Home01,
+    // New sidebar icons
+    ImageUser,
+    MessageChatSquare,
+    FileSearch02,
+    Cube01
 };

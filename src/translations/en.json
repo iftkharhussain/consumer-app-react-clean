@@ -32,5 +32,11 @@
   "dashboard": "Dashboard",
   "welcome": "Welcome to the consumer app",
   "twoFactorNeededPhoneMissing": "Phone number missing, two-factor authentication required",
-  "SearchConsumerApp": "Search Consumer App"
+  "SearchConsumerApp": "Search Consumer App",
+  "home": "Home",
+  "homeDescription": "This is your dashboard where you can manage your account and access various features.",
+  "questions": "Questions",
+  "askQuestion": "Ask a Question",
+  "updateProfile": "Update Profile",
+  "securitySettings": "Security Settings"
 }

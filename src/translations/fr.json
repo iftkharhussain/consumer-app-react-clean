@@ -32,5 +32,11 @@
   "dashboard": "Tableau de bord",
   "welcome": "Bienvenue dans l'application consommateur",
   "twoFactorNeededPhoneMissing": "Numéro de téléphone manquant, authentification à deux facteurs nécessaire",
-  "SearchConsumerApp": "Rechercher dans l'App Consommateur"
+  "SearchConsumerApp": "Rechercher dans l'App Consommateur",
+  "home": "Accueil",
+  "homeDescription": "Ceci est votre tableau de bord où vous pouvez gérer votre compte et accéder aux différentes fonctionnalités.",
+  "questions": "Questions",
+  "askQuestion": "Poser une Question",
+  "updateProfile": "Mettre à Jour le Profil",
+  "securitySettings": "Paramètres de Sécurité"
 }

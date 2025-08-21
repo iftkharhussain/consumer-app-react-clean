@@ -1,0 +1,675 @@
+.overviewPage {
+  padding: 32px;
+  max-width: 720px;
+  display: flex;
+  align-items: start;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.mainHeading {
+  color: var(--Gray-900, #121926);
+  font-family: var(--font-display, Inter);
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 38px; /* 126.667% */
+  margin: 0 0 8px 0;
+}
+
+.customTabs :global(.ant-tabs-ink-bar) {
+  display: none;
+}
+
+.customTabs :global(.ant-tabs-tab) {
+  border-bottom: none;
+}
+
+.customTabs :global(.ant-tabs-nav::before) {
+  display: none;
+}
+
+.customTabs :global(.ant-tabs-tab+.ant-tabs-tab) {
+  margin: 0;
+}
+.customTabs :global(.ant-tabs-nav-list) {
+  gap: 8px;
+}
+
+.tabLabelWithProgress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 140px;
+}
+
+.tabLabel {
+  color: var(--colors-text-text-secondary-700, #414651);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
+  text-align: center;
+  white-space: nowrap;
+}
+
+.customTabs .ant-tabs-tab-active .tabLabel {
+  color: var(--colors-text-text-primary-900, #181D27);
+}
+
+.progressBar {
+  height: 8px;
+  width: 100%;
+  background: #E9EAEB;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: #2121DD;
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+.tabContent {
+  padding: 16px 0;
+}
+
+.detailsTitle {
+  color: var(--colors-text-text-secondary-700, #414651);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
+  margin: 0 0 16px 0;
+}
+
+.detailsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.detailIcon {
+  width: 20px;
+  height: 20px;
+  color: #A4A7AE;
+  font-size: 20px;
+}
+
+.detailText {
+  flex: 1 0 0;
+  overflow: hidden;
+  color: var(--colors-text-text-tertiary-600, #535862);
+  text-overflow: ellipsis;
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
+}
+
+.completedMessage,
+.pendingMessage {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--text-sm--line-height, 20px);
+  padding: 16px;
+  text-align: center;
+}
+
+.completedMessage {
+  color: var(--color-success-600);
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rescheduleButton {
+  border: 1px solid var(--color-border-primary) !important;
+  background: var(--color-bg-primary) !important;
+  color: var(--colors-text-text-primary-900) !important;
+}
+
+.rescheduleButton:hover {
+  background: var(--color-bg-secondary) !important;
+  border-color: var(--color-border-primary) !important;
+  color: var(--colors-text-text-primary-900) !important;
+}
+
+.overallProgress {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 38px; /* 126.667% */
+  margin: 0 0 8px 0;
+}
+
+.subheading {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-md, 16px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--text-md--line-height, 24px); /* 150% */
+  margin: 0 0 32px 0;
+}
+
+.cardsContainer {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+}
+
+.estimateCard {
+  display: flex;
+  width: 343px;
+  min-height: 371px;
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: var(--radius-xl, 12px);
+  border: 1px solid var(--color-border-secondary, #E9EAEB);
+  background: var(--color-bg-primary, #FFF);
+  box-shadow: var(--shadow-xs);
+  padding: 24px;
+}
+
+.insurersCard {
+  width: 352px;
+  min-height: 371px;
+  border-radius: var(--radius-xl, 12px);
+  border: 1px solid var(--color-border-secondary, #E9EAEB);
+  background: #EEE;
+  box-shadow: var(--shadow-xs);
+  padding: 24px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.cardTitle {
+  color: var(--colors-text-text-primary-900, #181D27);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-lg, 18px);
+  font-style: normal;
+  font-weight: 600;
+  line-height: var(--text-lg--line-height, 28px); /* 155.556% */
+  margin: 0;
+}
+
+.monthlyBadge {
+  display: flex;
+  padding: 2px 10px;
+  align-items: center;
+  border-radius: var(--radius-full, 9999px);
+  border: 1px solid var(--color-utility-brand-200, #9FADAA);
+  background: var(--color-utility-brand-50, #F3F5F4);
+  color: var(--colors-text-text-primary-900, #181D27);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-weight: 500;
+  line-height: var(--text-sm--line-height, 20px);
+}
+
+.customerName {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-md, 16px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--text-md--line-height, 24px); /* 150% */
+  margin: 0 0 16px 0;
+}
+
+.priceRange {
+  color: #1A1ABA;
+  font-family: var(--font-body, Inter);
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 28px; /* 77.778% */
+  margin: 0 0 24px 0;
+}
+
+.termInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.termLabel {
+  color: var(--colors-text-text-primary-900, #181D27);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
+  margin: 0;
+}
+
+.termValue {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
+  margin: 0;
+}
+
+.benefitsContainer {
+  flex: 1;
+}
+
+.benefitItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.benefitLabel {
+  color: var(--colors-text-text-primary-900, #181D27);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--text-sm--line-height, 20px);
+  margin: 0;
+}
+
+.benefitValue {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--text-sm--line-height, 20px);
+  margin: 0;
+}
+
+.insurersGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.insurerLogo {
+  width: 105px;
+  height: 57px;
+  flex-shrink: 0;
+  aspect-ratio: 35/19;
+  background: var(--color-gray-100);
+  border-radius: var(--radius-md, 8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--colors-text-text-tertiary-600);
+  border: 1px solid var(--color-border-secondary);
+}
+
+.nextStepTitle {
+  color: var(--colors-text-text-secondary-700, #414651);
+  font-family: var(--font-display, Inter);
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: var(--text-display-sm--line-height, 38px); /* 211.111% */
+  margin: 0;
+}
+
+.nextStepDescription {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
+  margin: 0;
+}
+
+.progressContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.progressSteps {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.progressStep {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.stepLabel {
+  color: var(--colors-text-text-secondary-700, #414651);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
+  margin: 0 0 8px 0;
+}
+
+.progressBarContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.progressBar {
+  height: 8px;
+  width: 100%;
+  background: #E9EAEB;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: #2121DD;
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+.overallProgress {
+  display: flex;
+  justify-content: center;
+  margin-top: 27px;
+      margin-left: 13px;
+}
+
+.progressFill {
+  height: 100%;
+  background: #2121DD;
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+.progressPercentage {
+  color: var(--colors-text-text-secondary-700, #414651);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
+  margin: 0;
+}
+
+/* .advisorSection {
+  margin-top: 24px;
+} */
+
+.advisorTitle {
+  color: var(--colors-text-text-secondary-700, #414651);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
+  margin: 0 0 16px 0;
+}
+
+.advisorCard {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.advisorAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full, 9999px);
+  border: 0.75px solid rgba(0, 0, 0, 0.08);
+  background: var(--color-gray-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: var(--colors-text-text-primary-900);
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.advisorInfo {
+  flex: 1;
+}
+
+.advisorName {
+  color: var(--colors-text-text-primary-900, #181D27);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 600;
+  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
+  margin: 0 0 4px 0;
+}
+
+.advisorContact {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 171.429% */
+  margin: 0;
+}
+
+.moreOptionsTitle {
+  color: var(--Schemes-Secondary, #625B71);
+  font-family: var(--font-display, Inter);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 150% */
+  margin: 0;
+}
+
+.moreOptionsDescription {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
+  margin: 0;
+}
+
+.meetingQuestionSection {
+  margin-top: 24px;
+}
+
+.meetingQuestion {
+  color: var(--colors-text-text-primary-900, #181D27);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-lg, 18px);
+  font-style: normal;
+  font-weight: 600;
+  line-height: var(--text-lg--line-height, 28px); /* 155.556% */
+  margin: 0 0 16px 0;
+}
+
+.yesNoButtons {
+  display: flex;
+  gap: 12px;
+}
+
+.yesNoButton {
+  display: flex !important;
+  width: 161px !important;
+  padding: 10px 14px !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: var(--spacing-xs, 4px) !important;
+  border: 1px solid var(--color-border-primary) !important;
+  background: var(--color-bg-primary) !important;
+  color: var(--colors-text-text-primary-900) !important;
+  font-family: var(--font-body, Inter) !important;
+  font-size: var(--text-sm, 14px) !important;
+  font-weight: 500 !important;
+  line-height: var(--text-sm--line-height, 20px) !important;
+  border-radius: var(--radius-md, 8px) !important;
+  height: auto !important;
+}
+
+.yesNoButton:hover {
+  background: var(--color-bg-secondary) !important;
+  border-color: var(--color-border-primary) !important;
+  color: var(--colors-text-text-primary-900) !important;
+}
+
+.reviewSection {
+  width: 100%;
+}
+
+.ratingSection {
+  margin-top: 32px;
+}
+
+.rateTitle {
+  color: var(--colors-text-text-primary-900, #181D27);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-lg, 18px);
+  font-style: normal;
+  font-weight: 600;
+  line-height: var(--text-lg--line-height, 28px); /* 155.556% */
+  margin: 0 0 8px 0;
+}
+
+.rateDescription {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
+  margin: 0 0 24px 0;
+}
+
+.ratingContainer {
+  margin-bottom: 24px;
+}
+
+.customRate {
+  font-size: 24px;
+}
+.customRate :global(.ant-rate-star-first), .customRate :global(.ant-rate-star-second) {
+  color: #dfdfdf;
+}
+
+.customRate .ant-rate-star {
+  margin-right: 8px;
+}
+
+.commentsSection {
+  margin-bottom: 24px;
+}
+
+.commentsLabel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--colors-text-text-secondary-700, #414651);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
+  margin-bottom: 8px;
+}
+
+.optional {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  font-size: 12px;
+  background: var(--color-gray-100);
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.commentsTextarea {
+  border-radius: var(--radius-md, 8px) !important;
+  border: 1px solid var(--color-border-primary) !important;
+  font-family: var(--font-body, Inter) !important;
+  font-size: var(--text-sm, 14px) !important;
+}
+
+.commentsTextarea:focus {
+  border-color: var(--Primary, #1A1ABA) !important;
+  box-shadow: 0 0 0 2px rgba(26, 26, 186, 0.1) !important;
+}
+
+.submitButton {
+  min-width: 264px;
+}
+
+.ant-tabs-ink-bar{
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .overviewPage {
+    max-width: 100%;
+    padding: 16px;
+  }
+  
+  .cardsContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .estimateCard,
+  .insurersCard {
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .nextStepSection,
+  .moreOptionsSection {
+    width: 100%;
+    max-width: 100%;
+  }
+}

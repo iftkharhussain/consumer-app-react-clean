@@ -1,0 +1,47 @@
+.heading {
+  font-family: var(--font-display, Inter);
+  font-style: normal;
+  margin: 0;
+}
+
+.heading--1 {
+  color: var(--Gray-900, #121926);
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 38px; /* 126.667% */
+}
+
+.heading--2 {
+  color: var(--colors-text-text-secondary-700, #414651);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: var(--text-display-sm--line-height, 38px); /* 211.111% */
+}
+
+.heading--3 {
+  color: var(--colors-text-text-primary-900, #181D27);
+  font-size: var(--text-lg, 18px);
+  font-weight: 600;
+  line-height: var(--text-lg--line-height, 28px); /* 155.556% */
+}
+
+.heading--4 {
+  color: var(--Schemes-Secondary, #625B71);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px; /* 150% */
+}
+
+.heading--5 {
+  color: var(--colors-text-text-secondary-700, #414651);
+  font-size: var(--text-sm, 14px);
+  font-weight: 500;
+  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
+}
+
+.heading--6 {
+  color: var(--colors-text-text-primary-900, #181D27);
+  font-size: var(--text-sm, 14px);
+  font-weight: 600;
+  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
+}

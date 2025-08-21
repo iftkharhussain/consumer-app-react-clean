@@ -327,3 +327,9 @@
     font-size: 14px;
   }
 }
+
+/* Stretch variant for full width buttons */
+.stretch {
+  align-self: stretch;
+  width: 100%;
+}

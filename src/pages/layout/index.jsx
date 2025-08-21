@@ -43,16 +43,9 @@ const AppLayout = ({ heading, children, _style }) => {
             <ChevronRightDouble style={{ color: '#697586' }} />
           </div>
         }
-        <Content style={{ marginLeft: collapsed ? 80 : 314 }} >
-          <div className="norga-app-top-navbar">
-            <Link to='/' style={{ display: 'flex', alignItems: 'flex-end' }}>
-              <img src='/images/norga_logo_bleu 1.png' alt='Consumer App' style={{ maxWidth: '100px' }} />
-              <div className='version'>&nbsp; v2.0</div>
-            </Link>
-            <div className='menu-collapse-icon' onClick={toggleSidebar}> {showSidebar ? <XClose className='aside-close' /> : <Menu02 />}</div>
-          </div>
+        <Content style={{ marginLeft: collapsed ? 80 : 292 }} >
           <div className='main-body-wrapper' style={{ background: '#F8FAFC' }}>
-            <AppHeader heading={heading} collapsed={collapsed} setCollapsed={setCollapsed} />
+            {/* <AppHeader heading={heading} collapsed={collapsed} setCollapsed={setCollapsed} /> */}
             { children }
           </div>
         </Content>

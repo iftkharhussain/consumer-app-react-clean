@@ -73,6 +73,10 @@ export {
 export { default as IconWithCircles } from './iconWithCircles';
 export { default as Tooltip } from './tooltip';
 
+// Layout Components
+export { default as Heading } from './heading';
+export { default as Container } from './container';
+
 // Demo Component
 export { default as ComponentsDemo } from './demo/ComponentsDemo';
 

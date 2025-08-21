@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  padding: var(--spacing-xl, 16px);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-3xl, 24px);
+}
+
+.container--default {
+  width: 100%;
+  max-width: 720px;
+}
+
+.container--card {
+  width: 100%;
+  max-width: 720px;
+  border-radius: var(--radius-xl, 12px);
+  border: 1px solid var(--color-border-secondary, #E9EAEB);
+  background: var(--color-bg-primary, #FFF);
+  box-shadow: var(--shadow-xs);
+}
+
+.container--gray {
+  border-radius: var(--radius-xl, 12px);
+  border: 1px solid var(--color-border-secondary, #E9EAEB);
+  background: #EEE;
+  box-shadow: var(--shadow-xs);
+}
