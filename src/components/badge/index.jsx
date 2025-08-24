@@ -7,25 +7,27 @@ const Badge = ({
   variant = 'primary',
   size = 'sm',
   dot = false,
+  showDot = false, // Add alias for dot prop to match our usage
   icon: Icon,
   onClose,
   className = '',
   ...props
 }) => {
   const isClosable = typeof onClose === 'function';
+  const hasDot = dot || showDot; // Support both prop names
   
   // Build classes
   const badgeClasses = [
     styles.badge,
     styles[`variant-${variant}`],
     styles[`size-${size}`],
-    dot ? styles.dot : '',
+    hasDot ? styles.dot : '',
     isClosable ? styles.closable : '',
     className
   ].filter(Boolean).join(' ');
 
   // For dot badges, use Antd's dot functionality
-  if (dot && !children) {
+  if (hasDot && !children) {
     return (
       <AntBadge
         dot
@@ -38,6 +40,10 @@ const Badge = ({
   // Regular badge content
   const badgeContent = (
     <span className={badgeClasses} {...props}>
+      {hasDot && (
+        <span className={styles.dotElement} />
+      )}
+      
       {Icon && (
         <span className={styles.icon}>
           {typeof Icon === 'function' ? <Icon /> : Icon}

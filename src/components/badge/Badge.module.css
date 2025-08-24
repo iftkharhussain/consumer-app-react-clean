@@ -133,6 +133,31 @@
   height: 16px;
 }
 
+/* Dot element inside badges */
+.dotElement {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--Gray-400, #9aa3b2);
+  flex-shrink: 0;
+}
+
+.variant-primary .dotElement {
+  background-color: var(--Primary-600, #1a1aba);
+}
+
+.variant-success .dotElement {
+  background-color: var(--Success-500, #12b76a);
+}
+
+.variant-warning .dotElement {
+  background-color: var(--Warning-500, #f79009);
+}
+
+.variant-error .dotElement {
+  background-color: var(--Error-500, #f04438);
+}
+
 /* Text wrapper */
 .text {
   display: inline-flex;

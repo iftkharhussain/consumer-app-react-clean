@@ -9,7 +9,6 @@ export { default as PanelWrapper } from './PanelWrapper';
 // UI Components
 export { default as Banner } from './banner';
 export { default as Card } from './card';
-export { default as CustomTable } from './customTable';
 export { default as CustomInput } from './customInput';
 export { default as CustomSwitch } from './switch';
 
@@ -27,6 +26,7 @@ export { default as ContentBox } from './contentBox';
 export { default as InfoText } from './infoText';
 export { default as LinkPreviewBadge } from './linkPreviewBadge';
 export { default as UserProfileBadge } from './userProfileBadge';
+export { default as AdvisorTypeBadge } from './advisorTypeBadge';
 export { default as QuestionBox } from './questionBox';
 
 // Error Pages
@@ -68,14 +68,16 @@ export {
   ChevronDownIcon,
   InfoIcon,
   AlertTriangleIcon,
-  XIcon
+  XIcon,
+  ArrowRightIcon
 } from './icon';
 export { default as IconWithCircles } from './iconWithCircles';
 export { default as Tooltip } from './tooltip';
 
 // Layout Components
 export { default as Heading } from './heading';
-export { default as Container } from './container';
+export { default as Section } from './section';
+export { default as Text } from './text';
 
 // Demo Component
 export { default as ComponentsDemo } from './demo/ComponentsDemo';

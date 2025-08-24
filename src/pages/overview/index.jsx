@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { PageContent, Container } from 'components';
+import { PageContent, Section } from 'components';
 import { Button, Tabs, Rate, Input } from 'antd';
 import { CalendarOutlined, ClockCircleOutlined, BellOutlined } from '@ant-design/icons';
 import { Types } from '../../utils/helper';
@@ -250,7 +250,7 @@ const Overview = () => {
         </div>
 
         {/* Next Step Section */}
-        <Container variant="card">
+        <Section variant="card">
           <h2 className={styles.nextStepTitle}>Next Step: Schedule a call with your advisor</h2>
           <p className={styles.nextStepDescription}>
             Congratulations! An advisor has received your request and will prepare your personalized quotes. 
@@ -297,10 +297,10 @@ const Overview = () => {
               </Button>
             </div>
           </div>
-        </Container>
+        </Section>
 
         {/* More Options Section */}
-        <Container variant="card">
+        <Section variant="card">
           <h2 className={styles.moreOptionsTitle}>Looking for more product options?</h2>
           <p className={styles.moreOptionsDescription}>
             We offer a broader range to meet your unique needs. Click below to explore our full catalog and 
@@ -311,7 +311,7 @@ const Overview = () => {
           >
             Explore other Products
           </Button>
-        </Container>
+        </Section>
       </div>
     </PageContent>
   );

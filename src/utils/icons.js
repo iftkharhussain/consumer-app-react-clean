@@ -11,8 +11,10 @@ import Edit01 from "@untitled-ui/icons-react/build/cjs/Edit01";
 import Trash01 from "@untitled-ui/icons-react/build/cjs/Trash01";
 import ArrowLeft from "@untitled-ui/icons-react/build/cjs/ArrowLeft";
 import ArrowRight from "@untitled-ui/icons-react/build/cjs/ArrowRight";
+import ArrowNarrowRight from "@untitled-ui/icons-react/build/cjs/ArrowNarrowRight";
 import DotsVertical from "@untitled-ui/icons-react/build/cjs/DotsVertical";
 import ChevronDown from "@untitled-ui/icons-react/build/cjs/ChevronDown";
+import ChevronSelectorVertical from "@untitled-ui/icons-react/build/cjs/ChevronSelectorVertical";
 import Mail01 from "@untitled-ui/icons-react/build/cjs/Mail01";
 import Expand05 from "@untitled-ui/icons-react/build/cjs/Expand05";
 import ArrowSquareRight from "@untitled-ui/icons-react/build/cjs/ArrowSquareRight";
@@ -63,8 +65,10 @@ export {
     Trash01,
     ArrowLeft,
     ArrowRight,
+    ArrowNarrowRight,
     DotsVertical,
     ChevronDown,
+    ChevronSelectorVertical,
     Mail01,
     Expand05,
     ArrowSquareRight,

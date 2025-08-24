@@ -1,0 +1,55 @@
+/* Text Component Styles */
+
+.text {
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-style: normal;
+  margin: 0;
+}
+
+/* Text Variants */
+.variant-display-sm {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 38px; /* 126.667% */
+}
+
+.variant-body-lg {
+  font-size: var(--Font-size-text-lg, 18px);
+  font-weight: 600;
+  line-height: var(--Line-height-text-lg, 28px); /* 155.556% */
+}
+
+.variant-body-md {
+  font-size: var(--Font-size-text-md, 16px);
+  font-weight: 400;
+  line-height: var(--Line-height-text-md, 24px); /* 150% */
+}
+
+.variant-body-sm {
+  font-size: var(--Font-size-text-sm, 14px);
+  font-weight: 400;
+  line-height: var(--Line-height-text-sm, 20px); /* 142.857% */
+}
+
+.variant-body-sm-semibold {
+  font-size: var(--Font-size-text-sm, 14px);
+  font-weight: 600;
+  line-height: var(--Line-height-text-sm, 20px); /* 142.857% */
+}
+
+/* Color Variants */
+.color-primary {
+  color: var(--Gray-900, #121926);
+}
+
+.color-secondary {
+  color: var(--colors-text-text-secondary-700, #414651);
+}
+
+.color-tertiary {
+  color: var(--colors-text-text-tertiary-600, #535862);
+}
+
+.color-primary-900 {
+  color: var(--colors-text-text-primary-900, #181D27);
+}

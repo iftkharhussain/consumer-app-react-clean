@@ -1,0 +1,190 @@
+/* Alert component styles following Figma design */
+
+.alert {
+  display: flex;
+  padding: 16px;
+  border-radius: var(--radius-xl, 12px);
+  gap: 16px;
+  align-items: flex-start;
+  position: relative;
+  border: 1px solid var(--color-border-primary, #717680);
+  background: var(--color-bg-primary, #ffffff);
+  box-shadow: var(--shadow-xs, 0px 1px 2px rgba(10, 13, 18, 0.05));
+}
+
+/* Icon container */
+.iconContainer {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full, 9999px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Content area */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.textContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.title {
+  color: var(--color-text-secondary, #414651);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-weight: 600;
+  line-height: var(--text-sm--line-height, 20px);
+  margin: 0;
+}
+
+.description {
+  color: var(--color-text-tertiary, #535862);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-weight: 400;
+  line-height: var(--text-sm--line-height, 20px);
+  margin: 0;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* End icon (like logo) */
+.endIcon {
+  width: 159px;
+  height: 61px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.endIcon img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Close button */
+.closeButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-lg, 8px);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-quaternary, #a4a7ae);
+  transition: background-color 0.2s ease;
+}
+
+.closeButton:hover {
+  background-color: var(--color-bg-secondary, #f8fafc);
+}
+
+.closeButton:active {
+  background-color: var(--color-bg-tertiary, #eef2f6);
+}
+
+/* Alert type variants */
+
+/* Warning/Orange type (like in Figma) */
+.type-warning .iconContainer {
+  position: relative;
+}
+
+.type-warning .iconContainer::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border: 1.67px solid var(--color-warning-600, #dc6803);
+  border-radius: var(--radius-full, 9999px);
+  opacity: 0.1;
+}
+
+.type-warning .iconContainer::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border: 1.67px solid var(--color-warning-600, #dc6803);
+  border-radius: var(--radius-full, 9999px);
+  opacity: 0.3;
+}
+
+.type-warning .iconContainer svg,
+.type-warning .iconContainer {
+  color: var(--color-warning-600, #dc6803);
+  z-index: 1;
+  position: relative;
+}
+
+/* Info type */
+.type-info .iconContainer {
+  background-color: var(--color-brand-50, #f3f5f4);
+  border: 1px solid var(--color-brand-200, #c7d2fe);
+}
+
+.type-info .iconContainer svg {
+  color: var(--color-brand-600, #1a1aba);
+}
+
+/* Success type */
+.type-success .iconContainer {
+  background-color: var(--color-success-50, #ecfdf3);
+  border: 1px solid var(--color-success-200, #abefc6);
+}
+
+.type-success .iconContainer svg {
+  color: var(--color-success-600, #12b76a);
+}
+
+/* Error type */
+.type-error .iconContainer {
+  background-color: var(--color-error-50, #fef3f2);
+  border: 1px solid var(--color-error-200, #fecaca);
+}
+
+.type-error .iconContainer svg {
+  color: var(--color-error-600, #f04438);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .alert {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .endIcon {
+    width: 120px;
+    height: 46px;
+    align-self: center;
+  }
+
+  .closeButton {
+    position: static;
+    align-self: flex-end;
+    margin-top: -8px;
+  }
+}
