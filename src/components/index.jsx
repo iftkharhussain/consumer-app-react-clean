@@ -3,6 +3,7 @@
 // Page Layout Components
 export { default as PageBanner } from './pageBanner';
 export { default as PageHeading } from './pageHeading';
+export { default as PageHeader } from './pageHeader';
 export { default as PageContent } from './pageContent';
 export { default as PanelWrapper } from './PanelWrapper';
 
@@ -27,6 +28,7 @@ export { default as InfoText } from './infoText';
 export { default as LinkPreviewBadge } from './linkPreviewBadge';
 export { default as UserProfileBadge } from './userProfileBadge';
 export { default as AdvisorTypeBadge } from './advisorTypeBadge';
+export { default as StatusBadge } from './statusBadge';
 export { default as QuestionBox } from './questionBox';
 
 // Error Pages

@@ -11,6 +11,7 @@ const AdvisorTypeBadge = ({ type, className = '', ...props }) => {
           colorClass: 'mortgage-broker'
         };
       case 'Insurance Broker':
+      case 'online':
         return {
           dotColor: '#17B26A', // Green
           colorClass: 'insurance-broker'

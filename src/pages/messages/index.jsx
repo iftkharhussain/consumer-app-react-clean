@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Input, Badge, Button as AntButton, Dropdown } from 'antd';
-import { SearchOutlined, MoreOutlined, PhoneOutlined } from '@ant-design/icons';
-import Avatar from '../../components/avatar';
-import Button from '../../components/button';
+import { PhoneOutlined } from '@ant-design/icons';
+import MessagesHeader from './MessagesHeader';
+import MessagesSidebar from './MessagesSidebar';
+import ChatArea from './ChatArea';
 import styles from './Messages.module.css';
 
 const Messages = () => {
@@ -122,6 +122,10 @@ const Messages = () => {
     setSelectedMessage(conversation);
   };
 
+  const handleSearchChange = (value) => {
+    setSearchValue(value);
+  };
+
   const headerDropdownItems = [
     {
       key: 'call',
@@ -149,222 +153,20 @@ const Messages = () => {
 
   return (
     <div>
-      <div className={styles.sidebarHeader}>
-        <div className={styles.headerTop}>
-          <h1 className={styles.title}>Messages</h1>
-        </div>
-        <p className={styles.subtitle}>
-          Request to speak with a professional and view your conversation history here!
-        </p>
-      </div>
+      <MessagesHeader />
       <div className={styles.messagesContainer}>
-        {/* Sidebar */}
-        <div className={styles.sidebar}>
-          <div className={styles.sidebarHeader}>
-            <div className={styles.headerTop}>
-              <h1 className={styles.title}>Messages</h1>
-              <Badge count={1} className={styles.badge}>
-                <div></div>
-              </Badge>
-            </div>
-            <p className={styles.subtitle}>
-              Request to speak with a professional and view your conversation history here!
-            </p>
-          </div>
-
-          <div className={styles.searchSection}>
-            <Input
-              placeholder="Search"
-              prefix={<SearchOutlined className={styles.searchIcon} />}
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              className={styles.searchInput}
-            />
-          </div>
-
-          <div className={styles.conversationsList}>
-            {filteredConversations.map((conversation) => (
-              <div
-                key={conversation.id}
-                className={`${styles.conversationItem} ${selectedMessage?.id === conversation.id ? styles.selected : ''}`}
-                onClick={() => handleConversationSelect(conversation)}
-              >
-                <div className={styles.conversationAvatar}>
-                  <Avatar
-                    src={conversation.avatar}
-                    name={conversation.name}
-                    size="md"
-                    status={conversation.isOnline ? 'online' : 'offline'}
-                  />
-                </div>
-                <div className={styles.conversationContent}>
-                  <div className={styles.conversationHeader}>
-                    <span className={styles.conversationName}>{conversation.name}</span>
-                    <span className={styles.conversationTime}>{conversation.time}</span>
-                  </div>
-                  <div className={styles.conversationMeta}>
-                    <span className={styles.conversationRole}>{conversation.role}</span>
-                  </div>
-                  <div className={styles.conversationPreview}>
-                    <span className={conversation.isTyping ? styles.typing : ''}>
-                      {conversation.message}
-                    </span>
-                    {conversation.unread > 0 && (
-                      <Badge count={conversation.unread} className={styles.unreadBadge} />
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div className={styles.mainContent}>
-          {selectedMessage || currentConversation ? (
-            <>
-              {/* Chat Header */}
-              <div className={styles.chatHeader}>
-                <div className={styles.chatHeaderLeft}>
-                  <div className={styles.avatar}>
-                    <Avatar
-                      src={currentConversation.avatar}
-                      name={currentConversation.name}
-                      size="xl"
-                      status={currentConversation.isOnline ? 'online' : 'offline'}
-                    />
-                  </div>
-                  <div className={styles.chatHeaderInfo}>
-                    <h3 className={styles.chatHeaderName}>{currentConversation.name}</h3>
-                    <div className={styles.chatHeaderMeta}>
-                      <span className={styles.chatHeaderRole}>{currentConversation.role}</span>
-                      <span className={styles.onlineStatus}>
-                        {currentConversation.isOnline ? 'Online' : 'Offline'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.chatHeaderActions}>
-                  <Button
-                    color="secondary"
-                    size="sm"
-                    className={styles.callButton}
-                  >
-                    <PhoneOutlined />
-                    Call
-                  </Button>
-                  <Button
-                    color="secondary"
-                    size="sm"
-                  >
-                    Archive
-                  </Button>
-                  <Button
-                    color="secondary"
-                    size="sm"
-                  >
-                    View profile
-                  </Button>
-                  <Dropdown
-                    menu={{ items: headerDropdownItems }}
-                    trigger={['click']}
-                    placement="bottomRight"
-                  >
-                    <AntButton
-                      type="text"
-                      icon={<MoreOutlined />}
-                      className={styles.moreButton}
-                    />
-                  </Dropdown>
-                </div>
-              </div>
-
-              {/* Messages Area */}
-              <div className={styles.messagesArea}>
-                {currentConversation.messages.map((message, index) => {
-                  const showDate = index === 0 ||
-                    (currentConversation.messages[index - 1] &&
-                      currentConversation.messages[index - 1].time !== message.time);
-
-                  return (
-                    <div key={message.id}>
-                      {showDate && (
-                        <div className={styles.dateMarker}>
-                          <span>{message.time}</span>
-                        </div>
-                      )}
-                      <div className={`${styles.messageWrapper} ${message.isOwn ? styles.own : ''}`}>
-                        {!message.isOwn && (
-                          <Avatar
-                            src={currentConversation.avatar}
-                            name={message.sender}
-                            size="sm"
-                          />
-                        )}
-                        <div className={styles.messageContent}>
-                          <span className={styles.messageSender}>
-                            {message.isOwn ? 'You' : message.sender}
-                          </span>
-                          <div className={`${styles.messageBubble} ${message.isOwn ? styles.ownMessage : styles.otherMessage}`}>
-                            {message.hasAttachment ? (
-                              <div className={styles.attachmentMessage}>
-                                <div className={styles.attachmentIcon}>
-                                  📄
-                                </div>
-                                <div className={styles.attachmentInfo}>
-                                  <span className={styles.attachmentName}>{message.message}</span>
-                                  <span className={styles.attachmentSize}>{message.attachmentSize}</span>
-                                </div>
-                              </div>
-                            ) : (
-                              <p>{message.message}</p>
-                            )}
-                          </div>
-                          {!showDate && (
-                            <span className={styles.messageTime}>{message.time}</span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Message Input */}
-              <div className={styles.messageInput}>
-                <div className={styles.inputWrapper}>
-                  <Input.TextArea
-                    placeholder="Send a message"
-                    autoSize={{ minRows: 1, maxRows: 4 }}
-                    className={styles.textArea}
-                  />
-                  <div className={styles.inputActions}>
-                    <Button
-                      color="secondary"
-                      size="sm"
-                      className={styles.attachButton}
-                    >
-                      📎
-                    </Button>
-                    <Button
-                      color="primary"
-                      size="sm"
-                    >
-                      Send
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </>
-          ) : (
-            <div className={styles.emptyState}>
-              <div className={styles.emptyStateContent}>
-                <h3>Select a conversation</h3>
-                <p>Choose a conversation from the sidebar to start messaging</p>
-              </div>
-            </div>
-          )}
-        </div>
+        <MessagesSidebar
+          searchValue={searchValue}
+          onSearchChange={handleSearchChange}
+          conversations={filteredConversations}
+          selectedMessage={selectedMessage}
+          onConversationSelect={handleConversationSelect}
+        />
+        <ChatArea
+          selectedMessage={selectedMessage}
+          currentConversation={currentConversation}
+          headerDropdownItems={headerDropdownItems}
+        />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { PageContent, AdvisorTypeBadge } from 'components';
+import { PageContent, AdvisorTypeBadge, PageHeader } from 'components';
 import { Button, Table } from 'antd';
 import { AlertTriangleIcon, ArrowRightIcon, XIcon } from '../../components/icon';
 import Text from '../../components/text';
@@ -207,14 +207,11 @@ const MyAdvisors = () => {
     <PageContent pageType="myAdvisors">
       <div className={styles.myAdvisorsPage}>
         {/* Main Header */}
-        <div className={styles.header}>
-          <Text variant="display-sm" color="primary" as="h1">
-            My Advisors
-          </Text>
-          <Text variant="body-md" color="tertiary">
-            These are your advisors
-          </Text>
-        </div>
+        <PageHeader 
+          title="My Advisors" 
+          subtitle="These are your advisors"
+          className={styles.header}
+        />
 
         {/* Alert Section */}
         <div className={styles.alertContainer}>

@@ -238,6 +238,7 @@
     --color-bg-success-primary: var(--color-success-50);
     --color-bg-success-secondary: var(--color-success-100);
     --color-bg-success-solid: var(--color-success-600);
+    --color-bg-secondary2: #FAFAFA;
 
     /* BORDER COLORS */
     --color-border-primary: var(--color-gray-300);
