@@ -14,13 +14,6 @@ const MessageInput = () => {
         />
         <div className={styles.inputActions}>
           <Button
-            color="secondary"
-            size="sm"
-            className={styles.attachButton}
-          >
-            📎
-          </Button>
-          <Button
             color="primary"
             size="sm"
           >

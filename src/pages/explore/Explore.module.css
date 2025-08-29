@@ -1,0 +1,50 @@
+.explorePage {
+  padding: 0;
+  min-height: 100vh;
+  background: var(--color-bg-secondary);
+}
+
+.pageHeader {
+  margin-bottom: 16px;
+}
+
+.content {
+  padding: 0 24px 24px 24px;
+}
+
+.sectionHeader {
+  margin: 8px 0 24px 0;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 4px 0;
+}
+
+.sectionSubtitle {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-text-tertiary);
+  margin: 0;
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .cardsGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 768px) {
+  .cardsGrid { grid-template-columns: 1fr; }
+  .content { padding: 0 16px 16px 16px; }
+}

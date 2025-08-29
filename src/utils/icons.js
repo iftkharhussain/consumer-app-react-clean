@@ -51,6 +51,14 @@ import MessageChatSquare from "@untitled-ui/icons-react/build/cjs/MessageChatSqu
 import FileSearch02 from "@untitled-ui/icons-react/build/cjs/FileSearch02";
 import Cube01 from "@untitled-ui/icons-react/build/cjs/Cube01";
 
+// New icons for explore page
+import Home05 from "@untitled-ui/icons-react/build/cjs/Home05";
+import UserCheck01 from "@untitled-ui/icons-react/build/cjs/UserCheck01";
+import Car01 from "@untitled-ui/icons-react/build/cjs/Car01";
+import Heart from "@untitled-ui/icons-react/build/cjs/Heart";
+import Building05 from "@untitled-ui/icons-react/build/cjs/Building05";
+import Shield01 from "@untitled-ui/icons-react/build/cjs/Shield01";
+
 export {
     BarChartSquare02,
     LayersThree01,
@@ -102,5 +110,12 @@ export {
     ImageUser,
     MessageChatSquare,
     FileSearch02,
-    Cube01
+    Cube01,
+    // New explore page icons
+    Home05,
+    UserCheck01,
+    Car01,
+    Heart,
+    Building05,
+    Shield01
 };

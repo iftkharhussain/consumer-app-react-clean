@@ -21,6 +21,7 @@ const Home = React.lazy(() => import('./pages/home/index'));
 const Overview = React.lazy(() => import('./pages/overview/index'));
 const MyAdvisors = React.lazy(() => import('./pages/myAdvisors/index'));
 const Messages = React.lazy(() => import('./pages/messages/index'));
+const Explore = React.lazy(() => import('./pages/explore/index'));
 const Profile = React.lazy(() => import('./pages/settings/profile'));
 const Security = React.lazy(() => import('./pages/settings/security'));
 const ResetPassword = React.lazy(() => import('./pages/resetPassword/index'));
@@ -105,6 +106,7 @@ function App(props) {
 							<Route path="/overview" element={<Suspense fallback={<div>Loading...</div>}><Overview /></Suspense>} />
 							<Route path="/my-advisors" element={<Suspense fallback={<div>Loading...</div>}><MyAdvisors /></Suspense>} />
 							<Route path="/messages" element={<Suspense fallback={<div>Loading...</div>}><Messages /></Suspense>} />
+							<Route path="/explore" element={<Suspense fallback={<div>Loading...</div>}><Explore /></Suspense>} />
 							<Route path="/question" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
 							<Route path="/settings/profile" element={<Suspense fallback={<ProfileSkeleton setLayoutStyles={setLayoutStyles} />}><Profile section="profile" /></Suspense>} />
 							<Route path="/settings/security" element={<Suspense fallback={<SecuritySkeleton setLayoutStyles={setLayoutStyles} />}><Security section="security" /></Suspense>} />
