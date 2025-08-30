@@ -1,0 +1,191 @@
+/* Notifications Page Styles */
+
+.notificationsContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--Colors-Background-bg-primary, #FFF);
+}
+
+.pageHeaderContainer {
+  padding: 16px 24px 8px;
+  border-bottom: 1px solid var(--color-border-secondary);
+  background: var(--color-bg-primary);
+}
+
+.notificationsListContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 0;
+}
+
+/* Notification Section */
+.notificationSection {
+  display: flex;
+  padding: 24px 32px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.sectionTitle {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  font-family: Inter;
+  font-size: var(--Font-size-text-md, 16px);
+  font-style: normal;
+  font-weight: 600;
+  line-height: var(--Line-height-text-md, 24px); /* 150% */
+  margin: 0;
+}
+
+.notificationItems {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Individual Notification Item */
+.notificationItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+/* Avatar Styles */
+.avatarContainer {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full, 9999px);
+  background: #D6CFB7;
+  object-fit: cover;
+}
+
+.onlineIndicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  background: #06D6A0;
+  border: 2px solid #FFF;
+  border-radius: 50%;
+}
+
+/* Notification Content */
+.notificationContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.notificationHeader {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* User Name Styles */
+.userName {
+  color: var(--colors-text-text-secondary-700, #414651);
+  /* Text sm/Medium */
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-sm, 14px);
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--Line-height-text-sm, 20px); /* 142.857% */
+}
+
+/* Time Stamp Styles */
+.timeStamp {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  /* Text xs/Regular */
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-xs, 12px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--Line-height-text-xs, 18px); /* 150% */
+}
+
+/* Notification Text */
+.notificationText {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+/* Action Text Styles (Added a file to, Invited, Commented in) */
+.actionText {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  /* Text sm/Regular */
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--Line-height-text-sm, 20px); /* 142.857% */
+}
+
+/* Subject Text Styles (Marketing site redesign, Alisa Hester) */
+.subjectText {
+  color: var(--colors-text-text-brand-secondary-700, #0C2822);
+  /* Text sm/Medium */
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-sm, 14px);
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--Line-height-text-sm, 20px);
+}
+
+/* Horizontal Bar */
+.horizontalBar {
+  height: 1px;
+  align-self: stretch;
+  background: var(--Colors-Border-border-secondary, #E9EAEB);
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .notificationSection {
+    padding: 16px 20px;
+    gap: 12px;
+  }
+  
+  .notificationItem {
+    padding: 12px 0;
+    gap: 10px;
+  }
+  
+  .avatar {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .onlineIndicator {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .notificationSection {
+    padding: 12px 16px;
+  }
+  
+  .notificationHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  
+  .notificationText {
+    font-size: 13px;
+  }
+}

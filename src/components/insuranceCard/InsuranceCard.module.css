@@ -1,24 +1,20 @@
 .insuranceCard {
-  background: var(--color-bg-primary);
-  border: 1px solid var(--color-border-tertiary);
-  border-radius: 12px;
-  padding: 16px;
+  /* ContentBox provides outer chrome (padding, border, radius, shadow). */
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
   width: 100%;
-  max-width: 384px;
-  box-shadow: var(--shadow-xs);
+  max-width: 100%;
 }
 
 /* Header section with avatar and badge */
 .cardHeader {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.avatarContainer {
-  display: flex;
   align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .avatar {
@@ -47,6 +43,13 @@
   object-fit: contain;
 }
 
+.headerText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
 /* Content section */
 .cardContent {
   margin-bottom: 0;
@@ -70,16 +73,17 @@
   font-weight: 400;
   line-height: 20px;
   color: var(--color-text-secondary);
-  margin: 0 0 16px 0;
+  margin: 24px 0 20px 0;
 }
 
 /* Footer section with divider */
 .cardFooter {
   margin-top: 12px;
-  padding-top: 12px;
+  padding-top: 16px;
   border-top: 1px solid var(--color-border-tertiary);
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 8px;
   flex-wrap: wrap;
 }

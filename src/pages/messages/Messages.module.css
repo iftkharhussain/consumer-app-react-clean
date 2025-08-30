@@ -8,7 +8,7 @@
 
 .messagesContainer {
   display: flex;
-  height: calc(100vh - 80px); /* Adjust based on your header height */
+  height: calc(100vh - 105px); /* Adjust based on your header height */
   background: var(--color-bg-primary);
 }
 

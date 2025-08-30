@@ -17,6 +17,7 @@
 }
 .content-box.lead-card{
   gap: 0 !important;
+  padding: 16px;
 }
 .content-box.lead-card .ant-form-item{
 margin-bottom: 16px !important;

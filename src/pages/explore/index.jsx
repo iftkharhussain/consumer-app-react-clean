@@ -81,7 +81,7 @@ const Explore = () => {
   ];
 
   return (
-    <div className={styles.explorePage}>
+    <div>
       <PageHeader 
         title="Explore"
         subtitle="blah blah"

@@ -44,7 +44,14 @@ const AppLayout = ({ heading, children, _style }) => {
           </div>
         }
         <Content style={{ marginLeft: collapsed ? 80 : 292 }} >
-          <div className='main-body-wrapper' style={{ background: '#F8FAFC' }}>
+          <div
+            className='main-body-wrapper'
+            style={{
+              background: '#F8FAFC',
+              padding: _style?.contentPadding ?? '32px 32px 0',
+              ...( _style?.wrapper || {} ),
+            }}
+          >
             {/* <AppHeader heading={heading} collapsed={collapsed} setCollapsed={setCollapsed} /> */}
             { children }
           </div>

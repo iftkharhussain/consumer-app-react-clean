@@ -2,6 +2,8 @@ import React from 'react';
 import StatusBadge from '../statusBadge2';
 import styles from './InsuranceCard.module.css';
 import { ImageUser } from '../../utils/icons';
+import ContentBox from '../contentBox';
+import Button from '../button';
 
 const InsuranceCard = ({ 
   icon, 
@@ -15,46 +17,44 @@ const InsuranceCard = ({
   additionalButtons = [],
   onButtonClick 
 }) => {
-  const Button = ({ label, type = 'secondary', onClick }) => (
-    <button 
-      className={`${styles.actionButton} ${type === 'primary' ? styles.btnPrimary : styles.btnSecondary}`}
-      onClick={onClick}
-    >
+  const ActionBtn = ({ label, type = 'secondary', onClick }) => (
+    <Button size="md" color={type === 'primary' ? 'primary' : 'secondary'} onClick={onClick}>
       {label}
-    </button>
+    </Button>
   );
 
   return (
-    <div className={styles.insuranceCard}>
-      {/* Header with avatar and badge */}
-      <div className={styles.cardHeader}>
-        <div className={styles.avatarContainer}>
+    <ContentBox className="lead-card">
+      <div className={styles.insuranceCard}>
+        {/* Header: avatar on left, title and badge stacked on right */}
+        <div className={styles.cardHeader}>
           <div className={styles.avatar}>
             <div className={styles.iconContainer}>
               {icon ? <span className={styles.icon}>{icon}</span> : <ImageUser className={styles.icon} />}
             </div>
           </div>
+          <div className={styles.headerText}>
+            <h3 className={styles.title}>{title}</h3>
+            {badgeText && (
+              <StatusBadge text={badgeText} type={badgeType} />
+            )}
+          </div>
         </div>
-        {badgeText && (
-          <StatusBadge text={badgeText} type={badgeType} />
-        )}
-      </div>
 
-      {/* Title and description */}
-      <div className={styles.cardContent}>
-        <h3 className={styles.title}>{title}</h3>
-        {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
-        {description && <p className={styles.description}>{description}</p>}
-      </div>
+        {/* Description row */}
+        <div className={styles.cardContent}>
+          {description && <p className={styles.description}>{description}</p>}
+        </div>
 
-      {/* Footer actions */}
-      <div className={styles.cardFooter}>
-        <Button label={buttonText} type={buttonType} onClick={onButtonClick} />
-        {additionalButtons.map((lbl, idx) => (
-          <Button key={idx} label={lbl} type="primary" onClick={() => onButtonClick && onButtonClick(lbl)} />
-        ))}
+        {/* Footer actions */}
+        <div className={styles.cardFooter}>
+          <ActionBtn label={buttonText} type={buttonType} onClick={onButtonClick} />
+          {additionalButtons.map((lbl, idx) => (
+            <ActionBtn key={idx} label={lbl} type="primary" onClick={() => onButtonClick && onButtonClick(lbl)} />
+          ))}
+        </div>
       </div>
-    </div>
+    </ContentBox>
   );
 };
 

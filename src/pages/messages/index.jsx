@@ -128,26 +128,31 @@ const Messages = () => {
 
   const headerDropdownItems = [
     {
-      key: 'call',
+      key: 'mute',
       label: (
         <div className={styles.dropdownItem}>
-          <PhoneOutlined />
-          Call
+          🔇
+          Mute
         </div>
       ),
     },
     {
-      key: 'archive',
+      key: 'block',
       label: (
         <div className={styles.dropdownItem}>
-          📦
-          Archive
+          🚫
+          Block
         </div>
       ),
     },
     {
-      key: 'view-profile',
-      label: 'View profile',
+      key: 'delete',
+      label: (
+        <div className={styles.dropdownItem}>
+          🗑️
+          Delete
+        </div>
+      ),
     },
   ];
 

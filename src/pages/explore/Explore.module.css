@@ -8,12 +8,10 @@
   margin-bottom: 16px;
 }
 
-.content {
-  padding: 0 24px 24px 24px;
-}
+.content { padding: 0; }
 
 .sectionHeader {
-  margin: 8px 0 24px 0;
+  margin: 28px 0 24px 0;
 }
 
 .sectionTitle {
@@ -34,9 +32,10 @@
 .cardsGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  column-gap: 24px;
+  row-gap: 28px;
+  max-width: none;
+  margin: 0;
 }
 
 /* Responsive adjustments */
@@ -46,5 +45,5 @@
 
 @media (max-width: 768px) {
   .cardsGrid { grid-template-columns: 1fr; }
-  .content { padding: 0 16px 16px 16px; }
+  .content { padding: 0; }
 }
