@@ -53,7 +53,7 @@ const SettingsProfile = () => {
             <div className={styles.labelTitle}>Name</div>
           </Col>
           <Col xs={24} sm={16} md={16} lg={12}>
-            <Row gutter={16}>
+            <Row gutter={24}>
               <Col xs={24} sm={12}>
                 <Form.Item name="firstName">
                   <Input placeholder="Nicolas" className={styles.nameInput} />
@@ -78,8 +78,9 @@ const SettingsProfile = () => {
               <Input placeholder="nicolashm@norgaapp.com" disabled readOnly prefix={<Mail01 className='input-icon' />} className={`custom-icon-input ${styles.singleInput}`} />
             </Form.Item>
           </Col>
-        </Row>        {/* Photo Upload */}
-  <Row gutter={[24, 0]} align="top" className={styles.formRow}>
+        </Row>        
+        {/* Photo Upload */}
+        <Row gutter={[24, 0]} align="top" className={styles.formRow}>
           <Col xs={24} sm={8} md={8} lg={7} className={styles.leftLabel}>
             <div className={styles.labelTitle}>Your photo</div>
             <div className={styles.subDescription}>This will be displayed on your profile.</div>
