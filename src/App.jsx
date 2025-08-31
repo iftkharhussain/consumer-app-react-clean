@@ -108,8 +108,6 @@ function App(props) {
 							<Route path="/my-advisors" element={<Suspense fallback={<div>Loading...</div>}><MyAdvisors /></Suspense>} />
 							<Route path="/explore" element={<Suspense fallback={<div>Loading...</div>}><Explore /></Suspense>} />
 							<Route path="/question" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
-							<Route path="/settings/profile" element={<Suspense fallback={<ProfileSkeleton setLayoutStyles={setLayoutStyles} />}><Profile section="profile" /></Suspense>} />
-							<Route path="/settings/security" element={<Suspense fallback={<SecuritySkeleton setLayoutStyles={setLayoutStyles} />}><Security section="security" /></Suspense>} />
 						</Route>
 						{/* Messages, Notifications, and Settings routes with no page padding */}
 						<Route element={<PrivateWrapper auth={{ isAuthenticated: isAuth }} _style={{ contentPadding: 0 }} />}>

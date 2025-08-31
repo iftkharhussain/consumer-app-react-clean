@@ -63,20 +63,6 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 		}
 	}
 
-	const profileMenuItems = [
-		{
-			key: 'profile',
-			label: (
-				<Link to='/settings/profile'> {t('profile')} </Link>
-			),
-		},
-		{ key: 'settings', label: <Link to='/settings/security'> {t('security')}</Link> },
-		{
-			key: 'logout',
-			label: <Link style={{ color: 'red' }} block danger onClick={handleLogout} > {logoutLoading ? t('loggedOutLoadingMessage') : t('logoutLink')}</Link>,
-		},
-	];
-
 	useEffect(() => {
 		setCollapsed(propsCollapsed);
 	}, [propsCollapsed])
@@ -142,12 +128,12 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 			selectPaths: ['/settings'],
 			selectPaths: ['/settings/*'],
 			icon: (
-				<Link to='/settings/profile'>
+				<Link to='/settings'>
 					<Settings01 />
 				</Link>
 			),
 			label: (
-				<Link to='/settings/profile' style={{ color: 'inherit', textDecoration: 'none' }}>
+				<Link to='/settings' style={{ color: 'inherit', textDecoration: 'none' }}>
 					Account Settings
 				</Link>
 			),
@@ -186,14 +172,14 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 			},
 			{
 				key: 'complete-form',
-				selectPaths: ['/complete-form'],
+				selectPaths: ['/question'],
 				icon: (
-					<Link to='/complete-form'>
+					<Link to='/question'>
 						<LayersThree01 />
 					</Link>
 				),
 				label: (
-					<Link to='/complete-form' style={{ color: 'inherit', textDecoration: 'none' }}>
+					<Link to='/question' style={{ color: 'inherit', textDecoration: 'none' }}>
 						Complete your Form
 					</Link>
 				),
