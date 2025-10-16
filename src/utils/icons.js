@@ -14,6 +14,7 @@ import ArrowRight from "@untitled-ui/icons-react/build/cjs/ArrowRight";
 import ArrowNarrowRight from "@untitled-ui/icons-react/build/cjs/ArrowNarrowRight";
 import DotsVertical from "@untitled-ui/icons-react/build/cjs/DotsVertical";
 import ChevronDown from "@untitled-ui/icons-react/build/cjs/ChevronDown";
+import ChevronUp from "@untitled-ui/icons-react/build/cjs/ChevronUp";
 import ChevronSelectorVertical from "@untitled-ui/icons-react/build/cjs/ChevronSelectorVertical";
 import Mail01 from "@untitled-ui/icons-react/build/cjs/Mail01";
 import Expand05 from "@untitled-ui/icons-react/build/cjs/Expand05";
@@ -117,5 +118,6 @@ export {
     Car01,
     Heart,
     Building05,
-    Shield01
+    Shield01,
+    ChevronUp
 };

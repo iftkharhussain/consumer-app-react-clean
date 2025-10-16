@@ -5,6 +5,7 @@ import { PageContent, Section } from 'components';
 import { Button, Tabs, Rate, Input } from 'antd';
 import { CalendarOutlined, ClockCircleOutlined, BellOutlined } from '@ant-design/icons';
 import { Types } from '../../utils/helper';
+import CustomAlert from '../../components/customAlert';
 import styles from './Overview.module.css';
 
 const Overview = () => {
@@ -187,6 +188,22 @@ const Overview = () => {
 
   return (
     <PageContent pageType="overview">
+      {/* Custom Alert at the top */}
+      <CustomAlert
+        style={{ marginBottom: '20px', marginTop: '-30px', marginLeft: '-30px', marginRight: '-30px' }}
+        message="Want to save? You are also eligible for a [Same Category] quote."
+        secondaryMessage="Get a free quote now!"
+        buttonText="Get Free [Same Category Insurance] Quote"
+        category="Life Insurance"
+        onButtonClick={() => {
+          console.log('Get quote clicked');
+          // Handle navigation to quote page
+        }}
+        onClose={() => {
+          console.log('Alert closed');
+        }}
+      />
+      
       <div className={styles.overviewPage}>
         {/* Main Header */}
         <div>

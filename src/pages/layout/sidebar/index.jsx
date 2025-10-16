@@ -7,12 +7,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logoutUrl, serverUrl } from '../../../apis/sharedApi';
 import styles from './Sidebar.module.css';
 import Button from '../../../components/button';
+import ProgressCard from '../../../components/progressCard';
 
 import { userAppLocalConfig, setUserAppLocalConfig, getUserAppLocalConfig, action, Types, setRequest } from '../../../utils/helper';
 import toast from 'react-hot-toast';
 
 const { Sider } = Layout;
-const leadPageQueryParams = '?pipeline=prospection&advisor=all&filter=all-open'
 
 const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, children }) => {
 	const { t } = useTranslation();
@@ -147,40 +147,26 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 				selectPaths: ['/'],
 				icon: (
 					<Link to='/'>
-						<Home01 />
+						<Flash />
 					</Link>
 				),
 				label: (
 					<Link to='/' style={{ color: 'inherit', textDecoration: 'none' }}>
-						Overview
+						Life Insurance
 					</Link>
 				),
 			},
 			{
-				key: 'explore',
-				selectPaths: ['/explore'],
+				key: 'home1',
+				selectPaths: ['/'],
 				icon: (
-					<Link to='/explore'>
-						<FileSearch02 />
+					<Link to='/'>
+						<Flash />
 					</Link>
 				),
 				label: (
-					<Link to='/explore' style={{ color: 'inherit', textDecoration: 'none' }}>
-						Shop for more
-					</Link>
-				),
-			},
-			{
-				key: 'complete-form',
-				selectPaths: ['/question'],
-				icon: (
-					<Link to='/question'>
-						<LayersThree01 />
-					</Link>
-				),
-				label: (
-					<Link to='/question' style={{ color: 'inherit', textDecoration: 'none' }}>
-						Complete your Form
+					<Link to='/' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Insurance Product #2
 					</Link>
 				),
 			},
@@ -215,6 +201,36 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 					</div>
 				),
 			},
+			{
+				key: 'explore',
+				selectPaths: ['/explore'],
+				icon: (
+					<Link to='/explore'>
+						<FileSearch02 />
+					</Link>
+				),
+				label: (
+					<Link to='/explore' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Explore
+					</Link>
+				),
+			},
+			{
+				key: 'complete-form',
+				selectPaths: ['/question'],
+				icon: (
+					<Link to='/question'>
+						<Cube01 />
+					</Link>
+				),
+				label: (
+					<Link to='/question' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Current Offerings
+					</Link>
+				),
+			},
+			
+			
 		];
 
 		if (userType === 'admin') {
@@ -318,7 +334,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 				className={`${styles.appSidebar} ${collapsed ? styles.collapse : ''} ${!showProgressSection ? styles.hideProgressSection : ''}`}
 				breakpoint='sm'
 				style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0, }}
-				width={292} collapsedWidth={80}
+				width={300} collapsedWidth={80}
 				onCollapse={(value) => {
 					setCollapsed(value);
 					propsSetCollapsed(value);
@@ -355,24 +371,24 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 						<div className={styles.sidebarFooter}>
 							{/* Progress Section - Conditional */}
 							{showProgressSection && (
-								<div className={styles.progressSection}>
-									<div className={styles.progressTitle}>
-										<span>Intake Completion</span>
-										<span className={styles.progressPercentage}>14%</span>
-									</div>
-									<div className={styles.progressBar}>
-										<div className={styles.progressFill} style={{ width: '14%' }}></div>
-									</div>
-									<Button 
-										color="secondary" 
-										size="md" 
-										stretch={true}
-										onClick={() => {/* Handle click */}}
-									>
-										Complete your Profile
-									</Button>
-
-								</div>
+								<ProgressCard
+									title="Level Progress"
+									percentage={66}
+									description="2 of 3 categories finished. One more to go for full completion."
+									completedCount={2}
+									totalCount={3}
+									categories={[
+										{ name: 'People Insurance', completed: true },
+										{ name: 'P & C Insurance', completed: true },
+										{ name: 'Mortgage', completed: false },
+										{ name: 'Reward', completed: false }
+									]}
+									buttonText="Continue with your quotes"
+									onButtonClick={() => {
+										// Handle navigation to quotes or profile completion
+										console.log('Continue with quotes clicked');
+									}}
+								/>
 							)}
 
 							{/* User Profile Section */}
@@ -383,11 +399,15 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 									className={styles.userAvatar}
 								/>
 								<div className={styles.userInfo}>
+									<div className={styles.userNameRow}>
+										<span className={styles.userLevel}>Level 1</span>
+										<span className={styles.levelBadge}>1 category to level up</span>
+									</div>
 									<div className={styles.userName}>
-										{firstName+ ' '+ lastName || 'No Name'}
+										{firstName || 'John Paul'}
 									</div>
 									<div className={styles.userEmail}>
-										{email || 'No Email Provided'}
+										{email || 'johnp@norgaapp.com'}
 									</div>
 								</div>
 							</div>

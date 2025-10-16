@@ -414,6 +414,40 @@
   min-width: 0;
 }
 
+.userNameRow {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing) * 2);
+  margin-bottom: calc(var(--spacing) * 1);
+}
+
+.userLevel {
+  color: #1A1ABA;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px; /* 142.857% */
+}
+
+.levelBadge {
+  border-radius: 16px;
+  background: var(--Gray-100, #EEF2F6);
+  mix-blend-mode: multiply;
+  display: flex;
+  padding: 2px 8px;
+  align-items: center;
+  color: var(--Gray-700, #364152);
+  text-align: center;
+  /* Text xs/Medium */
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 18px; /* 150% */
+  white-space: nowrap;
+}
+
 .userName {
   font-family: var(--font-body);
   font-size: 14px;

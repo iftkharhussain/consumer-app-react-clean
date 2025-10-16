@@ -1,0 +1,96 @@
+/* Main Card Container */
+.progressCard {
+  display: flex;
+  padding: var(--spacing-xl, 16px);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-xl, 16px);
+  align-self: stretch;
+  border-radius: var(--radius-xl, 12px);
+  border: 1px solid var(--Colors-Border-border-secondary, #E9EAEB);
+  background: var(--Colors-Background-bg-primary, #FFF);
+  /* Shadows/shadow-xs */
+  box-shadow: 0 1px 2px 0 var(--Colors-Effects-Shadows-shadow-xs, rgba(10, 13, 18, 0.05));
+}
+
+/* Header with title and percentage */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.title {
+  color: #181D27;
+  /* Text sm/Semibold */
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-sm, 14px);
+  font-style: normal;
+  font-weight: 600;
+  line-height: var(--Line-height-text-sm, 20px); /* 142.857% */
+}
+
+.percentage {
+  color: var(--colors-text-text-quaternary-500, #717680);
+  /* Text sm/Regular */
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--Line-height-text-sm, 20px); /* 142.857% */
+}
+
+/* Description */
+.description {
+  color: #181D27;
+  /* Text sm/Regular */
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--Line-height-text-sm, 20px); /* 142.857% */
+  margin: 0;
+  align-self: stretch;
+}
+
+/* Categories List */
+.categoriesList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md, 12px);
+  width: 100%;
+}
+
+.categoryItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md, 12px);
+}
+
+.checkIcon {
+  display: flex;
+  width: 18px;
+  height: 18px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: var(--radius-full, 9999px);
+  background: var(--Colors-Background-bg-brand-primary, #F3F5F4);
+}
+
+.checkIcon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.categoryName {
+  color: #181D27;
+  /* Text sm/Regular */
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--Line-height-text-sm, 20px); /* 142.857% */
+}

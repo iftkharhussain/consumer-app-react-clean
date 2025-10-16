@@ -1,0 +1,147 @@
+/* Alert Container */
+.alertContainer {
+  display: flex;
+  max-width: var(--container-max-width-desktop, 1280px);
+  padding: var(--spacing-lg, 12px) var(--container-padding-desktop, 32px);
+  align-items: center;
+  align-self: stretch;
+  justify-content: space-between;
+  background: var(--Colors-Background-bg-primary, #FFF);
+  border-bottom: 1px solid var(--Colors-Border-border-secondary, #E9EAEB);
+  gap: var(--spacing-lg, 12px);
+}
+
+/* Alert Content (Left Side) */
+.alertContent {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg, 12px);
+  flex: 1;
+}
+
+/* Alert Icon */
+.alertIcon {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full, 9999px);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alertIcon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Alert Text Container */
+.alertText {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs, 4px);
+  flex-wrap: wrap;
+}
+
+/* Primary Message */
+.primaryMessage {
+  color: var(--colors-text-text-secondary-700, #414651);
+  /* Text sm/Semibold */
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-sm, 14px);
+  font-style: normal;
+  font-weight: 600;
+  line-height: var(--Line-height-text-sm, 20px); /* 142.857% */
+}
+
+/* Secondary Message */
+.secondaryMessage {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  /* Text sm/Regular */
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--Line-height-text-sm, 20px); /* 142.857% */
+}
+
+/* Alert Actions (Right Side) */
+.alertActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md, 8px);
+}
+
+/* Action Button */
+.actionButton {
+  display: flex;
+  padding: var(--spacing-md, 8px) var(--spacing-lg, 12px);
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-xs, 4px);
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--Colors-Border-border-primary, #D5D7DA);
+  background: var(--Colors-Background-bg-primary, #FFF);
+  color: var(--colors-text-text-secondary-700, #414651);
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-sm, 14px);
+  font-style: normal;
+  font-weight: 600;
+  line-height: var(--Line-height-text-sm, 20px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.actionButton:hover {
+  background: var(--Colors-Background-bg-secondary, #F8F9FA);
+  border-color: var(--Colors-Border-border-secondary, #E9EAEB);
+}
+
+.actionButton:active {
+  transform: scale(0.98);
+}
+
+/* Close Button */
+.closeButton {
+  display: flex;
+  width: 36px;
+  height: 36px;
+  padding: var(--spacing-md, 8px);
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: var(--radius-md, 8px);
+  color: var(--colors-text-text-tertiary-600, #535862);
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: var(--Colors-Background-bg-secondary, #F8F9FA);
+  color: var(--colors-text-text-secondary-700, #414651);
+}
+
+.closeButton:active {
+  transform: scale(0.95);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .alertContainer {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--spacing-md, 12px) var(--spacing-lg, 16px);
+  }
+
+  .alertActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .actionButton {
+    flex: 1;
+  }
+}
