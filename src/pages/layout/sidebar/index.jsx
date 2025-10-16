@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Layout, Menu, Tag, Input, Dropdown, Space } from 'antd';
-import { BarChartSquare02, LayersThree01, Users01, CheckDone01, PieChart03, Flash, LifeBuoy01, Settings01, Bell01, ChevronLeftDouble, File04, Home01, ImageUser, MessageChatSquare, FileSearch02, Cube01 } from "utils/icons";
+import { InfoCircle, LayersThree01, Users01, CheckDone01, CurrencyDollarCircle, Flash, LifeBuoy01, Settings01, Bell01, ChevronLeftDouble, File04, Home01, ImageUser, MessageChatSquare, FileSearch02, Cube01, Target01 } from "utils/icons";
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -216,21 +216,49 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 				),
 			},
 			{
+				key: 'boost-savings',
+				selectPaths: ['/boost-savings'],
+				icon: (
+					<Link to='/boost-savings'>
+						<CurrencyDollarCircle />
+					</Link>
+				),
+				label: (
+					<Link to='/boost-savings' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Boost Your Savings
+					</Link>
+				),
+			},
+			{
 				key: 'complete-form',
 				selectPaths: ['/question'],
 				icon: (
-					<Link to='/question'>
+					<Link to='/'>
 						<Cube01 />
 					</Link>
 				),
 				label: (
-					<Link to='/question' style={{ color: 'inherit', textDecoration: 'none' }}>
+					<Link to='/' style={{ color: 'inherit', textDecoration: 'none' }}>
 						Current Offerings
 					</Link>
 				),
 			},
-			
-			
+			{
+				key: 'complete-form',
+				selectPaths: ['/question'],
+				icon: (
+					<Link to='/'>
+						<InfoCircle />
+					</Link>
+				),
+				label: (
+					<Link to='/' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Question form
+					</Link>
+				),
+			},
+
+
 		];
 
 		if (userType === 'admin') {

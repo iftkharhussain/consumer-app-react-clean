@@ -45,6 +45,7 @@ import XCircle from "@untitled-ui/icons-react/build/cjs/XCircle";
 import Target01 from "@untitled-ui/icons-react/build/cjs/Target01";
 import Flag05 from "@untitled-ui/icons-react/build/cjs/Flag05";
 import Home01 from "@untitled-ui/icons-react/build/cjs/Home01";
+import CurrencyDollarCircle from "@untitled-ui/icons-react/build/cjs/CurrencyDollarCircle";
 
 // New icons for sidebar design
 import ImageUser from "@untitled-ui/icons-react/build/cjs/ImageUser";
@@ -119,5 +120,6 @@ export {
     Heart,
     Building05,
     Shield01,
-    ChevronUp
+    ChevronUp,
+    CurrencyDollarCircle
 };
