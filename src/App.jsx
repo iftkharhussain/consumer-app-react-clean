@@ -24,6 +24,7 @@ const Notifications = React.lazy(() => import('./pages/notifications/index'));
 const Settings = React.lazy(() => import('./pages/settings/index'));
 const Explore = React.lazy(() => import('./pages/explore/index'));
 const BoostSavings = React.lazy(() => import('./pages/boostSavings/index'));
+const CarInsurance = React.lazy(() => import('./pages/carInsurance/index'));
 const Profile = React.lazy(() => import('./pages/settings/profile'));
 const Security = React.lazy(() => import('./pages/settings/security'));
 const ResetPassword = React.lazy(() => import('./pages/resetPassword/index'));
@@ -109,6 +110,7 @@ function App(props) {
 							<Route path="/my-advisors" element={<Suspense fallback={<div>Loading...</div>}><MyAdvisors /></Suspense>} />
 							<Route path="/explore" element={<Suspense fallback={<div>Loading...</div>}><Explore /></Suspense>} />
 							<Route path="/boost-savings" element={<Suspense fallback={<div>Loading...</div>}><BoostSavings /></Suspense>} />
+							<Route path="/car-insurance" element={<Suspense fallback={<div>Loading...</div>}><CarInsurance /></Suspense>} />
 							<Route path="/question" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
 						</Route>
 						{/* Messages, Notifications, and Settings routes with no page padding */}

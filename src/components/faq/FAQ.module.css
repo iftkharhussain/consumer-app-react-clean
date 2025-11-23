@@ -1,0 +1,103 @@
+.faqSection {
+  width: 100%;
+  max-width: 768px;
+  margin: 64px auto 0;
+}
+
+.faqTitle {
+  color: var(--colors-text-text-primary-900, #181D27);
+  text-align: center;
+  font-family: var(--Font-family-font-family-display, Inter);
+  font-size: var(--Font-size-display-md, 36px);
+  font-style: normal;
+  font-weight: 600;
+  line-height: var(--Line-height-display-md, 44px); /* 122.222% */
+  letter-spacing: -0.72px;
+  margin: 0 0 24px 0;
+}
+
+.faqSubtitle {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  text-align: center;
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-xl, 20px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--Line-height-text-xl, 30px); /* 150% */
+  margin: 0 0 64px 0;
+}
+
+.faqList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.faqItem {
+  border-bottom: 1px solid #E9EAEB;
+}
+
+.faqItem:first-child {
+  border-top: none;
+}
+
+.faqItem:last-child {
+  border-bottom: none;
+}
+
+.faqQuestion {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  padding: 24px 0;
+  cursor: pointer;
+  text-align: left;
+  color: var(--colors-text-text-primary-900, #181D27);
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-lg, 18px);
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--Line-height-text-lg, 28px); /* 155.556% */
+}
+
+.faqQuestion:hover {
+  opacity: 0.8;
+}
+
+.faqIcon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.faqAnswer {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-md, 16px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--Line-height-text-md, 24px); /* 150% */
+  padding: 0 0 24px 0;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .faqSection {
+    max-width: 100%;
+  }
+
+  .faqTitle {
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  .faqSubtitle {
+    font-size: 18px;
+    line-height: 26px;
+  }
+}

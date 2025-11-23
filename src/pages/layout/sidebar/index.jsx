@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Layout, Menu, Tag, Input, Dropdown, Space } from 'antd';
-import { InfoCircle, LayersThree01, Users01, CheckDone01, CurrencyDollarCircle, Flash, LifeBuoy01, Settings01, Bell01, ChevronLeftDouble, File04, Home01, ImageUser, MessageChatSquare, FileSearch02, Cube01, Target01 } from "utils/icons";
+import { InfoCircle, LayersThree01, Users01, CheckDone01, CurrencyDollarCircle, Flash, LifeBuoy01, Settings01, Bell01, ChevronLeftDouble, File04, Home01, ImageUser, MessageChatSquare, FileSearch02, Cube01, Target01, Car01 } from "utils/icons";
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -226,6 +226,20 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 				label: (
 					<Link to='/boost-savings' style={{ color: 'inherit', textDecoration: 'none' }}>
 						Boost Your Savings
+					</Link>
+				),
+			},
+			{
+				key: 'car-insurance',
+				selectPaths: ['/car-insurance'],
+				icon: (
+					<Link to='/car-insurance'>
+						<Car01 />
+					</Link>
+				),
+				label: (
+					<Link to='/car-insurance' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Car Insurance
 					</Link>
 				),
 			},
