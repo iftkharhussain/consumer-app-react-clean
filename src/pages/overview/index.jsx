@@ -6,6 +6,7 @@ import { Button, Tabs, Rate, Input } from 'antd';
 import { CalendarOutlined, ClockCircleOutlined, BellOutlined } from '@ant-design/icons';
 import { Types } from '../../utils/helper';
 import CustomAlert from '../../components/customAlert';
+import MoreOptions from '../../components/moreOptions';
 import styles from './Overview.module.css';
 
 const Overview = () => {
@@ -35,11 +36,6 @@ const Overview = () => {
   const handleBookCall = () => {
     // Handle booking call functionality
     console.log('Book call clicked');
-  };
-
-  const handleExploreProducts = () => {
-    // Handle explore products functionality
-    console.log('Explore products clicked');
   };
 
   const handleReschedule = () => {
@@ -317,18 +313,7 @@ const Overview = () => {
         </Section>
 
         {/* More Options Section */}
-        <Section variant="card">
-          <h2 className={styles.moreOptionsTitle}>Looking for more product options?</h2>
-          <p className={styles.moreOptionsDescription}>
-            We offer a broader range to meet your unique needs. Click below to explore our full catalog and 
-            discover the right solutions for you.
-          </p>
-          <Button 
-            onClick={handleExploreProducts}
-          >
-            Explore other Products
-          </Button>
-        </Section>
+        <MoreOptions />
       </div>
     </PageContent>
   );

@@ -134,7 +134,7 @@ export const requestHelper = async (url, method, headers, data) => {
       if (isElementVisible('ipl-progress-indicator')) {
         alert('Cannot connect to the server., try to reload the page')
       }
-      toast.error(error.message);
+      // toast.error(error.message);
     }
   }
 };

@@ -93,7 +93,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 
 	const menuItemsOther = [
 		{
-			key: 'notifications', 
+			key: 'notifications',
 			selectPaths: ['/notifications'],
 			icon: (
 				<Link to='/notifications'>
@@ -110,7 +110,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 			),
 		},
 		{
-			key: 'help', 
+			key: 'help',
 			selectPaths: ['/help'],
 			icon: (
 				<Link to='/help'>
@@ -124,7 +124,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 			),
 		},
 		{
-			key: 'settings', 
+			key: 'settings',
 			selectPaths: ['/settings'],
 			selectPaths: ['/settings/*'],
 			icon: (
@@ -144,29 +144,29 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 		const menuItemsAdvisor = [
 			{
 				key: 'home',
-				selectPaths: ['/'],
+				selectPaths: ['/car-insurance'],
 				icon: (
-					<Link to='/'>
-						<Flash />
+					<Link to='/car-insurance'>
+						<Car01 />
 					</Link>
 				),
 				label: (
-					<Link to='/' style={{ color: 'inherit', textDecoration: 'none' }}>
-						Life Insurance
+					<Link to='/car-insurance' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Car Insurance
 					</Link>
 				),
 			},
 			{
-				key: 'home1',
-				selectPaths: ['/'],
+				key: 'overview',
+				selectPaths: ['/overview'],
 				icon: (
-					<Link to='/'>
+					<Link to='/overview'>
 						<Flash />
 					</Link>
 				),
 				label: (
-					<Link to='/' style={{ color: 'inherit', textDecoration: 'none' }}>
-						Insurance Product #2
+					<Link to='/overview' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Life Insurance
 					</Link>
 				),
 			},
@@ -229,48 +229,34 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 					</Link>
 				),
 			},
-			{
-				key: 'car-insurance',
-				selectPaths: ['/car-insurance'],
-				icon: (
-					<Link to='/car-insurance'>
-						<Car01 />
-					</Link>
-				),
-				label: (
-					<Link to='/car-insurance' style={{ color: 'inherit', textDecoration: 'none' }}>
-						Car Insurance
-					</Link>
-				),
-			},
-			{
-				key: 'complete-form',
-				selectPaths: ['/question'],
-				icon: (
-					<Link to='/'>
-						<Cube01 />
-					</Link>
-				),
-				label: (
-					<Link to='/' style={{ color: 'inherit', textDecoration: 'none' }}>
-						Current Offerings
-					</Link>
-				),
-			},
-			{
-				key: 'complete-form',
-				selectPaths: ['/question'],
-				icon: (
-					<Link to='/'>
-						<InfoCircle />
-					</Link>
-				),
-				label: (
-					<Link to='/' style={{ color: 'inherit', textDecoration: 'none' }}>
-						Question form
-					</Link>
-				),
-			},
+			// {
+			// 	key: 'complete-form',
+			// 	selectPaths: ['/question'],
+			// 	icon: (
+			// 		<Link to='/'>
+			// 			<Cube01 />
+			// 		</Link>
+			// 	),
+			// 	label: (
+			// 		<Link to='/' style={{ color: 'inherit', textDecoration: 'none' }}>
+			// 			Current Offerings
+			// 		</Link>
+			// 	),
+			// },
+			// {
+			// 	key: 'complete-form',
+			// 	selectPaths: ['/question'],
+			// 	icon: (
+			// 		<Link to='/'>
+			// 			<InfoCircle />
+			// 		</Link>
+			// 	),
+			// 	label: (
+			// 		<Link to='/' style={{ color: 'inherit', textDecoration: 'none' }}>
+			// 			Question form
+			// 		</Link>
+			// 	),
+			// },
 
 
 		];
@@ -394,15 +380,14 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 							</Link>
 						</div>
 						{/* <img src='/images/log-out-01.svg' className="mob-logout" title='menu-collapsed-icon' /> */}
-						{
+						{/* {
 							sidebarBehavior !== 'fixed' && !collapsed && (
 								<div className={`${styles.menuIcon} ${collapsed ? 'collapsed' : ''}`} onClick={() => { propsSetCollapsed(!collapsed); setCollapsed(!collapsed) }}>
-									{/* <img src='/images/log-out-01.svg' title='menu-collapsed-icon' /> */}
 									<ChevronLeftDouble style={{ color: '#697586' }} />
 								</div>
 
 							)
-						}
+						} */}
 					</div>
 				</div>
 
@@ -412,7 +397,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 					{!collapsed && (
 						<div className={styles.sidebarFooter}>
 							{/* Progress Section - Conditional */}
-							{showProgressSection && (
+							{/* {showProgressSection && (
 								<ProgressCard
 									title="Level Progress"
 									percentage={66}
@@ -431,13 +416,13 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 										console.log('Continue with quotes clicked');
 									}}
 								/>
-							)}
+							)} */}
 
 							{/* User Profile Section */}
 							<div className={styles.userProfile}>
-								<img 
-									src={profilePic || '/images/Avatar.png'} 
-									alt="User Avatar" 
+								<img
+									src={profilePic || '/images/Avatar.png'}
+									alt="User Avatar"
 									className={styles.userAvatar}
 								/>
 								<div className={styles.userInfo}>

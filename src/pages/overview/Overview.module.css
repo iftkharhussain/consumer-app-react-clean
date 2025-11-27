@@ -494,26 +494,6 @@
   margin: 0;
 }
 
-.moreOptionsTitle {
-  color: var(--Schemes-Secondary, #625B71);
-  font-family: var(--font-display, Inter);
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 24px; /* 150% */
-  margin: 0;
-}
-
-.moreOptionsDescription {
-  color: var(--colors-text-text-tertiary-600, #535862);
-  font-family: var(--font-body, Inter);
-  font-size: var(--text-sm, 14px);
-  font-style: normal;
-  font-weight: 400;
-  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
-  margin: 0;
-}
-
 .meetingQuestionSection {
   margin-top: 24px;
 }
@@ -666,8 +646,7 @@
     max-width: 400px;
   }
   
-  .nextStepSection,
-  .moreOptionsSection {
+  .nextStepSection {
     width: 100%;
     max-width: 100%;
   }

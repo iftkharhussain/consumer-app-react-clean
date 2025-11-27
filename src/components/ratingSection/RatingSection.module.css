@@ -1,0 +1,91 @@
+.ratingSection {
+  width: 100%;
+}
+
+.rateTitle {
+  color: var(--colors-text-text-primary-900, #181D27);
+  font-family: Inter;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px;
+  margin: 0 0 8px 0;
+}
+
+.rateSubtitle {
+  color: var(--colors-text-text-secondary-700, #414651);
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+  margin: 0 0 8px 0;
+}
+
+.rateDescription {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  margin: 0 0 24px 0;
+}
+
+.ratingContainer {
+  margin-bottom: 24px;
+}
+
+.customRate {
+  font-size: 24px;
+}
+
+.customRate :global(.ant-rate-star-first),
+.customRate :global(.ant-rate-star-second) {
+  color: #dfdfdf;
+}
+
+.commentsSection {
+  margin-bottom: 24px;
+}
+
+.commentsLabel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--colors-text-text-secondary-700, #414651);
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  margin-bottom: 8px;
+}
+
+.optional {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  font-size: 12px;
+  background: var(--color-gray-100, #f3f4f6);
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.commentsTextarea {
+  border-radius: 8px !important;
+  border: 1px solid var(--color-border-primary, #d1d5db) !important;
+  font-family: Inter !important;
+  font-size: 14px !important;
+}
+
+.commentsTextarea:focus {
+  border-color: #1A1ABA !important;
+  box-shadow: 0 0 0 2px rgba(26, 26, 186, 0.1) !important;
+}
+
+.submitButton {
+  min-width: 200px;
+}

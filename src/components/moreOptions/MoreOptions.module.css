@@ -1,0 +1,20 @@
+/* More Options Section */
+.title {
+  color: var(--Schemes-Secondary, #625B71);
+  font-family: var(--font-display, Inter);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 150% */
+  margin: 0;
+}
+
+.description {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
+  margin: 8px 0 16px 0;
+}

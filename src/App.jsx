@@ -105,7 +105,7 @@ function App(props) {
 				<Router>
 					<Routes>
 						<Route element={<PrivateWrapper auth={{ isAuthenticated: isAuth }} _style={layoutStyles} />}>
-							<Route path="/" element={<Suspense fallback={<div>Loading...</div>}><Overview /></Suspense>} />
+							<Route path="/" element={<Suspense fallback={<div>Loading...</div>}><CarInsurance /></Suspense>} />
 							<Route path="/overview" element={<Suspense fallback={<div>Loading...</div>}><Overview /></Suspense>} />
 							<Route path="/my-advisors" element={<Suspense fallback={<div>Loading...</div>}><MyAdvisors /></Suspense>} />
 							<Route path="/explore" element={<Suspense fallback={<div>Loading...</div>}><Explore /></Suspense>} />

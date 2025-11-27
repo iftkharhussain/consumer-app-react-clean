@@ -1,0 +1,295 @@
+.subtitle {
+  font-family: var(--font-family-body);
+  font-weight: 400;
+  font-size: var(--text-sm);
+  line-height: var(--line-height-text-sm);
+  letter-spacing: 0%;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.nextStepTitle {
+  font-family: var(--font-family-display);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: var(--line-height-display-sm);
+  letter-spacing: 0%;
+  margin-bottom: 12px;
+}
+
+.nextStepDescription {
+  font-family: var(--font-family-body);
+  font-weight: 400;
+  font-size: var(--text-sm);
+  line-height: var(--line-height-text-sm);
+  letter-spacing: 0%;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+/* Progress Section - copied exactly from InterestedModal */
+.progressSection {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.progressSteps {
+  display: flex;
+  gap: 8px;
+  flex: 0 0 90%;
+}
+
+.progressStep {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.stepLabel {
+  color: var(--colors-text-text-secondary-700, #414651);
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-sm, 14px);
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--Line-height-text-sm, 20px);
+  /* 142.857% */
+}
+
+.stepBar {
+  height: 8px;
+  border-radius: 4px;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.stepBarFill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #1A1ABA;
+  border-radius: 4px;
+}
+
+.progressPercentage {
+  flex: 0 0 10%;
+  color: var(--colors-text-text-secondary-700, #414651);
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-sm, 14px);
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--Line-height-text-sm, 20px);
+  /* 142.857% */
+  white-space: nowrap;
+  text-align: left;
+}
+
+/* Details Section - copied exactly from InterestedModal */
+
+
+.detailsTitle {
+  color: #535862;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 19.688px;
+  /* 140.63% */
+  margin: 0 0 16px 0;
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.detailIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.detailText {
+  overflow: hidden;
+  color: var(--colors-text-text-tertiary-600, #535862);
+  text-overflow: ellipsis;
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--Line-height-text-sm, 20px);
+  /* 142.857% */
+}
+
+/* Votre choix Section */
+.choiceSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.choiceLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.choiceRight {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.choiceTitle {
+  overflow: hidden;
+  color: var(--colors-text-text-tertiary-600, #535862);
+  text-overflow: ellipsis;
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-sm, 14px);
+  font-style: normal;
+  font-weight: 600;
+  line-height: var(--Line-height-text-sm, 20px);
+  margin: 0;
+}
+
+.choiceContent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.choiceLabel {
+  overflow: hidden;
+  color: var(--colors-text-text-tertiary-600, #535862);
+  text-overflow: ellipsis;
+  /* Text sm/Regular */
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--Line-height-text-sm, 20px);
+  /* 142.857% */
+}
+
+.choiceLogo {
+  width: 65px;
+  height: 29px;
+  aspect-ratio: 65/29;
+    margin-left: 10px;
+}
+
+.choicePrice {
+  overflow: hidden;
+  color: #535862;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-sm, 14px);
+  font-style: normal;
+  font-weight: 700;
+  line-height: var(--Line-height-text-sm, 20px);
+  /* 142.857% */
+}
+
+/* Provider Section */
+.providerSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.providerLabel {
+  font-family: var(--font-family-body);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.providerLogo {
+  display: block;
+  width: 165px;
+  margin-bottom: 10px;
+}
+
+/* Contact Section */
+.contactLabel {
+  font-family: var(--font-family-body);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--text-secondary);
+  margin-bottom: 0px;
+  margin-top: 0;
+}
+
+.contactLabel a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.contactLabel a:hover {
+  text-decoration: underline;
+}
+
+/* Call Happen Section */
+.callHappenSection {
+  /* border-top: 1px solid #E5E7EB; */
+  width: 250;
+}
+
+.callHappenTitle {
+  color: #535862;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 19.688px;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.yesNoButtons {
+  display: flex;
+  gap: 12px;
+}
+
+.yesButton,
+.noButton {
+min-width: 108px;
+  max-width: 150px;
+  padding: 10px 5px;
+  line-height: 1;
+  height: auto;
+}
+
+/* More Options Section */
+.moreOptionsTitle {
+  color: var(--Schemes-Secondary, #625B71);
+  font-family: var(--font-display, Inter);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 150% */
+  margin: 0;
+}
+
+.moreOptionsDescription {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
+  margin: 0;
+}
