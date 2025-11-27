@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Modal } from 'antd';
 import Button from '../button/Button';
 import ContactSection from '../contactSection';
 import RatingSection from '../ratingSection';
@@ -6,8 +7,6 @@ import styles from './InterestedModal.module.css';
 
 const InterestedModal = ({ isOpen, onClose, onAccept, variant = 'default' }) => {
   const [isLoading, setIsLoading] = useState(false);
-
-  if (!isOpen) return null;
 
   const handleAccept = () => {
     setIsLoading(true);
@@ -35,13 +34,16 @@ const InterestedModal = ({ isOpen, onClose, onAccept, variant = 'default' }) => 
   // Review variant - shows rating section with 100% progress
   if (variant === 'review') {
     return (
-      <div className={styles.modalOverlay} onClick={onClose}>
-        <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-          {/* Close button */}
-          <button className={styles.closeButton} onClick={onClose}>
-            <img src="/images/Button close X.svg" alt="Close" />
-          </button>
-
+      <Modal
+        open={isOpen}
+        onCancel={onClose}
+        footer={null}
+        width={814}
+        centered
+        className={styles.modal}
+        closeIcon={<img src="/images/Button close X.svg" alt="Close" />}
+      >
+        <div className={styles.modalContent}>
           {/* Title */}
           <h2 className={styles.title}>Review Courtika</h2>
 
@@ -87,19 +89,22 @@ const InterestedModal = ({ isOpen, onClose, onAccept, variant = 'default' }) => 
             onSubmit={handleSubmitRating} 
           />
         </div>
-      </div>
+      </Modal>
     );
   }
 
   // Default variant
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
-      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-        {/* Close button */}
-        <button className={styles.closeButton} onClick={onClose}>
-          <img src="/images/Button close X.svg" alt="Close" />
-        </button>
-
+    <Modal
+      open={isOpen}
+      onCancel={onClose}
+      footer={null}
+      width={814}
+      centered
+      className={styles.modal}
+      closeIcon={<img src="/images/Button close X.svg" alt="Close" />}
+    >
+      <div className={styles.modalContent}>
         {/* Title */}
         <h2 className={styles.title}>Acheter avec Courtika</h2>
 
@@ -171,7 +176,7 @@ const InterestedModal = ({ isOpen, onClose, onAccept, variant = 'default' }) => 
           </Button>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 };
 
