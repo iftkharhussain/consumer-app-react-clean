@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PageHeader from '../pageHeader';
 import { Section } from 'components';
 import Button from '../button/Button';
 import ProgressSection from '../progressSection/ProgressSection';
@@ -56,11 +55,6 @@ const EstimateContent = () => {
 
     return (
         <>
-            <PageHeader title="Here is your estimate!" />
-            <p className={styles.subtitle}>
-                The price is not final — an advisor will call you to confirm your health status, then adjust the duration and price according to your needs.
-            </p>
-
             {/* Next Step Section */}
             <Section variant="card">
                 <h2 className={styles.nextStepTitle}>Next Step: Schedule a call with your Courtika</h2>

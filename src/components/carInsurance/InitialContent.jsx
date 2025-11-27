@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
-import { Rate } from 'antd';
+import { Rate, Spin } from 'antd';
 import PageHeader from '../pageHeader';
 import Button from '../button/Button';
 import { Section } from 'components';
 import FAQ from '../faq';
 import GetInTouch from '../getInTouch';
 import MoreOptions from '../moreOptions';
+import OptionsModal from '../optionsModal';
 import styles from '../../pages/carInsurance/CarInsurance.module.css';
 
 const InitialContent = ({ onInterestedClick }) => {
     const [expandedProviders, setExpandedProviders] = useState({});
+    const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false);
+    const [isOptionsLoading, setIsOptionsLoading] = useState(false);
 
     const toggleProvider = (providerId) => {
         setExpandedProviders(prev => ({
@@ -20,6 +23,21 @@ const InitialContent = ({ onInterestedClick }) => {
 
     const handleGetInTouch = () => {
         console.log('Get in touch clicked');
+    };
+
+    const handleRecalculate = (data) => {
+        console.log('Recalculate with options:', data);
+        // Handle recalculation logic here
+    };
+
+    const handleModifierClick = (e) => {
+        e.preventDefault();
+        setIsOptionsLoading(true);
+        // Simulate loading delay (replace with actual API call if needed)
+        setTimeout(() => {
+            setIsOptionsLoading(false);
+            setIsOptionsModalOpen(true);
+        }, 800);
     };
 
     const faqItems = [
@@ -148,8 +166,12 @@ const InitialContent = ({ onInterestedClick }) => {
             <p className={styles.subtitle}>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam iusto amet saepe commodi odio, deleniti cum dolor unde fugiat sunt aliquid ea obcaecati expedita maxime ut cupiditate voluptates id reprehenderit.</p>
 
             {/* Modifier Section */}
-            <a href="#" className={styles.modifierLink}>
-                Modifier <img src="/images/config.svg" alt="" className={styles.modifierIcon} />
+            <a href="#" className={styles.modifierLink} onClick={handleModifierClick}>
+                Modifier {isOptionsLoading ? (
+                    <Spin size="small" />
+                ) : (
+                    <img src="/images/config.svg" alt="" className={styles.modifierIcon} />
+                )}
             </a>
 
             {/* Featured Provider Card */}
@@ -303,6 +325,13 @@ const InitialContent = ({ onInterestedClick }) => {
 
             {/* Get in Touch Section */}
             <GetInTouch onButtonClick={handleGetInTouch} />
+
+            {/* Options Modal */}
+            <OptionsModal
+                isOpen={isOptionsModalOpen}
+                onClose={() => setIsOptionsModalOpen(false)}
+                onRecalculate={handleRecalculate}
+            />
         </>
     );
 };
