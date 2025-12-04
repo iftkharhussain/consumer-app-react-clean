@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
-import { Layout, Menu, Tag, Input, Dropdown, Space } from 'antd';
-import { InfoCircle, LayersThree01, Users01, CheckDone01, CurrencyDollarCircle, Flash, LifeBuoy01, Settings01, Bell01, ChevronLeftDouble, File04, Home01, ImageUser, MessageChatSquare, FileSearch02, Cube01, Target01, Car01 } from "utils/icons";
+import { Layout, Menu, Tag, Input, Dropdown, Space, Popover } from 'antd';
+import { InfoCircle, LayersThree01, Users01, CheckDone01, CurrencyDollarCircle, Flash, LifeBuoy01, Settings01, Bell01, ChevronLeftDouble, File04, Home01, ImageUser, MessageChatSquare, FileSearch02, Cube01, Target01, Car01, LogOut01 } from "utils/icons";
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -418,26 +418,57 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 								/>
 							)} */}
 
-							{/* User Profile Section */}
-							<div className={styles.userProfile}>
-								<img
-									src={profilePic || '/images/Avatar.png'}
-									alt="User Avatar"
-									className={styles.userAvatar}
-								/>
-								<div className={styles.userInfo}>
-									<div className={styles.userNameRow}>
-										<span className={styles.userLevel}>Level 1</span>
-										<span className={styles.levelBadge}>1 category to level up</span>
+							{/* User Profile Section with Popover */}
+							<Popover
+								content={
+									<div style={{ minWidth: '180px' }}>
+										<div style={{ padding: '8px 0', borderBottom: '1px solid #f0f0f0', marginBottom: '8px' }}>
+											<div style={{ fontWeight: 600, color: '#1f2937' }}>{firstName || 'User'} {lastName || ''}</div>
+											<div style={{ fontSize: '12px', color: '#6b7280' }}>{email || ''}</div>
+										</div>
+										<Link to="/settings" style={{ display: 'flex', alignItems: 'center', padding: '8px 0', color: '#374151', textDecoration: 'none' }}>
+											<Settings01 style={{ marginRight: 8, width: 16, height: 16 }} />
+											{t('settings') || 'Settings'}
+										</Link>
+										<div 
+											onClick={handleLogout}
+											style={{ 
+												display: 'flex', 
+												alignItems: 'center', 
+												padding: '8px 0', 
+												color: '#ef4444', 
+												cursor: logoutLoading ? 'wait' : 'pointer',
+												opacity: logoutLoading ? 0.6 : 1
+											}}
+										>
+											<LogOut01 style={{ marginRight: 8, width: 16, height: 16 }} />
+											{logoutLoading ? 'Logging out...' : (t('logout') || 'Logout')}
+										</div>
 									</div>
-									<div className={styles.userName}>
-										{firstName || 'John Paul'}
-									</div>
-									<div className={styles.userEmail}>
-										{email || 'johnp@norgaapp.com'}
+								}
+								trigger="click"
+								placement="topRight"
+							>
+								<div className={styles.userProfile} style={{ cursor: 'pointer' }}>
+									<img
+										src={profilePic || '/images/Avatar.png'}
+										alt="User Avatar"
+										className={styles.userAvatar}
+									/>
+									<div className={styles.userInfo}>
+										<div className={styles.userNameRow}>
+											<span className={styles.userLevel}>Level 1</span>
+											<span className={styles.levelBadge}>1 category to level up</span>
+										</div>
+										<div className={styles.userName}>
+											{firstName || 'John Paul'}
+										</div>
+										<div className={styles.userEmail}>
+											{email || 'johnp@norgaapp.com'}
+										</div>
 									</div>
 								</div>
-							</div>
+							</Popover>
 						</div>
 					)}
 				</div>

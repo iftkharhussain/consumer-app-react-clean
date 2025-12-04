@@ -1,0 +1,57 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  padding: 48px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  max-width: 450px;
+  width: 100%;
+}
+
+.card h4 {
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.logo {
+  width: 120px;
+  margin-bottom: 24px;
+}
+
+/* Override Ant Design Result styles for better look */
+:global(.ant-result) {
+  padding: 48px 32px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  max-width: 500px;
+}
+
+:global(.ant-result-title) {
+  font-size: 24px !important;
+  font-weight: 600 !important;
+}
+
+:global(.ant-result-subtitle) {
+  font-size: 16px !important;
+  color: #666 !important;
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 32px 24px;
+  }
+  
+  :global(.ant-result) {
+    padding: 32px 16px;
+  }
+}

@@ -390,7 +390,8 @@ export const eraseCookie = (name) => {
 }
 
 export const setRequest = async (type, cred, path, method, dispatch, requestId) => {
-  const url = `${baseUrl}${path}`;
+  // If path is already a full URL, use it directly, otherwise append to baseUrl
+  const url = path.startsWith('http') ? path : `${baseUrl}${path}`;
   const res = await requestHelper(url, method, null, cred)
   if (!res) {
     return false

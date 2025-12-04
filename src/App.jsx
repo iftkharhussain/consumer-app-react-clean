@@ -17,6 +17,8 @@ import { Types, action, setRequest, userAppLocalConfig, setUserAppLocalConfig, g
 import { globalToken, lightToken, darkToken } from './utils/themeConfig';
 
 const LoginForm = React.lazy(() => import('./pages/login/index'));
+const Register = React.lazy(() => import('./pages/register/index'));
+const LeadLogin = React.lazy(() => import('./pages/leadLogin/index'));
 const Overview = React.lazy(() => import('./pages/overview/index'));
 const MyAdvisors = React.lazy(() => import('./pages/myAdvisors/index'));
 const Messages = React.lazy(() => import('./pages/messages/index'));
@@ -32,7 +34,7 @@ const ForgotPassword = React.lazy(() => import('./pages/forgotPassword/index'));
 const QuestionPage = React.lazy(() => import('./pages/question/index'));
 const Logout = React.lazy(() => import('./pages/logout/index'));
 const PrivateWrapper = ({ auth: { isAuthenticated }, heading, _style }) => {
-	return isAuthenticated === false ? (
+	return isAuthenticated === true ? (
 		<Layout _style={_style}>
 			<Outlet />
 		</Layout>
@@ -120,10 +122,12 @@ function App(props) {
 							<Route path="/settings" element={<Suspense fallback={<div>Loading...</div>}><Settings /></Suspense>} />
 						</Route>
 						<Route exact path="/logout" element={<Logout />} />
+						<Route exact path="/auth/lead-login" element={<Suspense fallback={<div>Loading...</div>}><LeadLogin /></Suspense>} />
 						<Route exact path="/question-public" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
 						<Route exact path="/reset-password/:token" element={isAuth ? <Navigate to={defaultAppPage} /> : <ResetPassword />} />
 						<Route exact path="/forgot-password" element={isAuth ? <Navigate to={defaultAppPage} /> : <ForgotPassword />} />
 						<Route exact path="/login" element={isAuth ? <Navigate to={defaultAppPage} /> : <LoginForm setIsAuth={setIsAuth} {...props} />} />
+						<Route exact path="/register" element={isAuth ? <Navigate to={defaultAppPage} /> : <Register setIsAuth={setIsAuth} {...props} />} />
 						<Route path="/*" element={<PageNotFound />} />
 					</Routes>
 				</Router>

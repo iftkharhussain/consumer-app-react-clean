@@ -1,9 +1,9 @@
 // API Configuration for Consumer App
 
-// Environment-based API URLs
-const LOCAL_API = 'http://localhost:8000';
-const DEV_API = 'https://dev-api.norga.com';
-const PROD_API = 'https://api.norga.com';
+// Environment-based API URLs  
+const LOCAL_API = 'http://localhost:3025';  // Consumer app API port
+const DEV_API = 'https://dev-consumer-api.norga.com';
+const PROD_API = 'https://consumer-api.norga.com';
 
 // Determine base URL based on environment
 const getBaseUrl = () => {
@@ -22,10 +22,15 @@ export const baseUrl = getBaseUrl();
 export const serverUrl = baseUrl; // Alias for baseUrl
 
 // Authentication Endpoints
-export const authUrl = `${baseUrl}/api/auth`;
+export const authUrl = `${baseUrl}/api/auth/verify`;
 export const LoginUrl = `${baseUrl}/api/auth/login`;
+export const RegisterUrl = `${baseUrl}/api/auth/register`;
+export const PhoneLoginUrl = `${baseUrl}/api/auth/phone-login`;
+export const LeadLoginUrl = `${baseUrl}/api/auth/lead-login`;
+export const CheckTokenUrl = `${baseUrl}/api/auth/check-token`;
 export const logoutUrl = `${baseUrl}/api/auth/logout`;
 export const profileUrl = `${baseUrl}/api/auth/profile`;
+export const CurrentUserUrl = `${baseUrl}/api/auth/me`;
 export const ForgotPasswordUrl = `${baseUrl}/api/auth/forgot-password`;
 export const ResetPasswordUrl = `${baseUrl}/api/auth/reset-password`;
 export const ResetPasswordAuthUrl = `${baseUrl}/api/auth/reset-password-auth`;

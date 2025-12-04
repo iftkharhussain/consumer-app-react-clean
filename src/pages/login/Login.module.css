@@ -74,7 +74,7 @@
 
 .button {
   height: 44px;
-  background: #2563eb;
+  background: #1a1aba;
   border: none;
   border-radius: 8px;
   font-size: 16px;
@@ -82,9 +82,9 @@
   color: #fff;
   transition: all .2s ease;
 }
-.button:hover { background: #1d4ed8; color: #fff; }
-.button:focus { background: #1d4ed8; color: #fff; box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
-.button:global(.ant-btn-loading) { background: #2563eb; color: #fff; }
+.button:hover { background: #1515a3; color: #fff; }
+.button:focus { background: #1515a3; color: #fff; box-shadow: 0 0 0 3px rgba(26,26,186,.1); }
+.button:global(.ant-btn-loading) { background: #1a1aba; color: #fff; }
 
 /* Error states */
 .form :global(.ant-form-item-has-error) .input,
