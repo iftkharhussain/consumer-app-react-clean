@@ -38,5 +38,21 @@
   "questions": "Questions",
   "askQuestion": "Ask a Question",
   "updateProfile": "Update Profile",
-  "securitySettings": "Security Settings"
+  "securitySettings": "Security Settings",
+  "creatingYourAccount": "Creating Your Account",
+  "verifying": "Verifying your credentials...",
+  "creating": "Setting up your account...",
+  "preparing": "Preparing your dashboard...",
+  "noTokenProvided": "No Authentication Token",
+  "noTokenProvidedDescription": "No authentication token was provided. Please use the link from your form submission.",
+  "goToLogin": "Go to Login",
+  "needHelp": "Need help?",
+  "accountCreated": "Account Created!",
+  "welcomeBack": "Welcome Back!",
+  "accountReadyRedirecting": "Your account is ready. Redirecting you now...",
+  "redirectingToDashboard": "Redirecting you to your dashboard...",
+  "authenticationFailed": "Authentication Failed",
+  "tokenExpiredOrInvalid": "Your login link may have expired or is invalid.",
+  "tokenExpiredHelp": "Login links expire after 10 minutes for security.",
+  "needAssistance": "Need assistance?"
 }

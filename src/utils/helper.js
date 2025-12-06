@@ -79,13 +79,15 @@ export const requestHelper = async (url, method, headers, data) => {
       url = `${url}?${queryParams.toString()}`;
     }
 
+    // Detect if data is a JSON string
+    const isJsonData = typeof data === 'string' && (data.startsWith('{') || data.startsWith('['));
+
     const requestOptions = {
       method,
       credentials: 'include', //'same-origin'
       headers: {
         ...headers,
-        // "Content-Type": "application/json"
-        // auth: getAuthCookieValue()
+        ...(isJsonData ? { 'Content-Type': 'application/json' } : {}),
       },
     };
 
@@ -111,7 +113,8 @@ export const requestHelper = async (url, method, headers, data) => {
       if (response.status === 401 && window.location.pathname !== '/login') {
         if (!window.location.pathname.startsWith('/join') &&
           !window.location.pathname.startsWith('/reset-password') &&
-          !window.location.pathname.startsWith('/forgot-password')) {
+          !window.location.pathname.startsWith('/forgot-password') &&
+          !window.location.pathname.startsWith('/auth/lead-login')) {
 
           window.location.href = "/login";
         }

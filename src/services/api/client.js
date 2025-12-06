@@ -5,19 +5,16 @@ import { baseUrl } from '../../apis/sharedApi';
 export const apiClient = axios.create({
   baseURL: baseUrl,
   timeout: 30000,
+  withCredentials: true, // Send cookies with requests
   headers: {
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*'
   }
 });
 
-// Request interceptor to add auth token
+// Request interceptor - cookies are sent automatically with withCredentials: true
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    console.log('[apiClient] Making request to:', config.url);
     return config;
   },
   (error) => {
@@ -28,14 +25,21 @@ apiClient.interceptors.request.use(
 // Response interceptor for error handling
 apiClient.interceptors.response.use(
   (response) => {
+    console.log('[apiClient] Response from:', response.config.url, response.status);
     return response;
   },
   (error) => {
+    console.log('[apiClient] Error from:', error.config?.url, error.response?.status);
     if (error.response?.status === 401) {
-      // Handle unauthorized access
-      localStorage.removeItem('token');
-      sessionStorage.removeItem('token');
-      window.location.href = '/login';
+      // Don't redirect if we're already on login page or if it's a quote API call
+      // Let the component handle the 401 error gracefully
+      const isLoginPage = window.location.pathname === '/login';
+      const isQuoteApi = error.config?.url?.includes('/quote/');
+      
+      if (!isLoginPage && !isQuoteApi) {
+        // Redirect to login for non-quote APIs
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }

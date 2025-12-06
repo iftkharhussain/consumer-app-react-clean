@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Rate, Spin } from 'antd';
 import PageHeader from '../pageHeader';
 import Button from '../button/Button';
@@ -7,12 +7,117 @@ import FAQ from '../faq';
 import GetInTouch from '../getInTouch';
 import MoreOptions from '../moreOptions';
 import OptionsModal from '../optionsModal';
+import { useQuote } from '../../hooks/useQuote';
+import { 
+    FeaturedCardSkeleton, 
+    ComparisonTableSkeleton, 
+    QuoteErrorState,
+    QuotePendingState 
+} from './QuoteSkeletons';
 import styles from '../../pages/carInsurance/CarInsurance.module.css';
 
 const InitialContent = ({ onInterestedClick }) => {
     const [expandedProviders, setExpandedProviders] = useState({});
     const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false);
     const [isOptionsLoading, setIsOptionsLoading] = useState(false);
+
+    // Use quote hook to fetch and manage quotes (single API call)
+    const { 
+        loading, 
+        error, 
+        quoteStatus, 
+        quoteData,
+        isLoading,
+        hasQuote,
+        isPending,
+        hasFailed,
+        showFallback,
+        isAuthenticated,
+        refresh 
+    } = useQuote('car-insurance', { 
+        autoFetch: true
+    });
+
+    // Transform quote details into display format
+    const [featuredProvider, setFeaturedProvider] = useState(null);
+    const [comparisonProviders, setComparisonProviders] = useState([]);
+
+    // Process quote results when available
+    useEffect(() => {
+        console.log('Quote data received:', {
+            hasQuoteData: !!quoteData,
+            carriers: quoteData?.carriers?.length || 0,
+            quoteStatus,
+            hasQuote,
+            isAuthenticated
+        });
+        
+        // quoteData contains { carriers: [...], carriersCount, responseTime }
+        if (quoteData?.carriers && Array.isArray(quoteData.carriers)) {
+            console.log('Processing carriers:', quoteData.carriers.map(c => ({
+                name: c.name,
+                available: c.available,
+                premium: c.premium
+            })));
+            
+            // Filter available carriers (Fortus returns 'available' not 'success')
+            const availableCarriers = quoteData.carriers.filter(r => r.available);
+            
+            if (availableCarriers.length > 0) {
+                // Find Intact as the featured provider (always show Intact first)
+                // If Intact not found, use the first available carrier
+                let intactCarrier = availableCarriers.find(c => 
+                    c.name?.toLowerCase() === 'intact' || 
+                    c.carrierName?.toLowerCase() === 'intact'
+                );
+                
+                // Fallback to first carrier if Intact not found
+                const featured = intactCarrier || availableCarriers[0];
+                
+                // Calculate price - premium is annual, divide by 12 for monthly
+                // If premium is 0 (test/sandbox), show placeholder
+                const annualPremium = featured.premium || 0;
+                const monthlyPrice = annualPremium > 0 ? Math.round(annualPremium / 12) : null;
+                
+                console.log('Setting featured provider:', featured.name || featured.carrierName);
+                setFeaturedProvider({
+                    name: featured.name || featured.carrierName || 'Best Option',
+                    logo: getCarrierLogo(featured.name || featured.carrierCode),
+                    price: monthlyPrice,
+                    yearlyPrice: annualPremium > 0 ? annualPremium : null,
+                    rating: 4.5,
+                    benefits: extractBenefits(featured),
+                    coverages: featured.coverages || [],
+                    quoteDetails: featured.quoteDetails || {}
+                });
+                
+                // Rest are comparison providers (exclude the featured one)
+                const otherCarriers = availableCarriers.filter(c => 
+                    (c.name || c.carrierName) !== (featured.name || featured.carrierName)
+                );
+                
+                const others = otherCarriers.map((result, index) => {
+                    const annual = result.premium || 0;
+                    const monthly = annual > 0 ? Math.round(annual / 12) : null;
+                    
+                    return {
+                        id: index + 1,
+                        name: result.name || result.carrierName || `Provider ${index + 2}`,
+                        logo: getCarrierLogo(result.name || result.carrierCode),
+                        monthlyPrice: monthly,
+                        yearlyPrice: annual > 0 ? annual : null,
+                        rating: 4.5,
+                        details: extractBenefits(result),
+                        coverages: result.coverages || [],
+                        quoteDetails: result.quoteDetails || {}
+                    };
+                });
+                
+                console.log('Setting comparison providers:', others.map(p => p.name));
+                setComparisonProviders(others);
+            }
+        }
+    }, [quoteData]);
 
     const toggleProvider = (providerId) => {
         setExpandedProviders(prev => ({
@@ -67,7 +172,84 @@ const InitialContent = ({ onInterestedClick }) => {
         }
     ];
 
-    const featuredProvider = {
+    // Helper function to get carrier logo
+    const getCarrierLogo = (carrierName) => {
+        if (!carrierName) return '/images/insurance-default.svg';
+        
+        const normalizedName = carrierName.toLowerCase().trim();
+        
+        const logoMap = {
+            'intact': '/images/intact-insurance.svg',
+            'beneva': '/images/Beneva_rgb.svg',
+            'promutuel': '/images/promutuel.svg',
+            'economical': '/images/economical.svg',
+            'caa': '/images/CAA_logo.svg',
+            'aviva': '/images/aviva.svg',
+            'wawanesa': '/images/wawanesa.svg',
+            'rsa': '/images/rsa.svg',
+        };
+        
+        // Check for exact match or partial match
+        for (const [key, logo] of Object.entries(logoMap)) {
+            if (normalizedName.includes(key)) {
+                return logo;
+            }
+        }
+        
+        return '/images/insurance-default.svg';
+    };
+
+    // Helper function to extract benefits from quote result
+    const extractBenefits = (result) => {
+        const benefits = [];
+        
+        // Extract from Fortus coverages array format
+        // Format: [{ code: "TPL", limit: "$2,000,000/-$1", deductible: 500 }, ...]
+        if (result.coverages && Array.isArray(result.coverages)) {
+            result.coverages.forEach(coverage => {
+                const code = coverage.code?.toUpperCase();
+                
+                // Map coverage codes to friendly names
+                const coverageNames = {
+                    'TPL': 'Third Party Liability',
+                    'DCPD': 'Direct Compensation',
+                    'COLL': 'Collision',
+                    'COMP': 'Comprehensive',
+                    'AB': 'Accident Benefits',
+                    'UA': 'Uninsured Auto',
+                    'SEF44': 'Family Protection'
+                };
+                
+                const label = coverageNames[code] || code || 'Coverage';
+                let value = '';
+                
+                if (coverage.limit && coverage.limit !== '-$1/-$1') {
+                    value = coverage.limit;
+                } else if (coverage.deductible && coverage.deductible > 0) {
+                    value = `$${coverage.deductible} deductible`;
+                } else {
+                    value = 'Included';
+                }
+                
+                benefits.push({ label, value });
+            });
+        }
+        
+        // If no coverages extracted, add default benefits
+        if (benefits.length === 0) {
+            benefits.push(
+                { label: 'Coverage', value: 'Full coverage' },
+                { label: 'Deductible', value: '$500' },
+                { label: 'Support', value: '24/7 Claims' }
+            );
+        }
+        
+        // Limit to first 3 benefits for display
+        return benefits.slice(0, 3);
+    };
+
+    // Fallback data when no quotes available
+    const fallbackFeaturedProvider = {
         name: 'Intact assurance',
         logo: '/images/intact-insurance.svg',
         price: 90,
@@ -79,7 +261,7 @@ const InitialContent = ({ onInterestedClick }) => {
         ]
     };
 
-    const comparisonProviders = [
+    const fallbackComparisonProviders = [
         {
             id: 1,
             name: 'Beneva',
@@ -131,34 +313,15 @@ const InitialContent = ({ onInterestedClick }) => {
                 { label: 'Benefit 2', value: 'cool benefit' },
                 { label: 'Benefit 3', value: 'cool benefit' }
             ]
-        },
-        {
-            id: 5,
-            name: 'Beneva',
-            logo: '/images/Beneva_rgb.svg',
-            monthlyPrice: 90,
-            yearlyPrice: 1080,
-            rating: 4.5,
-            details: [
-                { label: 'Benefit 1', value: 'cool benefit' },
-                { label: 'Benefit 2', value: 'cool benefit' },
-                { label: 'Benefit 3', value: 'cool benefit' }
-            ]
-        },
-        {
-            id: 6,
-            name: 'Promutuel assurance',
-            logo: '/images/promutuel.svg',
-            monthlyPrice: 90,
-            yearlyPrice: 1080,
-            rating: 4.5,
-            details: [
-                { label: 'Benefit 1', value: 'cool benefit' },
-                { label: 'Benefit 2', value: 'cool benefit' },
-                { label: 'Benefit 3', value: 'cool benefit' }
-            ]
         }
     ];
+
+    // Use quote data if available, otherwise use fallback
+    const displayFeaturedProvider = featuredProvider || fallbackFeaturedProvider;
+    const displayComparisonProviders = comparisonProviders.length > 0 ? comparisonProviders : fallbackComparisonProviders;
+
+    // Determine if we should show loading state (only when authenticated and actually loading)
+    const shouldShowLoading = isLoading && isAuthenticated && !showFallback;
 
     return (
         <>
@@ -174,144 +337,167 @@ const InitialContent = ({ onInterestedClick }) => {
                 )}
             </a>
 
-            {/* Featured Provider Card */}
-            <div className={styles.featuredCard}>
-                <div className={styles.featuredCardContent}>
-                    <div className={styles.providerColumn}>
-                        <div className={styles.providerHeader}>
-                            <img
-                                src={featuredProvider.logo}
-                                alt={featuredProvider.name}
-                                className={styles.providerLogo}
-                            />
-                            <span className={styles.providerName}>{featuredProvider.name}</span>
-                        </div>
-                    </div>
-
-                    <div className={styles.pricingColumn}>
-                        <div className={styles.pricingSection}>
-                            <div className={styles.priceMain}>
-                                <span className={styles.priceAmount}>{featuredProvider.price}$</span>
-                                <span className={styles.priceLabel}>a month</span>
-                            </div>
-                            <div className={styles.priceSecondary}>
-                                <span className={styles.priceYearlyLabel}>or </span>
-                                <span className={styles.priceYearlyAmount}>{featuredProvider.price * 12}$</span>
-                                <span className={styles.priceYearlyLabel}> a year</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={styles.benefitsColumn}>
-                        <div className={styles.benefitsSection}>
-                            {featuredProvider.benefits.map((benefit, index) => (
-                                <div key={index} className={styles.benefitRow}>
-                                    <span className={styles.benefitLabel}>{benefit.label}:</span>
-                                    <span className={styles.benefitValue}>{benefit.value}</span>
+            {/* Show skeleton while loading (only if authenticated), error state if failed, pending state if waiting */}
+            {shouldShowLoading ? (
+                <>
+                    <FeaturedCardSkeleton />
+                    <h2 className={styles.sectionHeading}>Other leading insurance providers</h2>
+                    <ComparisonTableSkeleton />
+                </>
+            ) : error && isAuthenticated ? (
+                <QuoteErrorState message={error} onRetry={refresh} />
+            ) : isPending && isAuthenticated ? (
+                <QuotePendingState message="Your quote is being processed. This may take a moment..." />
+            ) : (
+                <>
+                    {/* Featured Provider Card */}
+                    <div className={styles.featuredCard}>
+                        <div className={styles.featuredCardContent}>
+                            <div className={styles.providerColumn}>
+                                <div className={styles.providerHeader}>
+                                    <img
+                                        src={displayFeaturedProvider.logo}
+                                        alt={displayFeaturedProvider.name}
+                                        className={styles.providerLogo}
+                                    />
+                                    <span className={styles.providerName}>{displayFeaturedProvider.name}</span>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
+                            </div>
 
-                    <div className={styles.actionsColumn}>
-                        <div className={styles.featuredActions}>
-                            <Button
-                                type="primary"
-                                className={styles.interestedButton}
-                                onClick={onInterestedClick}
-                            >
-                                I am Interested
-                            </Button>
+                            <div className={styles.pricingColumn}>
+                                <div className={styles.pricingSection}>
+                                    {displayFeaturedProvider.price ? (
+                                        <>
+                                            <div className={styles.priceMain}>
+                                                <span className={styles.priceAmount}>{displayFeaturedProvider.price}$</span>
+                                                <span className={styles.priceLabel}>a month</span>
+                                            </div>
+                                            <div className={styles.priceSecondary}>
+                                                <span className={styles.priceYearlyLabel}>or </span>
+                                                <span className={styles.priceYearlyAmount}>{displayFeaturedProvider.yearlyPrice || displayFeaturedProvider.price * 12}$</span>
+                                                <span className={styles.priceYearlyLabel}> a year</span>
+                                            </div>
+                                        </>
+                                    ) : null}
+                                </div>
+                            </div>
 
-                            <div className={styles.ratingSection}>
-                                <Rate
-                                    disabled
-                                    allowHalf
-                                    value={featuredProvider.rating}
-                                    className={styles.ratingStars}
-                                />
-                                <a href="#" className={styles.reviewsLink}>Read reviews</a>
+                            <div className={styles.benefitsColumn}>
+                                <div className={styles.benefitsSection}>
+                                    {displayFeaturedProvider.benefits.map((benefit, index) => (
+                                        <div key={index} className={styles.benefitRow}>
+                                            <span className={styles.benefitLabel}>{benefit.label}:</span>
+                                            <span className={styles.benefitValue}>{benefit.value}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className={styles.actionsColumn}>
+                                <div className={styles.featuredActions}>
+                                    <Button
+                                        type="primary"
+                                        className={styles.interestedButton}
+                                        onClick={onInterestedClick}
+                                    >
+                                        I am Interested
+                                    </Button>
+
+                                    <div className={styles.ratingSection}>
+                                        <Rate
+                                            disabled
+                                            allowHalf
+                                            value={displayFeaturedProvider.rating}
+                                            className={styles.ratingStars}
+                                        />
+                                        <a href="#" className={styles.reviewsLink}>Read reviews</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            {/* Comparison Table */}
-            <h2 className={styles.sectionHeading}>Other leading insurance providers</h2>
-            <Section variant="card" style={{ padding: '0px' }}>
-                <table className={styles.comparisonTable}>
-                    <tbody>
-                        {comparisonProviders.map((provider) => (
-                            <React.Fragment key={provider.id}>
-                                <tr className={styles.providerRow}>
-                                    <td className={styles.providerLogoColumn}>
-                                        <img
-                                            src={provider.logo}
-                                            alt={provider.name}
-                                            className={styles.providerLogoSmall}
-                                        />
-                                    </td>
-
-                                    <td className={styles.providerNameColumn} style={{ width: '200px' }}>
-                                        <span className={styles.providerNameSmall}>{provider.name}</span>
-                                    </td>
-
-                                    <td className={styles.providerPricing}>
-                                        <span className={styles.priceAmountSmall}>{provider.monthlyPrice}$</span>
-                                        <span className={styles.priceLabelSmall}> a month or </span>
-                                        <span className={styles.priceYearlySmall}>{provider.yearlyPrice}$</span>
-                                        <span className={styles.priceLabelSmall}> a year</span>
-                                    </td>
-
-                                    <td className={styles.providerActions}>
-                                        <Button
-                                            type="primary"
-                                            className={styles.interestedButtonSmall}
-                                        >
-                                            I am Interested
-                                        </Button>
-                                        <button
-                                            className={styles.expandButton}
-                                            onClick={() => toggleProvider(provider.id)}
-                                        >
-                                            <img
-                                                src="/images/chevron-down1.svg"
-                                                alt="Expand"
-                                                className={expandedProviders[provider.id] ? styles.chevronUp : styles.chevronDown}
-                                            />
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                {expandedProviders[provider.id] && (
-                                    <tr className={styles.expandedRow}>
-                                        <td colSpan="4" className={styles.expandedDetails}>
-                                            <div className={styles.detailsContent}>
-                                                {provider.details.map((detail, index) => (
-                                                    <div key={index} className={styles.detailRow}>
-                                                        <span className={styles.detailLabel}>{detail.label}:</span>
-                                                        <span className={styles.detailValue}> {detail.value}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <div className={styles.expandedActions}>
-                                                <Rate
-                                                    disabled
-                                                    allowHalf
-                                                    value={provider.rating}
-                                                    className={styles.ratingStarsSmall}
+                    {/* Comparison Table */}
+                    <h2 className={styles.sectionHeading}>Other leading insurance providers</h2>
+                    <Section variant="card" style={{ padding: '0px' }}>
+                        <table className={styles.comparisonTable}>
+                            <tbody>
+                                {displayComparisonProviders.map((provider) => (
+                                    <React.Fragment key={provider.id}>
+                                        <tr className={styles.providerRow}>
+                                            <td className={styles.providerLogoColumn}>
+                                                <img
+                                                    src={provider.logo}
+                                                    alt={provider.name}
+                                                    className={styles.providerLogoSmall}
                                                 />
-                                                <a href="#" className={styles.reviewsLinkSmall}>Read reviews</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )}
-                            </React.Fragment>
-                        ))}
-                    </tbody>
-                </table>
-            </Section>
+                                            </td>
+
+                                            <td className={styles.providerNameColumn} style={{ width: '200px' }}>
+                                                <span className={styles.providerNameSmall}>{provider.name}</span>
+                                            </td>
+
+                                            <td className={styles.providerPricing}>
+                                                {provider.monthlyPrice ? (
+                                                    <>
+                                                        <span className={styles.priceAmountSmall}>{provider.monthlyPrice}$</span>
+                                                        <span className={styles.priceLabelSmall}> a month or </span>
+                                                        <span className={styles.priceYearlySmall}>{provider.yearlyPrice}$</span>
+                                                        <span className={styles.priceLabelSmall}> a year</span>
+                                                    </>
+                                                ) : null}
+                                            </td>
+
+                                            <td className={styles.providerActions}>
+                                                <Button
+                                                    type="primary"
+                                                    className={styles.interestedButtonSmall}
+                                                >
+                                                    I am Interested
+                                                </Button>
+                                                <button
+                                                    className={styles.expandButton}
+                                                    onClick={() => toggleProvider(provider.id)}
+                                                >
+                                                    <img
+                                                        src="/images/chevron-down1.svg"
+                                                        alt="Expand"
+                                                        className={expandedProviders[provider.id] ? styles.chevronUp : styles.chevronDown}
+                                                    />
+                                                </button>
+                                            </td>
+                                        </tr>
+
+                                        {expandedProviders[provider.id] && (
+                                            <tr className={styles.expandedRow}>
+                                                <td colSpan="4" className={styles.expandedDetails}>
+                                                    <div className={styles.detailsContent}>
+                                                        {provider.details.map((detail, index) => (
+                                                            <div key={index} className={styles.detailRow}>
+                                                                <span className={styles.detailLabel}>{detail.label}:</span>
+                                                                <span className={styles.detailValue}> {detail.value}</span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                    <div className={styles.expandedActions}>
+                                                        <Rate
+                                                            disabled
+                                                            allowHalf
+                                                            value={provider.rating}
+                                                            className={styles.ratingStarsSmall}
+                                                        />
+                                                        <a href="#" className={styles.reviewsLinkSmall}>Read reviews</a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </React.Fragment>
+                                ))}
+                            </tbody>
+                        </table>
+                    </Section>
+                </>
+            )}
 
             {/* More Options Section */}
             <MoreOptions />

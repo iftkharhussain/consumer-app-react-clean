@@ -38,5 +38,21 @@
   "questions": "Questions",
   "askQuestion": "Poser une Question",
   "updateProfile": "Mettre à Jour le Profil",
-  "securitySettings": "Paramètres de Sécurité"
+  "securitySettings": "Paramètres de Sécurité",
+  "creatingYourAccount": "Création de votre compte",
+  "verifying": "Vérification de vos identifiants...",
+  "creating": "Configuration de votre compte...",
+  "preparing": "Préparation de votre tableau de bord...",
+  "noTokenProvided": "Aucun jeton d'authentification",
+  "noTokenProvidedDescription": "Aucun jeton d'authentification n'a été fourni. Veuillez utiliser le lien de votre soumission de formulaire.",
+  "goToLogin": "Aller à la connexion",
+  "needHelp": "Besoin d'aide?",
+  "accountCreated": "Compte créé!",
+  "welcomeBack": "Bienvenue!",
+  "accountReadyRedirecting": "Votre compte est prêt. Redirection en cours...",
+  "redirectingToDashboard": "Redirection vers votre tableau de bord...",
+  "authenticationFailed": "Échec de l'authentification",
+  "tokenExpiredOrInvalid": "Votre lien de connexion a peut-être expiré ou est invalide.",
+  "tokenExpiredHelp": "Les liens de connexion expirent après 10 minutes pour des raisons de sécurité.",
+  "needAssistance": "Besoin d'assistance?"
 }

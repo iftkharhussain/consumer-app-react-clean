@@ -49,6 +49,12 @@ export const manageTwoStepAuthUrl = `${baseUrl}/api/auth/two-step`;
 // Search
 export const appSearchUrl = `${baseUrl}/api/search`;
 
+// Quote Management
+export const requestQuoteUrl = `${baseUrl}/api/quote/request`;
+export const getUserProductsUrl = `${baseUrl}/api/quote/products`;
+export const getQuoteStatusUrl = `${baseUrl}/api/quote/status`;
+export const getQuoteDetailsUrl = `${baseUrl}/api/quote/details`;
+
 // For backwards compatibility (these were imported in helper.js but not used)
 export const login = LoginUrl;
 export const signup = `${baseUrl}/api/auth/signup`;

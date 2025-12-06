@@ -3,55 +3,135 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #fafafa;
   padding: 20px;
 }
 
-.card {
-  background: white;
-  border-radius: 16px;
-  padding: 48px;
+.content {
   text-align: center;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-  max-width: 450px;
+  max-width: 400px;
   width: 100%;
 }
 
-.card h4 {
-  color: #333;
-  margin-bottom: 8px;
-}
-
-.logo {
-  width: 120px;
-  margin-bottom: 24px;
-}
-
-/* Override Ant Design Result styles for better look */
-:global(.ant-result) {
-  padding: 48px 32px;
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-  max-width: 500px;
-}
-
-:global(.ant-result-title) {
-  font-size: 24px !important;
+.title {
+  margin-top: 24px !important;
+  margin-bottom: 8px !important;
+  color: #1a1a2e !important;
   font-weight: 600 !important;
 }
 
-:global(.ant-result-subtitle) {
-  font-size: 16px !important;
-  color: #666 !important;
+.successTitle {
+  margin-top: 24px !important;
+  margin-bottom: 8px !important;
+  color: #52c41a !important;
+  font-weight: 600 !important;
+}
+
+.errorTitle {
+  margin-top: 24px !important;
+  margin-bottom: 8px !important;
+  color: #ff4d4f !important;
+  font-weight: 600 !important;
+}
+
+.description {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 24px !important;
+}
+
+.userName {
+  display: block;
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.stepText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  color: #667eea;
+}
+
+.stepText :global(.anticon) {
+  font-size: 16px;
+}
+
+.stepLabel {
+  font-size: 15px;
+  color: #666;
+}
+
+.progressBar {
+  margin-top: 32px !important;
+  max-width: 280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.iconWrapper {
+  margin-bottom: 8px;
+}
+
+.successIcon {
+  font-size: 64px;
+  color: #52c41a;
+}
+
+.errorIcon {
+  font-size: 64px;
+  color: #ff4d4f;
+}
+
+.warningIcon {
+  font-size: 64px;
+  color: #faad14;
+}
+
+.helpText {
+  display: block;
+  margin-bottom: 32px !important;
+  font-size: 14px;
+}
+
+.buttonGroup {
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.primaryBtn {
+  min-width: 200px;
+}
+
+.support {
+  margin-top: 48px;
+}
+
+.phoneLink {
+  color: #667eea;
+  font-weight: 500;
+  text-decoration: none;
+  margin-left: 4px;
+}
+
+.phoneLink:hover {
+  text-decoration: underline;
+}
+
+.phoneLink :global(.anticon) {
+  margin-right: 4px;
 }
 
 @media (max-width: 480px) {
-  .card {
-    padding: 32px 24px;
+  .content {
+    padding: 0 16px;
   }
   
-  :global(.ant-result) {
-    padding: 32px 16px;
+  .buttonGroup {
+    max-width: 100%;
   }
 }
