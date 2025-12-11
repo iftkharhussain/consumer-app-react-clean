@@ -14,6 +14,11 @@ import {
     QuoteErrorState,
     QuotePendingState 
 } from './QuoteSkeletons';
+import { 
+    getCarrierLogo, 
+    getCarrierName, 
+    isIntactCarrier 
+} from '../../utils/carrierUtils';
 import styles from '../../pages/carInsurance/CarInsurance.module.css';
 
 const InitialContent = ({ onInterestedClick }) => {
@@ -56,6 +61,7 @@ const InitialContent = ({ onInterestedClick }) => {
         if (quoteData?.carriers && Array.isArray(quoteData.carriers)) {
             console.log('Processing carriers:', quoteData.carriers.map(c => ({
                 name: c.name,
+                carrierCode: c.carrierCode,
                 available: c.available,
                 premium: c.premium
             })));
@@ -65,8 +71,9 @@ const InitialContent = ({ onInterestedClick }) => {
             
             if (availableCarriers.length > 0) {
                 // Find Intact as the featured provider (always show Intact first)
-                // If Intact not found, use the first available carrier
+                // Check by carrier code using the utility function
                 let intactCarrier = availableCarriers.find(c => 
+                    isIntactCarrier(c.carrierCode) ||
                     c.name?.toLowerCase() === 'intact' || 
                     c.carrierName?.toLowerCase() === 'intact'
                 );
@@ -79,10 +86,16 @@ const InitialContent = ({ onInterestedClick }) => {
                 const annualPremium = featured.premium || 0;
                 const monthlyPrice = annualPremium > 0 ? Math.round(annualPremium / 12) : null;
                 
-                console.log('Setting featured provider:', featured.name || featured.carrierName);
+                // Get display name from carrier code or use the name from response
+                const displayName = featured.carrierCode 
+                    ? getCarrierName(featured.carrierCode) 
+                    : (featured.name || featured.carrierName || 'Best Option');
+                
+                console.log('Setting featured provider:', displayName, 'code:', featured.carrierCode);
                 setFeaturedProvider({
-                    name: featured.name || featured.carrierName || 'Best Option',
-                    logo: getCarrierLogo(featured.name || featured.carrierCode),
+                    name: displayName,
+                    carrierCode: featured.carrierCode,
+                    logo: getCarrierLogo(featured.carrierCode || featured.name),
                     price: monthlyPrice,
                     yearlyPrice: annualPremium > 0 ? annualPremium : null,
                     rating: 4.5,
@@ -93,17 +106,23 @@ const InitialContent = ({ onInterestedClick }) => {
                 
                 // Rest are comparison providers (exclude the featured one)
                 const otherCarriers = availableCarriers.filter(c => 
-                    (c.name || c.carrierName) !== (featured.name || featured.carrierName)
+                    (c.carrierCode || c.name || c.carrierName) !== (featured.carrierCode || featured.name || featured.carrierName)
                 );
                 
                 const others = otherCarriers.map((result, index) => {
                     const annual = result.premium || 0;
                     const monthly = annual > 0 ? Math.round(annual / 12) : null;
                     
+                    // Get display name from carrier code or use the name from response
+                    const providerName = result.carrierCode 
+                        ? getCarrierName(result.carrierCode) 
+                        : (result.name || result.carrierName || `Provider ${index + 2}`);
+                    
                     return {
                         id: index + 1,
-                        name: result.name || result.carrierName || `Provider ${index + 2}`,
-                        logo: getCarrierLogo(result.name || result.carrierCode),
+                        name: providerName,
+                        carrierCode: result.carrierCode,
+                        logo: getCarrierLogo(result.carrierCode || result.name),
                         monthlyPrice: monthly,
                         yearlyPrice: annual > 0 ? annual : null,
                         rating: 4.5,
@@ -113,12 +132,11 @@ const InitialContent = ({ onInterestedClick }) => {
                     };
                 });
                 
-                console.log('Setting comparison providers:', others.map(p => p.name));
+                console.log('Setting comparison providers:', others.map(p => ({ name: p.name, code: p.carrierCode })));
                 setComparisonProviders(others);
             }
         }
     }, [quoteData]);
-
     const toggleProvider = (providerId) => {
         setExpandedProviders(prev => ({
             ...prev,
@@ -171,33 +189,6 @@ const InitialContent = ({ onInterestedClick }) => {
             answer: "lorem ipsum dolor sit amet consectetur adipisicing elit."
         }
     ];
-
-    // Helper function to get carrier logo
-    const getCarrierLogo = (carrierName) => {
-        if (!carrierName) return '/images/insurance-default.svg';
-        
-        const normalizedName = carrierName.toLowerCase().trim();
-        
-        const logoMap = {
-            'intact': '/images/intact-insurance.svg',
-            'beneva': '/images/Beneva_rgb.svg',
-            'promutuel': '/images/promutuel.svg',
-            'economical': '/images/economical.svg',
-            'caa': '/images/CAA_logo.svg',
-            'aviva': '/images/aviva.svg',
-            'wawanesa': '/images/wawanesa.svg',
-            'rsa': '/images/rsa.svg',
-        };
-        
-        // Check for exact match or partial match
-        for (const [key, logo] of Object.entries(logoMap)) {
-            if (normalizedName.includes(key)) {
-                return logo;
-            }
-        }
-        
-        return '/images/insurance-default.svg';
-    };
 
     // Helper function to extract benefits from quote result
     const extractBenefits = (result) => {
