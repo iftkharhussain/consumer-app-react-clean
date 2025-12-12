@@ -20,7 +20,7 @@ export const CARRIER_NAMES = {
     // Economical
     'ECON': 'Economical Insurance',
     // Pafco
-    'PAFM': 'Pafco Insurance',
+    'PAF': 'Pafco Insurance',
     // Beneva
     'BENE': 'Beneva',
     // Promutuel
@@ -50,7 +50,7 @@ export const CARRIER_LOGOS = {
     // Economical code
     'ECON': '/images/economical.svg',
     // Pafco code
-    'PAFM': '/images/pafco.svg',
+    'PAF': '/images/pafco.svg',
     // Beneva code
     'BENE': '/images/Beneva_rgb.svg',
     // Promutuel code
@@ -66,7 +66,7 @@ export const CARRIER_GROUPS = {
     "L'Unique": ['UNI'],
     'Wawanesa': ['WAWA'],
     'Economical': ['ECON'],
-    'Pafco': ['PAFM'],
+    'Pafco': ['PAF'],
     'Beneva': ['BENE'],
     'Promutuel': ['PROM'],
     'CAA': ['CAA'],

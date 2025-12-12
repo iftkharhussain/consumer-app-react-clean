@@ -54,5 +54,16 @@
   "authenticationFailed": "Échec de l'authentification",
   "tokenExpiredOrInvalid": "Votre lien de connexion a peut-être expiré ou est invalide.",
   "tokenExpiredHelp": "Les liens de connexion expirent après 10 minutes pour des raisons de sécurité.",
-  "needAssistance": "Besoin d'assistance?"
+  "needAssistance": "Besoin d'assistance?",
+  "verifyingAccount": "Vérification de votre compte",
+  "settingUp": "Configuration de votre profil...",
+  "accountExists": "Le compte existe déjà",
+  "credentialsMatched": "Identifiants validés avec succès",
+  "redirecting": "Redirection vers votre compte...",
+  "credentialsValidated": "Vos identifiants ont été validés. Redirection vers votre compte...",
+  "credentialsMismatch": "Vérification du compte requise",
+  "phonEmailMismatchMessage": "Nous avons constaté que votre numéro de téléphone et votre email sont différents de ceux que nous avons enregistrés. Veuillez vous connecter avec vos identifiants d'origine.",
+  "phoneMismatchMessage": "Nous avons trouvé un numéro de téléphone différent pour votre compte. Veuillez vous connecter avec votre numéro de téléphone d'origine ou utiliser l'email et le mot de passe corrects.",
+  "emailMismatchMessage": "Nous avons trouvé un email différent pour votre compte. Veuillez vous connecter avec votre email et mot de passe d'origine ou utiliser la vérification par téléphone.",
+  "submittedInfo": "Informations que vous avez soumises:"
 }

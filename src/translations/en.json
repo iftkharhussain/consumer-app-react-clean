@@ -54,5 +54,16 @@
   "authenticationFailed": "Authentication Failed",
   "tokenExpiredOrInvalid": "Your login link may have expired or is invalid.",
   "tokenExpiredHelp": "Login links expire after 10 minutes for security.",
-  "needAssistance": "Need assistance?"
+  "needAssistance": "Need assistance?",
+  "verifyingAccount": "Verifying Your Account",
+  "settingUp": "Setting up your profile...",
+  "accountExists": "Account already exists",
+  "credentialsMatched": "Credentials matched successfully",
+  "redirecting": "Redirecting to your account...",
+  "credentialsValidated": "Your credentials have been validated. Redirecting to your account...",
+  "credentialsMismatch": "Account Verification Required",
+  "phonEmailMismatchMessage": "We found that both your phone number and email are different from what we have on record. Please login with your original credentials.",
+  "phoneMismatchMessage": "We found a different phone number for your account. Please login with your original phone number or use the correct email and password.",
+  "emailMismatchMessage": "We found a different email for your account. Please login with your original email and password or use phone verification.",
+  "submittedInfo": "Information you submitted:"
 }
