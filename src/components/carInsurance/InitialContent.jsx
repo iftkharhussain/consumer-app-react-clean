@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Rate, Spin } from 'antd';
+import { Rate, Spin, Radio } from 'antd';
 import PageHeader from '../pageHeader';
 import Button from '../button/Button';
 import { Section } from 'components';
@@ -25,6 +25,7 @@ const InitialContent = ({ onInterestedClick }) => {
     const [expandedProviders, setExpandedProviders] = useState({});
     const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false);
     const [isOptionsLoading, setIsOptionsLoading] = useState(false);
+    const [billingPeriod, setBillingPeriod] = useState('Mensuel');
 
     // Use quote hook to fetch and manage quotes (single API call)
     const { 
@@ -316,23 +317,140 @@ const InitialContent = ({ onInterestedClick }) => {
 
     return (
         <>
-            <PageHeader title="Here's the best option for you!" />
-            <p className={styles.subtitle}>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam iusto amet saepe commodi odio, deleniti cum dolor unde fugiat sunt aliquid ea obcaecati expedita maxime ut cupiditate voluptates id reprehenderit.</p>
+            {/* Countdown Timer */}
+            <p className={styles.countdownText}>
+                Vos soumissions expirent dans : <span className={styles.countdownTime}>14:59</span>
+            </p>
 
-            {/* Modifier Section */}
-            <a href="#" className={styles.modifierLink} onClick={handleModifierClick}>
-                Modifier {isOptionsLoading ? (
-                    <Spin size="small" />
-                ) : (
-                    <img src="/images/config.svg" alt="" className={styles.modifierIcon} />
-                )}
-            </a>
+            {/* Featured Quote Card */}
+            <div className={styles.featuredQuoteCard}>
+                <div className={styles.featuredLeft}>
+                    <img 
+                        src="/images/intact-insurance.svg" 
+                        alt="Intact" 
+                        className={styles.featuredLogo} 
+                    />
+                    
+                    <div className={styles.featuredPricing}>
+                        <span className={styles.originalPrice}>102 $ / mo</span>
+                        <div className={styles.currentPrice}>
+                            <span className={styles.priceNumber}>90</span>
+                            <span className={styles.priceCurrency}>$</span>
+                            <span className={styles.pricePerMonth}> / mo</span>
+                        </div>
+                    </div>
+
+                    <div className={styles.discountBadge}>
+                        Rabais Intact appliqué!
+                    </div>
+                    
+                    <p className={styles.discountText}>
+                        Intact vous offre un rabais de 10% supplémentaire
+                    </p>
+
+                    <Radio.Group 
+                        value={billingPeriod}
+                        onChange={(e) => setBillingPeriod(e.target.value)}
+                        className={styles.billingToggle}
+                        buttonStyle="solid"
+                    >
+                        <Radio.Button value="Mensuel" className={styles.billingButton}>Mensuel</Radio.Button>
+                        <Radio.Button value="Annuel" className={styles.billingButton}>Annuel</Radio.Button>
+                    </Radio.Group>
+                </div>
+
+                <div className={styles.featuredRight}>
+                    <h2 className={styles.featuredHeading}>
+                        Edward, Intact se démarque selon vos infos fournies!
+                    </h2>
+                    
+                    <p className={styles.featuredDescription}>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum faucibus urna risus, acoivicm muba condimentum enim suscipit et. Fuscrm euismod eu.
+                    </p>
+                    
+                    <Button
+                        type="primary"
+                        className={styles.poursuivreButton}
+                        onClick={onInterestedClick}
+                    >
+                        Poursuivre
+                    </Button>
+                </div>
+            </div>
+
+            {/* Vos protections Section */}
+            <div className={styles.protectionsHeader}>
+                <h2 className={styles.protectionsTitle}>Vos protections</h2>
+                <a href="#" className={styles.personnaliserLink}>
+                    Personnaliser 
+                    <img src="/images/config.svg" alt="" className={styles.configIcon} />
+                </a>
+            </div>
+
+            <div className={styles.protectionsCard}>
+                <div className={styles.protectionItem}>
+                    <div className={styles.protectionHeader}>
+                        <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
+                        <h3 className={styles.protectionName}>Responsabilité civile</h3>
+                    </div>
+                    <p className={styles.protectionDescription}>
+                        Couvre les dommages à ce qui ne vous appartient pas quand vous causez un accident
+                    </p>
+                    <p className={styles.protectionCoverage}>Couverture : 2 000 000 $</p>
+                </div>
+
+                <div className={styles.protectionItem}>
+                    <div className={styles.protectionHeader}>
+                        <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
+                        <h3 className={styles.protectionName}>Assistance routière (FAQ 33)</h3>
+                    </div>
+                    <p className={styles.protectionDescription}>
+                        Aide et remorquage en cas de panne ou d'imprévu sur la route.
+                    </p>
+                    <a href="#" className={styles.disclaimerLink}>Disclaimer ici</a>
+                </div>
+
+                <div className={styles.protectionItem}>
+                    <div className={styles.protectionHeader}>
+                        <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
+                        <h3 className={styles.protectionName}>Collision et renversement (B2)</h3>
+                    </div>
+                    <p className={styles.protectionDescription}>
+                        Couvre les dommages causés à votre auto lorsque vous entrez en collision avec quelqu'un ou quelque chose.
+                    </p>
+                    <p className={styles.protectionCoverage}>Franchise : 500 $</p>
+                </div>
+
+                <div className={styles.protectionItem}>
+                    <div className={styles.protectionHeader}>
+                        <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
+                        <h3 className={styles.protectionName}>Protection bonifiée</h3>
+                    </div>
+                    <ul className={styles.protectionList}>
+                        <li>Responsabilité civile étendue (FAQ 2)</li>
+                        <li>Véhicule de remplacement et frais de déplacement (FAQ 20)</li>
+                        <li>Assurance de personnes (FAQ 27)</li>
+                        <li>Véhicules loués ou empruntés (FAQ 34)</li>
+                    </ul>
+                    <a href="#" className={styles.disclaimerLink}>Disclaimer ici</a>
+                </div>
+
+                <div className={styles.protectionItem}>
+                    <div className={styles.protectionHeader}>
+                        <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
+                        <h3 className={styles.protectionName}>Accidents sans collision ni renversement (B3)</h3>
+                    </div>
+                    <p className={styles.protectionDescription}>
+                        Couvre les bris de votre voiture et les dommages qui ne sont pas liés à une collision
+                    </p>
+                    <p className={styles.protectionCoverage}>Franchise : 250 $</p>
+                </div>
+            </div>
 
             {/* Show skeleton while loading (only if authenticated), error state if failed, pending state if waiting */}
             {shouldShowLoading ? (
                 <>
-                    <FeaturedCardSkeleton />
-                    <h2 className={styles.sectionHeading}>Other leading insurance providers</h2>
+                    <h2 className={styles.sectionHeading}>Insurance providers</h2>
                     <ComparisonTableSkeleton />
                 </>
             ) : error && isAuthenticated ? (
@@ -341,75 +459,8 @@ const InitialContent = ({ onInterestedClick }) => {
                 <QuotePendingState message="Your quote is being processed. This may take a moment..." />
             ) : (
                 <>
-                    {/* Featured Provider Card */}
-                    <div className={styles.featuredCard}>
-                        <div className={styles.featuredCardContent}>
-                            <div className={styles.providerColumn}>
-                                <div className={styles.providerHeader}>
-                                    <img
-                                        src={displayFeaturedProvider.logo}
-                                        alt={displayFeaturedProvider.name}
-                                        className={styles.providerLogo}
-                                    />
-                                    <span className={styles.providerName}>{displayFeaturedProvider.name}</span>
-                                </div>
-                            </div>
-
-                            <div className={styles.pricingColumn}>
-                                <div className={styles.pricingSection}>
-                                    {displayFeaturedProvider.price ? (
-                                        <>
-                                            <div className={styles.priceMain}>
-                                                <span className={styles.priceAmount}>{displayFeaturedProvider.price}$</span>
-                                                <span className={styles.priceLabel}>a month</span>
-                                            </div>
-                                            <div className={styles.priceSecondary}>
-                                                <span className={styles.priceYearlyLabel}>or </span>
-                                                <span className={styles.priceYearlyAmount}>{displayFeaturedProvider.yearlyPrice || displayFeaturedProvider.price * 12}$</span>
-                                                <span className={styles.priceYearlyLabel}> a year</span>
-                                            </div>
-                                        </>
-                                    ) : null}
-                                </div>
-                            </div>
-
-                            <div className={styles.benefitsColumn}>
-                                <div className={styles.benefitsSection}>
-                                    {displayFeaturedProvider.benefits.map((benefit, index) => (
-                                        <div key={index} className={styles.benefitRow}>
-                                            <span className={styles.benefitLabel}>{benefit.label}:</span>
-                                            <span className={styles.benefitValue}>{benefit.value}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div className={styles.actionsColumn}>
-                                <div className={styles.featuredActions}>
-                                    <Button
-                                        type="primary"
-                                        className={styles.interestedButton}
-                                        onClick={onInterestedClick}
-                                    >
-                                        I am Interested
-                                    </Button>
-
-                                    <div className={styles.ratingSection}>
-                                        <Rate
-                                            disabled
-                                            allowHalf
-                                            value={displayFeaturedProvider.rating}
-                                            className={styles.ratingStars}
-                                        />
-                                        <a href="#" className={styles.reviewsLink}>Read reviews</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     {/* Comparison Table */}
-                    <h2 className={styles.sectionHeading}>Other leading insurance providers</h2>
+                    <h2 className={styles.sectionHeading}>Insurance providers</h2>
                     <Section variant="card" style={{ padding: '0px' }}>
                         <table className={styles.comparisonTable}>
                             <tbody>

@@ -1,0 +1,468 @@
+.carInsurancePage {
+  padding: 0;
+  max-width: 826px;
+}
+
+/* Subtitle */
+.subtitle {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #667085;
+  margin: 8px 0 24px 0;
+}
+
+/* Modifier Section */
+.modifierLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 29.532px;
+  color: #1A1ABA;
+  font-family: Inter;
+  text-decoration: none;
+  margin-bottom: 0;
+}
+
+.modifierLink:hover {
+  text-decoration: underline;
+}
+
+.modifierIcon {
+  width: 12px;
+}
+
+/* Featured Provider Card */
+.featuredCard {
+  background: #EEEEEE;
+  border: 1px solid #E9EAEB;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.featuredCardContent {
+  display: flex;
+  align-items: flex-start;
+  gap: 70px;
+}
+
+.providerColumn,
+.pricingColumn,
+.benefitsColumn,
+.actionsColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.providerColumn {
+  flex: 0 0 auto;
+}
+
+.pricingColumn {
+  flex: 0 0 auto;
+}
+
+.benefitsColumn {
+  flex: 1;
+}
+
+.actionsColumn {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.providerHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.providerLogo {
+  max-width: 114px;
+  max-height: 50px;
+  object-fit: contain;
+}
+
+.providerName {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 28px;
+  color: #989898;
+}
+
+/* Pricing Section */
+.pricingSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.priceMain {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 0;
+}
+
+.priceAmount {
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 28px;
+  color: #1A1ABA;
+}
+
+.priceLabel {
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 28px;
+  color: #121926;
+}
+
+.priceSecondary {
+  display: block;
+  margin-top: 4px;
+}
+
+.priceYearlyLabel {
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 28px;
+  color: #121926;
+  font-family: var(--Font-family-font-family-body, Inter);
+}
+
+.priceYearlyAmount {
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 28px;
+  color: #1A1ABA;
+  font-family: var(--Font-family-font-family-body, Inter);
+}
+
+/* Benefits Section */
+.benefitsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.benefitRow {
+  display: flex;
+  gap: 4px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.benefitLabel {
+  font-weight: 700;
+  color: #121926;
+}
+
+.benefitValue {
+  font-weight: 400;
+  color: #121926;
+}
+
+/* Featured Actions */
+.featuredActions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.interestedButton {
+  height: 36px;
+  padding: 8px 18px;
+  font-size: var(--Font-size-text-sm, 14px);
+  font-weight: 600;
+  line-height: var(--Line-height-text-sm, 20px);
+  color: var(--Component-colors-Components-Buttons-Primary-button-primary-fg, #FFF);
+  font-family: var(--Font-family-font-family-body, Inter);
+  border-radius: 8px;
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+}
+
+.ratingSection {
+  display: flex;
+  gap: 12px;
+    gap: 5px;
+  flex-direction: column;
+}
+
+.ratingStars {
+  font-size: 9px;
+}
+
+.ratingStars :global(.ant-rate-star) {
+  margin-right: 4px;
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+}
+
+.ratingStars :global(.ant-rate-star svg) {
+  width: 9px;
+  height: 9px;
+}
+
+.reviewsLink {
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1;
+  color: #282828;
+  font-family: "PP Neue Montreal";
+  text-decoration: underline;
+  text-decoration-style: solid;
+  text-decoration-skip-ink: none;
+  text-underline-position: from-font;
+}
+
+/* Section Heading */
+.sectionHeading {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 30px;
+  color: #121926;
+  margin: 50px 0 20px 0;
+}
+
+/* Comparison Table */
+.comparisonTable {
+  width: 100%;
+  background: #FFF;
+  border: 1px solid #E9EAEB;
+  border-radius: 12px;
+  overflow: hidden;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.providerRow {
+  border-bottom: 1px solid #E9EAEB;
+}
+
+.providerRow:last-of-type {
+  border-bottom: none;
+}
+
+.providerRow td {
+  padding: 14px 20px;
+  vertical-align: middle;
+}
+
+.providerLogoColumn {
+  width: auto;
+  padding-right: 35px !important;
+}
+
+.providerLogoSmall {
+  max-width: 90px;
+  max-height: 32px;
+  object-fit: contain;
+  display: block;
+}
+
+.providerNameColumn {
+  width: 140px;
+  padding-right: 35px !important;
+}
+
+.providerNameSmall {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 28px;
+  color: #989898;
+  font-family: Inter;
+}
+
+.providerPricing {
+  width: auto;
+  white-space: nowrap;
+  padding-right: 35px !important;
+}
+
+.priceAmountSmall {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 28px;
+  color: #1A1ABA;
+  font-family: var(--Font-family-font-family-body, Inter);
+}
+
+.priceLabelSmall {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 28px;
+  color: #121926;
+  font-family: var(--Font-family-font-family-body, Inter);
+}
+
+.priceYearlySmall {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 28px;
+  color: #1A1ABA;
+  font-family: var(--Font-family-font-family-body, Inter);
+}
+
+.providerActions {
+  width: auto;
+  display: flex;
+  justify-content: flex-end;
+  white-space: nowrap;
+}
+
+.providerActions > * {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 12px;
+}
+
+.providerActions > *:last-child {
+  margin-right: 0;
+}
+
+.interestedButtonSmall {
+  height: 36px;
+  padding: 8px 18px;
+  font-size: var(--Font-size-text-sm, 14px);
+  font-weight: 600;
+  line-height: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+  white-space: nowrap;
+}
+
+.expandButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.chevronDown {
+  width: 12px;
+  height: 6px;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.chevronUp {
+  width: 12px;
+  height: 6px;
+  flex-shrink: 0;
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+/* Expanded Details */
+.expandedRow {
+  border-bottom: 1px solid #E9EAEB;
+}
+
+.expandedRow:last-of-type {
+  border-bottom: none;
+}
+
+.expandedDetails {
+  padding: 24px 24px !important;
+  border-top: 1px solid #E9EAEB;
+}
+
+.detailsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.detailRow {
+  display: flex;
+  gap: 4px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.detailLabel {
+  font-weight: 700;
+  color: #121926;
+}
+
+.detailValue {
+  font-weight: 400;
+  color: #121926;
+}
+
+.expandedActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ratingStarsSmall {
+  font-size: 16px;
+}
+
+.ratingStarsSmall :global(.ant-rate-star) {
+  margin-right: 4px;
+}
+
+.reviewsLinkSmall {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #1570EF;
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .featuredCardContent {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .providerRowContent {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .providerPricing {
+    width: 100%;
+  }
+
+  .providerActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* More Options Section */
+.moreOptionsTitle {
+  color: var(--Schemes-Secondary, #625B71);
+  font-family: var(--font-display, Inter);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 150% */
+  margin: 0;
+}
+
+.moreOptionsDescription {
+  color: var(--colors-text-text-tertiary-600, #535862);
+  font-family: var(--font-body, Inter);
+  font-size: var(--text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
+  margin: 0;
+}
