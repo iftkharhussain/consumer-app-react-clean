@@ -3,6 +3,13 @@
   max-width: 826px;
 }
 
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
 /* Countdown Timer */
 .countdownText {
   color: #000;

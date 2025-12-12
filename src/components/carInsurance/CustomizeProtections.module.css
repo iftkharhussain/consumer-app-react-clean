@@ -1,0 +1,262 @@
+.customizeContainer {
+  padding: 0;
+  max-width: 826px;
+}
+
+/* Back Button */
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #1A1ABA;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: var(--Line-height-text-sm, 20px);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 18px;
+}
+
+.backButton:hover {
+  text-decoration: underline;
+}
+
+.backIcon {
+  width: 4px;
+  height: 8px;
+}
+
+/* Page Heading */
+.pageHeading {
+  color: var(--Gray-900, #121926);
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-lg, 18px);
+  font-style: normal;
+  font-weight: 600;
+  line-height: var(--Line-height-text-lg, 28px);
+  margin: 0 0 32px 0;
+}
+
+/* Vehicle Info Cards */
+.vehicleRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.vehicleCard {
+  border-radius: 12px;
+  border: 1px solid #E9EAEB;
+  background: #F8F8F8;
+  padding: 16px;
+}
+
+.vehicleHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vehicleName {
+  color: #000;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--Line-height-text-sm, 20px);
+}
+
+.vehicleStatus {
+  color: #1A1ABA;
+  text-align: right;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--Line-height-text-sm, 20px);
+}
+
+.toggleGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggleGroupInactive {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggleLabel {
+  color: #1A1ABA;
+  font-family: Inter;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 14px;
+}
+
+.toggleLabelInactive {
+  color: #989898;
+  font-family: Inter;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 14px;
+}
+
+/* Protection Cards */
+.protectionCardsRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.protectionCard {
+  border-radius: 12px;
+  border: 1px solid #E9EAEB;
+  background: #FFF;
+  overflow: hidden;
+}
+
+.protectionCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #F8F8F8;
+  border-bottom: 1px solid #E9EAEB;
+}
+
+.protectionContent {
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.protectionTitle {
+  color: #000;
+  text-align: center;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 14px;
+  margin: 0 0 16px 0;
+}
+
+.carImage {
+  width: 83px;
+  height: 81px;
+  margin-bottom: 16px;
+}
+
+.protectionDesc {
+  color: #000;
+  text-align: center;
+  font-family: Inter;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 12px;
+  margin: 0 0 24px 0;
+}
+
+.coverageLabel {
+  color: #000;
+  text-align: center;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 14px;
+  margin: 0 0 12px 0;
+}
+
+.amountControl {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.amountButton {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #1A1ABA;
+  background: #FFF;
+  color: #1A1ABA;
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.amountButton:hover {
+  background: #1A1ABA;
+  color: #FFF;
+}
+
+.amountValue {
+  color: #1A1ABA;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+  min-width: 100px;
+  text-align: center;
+}
+
+.benefitsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.benefitsList li {
+  color: #000;
+  font-family: Inter;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 14px;
+  margin-bottom: 8px;
+  position: relative;
+  padding-left: 16px;
+}
+
+.benefitsList li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #40C099;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .vehicleRow,
+  .protectionCardsRow {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .vehicleRow,
+  .protectionCardsRow {
+    grid-template-columns: 1fr;
+  }
+}

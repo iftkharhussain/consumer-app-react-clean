@@ -21,7 +21,7 @@ import {
 } from '../../utils/carrierUtils';
 import styles from '../../pages/carInsurance/CarInsurance.module.css';
 
-const InitialContent = ({ onInterestedClick }) => {
+const InitialContent = ({ onInterestedClick, onCustomize }) => {
     const [expandedProviders, setExpandedProviders] = useState({});
     const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false);
     const [isOptionsLoading, setIsOptionsLoading] = useState(false);
@@ -381,7 +381,8 @@ const InitialContent = ({ onInterestedClick }) => {
             {/* Vos protections Section */}
             <div className={styles.protectionsHeader}>
                 <h2 className={styles.protectionsTitle}>Vos protections</h2>
-                <a href="#" className={styles.personnaliserLink}>
+                {/* <a href="#" className={styles.personnaliserLink} onClick={(e) => { e.preventDefault(); onCustomize && onCustomize(); }}> */}
+                <a href="#" className={styles.personnaliserLink} onClick={(e) => { e.preventDefault(); }}>
                     Personnaliser 
                     <img src="/images/config.svg" alt="" className={styles.configIcon} />
                 </a>

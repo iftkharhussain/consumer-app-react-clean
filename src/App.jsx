@@ -107,12 +107,10 @@ function App(props) {
 				<Router>
 					<Routes>
 						<Route element={<PrivateWrapper auth={{ isAuthenticated: isAuth }} _style={layoutStyles} />}>
-							<Route path="/" element={<Suspense fallback={<div>Loading...</div>}><CarInsurance /></Suspense>} />
 							<Route path="/overview" element={<Suspense fallback={<div>Loading...</div>}><Overview /></Suspense>} />
 							<Route path="/my-advisors" element={<Suspense fallback={<div>Loading...</div>}><MyAdvisors /></Suspense>} />
 							<Route path="/explore" element={<Suspense fallback={<div>Loading...</div>}><Explore /></Suspense>} />
 							<Route path="/boost-savings" element={<Suspense fallback={<div>Loading...</div>}><BoostSavings /></Suspense>} />
-							<Route path="/car-insurance" element={<Suspense fallback={<div>Loading...</div>}><CarInsurance /></Suspense>} />
 							<Route path="/question" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
 						</Route>
 						{/* Messages, Notifications, and Settings routes with no page padding */}
@@ -121,6 +119,9 @@ function App(props) {
 							<Route path="/notifications" element={<Suspense fallback={<div>Loading...</div>}><Notifications /></Suspense>} />
 							<Route path="/settings" element={<Suspense fallback={<div>Loading...</div>}><Settings /></Suspense>} />
 						</Route>
+						{/* Public car insurance routes */}
+						<Route path="/" element={<Suspense fallback={<div>Loading...</div>}><Layout><CarInsurance /></Layout></Suspense>} />
+						<Route path="/car-insurance" element={<Suspense fallback={<div>Loading...</div>}><Layout><CarInsurance /></Layout></Suspense>} />
 						<Route exact path="/logout" element={<Logout />} />
 						<Route exact path="/auth/lead-login" element={<Suspense fallback={<div>Loading...</div>}><LeadLogin /></Suspense>} />
 						<Route exact path="/question-public" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
