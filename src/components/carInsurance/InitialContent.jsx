@@ -26,6 +26,7 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
     const [expandedProviders, setExpandedProviders] = useState({});
     const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false);
     const [isOptionsLoading, setIsOptionsLoading] = useState(false);
+    const [isPersonnaliserLoading, setIsPersonnaliserLoading] = useState(false);
     const [billingPeriod, setBillingPeriod] = useState('Mensuel');
 
     // Use quote hook to fetch and manage quotes (single API call)
@@ -164,6 +165,16 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
             setIsOptionsLoading(false);
             setIsOptionsModalOpen(true);
         }, 800);
+    };
+
+    const handlePersonnaliserClick = (e) => {
+        e.preventDefault();
+        setIsPersonnaliserLoading(true);
+        // Simulate 2 second loading delay
+        setTimeout(() => {
+            setIsPersonnaliserLoading(false);
+            onCustomize && onCustomize();
+        }, 2000);
     };
 
     const faqItems = [
@@ -404,10 +415,14 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
             {/* Vos protections Section */}
             <div className={styles.protectionsHeader}>
                 <h2 className={styles.protectionsTitle}>Vos protections</h2>
-                {/* <a href="#" className={styles.personnaliserLink} onClick={(e) => { e.preventDefault(); onCustomize && onCustomize(); }}> */}
-                <a href="#" className={styles.personnaliserLink} onClick={(e) => { e.preventDefault(); }}>
-                    Personnaliser 
-                    <img src="/images/config.svg" alt="" className={styles.configIcon} />
+                <a 
+                    href="#" 
+                    className={styles.personnaliserLink} 
+                    onClick={handlePersonnaliserClick}
+                    style={{ opacity: isPersonnaliserLoading ? 0.6 : 1, pointerEvents: isPersonnaliserLoading ? 'none' : 'auto' }}
+                >
+                    {isPersonnaliserLoading ? 'Chargement...' : 'Personnaliser'}
+                    {!isPersonnaliserLoading && <img src="/images/config.svg" alt="" className={styles.configIcon} />}
                 </a>
             </div>
 
