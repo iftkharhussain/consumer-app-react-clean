@@ -1,0 +1,130 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  max-width: 600px;
+  width: 100%;
+}
+
+/* Icon and Progress Ring */
+.iconContainer {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progressRing {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.progressRingCircle {
+  transition: stroke-dashoffset 0.3s ease;
+}
+
+.carIcon {
+  width: 80px;
+  max-height: 80px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Heading */
+.heading {
+  color: #000;
+  text-align: center;
+  font-family: Inter;
+  font-size: var(--Font-size-text-lg, 18px);
+  font-style: normal;
+  font-weight: 600;
+  line-height: var(--Line-height-text-lg, 28px);
+  margin: 0 0 32px 0;
+}
+
+/* Steps List */
+.stepsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stepIcon {
+  display: flex;
+  width: 18px;
+  height: 18px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.stepText {
+  color: #989898;
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--Line-height-text-sm, 20px);
+  transition: color 0.3s ease;
+}
+
+.stepTextActive {
+  color: #181D27;
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: var(--Font-size-text-sm, 14px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--Line-height-text-sm, 20px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .modalContent {
+    padding: 32px 24px;
+  }
+
+  .iconContainer {
+    width: 120px;
+    height: 120px;
+  }
+
+  .carIcon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .heading {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
