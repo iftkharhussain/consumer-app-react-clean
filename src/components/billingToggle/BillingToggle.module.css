@@ -1,0 +1,67 @@
+.billingToggle {
+  display: inline-flex;
+  align-items: center;
+  height: 17px;
+  border-radius: 10px;
+  border: 1px solid #E9EAEB;
+  background: #FFF;
+  padding: 0;
+}
+
+.billingToggle :global(.ant-radio-button-wrapper) {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 10px !important;
+  padding: 0 12px;
+  height: 100%;
+  color: #121926 !important;
+  font-family: var(--Font-family-font-family-body, 'Inter', sans-serif);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.billingToggle :global(.ant-radio-button-wrapper:first-child) {
+  border-radius: 10px !important;
+}
+
+.billingToggle :global(.ant-radio-button-wrapper:last-child) {
+  border-radius: 10px !important;
+}
+
+.billingToggle :global(.ant-radio-button-wrapper:hover) {
+  color: #121926 !important;
+}
+
+.billingToggle :global(.ant-radio-button-wrapper-checked) {
+  background: #1A1ABA33 !important;
+  color: #121926 !important;
+  border-radius: 10px !important;
+}
+.billingToggle :global(.ant-radio-button-label) {
+  line-height: 1;
+  color: #121926;
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.billingToggle :global(.ant-radio-button-wrapper-checked:hover) {
+  color: #121926 !important;
+}
+
+.billingToggle :global(.ant-radio-button-wrapper:not(:first-child)::before) {
+  display: none;
+}
+
+.billingToggle :global(.ant-radio-button){
+  border: 1px solid #E9EAEB;
+  border-radius: 34px;
+}

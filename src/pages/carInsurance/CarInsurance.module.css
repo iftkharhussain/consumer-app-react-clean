@@ -19,6 +19,7 @@
   font-weight: 400;
   line-height: 16px;
   margin-bottom: 24px;
+  margin-top: 0;
 }
 
 .countdownTime {
@@ -57,7 +58,7 @@
   flex-direction: row;
   align-items: center;
   gap: 8px;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 
 .originalPrice {
@@ -130,7 +131,7 @@
   font-style: normal;
   font-weight: 400;
   line-height: 12px;
-  margin: 0 0 16px 0;
+  margin: 0 0 5px 0;
   max-width: 150px;
 }
 
@@ -601,6 +602,8 @@
 
 .providerRow {
   border-bottom: 1px solid #E9EAEB;
+  display: table-row;
+  height: auto;
 }
 
 .providerRow:last-of-type {
@@ -608,39 +611,90 @@
 }
 
 .providerRow td {
-  padding: 14px 20px;
+  padding: 16px;
   vertical-align: middle;
+  display: table-cell;
+  height: auto;
 }
 
 .providerLogoColumn {
-  width: auto;
-  padding-right: 35px !important;
+  width: 110px;
+  padding-right: 20px !important;
+  padding-left: 20px !important;
+  text-align: center;
 }
 
 .providerLogoSmall {
-  max-width: 90px;
-  max-height: 32px;
+  max-width: 100px;
+  max-height: 40px;
   object-fit: contain;
   display: block;
+  margin: 0 auto;
 }
 
 .providerNameColumn {
-  width: 140px;
-  padding-right: 35px !important;
+  width: 170px;
+  padding-right: 20px !important;
 }
 
 .providerNameSmall {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: #000;
+  font-family: Inter;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.providerSubtitle {
   font-size: 12px;
   font-weight: 400;
-  line-height: 28px;
+  line-height: 18px;
   color: #989898;
   font-family: Inter;
+  display: block;
 }
 
 .providerPricing {
-  width: auto;
+  width: 250px;
+  padding-right: 20px !important;
+  flex: 1;
+}
+
+.priceContainer {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  flex-wrap: nowrap;
   white-space: nowrap;
-  padding-right: 35px !important;
+}
+
+.priceCurrencySmall {
+  color: #1A1ABA;
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
+}
+
+.priceAmountLarge {
+  color: #1A1ABA;
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 28px;
+}
+
+.priceUnitSmall {
+  color: #121926;
+  font-family: var(--Font-family-font-family-body, Inter);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
 }
 
 .priceAmountSmall {
@@ -668,16 +722,19 @@
 }
 
 .providerActions {
-  width: auto;
+  width: 140px;
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   white-space: nowrap;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  text-align: right;
 }
 
 .providerActions > * {
   display: inline-block;
   vertical-align: middle;
-  margin-right: 12px;
 }
 
 .providerActions > *:last-child {
@@ -685,6 +742,17 @@
 }
 
 .interestedButtonSmall {
+  height: 36px;
+  padding: 8px 18px;
+  font-size: var(--Font-size-text-sm, 14px);
+  font-weight: 600;
+  line-height: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+  white-space: nowrap;
+}
+
+.poursuivreButtonSmall {
   height: 36px;
   padding: 8px 18px;
   font-size: var(--Font-size-text-sm, 14px);

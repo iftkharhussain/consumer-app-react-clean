@@ -9,11 +9,11 @@
   color: var(--colors-text-text-primary-900, #181D27);
   text-align: center;
   font-family: var(--Font-family-font-family-display, Inter);
-  font-size: var(--Font-size-display-md, 36px);
+  font-size: 24px;
   font-style: normal;
   font-weight: 600;
-  line-height: var(--Line-height-display-md, 44px); /* 122.222% */
-  letter-spacing: -0.72px;
+  line-height: 0;
+  letter-spacing: -0.48px;
   margin: 0 0 24px 0;
 }
 
@@ -21,11 +21,11 @@
   color: var(--colors-text-text-tertiary-600, #535862);
   text-align: center;
   font-family: var(--Font-family-font-family-body, Inter);
-  font-size: var(--Font-size-text-xl, 20px);
+  font-size: 14px;
   font-style: normal;
   font-weight: 400;
-  line-height: var(--Line-height-text-xl, 30px); /* 150% */
-  margin: 0 0 64px 0;
+  line-height: normal;
+  margin: 0 0 48px 0;
 }
 
 .faqList {
@@ -36,6 +36,8 @@
 
 .faqItem {
   border-bottom: 1px solid #E9EAEB;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
 }
 
 .faqItem:first-child {
@@ -53,15 +55,15 @@
   justify-content: space-between;
   background: none;
   border: none;
-  padding: 24px 0;
+  padding: 0;
   cursor: pointer;
   text-align: left;
   color: var(--colors-text-text-primary-900, #181D27);
   font-family: var(--Font-family-font-family-body, Inter);
-  font-size: var(--Font-size-text-lg, 18px);
+  font-size: 14px;
   font-style: normal;
   font-weight: 500;
-  line-height: var(--Line-height-text-lg, 28px); /* 155.556% */
+  line-height: var(--Line-height-text-lg, 28px);
 }
 
 .faqQuestion:hover {
@@ -69,8 +71,8 @@
 }
 
 .faqIcon {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
   display: block;
 }
@@ -78,11 +80,11 @@
 .faqAnswer {
   color: var(--colors-text-text-tertiary-600, #535862);
   font-family: var(--Font-family-font-family-body, Inter);
-  font-size: var(--Font-size-text-md, 16px);
+  font-size: 12px;
   font-style: normal;
   font-weight: 400;
-  line-height: var(--Line-height-text-md, 24px); /* 150% */
-  padding: 0 0 24px 0;
+  line-height: var(--Line-height-text-md, 24px);
+  padding: 16px 0 0 0;
   margin: 0;
 }
 

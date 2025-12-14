@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Rate, Spin, Radio } from 'antd';
 import PageHeader from '../pageHeader';
 import Button from '../button/Button';
+import BillingToggle from '../billingToggle';
 import { Section } from 'components';
 import FAQ from '../faq';
 import GetInTouch from '../getInTouch';
@@ -28,6 +29,7 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
     const [billingPeriod, setBillingPeriod] = useState('Mensuel');
 
     // Use quote hook to fetch and manage quotes (single API call)
+    // TEMPORARILY DISABLED FOR DEMO
     const { 
         loading, 
         error, 
@@ -41,7 +43,7 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
         isAuthenticated,
         refresh 
     } = useQuote('car-insurance', { 
-        autoFetch: true
+        autoFetch: false  // DISABLED: Set to true to enable API calls
     });
 
     // Transform quote details into display format
@@ -166,28 +168,28 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
 
     const faqItems = [
         {
-            question: "Is there a free trial available?",
-            answer: "lorem ipsum dolor sit amet consectetur adipisicing elit."
+            question: "Est-ce que le prix affiché est final ?",
+            answer: "Non. Le prix affiché est une estimation basée sur les informations fournies. Le prix final sera confirmé après discussion avec un courtier en assurance de dommages."
         },
         {
-            question: "Can I change my plan later?",
-            answer: "lorem ipsum dolor sit amet consectetur adipisicing elit."
+            question: "Pourquoi dois-je parler à un courtier ?",
+            answer: "Un courtier en assurance de dommages peut valider les informations que vous avez fournies et s'assurer que votre couverture correspond exactement à vos besoins et à votre situation."
         },
         {
-            question: "What is your cancellation policy?",
-            answer: "lorem ipsum dolor sit amet consectetur adipisicing elit."
+            question: "Que se passe-t-il après avoir complété la soumission en ligne ?",
+            answer: "Après avoir soumis vos informations, un courtier prendra contact avec vous pour confirmer les détails et finaliser votre soumission d'assurance automobile."
         },
         {
-            question: "Can other info be added to an invoice?",
-            answer: "lorem ipsum dolor sit amet consectetur adipisicing elit."
+            question: "Suis-je obligé d'acheter une assurance après la soumission ?",
+            answer: "Non. La soumission est sans engagement. Elle vous permet de comparer les options et de décider à votre rythme."
         },
         {
-            question: "How does billing work?",
-            answer: "lorem ipsum dolor sit amet consectetur adipisicing elit."
+            question: "Mes informations sont-elles sécurisées ?",
+            answer: "Oui. Toutes vos informations personnelles sont traitées de manière sécurisée et conforme aux normes de protection des données."
         },
         {
-            question: "How do I change my account email?",
-            answer: "lorem ipsum dolor sit amet consectetur adipisicing elit."
+            question: "Puis-je modifier mes informations après la soumission ?",
+            answer: "Oui. Vous pouvez modifier vos informations à tout moment. Les courtiers peuvent ajuster votre soumission en fonction de vos changements."
         }
     ];
 
@@ -256,8 +258,8 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
     const fallbackComparisonProviders = [
         {
             id: 1,
-            name: 'Beneva',
-            logo: '/images/Beneva_rgb.svg',
+            name: 'L\'Unique',
+            logo: '/images/LUnique.svg',
             monthlyPrice: 90,
             yearlyPrice: 1080,
             rating: 4.5,
@@ -295,8 +297,34 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
         },
         {
             id: 4,
-            name: 'CAA',
-            logo: '/images/CAA_logo.svg',
+            name: 'Wawanesa',
+            logo: '/images/Wawanesa.svg',
+            monthlyPrice: 90,
+            yearlyPrice: 1080,
+            rating: 4.5,
+            details: [
+                { label: 'Benefit 1', value: 'cool benefit' },
+                { label: 'Benefit 2', value: 'cool benefit' },
+                { label: 'Benefit 3', value: 'cool benefit' }
+            ]
+        },
+        {
+            id: 5,
+            name: 'Echelon Insurance',
+            logo: '/images/Echelon_Insuranc.svg',
+            monthlyPrice: 90,
+            yearlyPrice: 1080,
+            rating: 4.5,
+            details: [
+                { label: 'Benefit 1', value: 'cool benefit' },
+                { label: 'Benefit 2', value: 'cool benefit' },
+                { label: 'Benefit 3', value: 'cool benefit' }
+            ]
+        },
+        {
+            id: 6,
+            name: 'Pafco',
+            logo: '/images/pafco.svg',
             monthlyPrice: 90,
             yearlyPrice: 1080,
             rating: 4.5,
@@ -348,15 +376,10 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
                         Intact vous offre un rabais de 10% supplémentaire
                     </p>
 
-                    <Radio.Group 
+                    <BillingToggle 
                         value={billingPeriod}
-                        onChange={(e) => setBillingPeriod(e.target.value)}
-                        className={styles.billingToggle}
-                        buttonStyle="solid"
-                    >
-                        <Radio.Button value="Mensuel" className={styles.billingButton}>Mensuel</Radio.Button>
-                        <Radio.Button value="Annuel" className={styles.billingButton}>Annuel</Radio.Button>
-                    </Radio.Group>
+                        onChange={setBillingPeriod}
+                    />
                 </div>
 
                 <div className={styles.featuredRight}>
@@ -365,7 +388,7 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
                     </h2>
                     
                     <p className={styles.featuredDescription}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum faucibus urna risus, acoivicm muba condimentum enim suscipit et. Fuscrm euismod eu.
+                        Le prix affiché est une estimation. <strong>Pour obtenir le prix final, cliquez sur « Poursuivre » et parlez à un courtier en assurance de dommages</strong> ; celui-ci validera les informations nécessaires avec vous.
                     </p>
                     
                     <Button
@@ -461,7 +484,7 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
             ) : (
                 <>
                     {/* Comparison Table */}
-                    <h2 className={styles.sectionHeading}>Insurance providers</h2>
+                    <h2 className={styles.sectionHeading}>Autres options d'assureurs reconnus</h2>
                     <Section variant="card" style={{ padding: '0px' }}>
                         <table className={styles.comparisonTable}>
                             <tbody>
@@ -476,64 +499,32 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
                                                 />
                                             </td>
 
-                                            <td className={styles.providerNameColumn} style={{ width: '200px' }}>
-                                                <span className={styles.providerNameSmall}>{provider.name}</span>
+                                            <td className={styles.providerNameColumn}>
+                                                <span className={styles.providerSubtitle}>{provider.name}</span>
                                             </td>
 
                                             <td className={styles.providerPricing}>
                                                 {provider.monthlyPrice ? (
-                                                    <>
-                                                        <span className={styles.priceAmountSmall}>{provider.monthlyPrice}$</span>
-                                                        <span className={styles.priceLabelSmall}> a month or </span>
-                                                        <span className={styles.priceYearlySmall}>{provider.yearlyPrice}$</span>
-                                                        <span className={styles.priceLabelSmall}> a year</span>
-                                                    </>
+                                                    <div className={styles.priceContainer}>
+                                                        <span className={styles.priceAmountLarge}>{provider.monthlyPrice}</span>
+                                                        <span className={styles.priceCurrencySmall}>$</span>
+                                                        <span className={styles.priceUnitSmall}> a month or </span>
+                                                        <span className={styles.priceUnitSmall}>{provider.yearlyPrice}</span>
+                                                        <span className={styles.priceUnitSmall}> a year</span>
+                                                    </div>
                                                 ) : null}
                                             </td>
 
                                             <td className={styles.providerActions}>
                                                 <Button
                                                     type="primary"
-                                                    className={styles.interestedButtonSmall}
+                                                    className={styles.poursuivreButtonSmall}
+                                                    onClick={onInterestedClick}
                                                 >
-                                                    I am Interested
+                                                    Poursuivre
                                                 </Button>
-                                                <button
-                                                    className={styles.expandButton}
-                                                    onClick={() => toggleProvider(provider.id)}
-                                                >
-                                                    <img
-                                                        src="/images/chevron-down1.svg"
-                                                        alt="Expand"
-                                                        className={expandedProviders[provider.id] ? styles.chevronUp : styles.chevronDown}
-                                                    />
-                                                </button>
                                             </td>
                                         </tr>
-
-                                        {expandedProviders[provider.id] && (
-                                            <tr className={styles.expandedRow}>
-                                                <td colSpan="4" className={styles.expandedDetails}>
-                                                    <div className={styles.detailsContent}>
-                                                        {provider.details.map((detail, index) => (
-                                                            <div key={index} className={styles.detailRow}>
-                                                                <span className={styles.detailLabel}>{detail.label}:</span>
-                                                                <span className={styles.detailValue}> {detail.value}</span>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                    <div className={styles.expandedActions}>
-                                                        <Rate
-                                                            disabled
-                                                            allowHalf
-                                                            value={provider.rating}
-                                                            className={styles.ratingStarsSmall}
-                                                        />
-                                                        <a href="#" className={styles.reviewsLinkSmall}>Read reviews</a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        )}
                                     </React.Fragment>
                                 ))}
                             </tbody>
@@ -542,18 +533,12 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
                 </>
             )}
 
-            {/* More Options Section */}
-            <MoreOptions />
-
             {/* FAQ Section */}
             <FAQ
-                title="Frequently asked questions"
-                subtitle="Everything you need to know about the product and billing."
+                title="FAQ"
+                subtitle="Réponses aux questions fréquentes sur votre soumission d'assurance auto"
                 items={faqItems}
             />
-
-            {/* Get in Touch Section */}
-            <GetInTouch onButtonClick={handleGetInTouch} />
 
             {/* Options Modal */}
             <OptionsModal
