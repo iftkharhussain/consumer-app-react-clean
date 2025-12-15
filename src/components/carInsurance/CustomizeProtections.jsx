@@ -59,8 +59,6 @@ const CustomizeProtections = ({ onBack }) => {
                     description="Couvre les dommages à ce qui ne vous appartient pas quand vous causez un accident"
                     coverageLabel="Couverture jusqu'à:"
                     amount={protections.responsabilite.amount}
-                    amountDelta={100000}
-                    onAmountChange={(delta) => handleAmountChange('responsabilite', delta)}
                     vehicles={vehicles}
                     alwaysIncluded={true}
                 />
@@ -103,6 +101,8 @@ const CustomizeProtections = ({ onBack }) => {
                     ]}
                     vehicles={vehicles}
                     onVehicleToggle={handleVehicleToggle}
+                    showDetailsLink={true}
+                    detailsContent="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
                 />
 
                 <ProtectionCard
@@ -111,6 +111,8 @@ const CustomizeProtections = ({ onBack }) => {
                     description="Aide et remorquage en cas de panne ou d'imprévu sur la route."
                     vehicles={vehicles}
                     alwaysIncluded={true}
+                    showDetailsLink={true}
+                    detailsContent="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor."
                 />
             </div>
         </div>

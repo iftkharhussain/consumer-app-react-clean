@@ -8,6 +8,7 @@ import FAQ from '../faq';
 import GetInTouch from '../getInTouch';
 import MoreOptions from '../moreOptions';
 import OptionsModal from '../optionsModal';
+import CourtikaModal from '../courtikaModal';
 import { useQuote } from '../../hooks/useQuote';
 import { 
     FeaturedCardSkeleton, 
@@ -25,6 +26,7 @@ import styles from '../../pages/carInsurance/CarInsurance.module.css';
 const InitialContent = ({ onInterestedClick, onCustomize }) => {
     const [expandedProviders, setExpandedProviders] = useState({});
     const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false);
+    const [isCourtikaModalOpen, setIsCourtikaModalOpen] = useState(false);
     const [isOptionsLoading, setIsOptionsLoading] = useState(false);
     const [isPersonnaliserLoading, setIsPersonnaliserLoading] = useState(false);
     const [billingPeriod, setBillingPeriod] = useState('Mensuel');
@@ -405,7 +407,7 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
                     <Button
                         type="primary"
                         className={styles.poursuivreButton}
-                        onClick={onInterestedClick}
+                        onClick={() => setIsCourtikaModalOpen(true)}
                     >
                         Poursuivre
                     </Button>
@@ -560,6 +562,12 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
                 isOpen={isOptionsModalOpen}
                 onClose={() => setIsOptionsModalOpen(false)}
                 onRecalculate={handleRecalculate}
+            />
+
+            {/* Courtika Modal */}
+            <CourtikaModal
+                isOpen={isCourtikaModalOpen}
+                onClose={() => setIsCourtikaModalOpen(false)}
             />
         </>
     );

@@ -1,0 +1,119 @@
+/* Progress Bar Styles */
+.tabsContainer {
+    position: relative;
+    border-bottom: 1px solid #E9EAEB;
+}
+
+.customTabs {
+    width: 100%;
+}
+
+.customTabs :global(.ant-tabs-nav) {
+    margin-bottom: 0;
+}
+
+.customTabs :global(.ant-tabs-ink-bar) {
+    display: none;
+}
+
+.customTabs :global(.ant-tabs-tab) {
+    border-bottom: none;
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--colors-text-text-secondary-700, #414651);
+    pointer-events: none;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+}
+
+.customTabs :global(.ant-tabs-nav::before) {
+    display: none;
+}
+
+.customTabs :global(.ant-tabs-tab+.ant-tabs-tab) {
+    margin: 0;
+}
+
+.customTabs :global(.ant-tabs-nav-list) {
+    gap: 0;
+    width: 100%;
+}
+
+.customTabs :global(.ant-tabs-tab-active) {
+    color: var(--colors-text-text-primary-900, #181D27);
+}
+
+.customTabs :global(.ant-tabs-tab-active .ant-tabs-tab-btn) {
+    color: var(--colors-text-text-primary-900, #181D27);
+    font-weight: 500;
+}
+
+.tabLabelWithProgress {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%;
+}
+
+.tabLabel {
+    color: var(--colors-text-text-secondary-700, #414651);
+    font-family: var(--font-body, Inter);
+    font-size: var(--text-sm, 14px);
+    font-style: normal;
+    font-weight: 500;
+    line-height: var(--text-sm--line-height, 20px);
+    text-align: center;
+    white-space: nowrap;
+}
+
+.customTabs :global(.ant-tabs-tab-active) .tabLabel {
+    color: var(--colors-text-text-primary-900, #181D27);
+}
+
+.progressBar {
+    height: 8px;
+    width: 100%;
+    background: #fff;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: #2121DD;
+    border-radius: var(--radius-full);
+    transition: width 0.3s ease;
+}
+
+.overallProgress {
+    display: flex;
+    justify-content: center;
+    margin-top: 19px;
+    margin-left: 16px;
+}
+
+.progressPercentage {
+    color: var(--colors-text-text-secondary-700, #414651);
+    font-family: var(--font-body, Inter);
+    font-size: var(--text-sm, 14px);
+    font-style: normal;
+    font-weight: 500;
+    line-height: var(--text-sm--line-height, 20px);
+    margin: 0;
+}
+
+
+.customTabs :global(.ant-tabs-tab-btn){
+    width: 100%;
+}
+.TabCustomProgressBar_tabLabel {
+    text-align: left;
+}
+
+.customTabs :global(.ant-tabs-nav-list){
+    gap: 8px;
+}

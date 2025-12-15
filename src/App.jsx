@@ -107,7 +107,6 @@ function App(props) {
 				<Router>
 					<Routes>
 						<Route element={<PrivateWrapper auth={{ isAuthenticated: isAuth }} _style={layoutStyles} />}>
-							<Route path="/overview" element={<Suspense fallback={<div>Loading...</div>}><Overview /></Suspense>} />
 							<Route path="/my-advisors" element={<Suspense fallback={<div>Loading...</div>}><MyAdvisors /></Suspense>} />
 							<Route path="/explore" element={<Suspense fallback={<div>Loading...</div>}><Explore /></Suspense>} />
 							<Route path="/boost-savings" element={<Suspense fallback={<div>Loading...</div>}><BoostSavings /></Suspense>} />
@@ -121,6 +120,7 @@ function App(props) {
 						</Route>
 						{/* Public car insurance routes */}
 						<Route path="/" element={<Suspense fallback={<div>Loading...</div>}><Layout><CarInsurance /></Layout></Suspense>} />
+						<Route path="/overview" element={<Suspense fallback={<div>Loading...</div>}><Overview /></Suspense>} />
 						<Route path="/car-insurance" element={<Suspense fallback={<div>Loading...</div>}><Layout><CarInsurance /></Layout></Suspense>} />
 						<Route exact path="/logout" element={<Logout />} />
 						<Route exact path="/auth/lead-login" element={<Suspense fallback={<div>Loading...</div>}><LeadLogin /></Suspense>} />

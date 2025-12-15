@@ -1,0 +1,153 @@
+.courtikaModal :global(.ant-modal-content) {
+    padding: 0;
+    border-radius: 12px;
+}
+
+.courtikaModal :global(.ant-modal-close) {
+    top: 16px;
+    right: 16px;
+}
+
+.modalContent {
+    padding: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #eeeeee;
+}
+
+/* Modal Body */
+.modalBody {
+  padding: 40px 40px 32px;
+  background: #fff;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.modalTitle {
+    color: #121926;
+    font-family: Inter;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 32.345px;
+    margin: 0 0 24px 0;
+}
+
+.modalDescription {
+    color: var(--Noir-Principale, #282828);
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19.688px;
+    margin: 0 0 24px 0;
+}
+
+.modalDescription strong {
+    font-weight: 600;
+}
+
+.modalSubtitle {
+    color: #121926;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 19.688px;
+    margin: 0 0 24px 0;
+}
+
+.logoContainer {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.courtikaLogo {
+    width: 145px;
+    object-fit: contain;
+    margin-bottom: 35px;
+}
+
+/* Footer Buttons */
+.modalFooter {
+    display: flex;
+    gap: 30px;
+}
+
+.primaryButton {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    height: 36px;
+    padding: var(--spacing-md, 8px) var(--spacing-lg, 12px);
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-xs, 4px);
+    border-radius: var(--radius-md, 8px);
+    border: 2px solid var(--Gradient-skeuemorphic-gradient-border, rgba(255, 255, 255, 0.12));
+    background: #1A1ABA;
+    box-shadow: 0 0 0 1px var(--Colors-Effects-Shadows-shadow-skeumorphic-inner-border, rgba(10, 13, 18, 0.18)) inset,
+                0 -2px 0 0 var(--Colors-Effects-Shadows-shadow-skeumorphic-inner, rgba(10, 13, 18, 0.05)) inset,
+                0 1px 2px 0 var(--Colors-Effects-Shadows-shadow-xs, rgba(10, 13, 18, 0.05));
+    color: var(--Component-colors-Components-Buttons-Primary-button-primary-fg, #FFF);
+    font-family: var(--Font-family-font-family-body, Inter);
+    font-size: var(--Font-size-text-sm, 14px);
+    font-style: normal;
+    font-weight: 600;
+    line-height: var(--Line-height-text-sm, 20px);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+
+.secondaryButton {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    height: 36px;
+    padding: var(--spacing-md, 8px) var(--spacing-lg, 12px);
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-xs, 4px);
+    border-radius: var(--radius-md, 8px);
+    border: 2px solid var(--Gradient-skeuemorphic-gradient-border, rgba(255, 255, 255, 0.12));
+    background: #FFF;
+    box-shadow: 0 0 0 1px var(--Colors-Effects-Shadows-shadow-skeumorphic-inner-border, rgba(10, 13, 18, 0.18)) inset,
+                0 -2px 0 0 var(--Colors-Effects-Shadows-shadow-skeumorphic-inner, rgba(10, 13, 18, 0.05)) inset,
+                0 1px 2px 0 var(--Colors-Effects-Shadows-shadow-xs, rgba(10, 13, 18, 0.05));
+    color: #535862;
+    font-family: var(--Font-family-font-family-body, Inter);
+    font-size: var(--Font-size-text-sm, 14px);
+    font-style: normal;
+    font-weight: 600;
+    line-height: var(--Line-height-text-sm, 20px);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+    .modalTitle {
+        font-size: 24px;
+        line-height: 28px;
+    }
+
+    .modalBody {
+        padding: 24px 20px;
+    }
+
+    .tabsContainer {
+        padding: 16px 20px 0;
+    }
+
+    .overallProgress {
+        top: 16px;
+        right: 20px;
+    }
+
+    .modalFooter {
+        flex-direction: column;
+        padding: 0 20px 24px;
+    }
+}

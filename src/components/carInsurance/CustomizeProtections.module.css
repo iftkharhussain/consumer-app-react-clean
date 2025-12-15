@@ -38,7 +38,7 @@
   font-style: normal;
   font-weight: 600;
   line-height: var(--Line-height-text-lg, 28px);
-  margin: 0 0 32px 0;
+  margin: 0 0 16px 0;
 }
 
 /* Vehicle Toggles Card */
@@ -166,10 +166,13 @@
 }
 
 .protectionCard {
-  border-radius: 12px;
+border-radius: 12px;
   border: 1px solid #E9EAEB;
-  background: #FFF;
+  background: #f8f8f8;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .protectionCardHeader {
@@ -179,14 +182,18 @@
   padding: 16px;
   flex-direction: column;
   background: #F8F8F8;
-  border-bottom: 1px solid #E9EAEB;
 }
 
 .protectionContent {
-  padding: 24px 16px;
+padding: 24px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-radius: 12px;
+  border-top: 1px solid #E9EAEB;
+  background: #fff;
+  min-height: 301px;
+    justify-content: space-between;
 }
 
 .protectionTitle {
@@ -234,24 +241,28 @@
   gap: 0;
   background: #D4D4F4;
   border-radius: 100px;
-  padding: 4px;
+  padding: 2px;
   width: fit-content;
+    min-width: 203px;
+  text-align: center;
+  justify-content: space-around;
 }
 
 .amountButton {
   width: 32px;
-  height: 32px;
-  border-radius: 50%;
+  height: 16px;
+  border-radius: 32px;
   border: none;
   background: #1A1ABA;
   color: #FFF;
   font-size: 18px;
-  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s;
+  line-height: 16px;
+  margin: 0 4px;
 }
 
 .amountButton:hover {
@@ -269,6 +280,65 @@
   min-width: 120px;
   text-align: center;
   padding: 0 8px;
+}
+
+.amountValueStatic {
+  min-width: auto;
+  padding: 0 12px;
+}
+
+.amountDisplay {
+  color: #1A1ABA;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+  text-align: center;
+  padding: 8px 0;
+}
+
+.detailsLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: #1A1ABA;
+  text-align: center;
+  font-family: Inter;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 12px;
+  cursor: pointer;
+  margin: 16px auto 0;
+  padding: 8px 0;
+}
+
+.detailsLink:hover {
+  opacity: 0.8;
+}
+
+.arrowIcon {
+  width: 8px;
+  height: 4px;
+  flex-shrink: 0;
+}
+
+.detailsContent {
+  color: #535862;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+  margin-top: 12px;
+  padding: 12px;
+  background: #F9FAFB;
+  border-radius: 8px;
+  text-align: left;
 }
 
 .benefitsList {
