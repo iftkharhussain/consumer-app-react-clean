@@ -1,0 +1,108 @@
+.exploreSection {
+    margin: 16px auto 0;
+    padding: 40px 24px;
+    background: #FFF;
+    border: 1px solid #E9EAEB;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.iconsContainer {
+   display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  height: 100px;
+  width: 200px;
+  position: relative;
+  margin: 0 auto;
+  margin-bottom: 30px;
+}
+
+.iconCircle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    fill: #FFF;
+    stroke-width: 0.5px;
+    stroke: #E9EAEB;
+    background: #FFF;
+    border: 0.5px solid #E9EAEB;
+    position: absolute;
+
+}
+
+.productIcon {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
+.exploreTitle {
+    color: var(--colors-text-text-primary-900, #181D27);
+    text-align: center;
+    font-family: var(--Font-family-font-family-body, Inter);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: var(--Line-height-text-xl, 30px);
+    margin: 0 0 8px 0;
+}
+
+.exploreDescription {
+    color: var(--colors-text-text-tertiary-600, #535862);
+    text-align: center;
+    font-family: var(--Font-family-font-family-body, Inter);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: var(--Line-height-text-sm, 20px);
+    margin: 0 0 32px 0;
+    max-width: 527px;
+}
+
+.exploreButton {
+    display: inline-flex;
+    padding: 12px 24px;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--radius-md, 8px);
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    background: #1A1ABA;
+    box-shadow: 0 0 0 1px var(--Colors-Effects-Shadows-shadow-skeumorphic-inner-border, rgba(10, 13, 18, 0.18)) inset,
+                0 -2px 0 0 var(--Colors-Effects-Shadows-shadow-skeumorphic-inner, rgba(10, 13, 18, 0.05)) inset,
+                0 1px 2px 0 var(--Colors-Effects-Shadows-shadow-xs, rgba(10, 13, 18, 0.05));
+    color: var(--Component-colors-Components-Buttons-Primary-button-primary-fg, #FFF);
+    font-family: var(--Font-family-font-family-body, Inter);
+    font-size: var(--Font-size-text-md, 16px);
+    font-style: normal;
+    font-weight: 600;
+    line-height: var(--Line-height-text-md, 24px);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.exploreButton:hover {
+    background: #0F0F8F;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .iconsContainer {
+        gap: 12px;
+    }
+    
+    .iconCircle {
+        width: 64px;
+        height: 64px;
+    }
+    
+    .productIcon {
+        width: 36px;
+        height: 36px;
+    }
+}

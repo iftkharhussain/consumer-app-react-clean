@@ -33,6 +33,7 @@ const ResetPassword = React.lazy(() => import('./pages/resetPassword/index'));
 const ForgotPassword = React.lazy(() => import('./pages/forgotPassword/index'));
 const QuestionPage = React.lazy(() => import('./pages/question/index'));
 const Logout = React.lazy(() => import('./pages/logout/index'));
+const OrderProduct = React.lazy(() => import('./pages/product-order'));
 const PrivateWrapper = ({ auth: { isAuthenticated }, heading, _style }) => {
 	return isAuthenticated === true ? (
 		<Layout _style={_style}>
@@ -121,8 +122,8 @@ function App(props) {
 						{/* Public car insurance routes */}
 						<Route path="/" element={<Suspense fallback={<div>Loading...</div>}><Layout><CarInsurance /></Layout></Suspense>} />
 						<Route path="/overview" element={<Suspense fallback={<div>Loading...</div>}><Overview /></Suspense>} />
-						<Route path="/car-insurance" element={<Suspense fallback={<div>Loading...</div>}><Layout><CarInsurance /></Layout></Suspense>} />
-						<Route exact path="/logout" element={<Logout />} />
+						<Route path="/car-insurance" element={<Suspense fallback={<div>Loading...</div>}><Layout><CarInsurance /></Layout></Suspense>} />					
+						<Route path="/car-insurance/product-order" element={<Suspense fallback={<div>Loading...</div>}><Layout><OrderProduct /></Layout></Suspense>} />						<Route exact path="/logout" element={<Logout />} />
 						<Route exact path="/auth/lead-login" element={<Suspense fallback={<div>Loading...</div>}><LeadLogin /></Suspense>} />
 						<Route exact path="/question-public" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
 						<Route exact path="/reset-password/:token" element={isAuth ? <Navigate to={defaultAppPage} /> : <ResetPassword />} />

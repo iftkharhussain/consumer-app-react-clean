@@ -26,33 +26,6 @@ const EstimateContent = () => {
         }, 1000);
     };
 
-    const faqItems = [
-        {
-            question: "Is there a free trial available?",
-            answer: "lorem ipsum dolor sit amet consectetur adipisicing elit."
-        },
-        {
-            question: "Can I change my plan later?",
-            answer: "lorem ipsum dolor sit amet consectetur adipisicing elit."
-        },
-        {
-            question: "What is your cancellation policy?",
-            answer: "lorem ipsum dolor sit amet consectetur adipisicing elit."
-        },
-        {
-            question: "Can other info be added to an invoice?",
-            answer: "lorem ipsum dolor sit amet consectetur adipisicing elit."
-        },
-        {
-            question: "How does billing work?",
-            answer: "lorem ipsum dolor sit amet consectetur adipisicing elit."
-        },
-        {
-            question: "How do I change my account email?",
-            answer: "lorem ipsum dolor sit amet consectetur adipisicing elit."
-        }
-    ];
-
     return (
         <>
             {/* Next Step Section */}
@@ -119,11 +92,7 @@ const EstimateContent = () => {
             <MoreOptions />
 
             {/* FAQ Section */}
-            <FAQ
-                title="Frequently asked questions"
-                subtitle="Everything you need to know about the product and billing."
-                items={faqItems}
-            />
+            <FAQ />
 
             {/* Get in Touch Section */}
             <GetInTouch onButtonClick={handleGetInTouch} />

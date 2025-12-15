@@ -1,0 +1,236 @@
+.orderProductPage {
+    max-width: 825px;
+    padding: 0px 24px;
+}
+
+/* Main Heading */
+.mainHeading {
+    color: #121926;
+    font-family: Inter;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 32.345px;
+    margin: 0 0 24px 0;
+}
+
+/* Main Description */
+.mainDescription {
+    color: var(--Noir-Principale, #282828);
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19.688px;
+    margin: 0 0 24px 0;
+}
+
+.mainDescription strong {
+    font-weight: 600;
+}
+
+/* Two Column Container */
+.contentContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid #E9EAEB;
+    border-radius: 12px;
+    background-color: #fff;
+}
+
+/* Left Column */
+.leftColumn {
+    padding: 24px;
+    border-right: 1px solid #E9EAEB;
+}
+
+.columnTitle {
+    overflow: hidden;
+    color: #000;
+    text-overflow: ellipsis;
+    font-family: var(--Font-family-font-family-body, Inter);
+    font-size: var(--Font-size-text-sm, 14px);
+    font-style: normal;
+    font-weight: 600;
+    line-height: var(--Line-height-text-sm, 20px);
+    margin: 0 0 19px 0;
+}
+
+.intactLogo {
+    width: 109.935px;
+    height: 48.002px;
+    aspect-ratio: 109.94/48.00;
+    object-fit: contain;
+    margin-bottom: 16px;
+}
+
+.priceContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.oldPrice {
+    color: #535862;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19.688px;
+    text-decoration-line: line-through;
+}
+
+.newPrice {
+    color: #1A1ABA;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 19.688px;
+}
+
+.rabaisBadge {
+    display: inline-block;
+    padding: 0 12px;
+    border-radius: 34px;
+    background: rgba(26, 26, 186, 0.20);
+    color: #1A1ABA;
+    text-align: center;
+    font-family: var(--Font-family-font-family-body, Inter);
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28px;
+    margin-bottom: 24px;
+}
+
+.protectionsTitle {
+    color: #000;
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 19px;
+    margin: 0 0 15px 0;
+}
+
+.protectionItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+.protectionItem:last-child {
+    margin-bottom: 0px;
+}
+
+.tickIcon {
+    width: 9px;
+    height: 9px;
+    aspect-ratio: 1/1;
+    flex-shrink: 0;
+    margin-top: 5px;
+}
+
+.protectionDetails {
+    flex: 1;
+}
+
+.protectionName {
+    color: #535862;
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19px;
+    margin: 0 0 4px 0;
+}
+
+.protectionAmount {
+    color: #1A1ABA;
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19px;
+    margin: 0;
+}
+
+/* Right Column */
+.rightColumn {
+    padding: 24px;
+}
+
+.brokerTitle {
+    color: #000;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 19.688px;
+    margin: 0 0 16px 0;
+}
+
+.courtikaLogo {
+    width: 171px;
+    object-fit: contain;
+    margin: 16px 0;
+}
+
+.statusOpen {
+    color: #7AD3B8;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 19.688px;
+    margin: 0 0 16px 0;
+}
+
+.callSoon {
+    color: #000;
+    font-family: var(--Font-family-font-family-body, Inter);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 19.688px;
+    margin: 0 0 18px 0;
+}
+
+.infoRow {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.infoIcon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.infoText {
+    overflow: hidden;
+    color: var(--colors-text-text-tertiary-600, #535862);
+    text-overflow: ellipsis;
+    font-family: var(--Font-family-font-family-body, Inter);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: var(--Line-height-text-sm, 20px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .contentContainer {
+        grid-template-columns: 1fr;
+    }
+    
+    .mainHeading {
+        font-size: 24px;
+        line-height: 28px;
+    }
+}
