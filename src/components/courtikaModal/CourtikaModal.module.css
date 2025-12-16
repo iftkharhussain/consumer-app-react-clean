@@ -14,7 +14,6 @@
     overflow: hidden;
     background: #eeeeee;
     position: relative;
-    min-height: 500px;
 }
 
 .contentHidden {
@@ -33,13 +32,13 @@
 }
 
 .loadingGif {
-    width: 300px;
+    width: 250px;
     height: auto;
 }
 
 /* Modal Body */
 .modalBody {
-  padding: 40px 40px 32px;
+  padding: 34px 56px;
   background: #fff;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
@@ -51,8 +50,8 @@
     font-size: 32px;
     font-style: normal;
     font-weight: 600;
-    line-height: 32.345px;
-    margin: 0 0 24px 0;
+    line-height: 1;
+    margin: 0 0 16px 0;
 }
 
 .modalDescription {
@@ -62,7 +61,8 @@
     font-style: normal;
     font-weight: 400;
     line-height: 19.688px;
-    margin: 0 0 24px 0;
+    margin: 0 0 16px 0;
+    max-width: 600px;
 }
 
 .modalDescription strong {
@@ -86,7 +86,7 @@
     font-style: normal;
     font-weight: 600;
     line-height: 19.688px;
-    margin: 0 0 24px 0;
+    margin: 0 0 16px 0;
 }
 
 .logoContainer {
@@ -97,7 +97,7 @@
 .courtikaLogo {
     width: 145px;
     object-fit: contain;
-    margin-bottom: 35px;
+    margin-bottom: 24px;
 }
 
 /* Footer Buttons */

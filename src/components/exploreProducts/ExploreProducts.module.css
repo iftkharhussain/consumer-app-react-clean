@@ -1,6 +1,6 @@
 .exploreSection {
     margin: 16px auto 0;
-    padding: 40px 24px;
+    padding: 32px 32px 40px 32px;
     background: #FFF;
     border: 1px solid #E9EAEB;
     border-radius: 12px;
@@ -13,16 +13,17 @@
   align-items: center;
   gap: 16px;
   margin-bottom: 32px;
-  height: 100px;
-  width: 200px;
+  height: 68px;
+  width: 158px;
   position: relative;
   margin: 0 auto;
   margin-bottom: 30px;
+  margin-top: 15px;
 }
 
 .iconCircle {
-    width: 80px;
-    height: 80px;
+    width: 67px;
+    height: 67px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -37,8 +38,8 @@
 }
 
 .productIcon {
-    width: 48px;
-    height: 48px;
+    width: 39px;
+    height: 39px;
     object-fit: contain;
 }
 
@@ -50,7 +51,7 @@
     font-style: normal;
     font-weight: 600;
     line-height: var(--Line-height-text-xl, 30px);
-    margin: 0 0 8px 0;
+    margin: 0 0 5px 0;
 }
 
 .exploreDescription {
@@ -61,13 +62,13 @@
     font-style: normal;
     font-weight: 400;
     line-height: var(--Line-height-text-sm, 20px);
-    margin: 0 0 32px 0;
+    margin: 0 auto 32px auto;
     max-width: 527px;
 }
 
 .exploreButton {
     display: inline-flex;
-    padding: 12px 24px;
+    padding: 14.3px 20px;
     justify-content: center;
     align-items: center;
     border-radius: var(--radius-md, 8px);
@@ -81,7 +82,7 @@
     font-size: var(--Font-size-text-md, 16px);
     font-style: normal;
     font-weight: 600;
-    line-height: var(--Line-height-text-md, 24px);
+    line-height: 1;
     cursor: pointer;
     transition: background 0.2s;
 }

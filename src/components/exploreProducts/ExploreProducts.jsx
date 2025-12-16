@@ -8,7 +8,7 @@ const ExploreProducts = ({ onExplore }) => {
                 <div className={styles.iconCircle} style={{left:0}}>
                     <img src="/images/pr1.svg" alt="Product 1" className={styles.productIcon} />
                 </div>
-                <div className={styles.iconCircle} style={{top:'-04px', zIndex:1}}>
+                <div className={styles.iconCircle} style={{top:'-15px', zIndex:1}}>
                     <img src="/images/pr3.svg" alt="Product 3" className={styles.productIcon} />
                 </div>
                 <div className={styles.iconCircle} style={{right:0}}>

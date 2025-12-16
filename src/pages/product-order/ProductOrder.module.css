@@ -10,8 +10,8 @@
     font-size: 32px;
     font-style: normal;
     font-weight: 600;
-    line-height: 32.345px;
-    margin: 0 0 24px 0;
+    line-height: 1;
+    margin: 0 0 16px 0;
 }
 
 /* Main Description */
@@ -23,6 +23,7 @@
     font-weight: 400;
     line-height: 19.688px;
     margin: 0 0 24px 0;
+    max-width: 627px;
 }
 
 .mainDescription strong {
@@ -41,7 +42,7 @@
 
 /* Left Column */
 .leftColumn {
-    padding: 24px;
+    padding: 32px;
     border-right: 1px solid #E9EAEB;
 }
 
@@ -69,7 +70,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .oldPrice {
@@ -78,7 +79,7 @@
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
-    line-height: 19.688px;
+    line-height: 1;
     text-decoration-line: line-through;
 }
 
@@ -88,7 +89,7 @@
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
-    line-height: 19.688px;
+    line-height: 1;
 }
 
 .rabaisBadge {
@@ -102,8 +103,8 @@
     font-size: 10px;
     font-style: normal;
     font-weight: 400;
-    line-height: 28px;
-    margin-bottom: 24px;
+    line-height: 19px;
+    margin-bottom: 16px;
 }
 
 .protectionsTitle {
@@ -112,7 +113,7 @@
     font-size: 12px;
     font-style: normal;
     font-weight: 600;
-    line-height: 19px;
+    line-height: 1;
     margin: 0 0 15px 0;
 }
 
@@ -131,7 +132,7 @@
     height: 9px;
     aspect-ratio: 1/1;
     flex-shrink: 0;
-    margin-top: 5px;
+    margin-top: 2px;
 }
 
 .protectionDetails {
@@ -144,7 +145,7 @@
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
-    line-height: 19px;
+    line-height: 1;
     margin: 0 0 4px 0;
 }
 
@@ -160,7 +161,7 @@
 
 /* Right Column */
 .rightColumn {
-    padding: 24px;
+    padding: 32px;
 }
 
 .brokerTitle {
@@ -169,14 +170,14 @@
     font-size: 14px;
     font-style: normal;
     font-weight: 600;
-    line-height: 19.688px;
+    line-height: 1;
     margin: 0 0 16px 0;
 }
 
 .courtikaLogo {
-    width: 171px;
+    width: 125px;
     object-fit: contain;
-    margin: 16px 0;
+    margin-bottom: 10px;
 }
 
 .statusOpen {
@@ -185,8 +186,8 @@
     font-size: 14px;
     font-style: normal;
     font-weight: 600;
-    line-height: 19.688px;
-    margin: 0 0 16px 0;
+    line-height: 1;
+    margin: 0 0 10px 0;
 }
 
 .callSoon {
@@ -195,8 +196,8 @@
     font-size: 14px;
     font-style: normal;
     font-weight: 600;
-    line-height: 19.688px;
-    margin: 0 0 18px 0;
+    line-height: 1;
+    margin: 0 0 16px 0;
 }
 
 .infoRow {

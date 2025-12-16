@@ -81,10 +81,6 @@ const CourtikaModal = ({ isOpen, onClose }) => {
                         Norga collabore avec Courtika, courtier en assurance de dommages certifié à l'AMF. Courtika peut répondre à vos questions, vérifier vos informations et vous aider à finaliser l'achat de votre assurance. <strong>Cliquez sur « Demander un appel » pour continuer.</strong>
                     </p>
 
-                    <p className={styles.modalLorem}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    </p>
-
                     <p className={styles.modalSubtitle}>
                         Courtier en assurance de dommages certifié à l'AMF:
                     </p>

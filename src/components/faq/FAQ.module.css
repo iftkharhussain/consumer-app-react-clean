@@ -2,7 +2,7 @@
   width: 100%;
   max-width: 768px;
   margin: 64px auto 0;
-  margin-top: 120px;
+  margin-top: 96px;
 }
 
 .faqTitle {
@@ -12,7 +12,7 @@
   font-size: 24px;
   font-style: normal;
   font-weight: 600;
-  line-height: 0;
+  line-height: 1;
   letter-spacing: -0.48px;
   margin: 0 0 24px 0;
 }

@@ -18,7 +18,7 @@ const OrderProduct = () => {
             <p className={styles.mainDescription}>
                 Nous avons envoyé votre demande à un courtier en assurance de dommages chez Courtika. 
                 Celui-ci vous appellera dès que possible pour répondre à vos questions et finaliser les détails. 
-                <strong>Assurez-vous de répondre au XXX XXX XXXX</strong>
+                <strong> Assurez-vous de répondre au XXX XXX XXXX</strong>
             </p>
 
             <div className={styles.contentContainer}>
