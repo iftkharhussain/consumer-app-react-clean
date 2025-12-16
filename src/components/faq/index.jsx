@@ -29,8 +29,8 @@ const defaultFaqItems = [
 ];
 
 const FAQ = ({ 
-  title = "Questions fréquentes", 
-  subtitle = "Avez-vous des questions? Nous sommes là pour vous aider.", 
+  title = "FAQ", 
+  subtitle = "Réponses aux questions fréquentes sur votre soumission d’assurance auto", 
   items = defaultFaqItems 
 }) => {
   const [expandedItems, setExpandedItems] = useState({});

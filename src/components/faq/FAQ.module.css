@@ -65,6 +65,9 @@
   font-weight: 500;
   line-height: var(--Line-height-text-lg, 28px);
 }
+.faqQuestion > span {
+  line-height: 1;
+}
 
 .faqQuestion:hover {
   opacity: 0.8;

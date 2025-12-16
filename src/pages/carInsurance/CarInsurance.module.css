@@ -183,6 +183,7 @@
   font-weight: 600;
   line-height: 38px;
   margin: 0 0 32px 0;
+  line-height: 1;
 }
 
 .featuredDescription {
@@ -269,7 +270,7 @@
 .protectionItem {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 3px;
   margin-bottom: 24px;
   break-inside: avoid;
 }
@@ -586,7 +587,7 @@
   font-style: normal;
   font-weight: 600;
   line-height: var(--Line-height-text-lg, 28px);
-  margin: 32px 0 16px 0;
+  margin: 32px 0 16px 5px;
 }
 
 /* Comparison Table */

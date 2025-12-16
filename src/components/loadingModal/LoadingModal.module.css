@@ -25,9 +25,9 @@
 /* Icon and Progress Ring */
 .iconContainer {
   position: relative;
-  width: 160px;
-  height: 160px;
-  margin-bottom: 32px;
+  width: 99px;
+  height: 99px;
+  margin-bottom: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -46,8 +46,8 @@
 }
 
 .carIcon {
-  width: 80px;
-  max-height: 80px;
+  width: 50px;
+  max-height: 50px;
   position: relative;
   z-index: 1;
 }
@@ -56,6 +56,8 @@
 .heading {
   color: #000;
   text-align: center;
+  leading-trim: both;
+  text-edge: cap;
   font-family: Inter;
   font-size: var(--Font-size-text-lg, 18px);
   font-style: normal;
@@ -66,17 +68,28 @@
 
 /* Steps List */
 .stepsList {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-  max-width: 400px;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0 auto;
 }
 
 .stepItem {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  /* margin doesn't work on tr */
+}
+
+.stepIconCell {
+  padding: 0 8px 6px 0;
+  vertical-align: middle;
+}
+
+.stepTextCell {
+  padding: 0 0 6px 0;
+  vertical-align: middle;
+}
+
+.stepItem:last-child .stepIconCell,
+.stepItem:last-child .stepTextCell {
+  padding-bottom: 0;
 }
 
 .stepIcon {

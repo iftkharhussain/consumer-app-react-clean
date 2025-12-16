@@ -66,28 +66,28 @@ const LoadingModal = ({
             <div className={styles.modalContent}>
                 {/* Animated Car Icon with Progress */}
                 <div className={styles.iconContainer}>
-                    <svg className={styles.progressRing} width="160" height="160" viewBox="0 0 160 160">
+                    <svg className={styles.progressRing} width="99" height="99" viewBox="0 0 99 99">
                         <circle
                             className={styles.progressRingCircleBg}
-                            cx="80"
-                            cy="80"
-                            r="70"
+                            cx="49.5"
+                            cy="49.5"
+                            r="44.5"
                             fill="none"
                             stroke="#E5E7EB"
-                            strokeWidth="8"
+                            strokeWidth="5"
                         />
                         <circle
                             className={styles.progressRingCircle}
-                            cx="80"
-                            cy="80"
-                            r="70"
+                            cx="49.5"
+                            cy="49.5"
+                            r="44.5"
                             fill="none"
                             stroke="#1A1ABA"
-                            strokeWidth="8"
+                            strokeWidth="5"
                             strokeLinecap="round"
-                            strokeDasharray={`${2 * Math.PI * 70}`}
-                            strokeDashoffset={`${2 * Math.PI * 70 * (1 - progress / 100)}`}
-                            transform="rotate(-90 80 80)"
+                            strokeDasharray={`${2 * Math.PI * 44.5}`}
+                            strokeDashoffset={`${2 * Math.PI * 44.5 * (1 - progress / 100)}`}
+                            transform="rotate(-90 49.5 49.5)"
                         />
                     </svg>
                     <img 
@@ -103,20 +103,26 @@ const LoadingModal = ({
                 </h2>
 
                 {/* Progress Steps */}
-                <div className={styles.stepsList}>
-                    {steps.map((step, index) => (
-                        <div key={index} className={styles.stepItem}>
-                            <img 
-                                src={currentStep >= index ? '/images/blue-tik.svg' : '/images/check.svg'}
-                                alt={currentStep >= index ? 'Completed' : 'Pending'}
-                                className={styles.stepIcon}
-                            />
-                            <span className={currentStep >= index ? styles.stepTextActive : styles.stepText}>
-                                {step}
-                            </span>
-                        </div>
-                    ))}
-                </div>
+                <table className={styles.stepsList}>
+                    <tbody>
+                        {steps.map((step, index) => (
+                            <tr key={index} className={styles.stepItem}>
+                                <td className={styles.stepIconCell}>
+                                    <img 
+                                        src={currentStep >= index ? '/images/blue-tik.svg' : '/images/check.svg'}
+                                        alt={currentStep >= index ? 'Completed' : 'Pending'}
+                                        className={styles.stepIcon}
+                                    />
+                                </td>
+                                <td className={styles.stepTextCell}>
+                                    <span className={currentStep >= index ? styles.stepTextActive : styles.stepText}>
+                                        {step}
+                                    </span>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
         </div>
     );
