@@ -1,5 +1,6 @@
 import React from 'react';
 import { Switch } from 'antd';
+import { CoverageStatus } from '..';
 import styles from './CustomizeProtections.module.css';
 
 const ProtectionCard = ({
@@ -37,16 +38,12 @@ const ProtectionCard = ({
                             {alwaysIncluded ? (
                                 <span className={styles.alwaysIncluded}>Toujours inclus</span>
                             ) : (
-                                <div className={vehicle.included ? styles.toggleGroup : styles.toggleGroupInactive}>
-                                    <Switch
-                                        checked={vehicle.included}
-                                        onChange={(checked) => onVehicleToggle && onVehicleToggle(index, checked)}
-                                        size="small"
-                                    />
-                                    <span className={vehicle.included ? styles.toggleLabel : styles.toggleLabelInactive}>
-                                        {vehicle.included ? 'couvert' : 'non couvert'}
-                                    </span>
-                                </div>
+                                <CoverageStatus
+                                    active={vehicle.included}
+                                    onChange={(checked) => onVehicleToggle && onVehicleToggle(index, checked)}
+                                    activeText="couvert"
+                                    inactiveText="non couvert"
+                                />
                             )}
                         </div>
                     ))}
@@ -55,14 +52,14 @@ const ProtectionCard = ({
 
             <div className={styles.protectionContent}>
                 <h3 className={styles.protectionTitle}>{title}</h3>
-                <span style={{textAlign:'center'}}>
-                  {image && <img src={image} alt="protection" className={styles.carImage} />}
-                  
-                  {description && (
-                      <p className={styles.protectionDesc}>{description}</p>
-                  )}
+                <span style={{ textAlign: 'center' }}>
+                    {image && <img src={image} alt="protection" className={styles.carImage} />}
+
+                    {description && (
+                        <p className={styles.protectionDesc}>{description}</p>
+                    )}
                 </span>
-                
+
                 {benefitsList && (
                     <ul className={styles.benefitsList}>
                         {benefitsList.map((benefit, index) => (
@@ -70,14 +67,14 @@ const ProtectionCard = ({
                         ))}
                     </ul>
                 )}
-                
+
                 {showDetailsLink && (
                     <>
                         <button className={styles.detailsLink} onClick={handleDetailsClick}>
                             *Détail condition importante
-                            <img 
-                                src="/images/arrow-down.svg" 
-                                alt="arrow" 
+                            <img
+                                src="/images/arrow-down.svg"
+                                alt="arrow"
                                 className={styles.arrowIcon}
                                 style={{ transform: isDetailsExpanded ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}
                             />
@@ -89,32 +86,32 @@ const ProtectionCard = ({
                         )}
                     </>
                 )}
-                
+
                 {coverageLabel && amount !== undefined && (
                     <>
                         <p className={styles.coverageLabel}>{coverageLabel}</p>
                         <div className={`${styles.amountControl} ${!onAmountChange ? styles.amountControlStatic : ''}`}>
                             {onAmountChange && (
-                                <button 
-                                    className={styles.amountButton} 
+                                <button
+                                    className={styles.amountButton}
                                     onClick={() => onAmountChange(-amountDelta)}
                                 >
-                                <svg width="12" height="1" viewBox="0 0 12 1" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                  <path d="M0.5 0.5L10.9333 0.500001" stroke="white" stroke-linecap="round"/>
-                                </svg>
+                                    <svg width="12" height="1" viewBox="0 0 12 1" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M0.5 0.5L10.9333 0.500001" stroke="white" stroke-linecap="round" />
+                                    </svg>
                                 </button>
                             )}
                             <span className={`${styles.amountValue} ${!onAmountChange ? styles.amountValueStatic : ''}`}>
-                                {typeof amount === 'number' && amount > 999 
-                                    ? amount.toLocaleString() 
+                                {typeof amount === 'number' && amount > 999
+                                    ? amount.toLocaleString()
                                     : amount} $
                             </span>
                             {onAmountChange && (
-                                <button 
-                                    className={styles.amountButton} 
+                                <button
+                                    className={styles.amountButton}
                                     onClick={() => onAmountChange(amountDelta)}
                                 >
-                                +
+                                    +
                                 </button>
                             )}
                         </div>

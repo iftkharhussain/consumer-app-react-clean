@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { PageContent, Section } from 'components';
+import { PageContent, Section, CoverageStatus } from 'components';
 import { Button, Tabs, Rate, Input } from 'antd';
 import { CalendarOutlined, ClockCircleOutlined, BellOutlined } from '@ant-design/icons';
 import { Types } from '../../utils/helper';
@@ -16,6 +16,7 @@ const Overview = () => {
   const { firstName, lastName } = useSelector((state) => state.app.user_profile);
   const [rating, setRating] = React.useState(0);
   const [comment, setComment] = React.useState('');
+  const [isCovered, setIsCovered] = React.useState(false);
 
   useEffect(() => {
     if (!initialized.current) {
@@ -108,7 +109,7 @@ const Overview = () => {
       children: (
         <div className={styles.tabContent}>
           <div className={styles.pendingMessage}>Meeting scheduled for Friday, Jan 10, 2025</div>
-          
+
           <div className={styles.meetingQuestionSection}>
             <h3 className={styles.meetingQuestion}>Did the meeting happen?</h3>
             <div className={styles.yesNoButtons}>
@@ -151,10 +152,10 @@ const Overview = () => {
               <p className={styles.rateDescription}>
                 Please share your experience to help us improve our service
               </p>
-              
+
               <div className={styles.ratingContainer}>
-                <Rate 
-                  value={rating} 
+                <Rate
+                  value={rating}
                   onChange={setRating}
                   className={styles.customRate}
                 />
@@ -199,7 +200,7 @@ const Overview = () => {
           console.log('Alert closed');
         }}
       />
-      
+
       <div className={styles.overviewPage}>
         {/* Main Header */}
         <div>
@@ -207,6 +208,15 @@ const Overview = () => {
           <p className={styles.subheading}>
             The price is not final — an advisor will call you to confirm your health status, then adjust the duration and price according to your needs.
           </p>
+        </div>
+
+        <div style={{ marginBottom: '24px' }}>
+          <CoverageStatus
+            active={isCovered}
+            onChange={setIsCovered}
+            activeText="couvert"
+            inactiveText="non couvert"
+          />
         </div>
 
         {/* Cards Container */}
@@ -217,21 +227,21 @@ const Overview = () => {
               <h3 className={styles.cardTitle}>Estimated Price</h3>
               <span className={styles.monthlyBadge}>Monthly</span>
             </div>
-            
+
             <p className={styles.customerName}>For {customerName}</p>
-            
+
             <div className={styles.priceRange}>$25.2 - $29.48</div>
-            
+
             <div className={styles.termInfo}>
               <span className={styles.termLabel}>Term:</span>
               <span className={styles.termValue}>10-Year Term</span>
             </div>
-            
+
             <div className={styles.termInfo}>
               <span className={styles.termLabel}>Coverage:</span>
               <span className={styles.termValue}>$250,000</span>
             </div>
-            
+
             <div className={styles.benefitsContainer}>
               <div className={styles.benefitItem}>
                 <span className={styles.benefitLabel}>Benefit 1:</span>
@@ -266,11 +276,11 @@ const Overview = () => {
         <Section variant="card">
           <h2 className={styles.nextStepTitle}>Next Step: Schedule a call with your advisor</h2>
           <p className={styles.nextStepDescription}>
-            Congratulations! An advisor has received your request and will prepare your personalized quotes. 
+            Congratulations! An advisor has received your request and will prepare your personalized quotes.
             Schedule a call so they can contact you at the right time.
           </p>
 
-          <div className={'flex '+ styles.tabsContainer}>
+          <div className={'flex ' + styles.tabsContainer}>
             <Tabs
               defaultActiveKey="2"
               items={tabItems}
@@ -280,7 +290,7 @@ const Overview = () => {
               <span className={styles.progressPercentage}>25%</span>
             </div>
           </div>
-          
+
           <div className={styles.advisorSection}>
             <h3 className={styles.advisorTitle}>Advisor</h3>
             <div className={styles.advisorCard}>
@@ -291,17 +301,17 @@ const Overview = () => {
                 <p className={styles.advisorContact}>Email: janedoe@gmail.com</p>
               </div>
             </div>
-            
+
             <div className={styles.buttonGroup}>
-              <Button 
+              <Button
                 type="primary"
                 onClick={handleBookCall}
                 block
               >
                 Book a call with Jane Doe
               </Button>
-              
-              <Button 
+
+              <Button
                 onClick={handleReschedule}
                 block
                 className={styles.rescheduleButton}

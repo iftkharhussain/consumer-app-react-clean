@@ -53,9 +53,13 @@
 .vehicleToggleRow {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   padding-bottom: 8px;
   width: 100%;
+}
+
+.vehicleToggleRow:last-child {
+  padding-bottom: 0;
 }
 
 

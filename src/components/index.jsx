@@ -29,6 +29,7 @@ export { default as LinkPreviewBadge } from './linkPreviewBadge';
 export { default as UserProfileBadge } from './userProfileBadge';
 export { default as AdvisorTypeBadge } from './advisorTypeBadge';
 export { default as StatusBadge } from './statusBadge';
+export { default as CoverageStatus } from './coverageStatus';
 export { default as QuestionBox } from './questionBox';
 
 // Error Pages
@@ -37,10 +38,10 @@ export { default as NotFound } from './notFound';
 
 // UntitledUI-inspired Components
 export { default as Button } from './button';
-export { 
+export {
   default as Input,
   TextArea,
-  Password 
+  Password
 } from './input';
 export {
   default as Badge,
