@@ -146,9 +146,9 @@
   font-style: normal;
   font-weight: 400;
   line-height: 14px;
-    position: absolute;
+  position: absolute;
   bottom: -18px;
-    width: 61px;
+  width: 61px;
   right: -5px;
 }
 
@@ -167,10 +167,11 @@
   grid-template-columns: 1fr 1fr 1fr;
   gap: 16px;
   margin-bottom: 32px;
+  align-items: start;
 }
 
 .protectionCard {
-border-radius: 12px;
+  border-radius: 12px;
   border: 1px solid #E9EAEB;
   background: #f8f8f8;
   overflow: hidden;
@@ -189,7 +190,7 @@ border-radius: 12px;
 }
 
 .protectionContent {
-padding: 24px 16px;
+  padding: 24px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -197,7 +198,7 @@ padding: 24px 16px;
   border-top: 1px solid #E9EAEB;
   background: #fff;
   min-height: 301px;
-    justify-content: space-between;
+  justify-content: space-between;
 }
 
 .protectionTitle {
@@ -247,7 +248,7 @@ padding: 24px 16px;
   border-radius: 100px;
   padding: 2px;
   width: fit-content;
-    min-width: 203px;
+  min-width: 203px;
   text-align: center;
   justify-content: space-around;
 }
