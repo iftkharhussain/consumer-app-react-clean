@@ -25,6 +25,14 @@ const appState = (state = initialState, action) => {
         auth: action.payLoad?.data,
         user_profile: action.payLoad?.data
       }
+    case 'update_profile':
+      return {
+        ...state,
+        user_profile: {
+          ...state.user_profile,
+          ...action.payLoad
+        }
+      }
     case 'user_local_config':
       return {
         ...state,

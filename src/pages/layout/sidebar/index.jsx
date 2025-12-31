@@ -451,7 +451,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 							>
 								<div className={styles.userProfile} style={{ cursor: 'pointer' }}>
 									<img
-										src={profilePic || '/images/Avatar.png'}
+										src={profilePic ? `${serverUrl}${profilePic}` : '/images/Avatar.png'}
 										alt="User Avatar"
 										className={styles.userAvatar}
 									/>

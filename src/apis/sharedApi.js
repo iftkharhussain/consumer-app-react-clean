@@ -1,21 +1,8 @@
 // API Configuration for Consumer App
 
-// Environment-based API URLs  
-const LOCAL_API = 'http://localhost:3025';  // Consumer app API port
-const DEV_API = 'https://dev-consumer-api.norga.com';
-const PROD_API = 'https://consumer-api.norga.com';
-
-// Determine base URL based on environment
+// Get API URL from environment variable with fallback
 const getBaseUrl = () => {
-  const hostname = window.location.hostname;
-  
-  if (hostname === 'localhost' || hostname === '127.0.0.1') {
-    return LOCAL_API;
-  } else if (hostname.includes('dev') || hostname.includes('staging')) {
-    return DEV_API;
-  } else {
-    return PROD_API;
-  }
+  return process.env.REACT_APP_API_URL || 'http://localhost:3025';
 };
 
 export const baseUrl = getBaseUrl();
