@@ -9,45 +9,39 @@ import GetInTouch from '../getInTouch';
 import MoreOptions from '../moreOptions';
 import OptionsModal from '../optionsModal';
 import CourtikaModal from '../courtikaModal';
-import { useQuote } from '../../hooks/useQuote';
-import { 
-    FeaturedCardSkeleton, 
-    ComparisonTableSkeleton, 
+import {
+    FeaturedCardSkeleton,
+    ComparisonTableSkeleton,
     QuoteErrorState,
-    QuotePendingState 
+    QuotePendingState
 } from './QuoteSkeletons';
-import { 
-    getCarrierLogo, 
-    getCarrierName, 
-    isIntactCarrier 
+import {
+    getCarrierLogo,
+    getCarrierName,
+    isIntactCarrier
 } from '../../utils/carrierUtils';
 import styles from '../../pages/carInsurance/CarInsurance.module.css';
 
-const InitialContent = ({ onInterestedClick, onCustomize }) => {
+const InitialContent = ({
+    onInterestedClick,
+    onCustomize,
+    // Props from parent (CarInsurance page)
+    quoteData,
+    quoteLoading,
+    quoteStatus,
+    hasQuote,
+    hasFailed,
+    isPending,
+    quoteError,
+    isAuthenticated = true,
+    onRetryQuote
+}) => {
     const [expandedProviders, setExpandedProviders] = useState({});
     const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false);
     const [isCourtikaModalOpen, setIsCourtikaModalOpen] = useState(false);
     const [isOptionsLoading, setIsOptionsLoading] = useState(false);
     const [isPersonnaliserLoading, setIsPersonnaliserLoading] = useState(false);
     const [billingPeriod, setBillingPeriod] = useState('Mensuel');
-
-    // Use quote hook to fetch and manage quotes (single API call)
-    // TEMPORARILY DISABLED FOR DEMO
-    const { 
-        loading, 
-        error, 
-        quoteStatus, 
-        quoteData,
-        isLoading,
-        hasQuote,
-        isPending,
-        hasFailed,
-        showFallback,
-        isAuthenticated,
-        refresh 
-    } = useQuote('car-insurance', { 
-        autoFetch: false  // DISABLED: Set to true to enable API calls
-    });
 
     // Transform quote details into display format
     const [featuredProvider, setFeaturedProvider] = useState(null);
@@ -62,7 +56,7 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
             hasQuote,
             isAuthenticated
         });
-        
+
         // quoteData contains { carriers: [...], carriersCount, responseTime }
         if (quoteData?.carriers && Array.isArray(quoteData.carriers)) {
             console.log('Processing carriers:', quoteData.carriers.map(c => ({
@@ -71,32 +65,32 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
                 available: c.available,
                 premium: c.premium
             })));
-            
+
             // Filter available carriers (Fortus returns 'available' not 'success')
             const availableCarriers = quoteData.carriers.filter(r => r.available);
-            
+
             if (availableCarriers.length > 0) {
                 // Find Intact as the featured provider (always show Intact first)
                 // Check by carrier code using the utility function
-                let intactCarrier = availableCarriers.find(c => 
+                let intactCarrier = availableCarriers.find(c =>
                     isIntactCarrier(c.carrierCode) ||
-                    c.name?.toLowerCase() === 'intact' || 
+                    c.name?.toLowerCase() === 'intact' ||
                     c.carrierName?.toLowerCase() === 'intact'
                 );
-                
+
                 // Fallback to first carrier if Intact not found
                 const featured = intactCarrier || availableCarriers[0];
-                
+
                 // Calculate price - premium is annual, divide by 12 for monthly
                 // If premium is 0 (test/sandbox), show placeholder
                 const annualPremium = featured.premium || 0;
                 const monthlyPrice = annualPremium > 0 ? Math.round(annualPremium / 12) : null;
-                
+
                 // Get display name from carrier code or use the name from response
-                const displayName = featured.carrierCode 
-                    ? getCarrierName(featured.carrierCode) 
+                const displayName = featured.carrierCode
+                    ? getCarrierName(featured.carrierCode)
                     : (featured.name || featured.carrierName || 'Best Option');
-                
+
                 console.log('Setting featured provider:', displayName, 'code:', featured.carrierCode);
                 setFeaturedProvider({
                     name: displayName,
@@ -109,21 +103,21 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
                     coverages: featured.coverages || [],
                     quoteDetails: featured.quoteDetails || {}
                 });
-                
+
                 // Rest are comparison providers (exclude the featured one)
-                const otherCarriers = availableCarriers.filter(c => 
+                const otherCarriers = availableCarriers.filter(c =>
                     (c.carrierCode || c.name || c.carrierName) !== (featured.carrierCode || featured.name || featured.carrierName)
                 );
-                
+
                 const others = otherCarriers.map((result, index) => {
                     const annual = result.premium || 0;
                     const monthly = annual > 0 ? Math.round(annual / 12) : null;
-                    
+
                     // Get display name from carrier code or use the name from response
-                    const providerName = result.carrierCode 
-                        ? getCarrierName(result.carrierCode) 
+                    const providerName = result.carrierCode
+                        ? getCarrierName(result.carrierCode)
                         : (result.name || result.carrierName || `Provider ${index + 2}`);
-                    
+
                     return {
                         id: index + 1,
                         name: providerName,
@@ -137,7 +131,7 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
                         quoteDetails: result.quoteDetails || {}
                     };
                 });
-                
+
                 console.log('Setting comparison providers:', others.map(p => ({ name: p.name, code: p.carrierCode })));
                 setComparisonProviders(others);
             }
@@ -182,13 +176,13 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
     // Helper function to extract benefits from quote result
     const extractBenefits = (result) => {
         const benefits = [];
-        
+
         // Extract from Fortus coverages array format
         // Format: [{ code: "TPL", limit: "$2,000,000/-$1", deductible: 500 }, ...]
         if (result.coverages && Array.isArray(result.coverages)) {
             result.coverages.forEach(coverage => {
                 const code = coverage.code?.toUpperCase();
-                
+
                 // Map coverage codes to friendly names
                 const coverageNames = {
                     'TPL': 'Third Party Liability',
@@ -199,10 +193,10 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
                     'UA': 'Uninsured Auto',
                     'SEF44': 'Family Protection'
                 };
-                
+
                 const label = coverageNames[code] || code || 'Coverage';
                 let value = '';
-                
+
                 if (coverage.limit && coverage.limit !== '-$1/-$1') {
                     value = coverage.limit;
                 } else if (coverage.deductible && coverage.deductible > 0) {
@@ -210,11 +204,11 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
                 } else {
                     value = 'Included';
                 }
-                
+
                 benefits.push({ label, value });
             });
         }
-        
+
         // If no coverages extracted, add default benefits
         if (benefits.length === 0) {
             benefits.push(
@@ -223,7 +217,7 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
                 { label: 'Support', value: '24/7 Claims' }
             );
         }
-        
+
         // Limit to first 3 benefits for display
         return benefits.slice(0, 3);
     };
@@ -327,7 +321,7 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
     const displayComparisonProviders = comparisonProviders.length > 0 ? comparisonProviders : fallbackComparisonProviders;
 
     // Determine if we should show loading state (only when authenticated and actually loading)
-    const shouldShowLoading = isLoading && isAuthenticated && !showFallback;
+    const shouldShowLoading = quoteLoading && isAuthenticated && !hasQuote;
 
     return (
         <>
@@ -339,12 +333,12 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
             {/* Featured Quote Card */}
             <div className={styles.featuredQuoteCard}>
                 <div className={styles.featuredLeft}>
-                    <img 
-                        src="/images/intact-insurance.svg" 
-                        alt="Intact" 
-                        className={styles.featuredLogo} 
+                    <img
+                        src="/images/intact-insurance.svg"
+                        alt="Intact"
+                        className={styles.featuredLogo}
                     />
-                    
+
                     <div className={styles.featuredPricing}>
                         <span className={styles.originalPrice}>102 $ / mo</span>
                         <div className={styles.currentPrice}>
@@ -357,12 +351,12 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
                     <div className={styles.discountBadge}>
                         Rabais Intact appliqué!
                     </div>
-                    
+
                     <p className={styles.discountText}>
                         Intact vous offre un rabais de 10% supplémentaire
                     </p>
 
-                    <BillingToggle 
+                    <BillingToggle
                         value={billingPeriod}
                         onChange={setBillingPeriod}
                     />
@@ -372,11 +366,11 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
                     <h2 className={styles.featuredHeading}>
                         Edward, Intact se démarque selon vos infos fournies!
                     </h2>
-                    
+
                     <p className={styles.featuredDescription}>
                         Le prix affiché est une estimation. <strong>Pour obtenir le prix final, cliquez sur « Poursuivre » et parlez à un courtier en assurance de dommages</strong> ; celui-ci validera les informations nécessaires avec vous.
                     </p>
-                    
+
                     <Button
                         type="primary"
                         className={styles.poursuivreButton}
@@ -390,9 +384,9 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
             {/* Vos protections Section */}
             <div className={styles.protectionsHeader}>
                 <h2 className={styles.protectionsTitle}>Vos protections</h2>
-                <a 
-                    href="#" 
-                    className={styles.personnaliserLink} 
+                <a
+                    href="#"
+                    className={styles.personnaliserLink}
                     onClick={handlePersonnaliserClick}
                     style={{ opacity: isPersonnaliserLoading ? 0.6 : 1, pointerEvents: isPersonnaliserLoading ? 'none' : 'auto' }}
                 >
@@ -467,8 +461,8 @@ const InitialContent = ({ onInterestedClick, onCustomize }) => {
                     <h2 className={styles.sectionHeading}>Insurance providers</h2>
                     <ComparisonTableSkeleton />
                 </>
-            ) : error && isAuthenticated ? (
-                <QuoteErrorState message={error} onRetry={refresh} />
+            ) : quoteError && isAuthenticated ? (
+                <QuoteErrorState message={quoteError} onRetry={onRetryQuote} />
             ) : isPending && isAuthenticated ? (
                 <QuotePendingState message="Your quote is being processed. This may take a moment..." />
             ) : (

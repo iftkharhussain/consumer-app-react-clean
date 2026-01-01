@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './LoadingModal.module.css';
 
-const LoadingModal = ({ 
-    isOpen, 
-    onClose, 
-    userName = 'Edward',
+const LoadingModal = ({
+    isOpen,
+    onClose,
+    userName = 'User',
+    heading = null, // Optional custom heading
     steps = [
         'Création du compte Norga',
         'Analyse de vos réponses',
@@ -14,18 +16,35 @@ const LoadingModal = ({
     totalDuration = 5000,
     autoClose = true
 }) => {
+    const { t } = useTranslation();
     const [currentStep, setCurrentStep] = useState(-1);
     const [progress, setProgress] = useState(0);
+
+    // Use refs to track if we've started and to store the onClose callback
+    const hasStartedRef = useRef(false);
+    const onCloseRef = useRef(onClose);
+
+    // Keep onClose ref updated
+    useEffect(() => {
+        onCloseRef.current = onClose;
+    }, [onClose]);
 
     useEffect(() => {
         if (!isOpen) {
             setCurrentStep(-1);
             setProgress(0);
+            hasStartedRef.current = false;
             return;
         }
 
+        // Prevent re-starting if already started
+        if (hasStartedRef.current) {
+            return;
+        }
+        hasStartedRef.current = true;
+
         const stepDuration = totalDuration / steps.length;
-        
+
         // Animate progress bar
         const progressInterval = setInterval(() => {
             setProgress(prev => {
@@ -38,7 +57,7 @@ const LoadingModal = ({
         }, 50);
 
         // Update steps one by one
-        const stepIntervals = steps.map((_, index) => 
+        const stepIntervals = steps.map((_, index) =>
             setTimeout(() => {
                 setCurrentStep(index);
             }, stepDuration * (index + 1))
@@ -48,7 +67,7 @@ const LoadingModal = ({
         let closeTimeout;
         if (autoClose) {
             closeTimeout = setTimeout(() => {
-                onClose && onClose();
+                onCloseRef.current && onCloseRef.current();
             }, totalDuration);
         }
 
@@ -56,10 +75,15 @@ const LoadingModal = ({
             clearInterval(progressInterval);
             stepIntervals.forEach(timeout => clearTimeout(timeout));
             if (closeTimeout) clearTimeout(closeTimeout);
+            // Reset hasStartedRef so timer can be recreated if effect runs again (React StrictMode)
+            hasStartedRef.current = false;
         };
-    }, [isOpen, steps.length, totalDuration, autoClose, onClose]);
+    }, [isOpen, steps.length, totalDuration, autoClose]); // Removed onClose from deps
 
     if (!isOpen) return null;
+
+    // Default heading uses translation with user's name
+    const displayHeading = heading || t('loadingModal.shoppingInsurers', { userName }) || `${userName}, nous magasinons les assureurs pour vous...`;
 
     return (
         <div className={styles.modalOverlay}>
@@ -90,16 +114,16 @@ const LoadingModal = ({
                             transform="rotate(-90 49.5 49.5)"
                         />
                     </svg>
-                    <img 
-                        src="/images/quote-loading.png" 
-                        alt="Loading" 
+                    <img
+                        src="/images/quote-loading.png"
+                        alt="Loading"
                         className={styles.carIcon}
                     />
                 </div>
 
                 {/* Heading */}
                 <h2 className={styles.heading}>
-                    {userName}, nous magasinons les assureurs pour vous...
+                    {displayHeading}
                 </h2>
 
                 {/* Progress Steps */}
@@ -108,7 +132,7 @@ const LoadingModal = ({
                         {steps.map((step, index) => (
                             <tr key={index} className={styles.stepItem}>
                                 <td className={styles.stepIconCell}>
-                                    <img 
+                                    <img
                                         src={currentStep >= index ? '/images/blue-tik.svg' : '/images/check.svg'}
                                         alt={currentStep >= index ? 'Completed' : 'Pending'}
                                         className={styles.stepIcon}

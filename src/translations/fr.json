@@ -53,7 +53,7 @@
   "redirectingToDashboard": "Redirection vers votre tableau de bord...",
   "authenticationFailed": "Échec de l'authentification",
   "tokenExpiredOrInvalid": "Votre lien de connexion a peut-être expiré ou est invalide.",
-  "tokenExpiredHelp": "Les liens de connexion expirent après 10 minutes pour des raisons de sécurité.",
+  "tokenExpiredHelp": "Les liens de connexion expirent après 20 minutes pour des raisons de sécurité.",
   "needAssistance": "Besoin d'assistance?",
   "verifyingAccount": "Vérification de votre compte",
   "settingUp": "Configuration de votre profil...",
@@ -91,5 +91,19 @@
   "profilePictureHasBeenUpdated": "La photo de profil a été mise à jour",
   "profilePictureWasFailedToUpdate": "Échec de la mise à jour de la photo de profil",
   "fileSizeExceeded": "La taille du fichier a dépassé 5 Mo",
-  "invalidImageFile": "Fichier image invalide"
+  "invalidImageFile": "Fichier image invalide",
+  "user": "Utilisateur",
+  "carInsurance": {
+    "loadingSteps": {
+      "creatingAccount": "Création du compte Norga",
+      "analyzingResponses": "Analyse de vos réponses",
+      "connectingInsurers": "Connexion aux assureurs",
+      "applyingDiscounts": "Application des rabais"
+    },
+    "quoteLoading": "Nous calculons votre soumission d'assurance...",
+    "quoteLoadingSubtext": "Encore quelques secondes..."
+  },
+  "loadingModal": {
+    "shoppingInsurers": "{{userName}}, nous magasinons les assureurs pour vous..."
+  }
 }

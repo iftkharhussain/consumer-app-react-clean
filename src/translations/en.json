@@ -53,7 +53,7 @@
   "redirectingToDashboard": "Redirecting you to your dashboard...",
   "authenticationFailed": "Authentication Failed",
   "tokenExpiredOrInvalid": "Your login link may have expired or is invalid.",
-  "tokenExpiredHelp": "Login links expire after 10 minutes for security.",
+  "tokenExpiredHelp": "Login links expire after 20 minutes for security.",
   "needAssistance": "Need assistance?",
   "verifyingAccount": "Verifying Your Account",
   "settingUp": "Setting up your profile...",
@@ -91,5 +91,19 @@
   "profilePictureHasBeenUpdated": "Profile picture has been updated",
   "profilePictureWasFailedToUpdate": "Profile picture failed to update",
   "fileSizeExceeded": "File size exceeded 5MB",
-  "invalidImageFile": "Invalid image file"
+  "invalidImageFile": "Invalid image file",
+  "user": "User",
+  "carInsurance": {
+    "loadingSteps": {
+      "creatingAccount": "Creating your Norga account",
+      "analyzingResponses": "Analyzing your responses",
+      "connectingInsurers": "Connecting to insurers",
+      "applyingDiscounts": "Applying discounts"
+    },
+    "quoteLoading": "We're calculating your insurance quote...",
+    "quoteLoadingSubtext": "Just a few more seconds..."
+  },
+  "loadingModal": {
+    "shoppingInsurers": "{{userName}}, we're shopping insurers for you..."
+  }
 }

@@ -207,9 +207,9 @@
   border-radius: var(--radius-md, 8px);
   border: 2px solid rgba(255, 255, 255, 0.12);
   background: #1A1ABA;
-  box-shadow: 0 0 0 1px rgba(10, 13, 18, 0.18) inset, 
-              0 -2px 0 0 rgba(10, 13, 18, 0.05) inset, 
-              0 1px 2px 0 rgba(10, 13, 18, 0.05);
+  box-shadow: 0 0 0 1px rgba(10, 13, 18, 0.18) inset,
+    0 -2px 0 0 rgba(10, 13, 18, 0.05) inset,
+    0 1px 2px 0 rgba(10, 13, 18, 0.05);
   color: #FFF;
   font-family: var(--Font-family-font-family-body, Inter);
   font-size: var(--Font-size-text-sm, 14px);
@@ -547,7 +547,7 @@
 .ratingSection {
   display: flex;
   gap: 12px;
-    gap: 5px;
+  gap: 5px;
   flex-direction: column;
 }
 
@@ -733,12 +733,12 @@
   text-align: right;
 }
 
-.providerActions > * {
+.providerActions>* {
   display: inline-block;
   vertical-align: middle;
 }
 
-.providerActions > *:last-child {
+.providerActions>*:last-child {
   margin-right: 0;
 }
 
@@ -880,7 +880,8 @@
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
-  line-height: 24px; /* 150% */
+  line-height: 24px;
+  /* 150% */
   margin: 0;
 }
 
@@ -890,6 +891,115 @@
   font-size: var(--text-sm, 14px);
   font-style: normal;
   font-weight: 400;
-  line-height: var(--text-sm--line-height, 20px); /* 142.857% */
+  line-height: var(--text-sm--line-height, 20px);
+  /* 142.857% */
   margin: 0;
+}
+
+/* Secondary Loading Overlay - Shows when quote is still loading after initial modal */
+.secondaryLoadingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.secondaryLoadingContent {
+  text-align: center;
+  padding: 40px;
+  max-width: 400px;
+}
+
+.secondaryLoadingText {
+  color: #121926;
+  font-family: Inter, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 28px;
+  margin: 24px 0 8px 0;
+}
+
+.secondaryLoadingSubtext {
+  color: #535862;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  margin: 0;
+}
+
+/* SSE Streaming UI Styles */
+.streamingContainer {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.streamingHeader {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.streamingHeader h2 {
+  color: #121926;
+  font-family: Inter, sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 36px;
+  margin: 0 0 12px 0;
+}
+
+.streamingHeader p {
+  color: #535862;
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  margin: 0;
+}
+
+.streamError {
+  text-align: center;
+  padding: 24px;
+  margin-top: 24px;
+  background: #FEF3F2;
+  border-radius: 12px;
+  border: 1px solid #FEE4E2;
+}
+
+.streamError p {
+  color: #B42318;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 16px 0;
+}
+
+.retryButton {
+  background: linear-gradient(180deg, #5E6CD3 0%, #4854C7 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.retryButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(94, 108, 211, 0.3);
+}
+
+.retryButton:active {
+  transform: translateY(0);
 }

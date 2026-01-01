@@ -59,7 +59,7 @@ const LeadLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  
+
   const [status, setStatus] = useState(STATUS.LOADING);
   const [errorMessage, setErrorMessage] = useState('');
   const [userData, setUserData] = useState(null);
@@ -69,14 +69,14 @@ const LeadLogin = () => {
   const [credentialsMismatch, setCredentialsMismatch] = useState(null);
   const [submittedCredentials, setSubmittedCredentials] = useState(null);
   const [loadingSteps, setLoadingSteps] = useState(NEW_USER_STEPS);
-  
+
   const loadingStartTime = useRef(null);
   const progressIntervalRef = useRef(null);
 
   useEffect(() => {
     const token = searchParams.get('token');
     const start = searchParams.get('start'); // Where to redirect after login
-    
+
     if (!token) {
       setStatus(STATUS.NO_TOKEN);
       return;
@@ -85,10 +85,10 @@ const LeadLogin = () => {
     // Start loading animation
     loadingStartTime.current = Date.now();
     startLoadingAnimation();
-    
+
     // Validate token and login
     authenticateWithToken(token, start);
-    
+
     return () => {
       if (progressIntervalRef.current) {
         clearInterval(progressIntervalRef.current);
@@ -100,13 +100,13 @@ const LeadLogin = () => {
   const startLoadingAnimation = () => {
     let stepIndex = 0;
     let progressValue = 0;
-    
+
     progressIntervalRef.current = setInterval(() => {
       progressValue += 1;
       if (progressValue <= 95) {
         setProgress(progressValue);
       }
-      
+
       // Update step every ~2 seconds (based on 4 steps in 8 seconds)
       if (progressValue % 32 === 0 && stepIndex < loadingSteps.length - 1) {
         stepIndex++;
@@ -151,11 +151,11 @@ const LeadLogin = () => {
       // Wait for minimum loading time before showing result
       setTimeout(() => {
         setProgress(100);
-        
+
         if (response?.success) {
           setIsNewUser(response.isNewUser);
           setUserData(response.user);
-          
+
           // Store session token if returned
           if (response.sessionToken) {
             localStorage.setItem('sessionToken', response.sessionToken);
@@ -187,7 +187,7 @@ const LeadLogin = () => {
       console.error('Lead login error:', error);
       const elapsedTime = Date.now() - loadingStartTime.current;
       const remainingTime = Math.max(0, MIN_LOADING_TIME - elapsedTime);
-      
+
       setTimeout(() => {
         setProgress(100);
         setStatus(STATUS.ERROR);
@@ -204,28 +204,28 @@ const LeadLogin = () => {
   if (status === STATUS.LOADING) {
     const currentLoadingStep = loadingSteps[currentStep];
     const isExistingUser = loadingSteps === EXISTING_USER_STEPS;
-    
+
     return (
       <div className={styles.container}>
         <div className={styles.content}>
           <Spin indicator={<LoadingOutlined style={{ fontSize: 48, color: '#667eea' }} spin />} />
-          
+
           <Title level={3} className={styles.title}>
-            {isExistingUser 
+            {isExistingUser
               ? (t('verifyingAccount') || 'Verifying Your Account')
               : (t('creatingYourAccount') || 'Creating Your Account')
             }
           </Title>
-          
+
           <div className={styles.stepText}>
             {currentLoadingStep.icon}
             <Text className={styles.stepLabel}>
               {t(currentLoadingStep.key) || currentLoadingStep.text}
             </Text>
           </div>
-          
-          <Progress 
-            percent={progress} 
+
+          <Progress
+            percent={progress}
             showInfo={false}
             strokeColor="#1a1aba"
             trailColor="#e8e8e8"
@@ -244,19 +244,19 @@ const LeadLogin = () => {
           <div className={styles.iconWrapper}>
             <CloseCircleOutlined className={styles.warningIcon} />
           </div>
-          
+
           <Title level={3} className={styles.title}>
             {t('noTokenProvided') || 'No Authentication Token'}
           </Title>
-          
+
           <Paragraph className={styles.description}>
             {t('noTokenProvidedDescription') || 'No authentication token was provided. Please use the link from your form submission.'}
           </Paragraph>
-          
+
           <Button type="primary" size="large" onClick={handleGoToLogin} className={styles.primaryBtn}>
             {t('goToLogin') || 'Go to Login'}
           </Button>
-          
+
           <div className={styles.support}>
             <Text type="secondary">{t('needHelp') || 'Need help?'} </Text>
             <a href={`tel:${SUPPORT_PHONE.replace(/[^0-9+]/g, '')}`} className={styles.phoneLink}>
@@ -276,32 +276,32 @@ const LeadLogin = () => {
           <div className={styles.iconWrapper}>
             <CheckCircleOutlined className={styles.successIcon} />
           </div>
-          
+
           <Title level={3} className={styles.successTitle}>
-            {isNewUser 
-              ? (t('accountCreated') || 'Account Created Successfully!') 
+            {isNewUser
+              ? (t('accountCreated') || 'Account Created Successfully!')
               : (t('welcomeBack') || 'Welcome Back!')}
           </Title>
-          
+
           {userData && (
             <Text className={styles.userName}>
               {userData.fullName || userData.email}
             </Text>
           )}
-          
+
           <Paragraph className={styles.description}>
-            {isNewUser 
-              ? (t('accountReadyRedirecting') || 'Your account is ready. Redirecting to your dashboard...') 
+            {isNewUser
+              ? (t('accountReadyRedirecting') || 'Your account is ready. Redirecting to your dashboard...')
               : (t('credentialsValidated') || 'Your credentials have been validated. Redirecting to your account...')}
           </Paragraph>
-          
+
           {!isNewUser && (
             <div className={styles.successBadge}>
               <CheckCircleOutlined style={{ color: '#52c41a', marginRight: 8 }} />
               <Text type="secondary">{t('credentialsMatched') || 'Credentials matched'}</Text>
             </div>
           )}
-          
+
           <Spin indicator={<LoadingOutlined style={{ fontSize: 24, color: '#52c41a' }} spin />} />
         </div>
       </div>
@@ -316,24 +316,24 @@ const LeadLogin = () => {
           <div className={styles.iconWrapper}>
             <CloseCircleOutlined className={styles.warningIcon} />
           </div>
-          
+
           <Title level={3} className={styles.title}>
             {t('credentialsMismatch') || 'Account Verification Required'}
           </Title>
-          
+
           <Paragraph className={styles.description}>
             {credentialsMismatch?.phoneMismatch && credentialsMismatch?.emailMismatch ? (
-              t('phonEmailMismatchMessage') || 
+              t('phonEmailMismatchMessage') ||
               'We found that both your phone number and email are different from what we have on record. Please login with your original credentials.'
             ) : credentialsMismatch?.phoneMismatch ? (
-              t('phoneMismatchMessage') || 
+              t('phoneMismatchMessage') ||
               'We found a different phone number for your account. Please login with your original phone number or use the correct email and password.'
             ) : (
-              t('emailMismatchMessage') || 
+              t('emailMismatchMessage') ||
               'We found a different email for your account. Please login with your original email and password or use phone verification.'
             )}
           </Paragraph>
-          
+
           {submittedCredentials && (
             <div className={styles.credentialsInfo}>
               <Text type="secondary" className={styles.credLabel}>
@@ -351,11 +351,11 @@ const LeadLogin = () => {
               )}
             </div>
           )}
-          
+
           <Button type="primary" size="large" onClick={handleGoToLogin} className={styles.primaryBtn}>
             {t('goToLogin') || 'Go to Login'}
           </Button>
-          
+
           <div className={styles.support}>
             <Text type="secondary">{t('needHelp') || 'Need help?'} </Text>
             <a href={`tel:${SUPPORT_PHONE.replace(/[^0-9+]/g, '')}`} className={styles.phoneLink}>
@@ -374,19 +374,19 @@ const LeadLogin = () => {
         <div className={styles.iconWrapper}>
           <CloseCircleOutlined className={styles.errorIcon} />
         </div>
-        
+
         <Title level={3} className={styles.errorTitle}>
           {t('authenticationFailed') || 'Authentication Failed'}
         </Title>
-        
+
         <Paragraph className={styles.description}>
           {errorMessage || t('tokenExpiredOrInvalid') || 'Your login link may have expired or is invalid.'}
         </Paragraph>
-        
+
         <Text type="secondary" className={styles.helpText}>
-          {t('tokenExpiredHelp') || 'Login links expire after 10 minutes for security.'}
+          {t('tokenExpiredHelp') || 'Login links expire after 20 minutes for security.'}
         </Text>
-        
+
         <div className={styles.support}>
           <Text type="secondary">{t('needAssistance') || 'Need assistance?'} </Text>
           <a href={`tel:${SUPPORT_PHONE.replace(/[^0-9+]/g, '')}`} className={styles.phoneLink}>
