@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { PageContent, Section, CoverageStatus } from 'components';
+import { PageContent, Section } from 'components';
 import { Button, Tabs, Rate, Input } from 'antd';
 import { CalendarOutlined, ClockCircleOutlined, BellOutlined } from '@ant-design/icons';
 import { Types } from '../../utils/helper';
@@ -208,15 +208,6 @@ const Overview = () => {
           <p className={styles.subheading}>
             The price is not final — an advisor will call you to confirm your health status, then adjust the duration and price according to your needs.
           </p>
-        </div>
-
-        <div style={{ marginBottom: '24px' }}>
-          <CoverageStatus
-            active={isCovered}
-            onChange={setIsCovered}
-            activeText="couvert"
-            inactiveText="non couvert"
-          />
         </div>
 
         {/* Cards Container */}

@@ -34,7 +34,8 @@ const InitialContent = ({
     isPending,
     quoteError,
     isAuthenticated = true,
-    onRetryQuote
+    onRetryQuote,
+    userName = 'User'
 }) => {
     const [expandedProviders, setExpandedProviders] = useState({});
     const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false);
@@ -63,7 +64,9 @@ const InitialContent = ({
                 name: c.name,
                 carrierCode: c.carrierCode,
                 available: c.available,
-                premium: c.premium
+                premium: c.premium,
+                annualPremium: c.annualPremium,
+                monthlyPremium: c.monthlyPremium
             })));
 
             // Filter available carriers (Fortus returns 'available' not 'success')
@@ -81,17 +84,17 @@ const InitialContent = ({
                 // Fallback to first carrier if Intact not found
                 const featured = intactCarrier || availableCarriers[0];
 
-                // Calculate price - premium is annual, divide by 12 for monthly
+                // Calculate price - use annualPremium/monthlyPremium if available, otherwise calculate
                 // If premium is 0 (test/sandbox), show placeholder
-                const annualPremium = featured.premium || 0;
-                const monthlyPrice = annualPremium > 0 ? Math.round(annualPremium / 12) : null;
+                const annualPremium = featured.annualPremium || featured.premium || 0;
+                const monthlyPrice = featured.monthlyPremium || (annualPremium > 0 ? Math.round(annualPremium / 12) : null);
 
                 // Get display name from carrier code or use the name from response
                 const displayName = featured.carrierCode
                     ? getCarrierName(featured.carrierCode)
                     : (featured.name || featured.carrierName || 'Best Option');
 
-                console.log('Setting featured provider:', displayName, 'code:', featured.carrierCode);
+                console.log('Setting featured provider:', displayName, 'code:', featured.carrierCode, 'annual:', annualPremium, 'monthly:', monthlyPrice);
                 setFeaturedProvider({
                     name: displayName,
                     carrierCode: featured.carrierCode,
@@ -104,19 +107,16 @@ const InitialContent = ({
                     quoteDetails: featured.quoteDetails || {}
                 });
 
-                // Rest are comparison providers (exclude the featured one)
-                const otherCarriers = availableCarriers.filter(c =>
-                    (c.carrierCode || c.name || c.carrierName) !== (featured.carrierCode || featured.name || featured.carrierName)
-                );
-
-                const others = otherCarriers.map((result, index) => {
-                    const annual = result.premium || 0;
-                    const monthly = annual > 0 ? Math.round(annual / 12) : null;
+                // For comparison providers: include ALL carriers (including the featured one)
+                // This ensures L'Unique shows in the table with real values when it's the only carrier
+                const allCarriersForComparison = availableCarriers.map((result, index) => {
+                    const annual = result.annualPremium || result.premium || 0;
+                    const monthly = result.monthlyPremium || (annual > 0 ? Math.round(annual / 12) : null);
 
                     // Get display name from carrier code or use the name from response
                     const providerName = result.carrierCode
                         ? getCarrierName(result.carrierCode)
-                        : (result.name || result.carrierName || `Provider ${index + 2}`);
+                        : (result.name || result.carrierName || `Provider ${index + 1}`);
 
                     return {
                         id: index + 1,
@@ -132,8 +132,13 @@ const InitialContent = ({
                     };
                 });
 
-                console.log('Setting comparison providers:', others.map(p => ({ name: p.name, code: p.carrierCode })));
-                setComparisonProviders(others);
+                console.log('Setting comparison providers:', allCarriersForComparison.map(p => ({ 
+                    name: p.name, 
+                    code: p.carrierCode,
+                    monthly: p.monthlyPrice,
+                    yearly: p.yearlyPrice
+                })));
+                setComparisonProviders(allCarriersForComparison);
             }
         }
     }, [quoteData]);
@@ -225,8 +230,10 @@ const InitialContent = ({
     // Fallback data when no quotes available
     const fallbackFeaturedProvider = {
         name: 'Intact assurance',
+        carrierCode: 'GC',
         logo: '/images/intact-insurance.svg',
         price: 90,
+        yearlyPrice: 1080,
         rating: 4.5,
         benefits: [
             { label: 'Benefit 1', value: 'cool benefit' },
@@ -330,56 +337,70 @@ const InitialContent = ({
                 Vos soumissions expirent dans : <span className={styles.countdownTime}>14:59</span>
             </p>
 
-            {/* Featured Quote Card */}
-            <div className={styles.featuredQuoteCard}>
-                <div className={styles.featuredLeft}>
-                    <img
-                        src="/images/intact-insurance.svg"
-                        alt="Intact"
-                        className={styles.featuredLogo}
-                    />
+            {/* Featured Quote Card - Show skeleton while loading */}
+            {shouldShowLoading ? (
+                <FeaturedCardSkeleton />
+            ) : (
+                <div className={styles.featuredQuoteCard}>
+                    <div className={styles.featuredLeft}>
+                        <img
+                            src={displayFeaturedProvider.logo}
+                            alt={displayFeaturedProvider.name}
+                            className={styles.featuredLogo}
+                        />
 
-                    <div className={styles.featuredPricing}>
-                        <span className={styles.originalPrice}>102 $ / mo</span>
-                        <div className={styles.currentPrice}>
-                            <span className={styles.priceNumber}>90</span>
-                            <span className={styles.priceCurrency}>$</span>
-                            <span className={styles.pricePerMonth}> / mo</span>
+                        <div className={styles.featuredPricing}>
+                            {billingPeriod === 'Mensuel' ? (
+                                <div className={styles.currentPrice}>
+                                    <span className={styles.priceNumber}>{displayFeaturedProvider.price || '—'}</span>
+                                    <span className={styles.priceCurrency}>$</span>
+                                    <span className={styles.pricePerMonth}> / mo</span>
+                                </div>
+                            ) : (
+                                <div className={styles.currentPrice}>
+                                    <span className={styles.priceNumber}>{displayFeaturedProvider.yearlyPrice || '—'}</span>
+                                    <span className={styles.priceCurrency}>$</span>
+                                    <span className={styles.pricePerMonth}> / an</span>
+                                </div>
+                            )}
                         </div>
+
+                        {isIntactCarrier(displayFeaturedProvider.carrierCode) && (
+                            <>
+                                <div className={styles.discountBadge}>
+                                    Rabais Intact appliqué!
+                                </div>
+                                <p className={styles.discountText}>
+                                    Intact vous offre un rabais de 10% supplémentaire
+                                </p>
+                            </>
+                        )}
+
+                        <BillingToggle
+                            value={billingPeriod}
+                            onChange={setBillingPeriod}
+                        />
                     </div>
 
-                    <div className={styles.discountBadge}>
-                        Rabais Intact appliqué!
+                    <div className={styles.featuredRight}>
+                        <h2 className={styles.featuredHeading}>
+                            {userName}, {displayFeaturedProvider.name} se démarque selon vos infos fournies!
+                        </h2>
+
+                        <p className={styles.featuredDescription}>
+                            Le prix affiché est une estimation. <strong>Pour obtenir le prix final, cliquez sur « Poursuivre » et parlez à un courtier en assurance de dommages</strong> ; celui-ci validera les informations nécessaires avec vous.
+                        </p>
+
+                        <Button
+                            type="primary"
+                            className={styles.poursuivreButton}
+                            onClick={() => setIsCourtikaModalOpen(true)}
+                        >
+                            Poursuivre
+                        </Button>
                     </div>
-
-                    <p className={styles.discountText}>
-                        Intact vous offre un rabais de 10% supplémentaire
-                    </p>
-
-                    <BillingToggle
-                        value={billingPeriod}
-                        onChange={setBillingPeriod}
-                    />
                 </div>
-
-                <div className={styles.featuredRight}>
-                    <h2 className={styles.featuredHeading}>
-                        Edward, Intact se démarque selon vos infos fournies!
-                    </h2>
-
-                    <p className={styles.featuredDescription}>
-                        Le prix affiché est une estimation. <strong>Pour obtenir le prix final, cliquez sur « Poursuivre » et parlez à un courtier en assurance de dommages</strong> ; celui-ci validera les informations nécessaires avec vous.
-                    </p>
-
-                    <Button
-                        type="primary"
-                        className={styles.poursuivreButton}
-                        onClick={() => setIsCourtikaModalOpen(true)}
-                    >
-                        Poursuivre
-                    </Button>
-                </div>
-            </div>
+            )}
 
             {/* Vos protections Section */}
             <div className={styles.protectionsHeader}>

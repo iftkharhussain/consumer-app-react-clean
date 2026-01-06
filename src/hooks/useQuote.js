@@ -33,6 +33,7 @@ export const useQuote = (productSlug, options = {}) => {
   // Refs for cleanup
   const pollTimeoutRef = useRef(null);
   const isMountedRef = useRef(true);
+  const hasInitialFetchRef = useRef(false);
 
   /**
    * Fetch quote - single API call that handles everything
@@ -94,12 +95,14 @@ export const useQuote = (productSlug, options = {}) => {
    */
   const refresh = useCallback(async () => {
     setPollAttempts(0);
+    hasInitialFetchRef.current = true; // Mark as fetched to prevent auto-fetch again
     await fetchQuote();
   }, [fetchQuote]);
 
   // Auto-fetch on mount
   useEffect(() => {
-    if (autoFetch && productSlug) {
+    if (autoFetch && productSlug && !hasInitialFetchRef.current) {
+      hasInitialFetchRef.current = true;
       fetchQuote();
     }
   }, [productSlug, autoFetch]); // eslint-disable-line react-hooks/exhaustive-deps

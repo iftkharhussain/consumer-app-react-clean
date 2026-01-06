@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import InterestedModal from '../../components/interestedModal';
 import InitialContent from '../../components/carInsurance/InitialContent';
 import EstimateContent from '../../components/carInsurance/EstimateContent';
@@ -23,6 +24,10 @@ const CarInsurance = () => {
   const [showCustomize, setShowCustomize] = useState(false);
   const [showLoadingModal, setShowLoadingModal] = useState(true);
 
+  // Get user profile from Redux state
+  const userProfile = useSelector(state => state.app?.user_profile);
+  const authUser = useSelector(state => state.app?.auth);
+
   // Fetch quote on page load - autoFetch is true by default
   // Hook will poll every 3 seconds when status is 'fetching'
   const {
@@ -37,21 +42,10 @@ const CarInsurance = () => {
     refresh: refreshQuote
   } = useQuote('car-insurance');
 
-  // Get user info from localStorage or context
-  const getUserName = () => {
-    try {
-      const sessionData = localStorage.getItem('user');
-      if (sessionData) {
-        const user = JSON.parse(sessionData);
-        return user.firstName || user.fullName?.split(' ')[0] || user.email?.split('@')[0] || t('user') || 'User';
-      }
-    } catch (e) {
-      console.log('Error getting user name:', e);
-    }
-    return t('user') || 'User';
-  };
-
-  const userName = getUserName();
+  // Get user's first name from Redux (user_profile or auth), fallback to 'User'
+  const userName = userProfile?.firstName || authUser?.firstName || 
+                   userProfile?.fullName?.split(' ')[0] || authUser?.fullName?.split(' ')[0] || 
+                   t('user') || 'User';
 
   // Memoize loading steps to prevent re-creating array on every render
   // This prevents the LoadingModal from resetting when polling causes re-renders
@@ -113,6 +107,7 @@ const CarInsurance = () => {
               quoteError={quoteError}
               isAuthenticated={isAuthenticated}
               onRetryQuote={refreshQuote}
+              userName={userName}
             />
           ) : (
             <EstimateContent quoteData={quoteData} />
