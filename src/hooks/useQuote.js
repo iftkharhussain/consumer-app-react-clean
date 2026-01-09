@@ -1,21 +1,30 @@
 /**
- * useQuote Hook - Simplified quote fetching with polling
+ * useQuote Hook - Simplified quote fetching with async polling
  * 
- * Single API call approach:
- * - Calls /api/quote/fetch which handles everything server-side
- * - Returns quote if exists, or fetches from LMS if not
- * - Polls when status is 'fetching' until quote is ready
+ * Async Polling Flow (Jan 2026):
+ * 1. Calls /api/quote/fetch which requests quote from LMS
+ * 2. LMS returns immediately with quoteId (status: 'pending')
+ * 3. Hook polls /api/quote/poll/:quoteId every 5 seconds
+ * 4. When status becomes 'success'/'failed'/'timeout', polling stops
+ * 
+ * Quote Statuses:
+ * - pending: Quote request submitted, waiting to start
+ * - processing: LMS is fetching from insurers
+ * - success: Quote completed with carrier data
+ * - failed: Quote request failed
+ * - timeout: Quote timed out (5 min max)
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import quoteService from '../services/api/quoteService';
 
-// Polling interval in milliseconds
-const POLL_INTERVAL = 3000;
-const MAX_POLL_ATTEMPTS = 60; // Max 3 minutes of polling (60 * 3s)
+// Polling configuration
+const POLL_INTERVAL = 5000;       // 5 seconds (matches LMS async flow)
+const MAX_POLL_DURATION = 300000; // 5 minutes max
+const MAX_POLL_ATTEMPTS = 60;     // 60 * 5s = 5 minutes
 
 /**
- * Custom hook for quote management
+ * Custom hook for quote management with async polling
  * @param {string} productSlug - Product slug (e.g., 'car-insurance')
  * @param {Object} options - Hook options
  * @param {boolean} options.autoFetch - Auto fetch on mount (default: true)
@@ -27,20 +36,94 @@ export const useQuote = (productSlug, options = {}) => {
   const [error, setError] = useState(null);
   const [quoteStatus, setQuoteStatus] = useState(null);
   const [quoteData, setQuoteData] = useState(null);
+  const [quoteId, setQuoteId] = useState(null);
   const [isAuthed, setIsAuthed] = useState(true);
   const [pollAttempts, setPollAttempts] = useState(0);
 
   // Refs for cleanup
   const pollTimeoutRef = useRef(null);
+  const pollStartTimeRef = useRef(null);
   const isMountedRef = useRef(true);
   const hasInitialFetchRef = useRef(false);
 
   /**
-   * Fetch quote - single API call that handles everything
-   * The server will:
-   * 1. Find user's product
-   * 2. Check if quote exists (return it)
-   * 3. If not, request from LMS and return result
+   * Poll quote status by quoteId
+   */
+  const pollQuoteStatus = useCallback(async (qId) => {
+    if (!qId || !isMountedRef.current) return;
+
+    // Check if max poll duration exceeded
+    if (pollStartTimeRef.current) {
+      const elapsed = Date.now() - pollStartTimeRef.current;
+      if (elapsed >= MAX_POLL_DURATION) {
+        setQuoteStatus('timeout');
+        setError('Quote request timed out. Please try again.');
+        setLoading(false);
+        return;
+      }
+    }
+
+    try {
+      const response = await quoteService.checkQuoteStatus(qId);
+
+      if (!isMountedRef.current) return;
+
+      if (response.success) {
+        const status = response.status;
+        setQuoteStatus(status);
+
+        // If complete, update quote data
+        if (['success', 'failed', 'timeout'].includes(status)) {
+          if (status === 'success') {
+            console.log('[useQuote] Quote success! Setting quote data:', {
+              carriersCount: response.carriers?.length || 0,
+              carriers: response.carriers?.map(c => ({
+                code: c.carrierCode,
+                name: c.carrierName,
+                status: c.status,
+                premium: c.premium
+              }))
+            });
+            setQuoteData({
+              id: response.quoteId,
+              carriers: response.carriers || [],
+              carriersCount: response.carriersCount || response.carriers?.length || 0,
+              responseTime: response.responseTime,
+              createdAt: response.createdAt
+            });
+          } else if (status === 'failed') {
+            setError(response.error || response.errorMessage || 'Quote request failed');
+          }
+          setLoading(false);
+          return; // Stop polling
+        }
+
+        // Continue polling for pending/processing
+        setPollAttempts(prev => prev + 1);
+      } else {
+        setQuoteStatus('error');
+        setError(response.message || 'Failed to check quote status');
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error('[useQuote] Poll error:', err);
+
+      if (!isMountedRef.current) return;
+
+      // Don't stop polling on transient errors, but count them
+      if (pollAttempts >= MAX_POLL_ATTEMPTS) {
+        setQuoteStatus('error');
+        setError('Quote status check failed. Please try again.');
+        setLoading(false);
+      } else {
+        setPollAttempts(prev => prev + 1);
+      }
+    }
+  }, [pollAttempts]);
+
+  /**
+   * Fetch quote - initial API call that triggers LMS quote request
+   * Returns immediately with quoteId for polling
    */
   const fetchQuote = useCallback(async (isPoll = false) => {
     if (!productSlug) {
@@ -50,6 +133,9 @@ export const useQuote = (productSlug, options = {}) => {
     if (!isPoll) {
       setLoading(true);
       setError(null);
+      setQuoteId(null);
+      setPollAttempts(0);
+      pollStartTimeRef.current = null;
     }
 
     try {
@@ -58,8 +144,28 @@ export const useQuote = (productSlug, options = {}) => {
       if (!isMountedRef.current) return;
 
       if (response.success) {
-        setQuoteStatus(response.quoteStatus || 'success');
-        setQuoteData(response.quote || null);
+        // Check if we got a quoteId for polling (new async flow)
+        if (response.quoteId && ['pending', 'processing', 'fetching'].includes(response.quoteStatus || response.status)) {
+          console.log('[useQuote] Starting async polling flow:', {
+            quoteId: response.quoteId,
+            status: response.quoteStatus || response.status,
+            leadId: response.leadId
+          });
+          setQuoteId(response.quoteId);
+          setQuoteStatus(response.quoteStatus || response.status || 'pending');
+          pollStartTimeRef.current = Date.now();
+          // Polling will be triggered by useEffect watching quoteStatus
+        } else {
+          // Quote already exists (success) or failed
+          console.log('[useQuote] Got immediate quote result:', {
+            status: response.quoteStatus,
+            hasQuote: !!response.quote,
+            carriersCount: response.quote?.carriers?.length || 0
+          });
+          setQuoteStatus(response.quoteStatus || 'success');
+          setQuoteData(response.quote || null);
+          setLoading(false);
+        }
 
         return response;
       } else {
@@ -67,6 +173,7 @@ export const useQuote = (productSlug, options = {}) => {
         setQuoteStatus(response.quoteStatus || 'failed');
         setError(response.message || 'Failed to fetch quote');
         setQuoteData(null);
+        setLoading(false);
       }
     } catch (err) {
       console.error('[useQuote] Error:', err);
@@ -83,19 +190,18 @@ export const useQuote = (productSlug, options = {}) => {
         setQuoteStatus('error');
         setError(err.response?.data?.message || err.message || 'Failed to fetch quote');
       }
-    } finally {
-      if (isMountedRef.current && !isPoll) {
-        setLoading(false);
-      }
+      setLoading(false);
     }
   }, [productSlug]);
 
   /**
-   * Refresh quote data
+   * Refresh quote data - force new quote request
    */
   const refresh = useCallback(async () => {
     setPollAttempts(0);
-    hasInitialFetchRef.current = true; // Mark as fetched to prevent auto-fetch again
+    setQuoteId(null);
+    pollStartTimeRef.current = null;
+    hasInitialFetchRef.current = true;
     await fetchQuote();
   }, [fetchQuote]);
 
@@ -107,7 +213,7 @@ export const useQuote = (productSlug, options = {}) => {
     }
   }, [productSlug, autoFetch]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Polling effect - poll when status is 'fetching'
+  // Polling effect - poll when status is 'pending' or 'processing' or 'fetching'
   useEffect(() => {
     // Clear any existing timeout
     if (pollTimeoutRef.current) {
@@ -115,17 +221,18 @@ export const useQuote = (productSlug, options = {}) => {
       pollTimeoutRef.current = null;
     }
 
-    // Start polling if status is 'fetching' and under max attempts
-    if (quoteStatus === 'fetching' && pollAttempts < MAX_POLL_ATTEMPTS) {
+    const shouldPoll = ['pending', 'processing', 'fetching'].includes(quoteStatus) && 
+                       quoteId && 
+                       pollAttempts < MAX_POLL_ATTEMPTS;
 
+    if (shouldPoll) {
       pollTimeoutRef.current = setTimeout(async () => {
         if (isMountedRef.current) {
-          setPollAttempts(prev => prev + 1);
-          await fetchQuote(true); // Pass true to indicate this is a poll
+          await pollQuoteStatus(quoteId);
         }
       }, POLL_INTERVAL);
-    } else if (pollAttempts >= MAX_POLL_ATTEMPTS && quoteStatus === 'fetching') {
-      setQuoteStatus('error');
+    } else if (pollAttempts >= MAX_POLL_ATTEMPTS && ['pending', 'processing', 'fetching'].includes(quoteStatus)) {
+      setQuoteStatus('timeout');
       setError('Quote fetch timed out. Please try again.');
       setLoading(false);
     }
@@ -135,7 +242,7 @@ export const useQuote = (productSlug, options = {}) => {
         clearTimeout(pollTimeoutRef.current);
       }
     };
-  }, [quoteStatus, pollAttempts, fetchQuote]);
+  }, [quoteStatus, quoteId, pollAttempts, pollQuoteStatus]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -154,14 +261,15 @@ export const useQuote = (productSlug, options = {}) => {
     error,
     quoteStatus,
     quoteData,
+    quoteId,
 
     // Computed
-    isLoading: loading || quoteStatus === 'fetching',
+    isLoading: loading || ['pending', 'processing', 'fetching'].includes(quoteStatus),
     hasQuote: quoteStatus === 'success',
-    isPending: quoteStatus === 'fetching',
-    hasFailed: quoteStatus === 'failed' || quoteStatus === 'error' || quoteStatus === 'not_found',
+    isPending: ['pending', 'processing', 'fetching'].includes(quoteStatus),
+    hasFailed: ['failed', 'error', 'not_found', 'timeout'].includes(quoteStatus),
     isAuthenticated: isAuthed,
-    showFallback: !isAuthed || quoteStatus === 'unauthenticated' || quoteStatus === 'not_found' || quoteStatus === 'error',
+    showFallback: !isAuthed || ['unauthenticated', 'not_found', 'error'].includes(quoteStatus),
 
     // Actions
     fetchQuote,

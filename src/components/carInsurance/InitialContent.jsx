@@ -61,16 +61,20 @@ const InitialContent = ({
         // quoteData contains { carriers: [...], carriersCount, responseTime }
         if (quoteData?.carriers && Array.isArray(quoteData.carriers)) {
             console.log('Processing carriers:', quoteData.carriers.map(c => ({
-                name: c.name,
+                name: c.name || c.carrierName,
                 carrierCode: c.carrierCode,
                 available: c.available,
+                status: c.status,
                 premium: c.premium,
                 annualPremium: c.annualPremium,
                 monthlyPremium: c.monthlyPremium
             })));
 
-            // Filter available carriers (Fortus returns 'available' not 'success')
-            const availableCarriers = quoteData.carriers.filter(r => r.available);
+            // Filter available carriers
+            // Check both 'available' flag (legacy) and 'status: success' (new async flow)
+            const availableCarriers = quoteData.carriers.filter(r => 
+                r.available === true || r.status === 'success'
+            );
 
             if (availableCarriers.length > 0) {
                 // Find Intact as the featured provider (always show Intact first)

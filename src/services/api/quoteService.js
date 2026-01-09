@@ -72,11 +72,44 @@ export const getQuoteDetails = async (userProductId) => {
   return response.data;
 };
 
+// ============================================
+// ASYNC POLLING ENDPOINTS (Jan 2026)
+// ============================================
+
+/**
+ * Poll quote status by quoteId (Async Polling Pattern)
+ * 
+ * Call this every 5 seconds after requesting a quote until status is:
+ * - 'success': Quote completed successfully, includes carriers data
+ * - 'failed': Quote request failed
+ * - 'timeout': Quote timed out
+ * 
+ * @param {string} quoteId - The quote ID returned from requestQuote
+ * @returns {Promise<Object>} Quote status with carriers if complete
+ */
+export const checkQuoteStatus = async (quoteId) => {
+  const response = await apiClient.get(`/api/quote/poll/${quoteId}`);
+  return response.data;
+};
+
+/**
+ * Get all quotes for a lead
+ * @param {string} leadId - Lead ID
+ * @returns {Promise<Object>} List of quote records
+ */
+export const getQuotesByLead = async (leadId) => {
+  const response = await apiClient.get(`/api/quote/by-lead/${leadId}`);
+  return response.data;
+};
+
 export default {
   fetchQuote,
   requestQuote,
   getUserProducts,
   getQuoteStatus,
   getQuoteStatusBySlug,
-  getQuoteDetails
+  getQuoteDetails,
+  // Async polling
+  checkQuoteStatus,
+  getQuotesByLead
 };
