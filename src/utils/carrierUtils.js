@@ -9,10 +9,10 @@ export const CARRIER_NAMES = {
     'GC': 'Intact Insurance',
     'HAL': 'Intact Insurance (Halifax)',
     'GRP': 'Intact Insurance (Group)',
-    // Optimum/Desjardins
-    'NATS': 'Optimum Insurance',
-    'NATF': 'Optimum Insurance',
-    'BCIC': 'Optimum Insurance',
+    // Optimum
+    'NATS': 'Optimum Assurance',
+    'NATF': 'Optimum Assurance',
+    'BCIC': 'Optimum Assurance',
     // L'Unique
     'UNI': "L'Unique Assurances",
     // Wawanesa
@@ -25,12 +25,15 @@ export const CARRIER_NAMES = {
     'BENE': 'Beneva',
     // Promutuel
     'PROM': 'Promutuel Assurance',
+    'PRM2': 'Promutuel Assurance',
     // CAA
     'CAA': 'CAA Insurance',
     // Aviva
     'AVIVA': 'Aviva Canada',
     // RSA
     'RSA': 'RSA Insurance',
+    // Echelon
+    'ECGL': 'Echelon Insurance',
 };
 
 // Carrier code to logo path mapping
@@ -39,10 +42,8 @@ export const CARRIER_LOGOS = {
     'GC': '/images/intact-insurance.svg',
     'HAL': '/images/intact-insurance.svg',
     'GRP': '/images/intact-insurance.svg',
-    // Optimum/Desjardins codes (using default logo)
-    'NATS': '/images/insurance-default.svg',
-    'NATF': '/images/insurance-default.svg',
-    'BCIC': '/images/insurance-default.svg',
+    // Optimum codes
+    'NATS': '/images/optimum.png',
     // L'Unique code
     'UNI': '/images/lunique.svg',
     // Wawanesa code
@@ -55,8 +56,11 @@ export const CARRIER_LOGOS = {
     'BENE': '/images/Beneva_rgb.svg',
     // Promutuel code
     'PROM': '/images/promutuel.svg',
+    'PRM2': '/images/promutuel.svg',
     // CAA code
     'CAA': '/images/CAA_logo.svg',
+    // Echelon code
+    'ECGL': '/images/echelon.svg',
 };
 
 // Carrier groups (codes that belong to the same carrier)
@@ -68,7 +72,8 @@ export const CARRIER_GROUPS = {
     'Economical': ['ECON'],
     'Pafco': ['PAF'],
     'Beneva': ['BENE'],
-    'Promutuel': ['PROM'],
+    'Promutuel': ['PROM', 'PRM2'],
+    'Echelon': ['ECGL'],
     'CAA': ['CAA'],
 };
 
@@ -101,7 +106,7 @@ export const getCarrierLogo = (carrierCodeOrName) => {
         'lunique': '/images/lunique.svg',
         'unique': '/images/lunique.svg',
         'desjardins': '/images/desjardins.svg',
-        'optimum': '/images/optimum.svg',
+        'optimum': '/images/optimum.png',
         'pafco': '/images/pafco.svg',
     };
     
