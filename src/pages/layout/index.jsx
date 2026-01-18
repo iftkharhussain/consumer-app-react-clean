@@ -5,15 +5,49 @@ import { ChevronLeftDouble, ChevronRightDouble, Menu02, XClose } from "utils/ico
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import AppHeader from './header'
+import MobileNavbar from '../../components/mobileNavbar/MobileNavbar';
 
-const {Content, Footer} = Layout;
+const { Content, Footer } = Layout;
 
 const AppLayout = ({ heading, children, _style }) => {
   const [collapsed, setCollapsed] = useState(true);
   const { token: { colorBgContainerAside } } = theme.useToken();
   const [showSidebar, setShowSidebar] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(false);
 
-  const {sidebarBehavior} = useSelector((state) => state.app.user_profile);
+  const { sidebarBehavior } = useSelector((state) => state.app.user_profile);
+
+  // Detect mobile view
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobileView(mobile);
+
+      // Add/remove mobile-view class to body
+      if (mobile) {
+        document.body.classList.add('mobile-view');
+      } else {
+        document.body.classList.remove('mobile-view');
+        setShowSidebar(false); // Close sidebar when switching to desktop
+      }
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Handle sidebar open/close class on body
+  useEffect(() => {
+    if (isMobileView) {
+      if (showSidebar) {
+        document.body.classList.add('sidebar-open');
+      } else {
+        document.body.classList.remove('sidebar-open');
+      }
+    }
+  }, [showSidebar, isMobileView]);
 
   useEffect(() => {
     if (sidebarBehavior === 'auto') {
@@ -24,20 +58,37 @@ const AppLayout = ({ heading, children, _style }) => {
 
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
-    setCollapsed(false);
-    // document.body.classList.remove('collapsed');
-    // document.aside.classList.remove('ant-layout-sider-collapsed');
-    // document.aside.classList.remove('collapse');
+    if (isMobileView) {
+      setCollapsed(false);
+    }
   };
+
+  const closeMobileSidebar = () => {
+    if (isMobileView) {
+      setShowSidebar(false);
+    }
+  };
+
   return (
     <Layout style={{ minHeight: '100vh' }} >
+      {/* Mobile Navbar Header */}
+      <MobileNavbar onMenuClick={toggleSidebar} />
+
+      {/* Mobile Sidebar Overlay */}
+      {isMobileView && (
+        <div
+          className="mobile-sidebar-overlay"
+          onClick={closeMobileSidebar}
+        />
+      )}
+
       <div className={`norga-mobile-menu ${showSidebar ? 'show' : ''}`}>
         <div className='sidebar-mb-overlay'></div>
-        <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+        <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} onMobileClose={closeMobileSidebar} />
       </div>
       <Layout>
         {
-          collapsed &&
+          collapsed && !isMobileView &&
           <div className="menu-icon collapsed body-level" onClick={() => setCollapsed(!collapsed)}>
             {/* <img src="/images/log-out-01.svg" title="menu-collapsed-icon" /> */}
             <ChevronRightDouble style={{ color: '#697586' }} />
@@ -49,11 +100,11 @@ const AppLayout = ({ heading, children, _style }) => {
             style={{
               background: '#F8FAFC',
               padding: _style?.contentPadding ?? '32px 32px 0',
-              ...( _style?.wrapper || {} ),
+              ...(_style?.wrapper || {}),
             }}
           >
             {/* <AppHeader heading={heading} collapsed={collapsed} setCollapsed={setCollapsed} /> */}
-            { children }
+            {children}
           </div>
         </Content>
       </Layout>

@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Layout, Menu, Tag, Input, Dropdown, Space, Popover } from 'antd';
-import { InfoCircle, LayersThree01, Users01, CheckDone01, CurrencyDollarCircle, Flash, LifeBuoy01, Settings01, Bell01, ChevronLeftDouble, File04, Home01, ImageUser, MessageChatSquare, FileSearch02, Cube01, Target01, Car01, LogOut01 } from "utils/icons";
+import { InfoCircle, LayersThree01, Users01, CheckDone01, CurrencyDollarCircle, Flash, LifeBuoy01, Settings01, Bell01, ChevronLeftDouble, File04, Home01, ImageUser, MessageChatSquare, FileSearch02, Cube01, Target01, Car01, LogOut01, XClose } from "utils/icons";
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -14,7 +14,7 @@ import toast from 'react-hot-toast';
 
 const { Sider } = Layout;
 
-const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, children }) => {
+const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, onMobileClose, children }) => {
 	const { t } = useTranslation();
 	const dispatch = useDispatch();
 	const location = useLocation();
@@ -376,10 +376,10 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 								<img src={!collapsed ? '/images/norga-blue-logo.png' : '/images/logo-single.png'}
 									className={`mob-none ${collapsed ? 'collapsed' : ''}`} alt='Norga' style={{ maxWidth: '100px' }}
 								/>
-								{!collapsed && <div className={styles.version}>&nbsp; v2.0</div>}
+								{!collapsed && <div className={styles.version}>&nbsp; v0.6</div>}
 							</Link>
 						</div>
-						{/* <img src='/images/log-out-01.svg' className="mob-logout" title='menu-collapsed-icon' /> */}
+						{onMobileClose && <button className="mobile-sidebar-close mobile-only" onClick={onMobileClose} aria-label="Close menu" type="button"><XClose style={{ width: 20, height: 20, color: '#697586' }} /></button>}
 						{/* {
 							sidebarBehavior !== 'fixed' && !collapsed && (
 								<div className={`${styles.menuIcon} ${collapsed ? 'collapsed' : ''}`} onClick={() => { propsSetCollapsed(!collapsed); setCollapsed(!collapsed) }}>
@@ -430,13 +430,13 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, c
 											<Settings01 style={{ marginRight: 8, width: 16, height: 16 }} />
 											{t('settings') || 'Settings'}
 										</Link>
-										<div 
+										<div
 											onClick={handleLogout}
-											style={{ 
-												display: 'flex', 
-												alignItems: 'center', 
-												padding: '8px 0', 
-												color: '#ef4444', 
+											style={{
+												display: 'flex',
+												alignItems: 'center',
+												padding: '8px 0',
+												color: '#ef4444',
 												cursor: logoutLoading ? 'wait' : 'pointer',
 												opacity: logoutLoading ? 0.6 : 1
 											}}

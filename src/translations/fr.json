@@ -105,5 +105,6 @@
   },
   "loadingModal": {
     "shoppingInsurers": "{{userName}}, nous magasinons les assureurs pour vous..."
-  }
+  },
+  "resubmit_alert_message": "Si vous souhaitez ajouter une autre soumission ou obtenir un produit différent, utilisez cette application au lieu de remplir à nouveau le formulaire ou contactez le 00-0000-0000"
 }

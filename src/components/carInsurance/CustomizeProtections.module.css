@@ -3,6 +3,12 @@
   max-width: 826px;
 }
 
+/* Fixed Bottom Container - Hidden by default (shown only on mobile) */
+.fixedBottomContainer {
+  display: none;
+}
+
+
 /* Back Button */
 .backButton {
   display: inline-flex;
@@ -396,10 +402,157 @@
 }
 
 /* Responsive */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
 
+  /* Back Button - Mobile */
+  .backButton {
+    border-radius: 36px;
+    border: 0.5px solid #E9EAEB;
+    background: #FFF;
+    margin-bottom: 32px;
+    padding: 8px 16px;
+    color: #1A1ABA;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: var(--Line-height-text-sm, 20px);
+    /* 142.857% */
+  }
+
+  /* Page Heading - Mobile */
+  .pageHeading {
+    font-size: 20px;
+    margin: 0 0 20px 5px;
+  }
+
+  /* Vehicle Name - Mobile */
+  .vehicleName {
+    font-size: 14px;
+  }
+
+  /* Vehicle Toggle Row - Mobile */
+  .vehicleToggleRow {
+    margin-bottom: 20px;
+  }
+
+  .vehicleToggleRow:last-child,
+  .vehicleToggleRow:has(.alwaysIncluded) {
+    margin-bottom: 0;
+  }
+
+  /* Protection Title - Mobile */
+  .protectionTitle {
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  /* Car Image - Mobile */
+  .carImage {
+    width: 137px;
+    height: auto;
+    max-height: 131px;
+    margin-top: 16px;
+  }
+
+  /* Protection Description - Mobile */
+  .protectionDesc {
+    font-size: 14px;
+  }
+
+  /* Coverage Label - Mobile */
+  .coverageLabel {
+    font-size: 14px;
+  }
+
+  /* Amount Control - Mobile */
+  .amountControl {
+    padding: 9px 13px;
+    width: 100%;
+    max-width: 500px;
+    min-height: 56px;
+    justify-content: space-between;
+  }
+
+  /* Amount Control Static (no buttons) - Center text */
+  .amountControlStatic {
+    justify-content: center;
+  }
+
+  /* Amount Button - Mobile */
+  .amountButton {
+    margin: 0px;
+    width: 56px;
+    height: 36px;
+    font-size: 33px;
+  }
+
+  /* Dash Icon (SVG) inside Amount Button */
+  .amountButton svg {
+    width: 20px;
+  }
+
+  /* Benefits List - Mobile */
+  .benefitsList li {
+    font-size: 14px;
+    padding-left: 23px;
+    line-height: 18px;
+  }
+
+  /* Details Link - Mobile */
+  .detailsLink {
+    font-size: 14px;
+  }
+
+  /* Amount Value - Mobile */
+  .amountValue {
+    font-size: 20px;
+  }
+
+  /* Grid Layout - Mobile */
   .vehicleRow,
   .protectionCardsRow {
     grid-template-columns: 1fr;
+  }
+
+  /* Fixed Bottom Container - Mobile Only */
+  .fixedBottomContainer {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border: 0.5px solid #E9EAEB;
+    background: #FFF;
+    padding: 30px;
+    z-index: 100;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Recalculate Button - Mobile */
+  .recalculateButton {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    border-radius: 8px;
+    background: #1A1ABA;
+    color: #FFF;
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .recalculateButton:hover {
+    background: #0F0F8F;
+  }
+
+  /* Add padding to container to prevent content from being hidden behind fixed button */
+  .customizeContainer {
+    padding-bottom: 120px;
   }
 }

@@ -32,3 +32,33 @@
     text-align: right;
     transition: color 0.2s;
 }
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+
+    /* Wrapper - Horizontal Layout (Label on Left) */
+    .wrapper {
+        flex-direction: row-reverse;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* SVG Container - Scale to 56x24px */
+    .svgContainer {
+        width: 56px;
+        height: 24px;
+    }
+
+    .svgContainer svg {
+        width: 56px !important;
+        height: 24px !important;
+    }
+
+    /* Text Label - Mobile */
+    .text {
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 20px;
+        text-align: left;
+    }
+}

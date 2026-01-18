@@ -50,25 +50,9 @@ const InitialContent = ({
 
     // Process quote results when available
     useEffect(() => {
-        console.log('Quote data received:', {
-            hasQuoteData: !!quoteData,
-            carriers: quoteData?.carriers?.length || 0,
-            quoteStatus,
-            hasQuote,
-            isAuthenticated
-        });
 
         // quoteData contains { carriers: [...], carriersCount, responseTime }
         if (quoteData?.carriers && Array.isArray(quoteData.carriers)) {
-            console.log('Processing carriers:', quoteData.carriers.map(c => ({
-                name: c.name || c.carrierName,
-                carrierCode: c.carrierCode,
-                available: c.available,
-                status: c.status,
-                premium: c.premium,
-                annualPremium: c.annualPremium,
-                monthlyPremium: c.monthlyPremium
-            })));
 
             // Filter available carriers
             // Check both 'available' flag (legacy) and 'status: success' (new async flow)
@@ -98,7 +82,6 @@ const InitialContent = ({
                     ? getCarrierName(featured.carrierCode)
                     : (featured.name || featured.carrierName || 'Best Option');
 
-                console.log('Setting featured provider:', displayName, 'code:', featured.carrierCode, 'annual:', annualPremium, 'monthly:', monthlyPrice);
                 setFeaturedProvider({
                     name: displayName,
                     carrierCode: featured.carrierCode,
@@ -135,13 +118,6 @@ const InitialContent = ({
                         quoteDetails: result.quoteDetails || {}
                     };
                 });
-
-                console.log('Setting comparison providers:', allCarriersForComparison.map(p => ({ 
-                    name: p.name, 
-                    code: p.carrierCode,
-                    monthly: p.monthlyPrice,
-                    yearly: p.yearlyPrice
-                })));
                 setComparisonProviders(allCarriersForComparison);
             }
         }
@@ -190,17 +166,27 @@ const InitialContent = ({
         // Format: [{ code: "TPL", limit: "$2,000,000/-$1", deductible: 500 }, ...]
         if (result.coverages && Array.isArray(result.coverages)) {
             result.coverages.forEach(coverage => {
-                const code = coverage.code?.toUpperCase();
+                // Convert code to string first (can be number for FAQ coverages like 2, 20, 27, 34)
+                const code = String(coverage.code || '').toUpperCase();
 
                 // Map coverage codes to friendly names
                 const coverageNames = {
+                    'TP': 'Third Party Liability',
                     'TPL': 'Third Party Liability',
                     'DCPD': 'Direct Compensation',
+                    'COL': 'Collision',
                     'COLL': 'Collision',
+                    'CMP': 'Comprehensive',
                     'COMP': 'Comprehensive',
                     'AB': 'Accident Benefits',
                     'UA': 'Uninsured Auto',
-                    'SEF44': 'Family Protection'
+                    'SEF44': 'Family Protection',
+                    // FAQ coverages (returned as numbers from API)
+                    '2': 'Extended Civil Liability (FAQ 2)',
+                    '20': 'Replacement Vehicle (FAQ 20)',
+                    '27': 'Personal Insurance (FAQ 27)',
+                    '34': 'Medical Expenses (FAQ 34)',
+                    'MED_LIMIT': 'Medical Expenses (FAQ 34)'
                 };
 
                 const label = coverageNames[code] || code || 'Coverage';

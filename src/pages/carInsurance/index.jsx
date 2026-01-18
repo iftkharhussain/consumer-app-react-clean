@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import InterestedModal from '../../components/interestedModal';
@@ -6,6 +6,7 @@ import InitialContent from '../../components/carInsurance/InitialContent';
 import EstimateContent from '../../components/carInsurance/EstimateContent';
 import CustomizeProtections from '../../components/carInsurance/CustomizeProtections';
 import LoadingModal from '../../components/loadingModal';
+import ResubmitAlert from '../../components/ResubmitAlert';
 import useQuote from '../../hooks/useQuote';
 import styles from './CarInsurance.module.css';
 
@@ -23,10 +24,25 @@ const CarInsurance = () => {
   const [showEstimate, setShowEstimate] = useState(false);
   const [showCustomize, setShowCustomize] = useState(false);
   const [showLoadingModal, setShowLoadingModal] = useState(true);
+  const [showResubmitAlert, setShowResubmitAlert] = useState(false);
 
   // Get user profile from Redux state
   const userProfile = useSelector(state => state.app?.user_profile);
   const authUser = useSelector(state => state.app?.auth);
+
+  // Check for resubmit alert flag on mount
+  useEffect(() => {
+    const alertFlag = localStorage.getItem('showResubmitAlert');
+    if (alertFlag === 'true') {
+      setShowResubmitAlert(true);
+      // Clear the flag after showing
+      localStorage.removeItem('showResubmitAlert');
+    }
+  }, []);
+
+  const handleCloseResubmitAlert = () => {
+    setShowResubmitAlert(false);
+  };
 
   // Fetch quote on page load - autoFetch is true by default
   // Hook will poll every 3 seconds when status is 'fetching'
@@ -79,6 +95,11 @@ const CarInsurance = () => {
 
   return (
     <div className={styles.carInsurancePage}>
+      {/* Resubmit Alert - Shows if user resubmitted form with different info */}
+      {showResubmitAlert && (
+        <ResubmitAlert onClose={handleCloseResubmitAlert} />
+      )}
+
       {/* Initial Loading Modal - Shows for ~5 seconds */}
       <LoadingModal
         isOpen={showLoadingModal}

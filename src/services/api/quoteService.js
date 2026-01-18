@@ -15,10 +15,21 @@ import apiClient from './client';
  * @returns {Promise<Object>} Quote response with carriers
  */
 export const fetchQuote = async (productSlug) => {
-  const response = await apiClient.get('/api/quote/fetch', {
-    params: { productSlug }
-  });
-  return response.data;
+  try {
+    const response = await apiClient.get('/api/quote/fetch', {
+      params: { productSlug }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('[quoteService] fetchQuote ERROR:', {
+      message: error.message,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+      url: error.config?.url
+    });
+    throw error;
+  }
 };
 
 /**

@@ -161,6 +161,11 @@ const LeadLogin = () => {
             localStorage.setItem('sessionToken', response.sessionToken);
           }
 
+          // Store resubmit alert flag if user resubmitted with different info
+          if (response.showResubmitAlert) {
+            localStorage.setItem('showResubmitAlert', 'true');
+          }
+
           setStatus(STATUS.SUCCESS);
 
           // Redirect after showing success message

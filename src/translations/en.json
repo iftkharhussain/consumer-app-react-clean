@@ -105,5 +105,6 @@
   },
   "loadingModal": {
     "shoppingInsurers": "{{userName}}, we're shopping insurers for you..."
-  }
+  },
+  "resubmit_alert_message": "If you want to add another quote or get a different product, use this app instead of filling the form again or contact 00-0000-0000"
 }

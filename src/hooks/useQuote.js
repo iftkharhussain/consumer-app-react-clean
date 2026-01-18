@@ -75,15 +75,6 @@ export const useQuote = (productSlug, options = {}) => {
         // If complete, update quote data
         if (['success', 'failed', 'timeout'].includes(status)) {
           if (status === 'success') {
-            console.log('[useQuote] Quote success! Setting quote data:', {
-              carriersCount: response.carriers?.length || 0,
-              carriers: response.carriers?.map(c => ({
-                code: c.carrierCode,
-                name: c.carrierName,
-                status: c.status,
-                premium: c.premium
-              }))
-            });
             setQuoteData({
               id: response.quoteId,
               carriers: response.carriers || [],
@@ -125,8 +116,9 @@ export const useQuote = (productSlug, options = {}) => {
    * Fetch quote - initial API call that triggers LMS quote request
    * Returns immediately with quoteId for polling
    */
-  const fetchQuote = useCallback(async (isPoll = false) => {
+  const fetchQuote = useCallback(async (isPoll = false) => {    
     if (!productSlug) {
+      console.warn('[useQuote] fetchQuote aborted: no productSlug');
       return;
     }
 
@@ -141,27 +133,21 @@ export const useQuote = (productSlug, options = {}) => {
     try {
       const response = await quoteService.fetchQuote(productSlug);
 
-      if (!isMountedRef.current) return;
+      if (!isMountedRef.current) {
+        console.log('[useQuote] Component unmounted, aborting');
+        return;
+      }
 
       if (response.success) {
         // Check if we got a quoteId for polling (new async flow)
         if (response.quoteId && ['pending', 'processing', 'fetching'].includes(response.quoteStatus || response.status)) {
-          console.log('[useQuote] Starting async polling flow:', {
-            quoteId: response.quoteId,
-            status: response.quoteStatus || response.status,
-            leadId: response.leadId
-          });
+          
           setQuoteId(response.quoteId);
           setQuoteStatus(response.quoteStatus || response.status || 'pending');
           pollStartTimeRef.current = Date.now();
           // Polling will be triggered by useEffect watching quoteStatus
         } else {
           // Quote already exists (success) or failed
-          console.log('[useQuote] Got immediate quote result:', {
-            status: response.quoteStatus,
-            hasQuote: !!response.quote,
-            carriersCount: response.quote?.carriers?.length || 0
-          });
           setQuoteStatus(response.quoteStatus || 'success');
           setQuoteData(response.quote || null);
           setLoading(false);
@@ -169,14 +155,12 @@ export const useQuote = (productSlug, options = {}) => {
 
         return response;
       } else {
-        // API returned success: false
         setQuoteStatus(response.quoteStatus || 'failed');
         setError(response.message || 'Failed to fetch quote');
         setQuoteData(null);
         setLoading(false);
       }
     } catch (err) {
-      console.error('[useQuote] Error:', err);
 
       if (!isMountedRef.current) return;
 
@@ -205,13 +189,28 @@ export const useQuote = (productSlug, options = {}) => {
     await fetchQuote();
   }, [fetchQuote]);
 
-  // Auto-fetch on mount
+  // Auto-fetch on mount - ALWAYS runs, with detailed logging
   useEffect(() => {
-    if (autoFetch && productSlug && !hasInitialFetchRef.current) {
-      hasInitialFetchRef.current = true;
-      fetchQuote();
+    // Log immediately when effect runs
+
+    if (!autoFetch) {
+      console.log('[useQuote] SKIP: autoFetch is false');
+      return;
     }
-  }, [productSlug, autoFetch]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (!productSlug) {
+      console.log('[useQuote] SKIP: no productSlug');
+      return;
+    }
+    if (hasInitialFetchRef.current) {
+      console.log('[useQuote] SKIP: already fetched (hasInitialFetchRef = true)');
+      return;
+    }
+    
+    // All conditions passed - fetch!
+    hasInitialFetchRef.current = true;
+    fetchQuote();
+    
+  }, [productSlug, autoFetch, fetchQuote]);
 
   // Polling effect - poll when status is 'pending' or 'processing' or 'fetching'
   useEffect(() => {

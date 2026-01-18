@@ -14,10 +14,11 @@ export const apiClient = axios.create({
 // Request interceptor - cookies are sent automatically with withCredentials: true
 apiClient.interceptors.request.use(
   (config) => {
-    console.log('[apiClient] Making request to:', config.url);
+    const fullUrl = `${config.baseURL}${config.url}`;
     return config;
   },
   (error) => {
+    console.error('[apiClient] REQUEST ERROR:', error);
     return Promise.reject(error);
   }
 );
@@ -25,11 +26,9 @@ apiClient.interceptors.request.use(
 // Response interceptor for error handling
 apiClient.interceptors.response.use(
   (response) => {
-    console.log('[apiClient] Response from:', response.config.url, response.status);
     return response;
   },
   (error) => {
-    console.log('[apiClient] Error from:', error.config?.url, error.response?.status);
     if (error.response?.status === 401) {
       // Don't redirect if we're already on login page or if it's a quote API call
       // Let the component handle the 401 error gracefully

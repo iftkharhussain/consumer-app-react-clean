@@ -2,7 +2,8 @@
 
 // Get API URL from environment variable with fallback
 const getBaseUrl = () => {
-  return process.env.REACT_APP_API_URL || 'http://localhost:3025';
+  const url = process.env.REACT_APP_API_URL;
+  return url;
 };
 
 export const baseUrl = getBaseUrl();

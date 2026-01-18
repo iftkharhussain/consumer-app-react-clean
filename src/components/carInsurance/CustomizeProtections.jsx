@@ -115,6 +115,13 @@ const CustomizeProtections = ({ onBack }) => {
                     detailsContent="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor."
                 />
             </div>
+
+            {/* Fixed Bottom Container - Mobile Only */}
+            <div className={styles.fixedBottomContainer}>
+                <button className={styles.recalculateButton}>
+                    Recalculer mon prix
+                </button>
+            </div>
         </div>
     );
 };

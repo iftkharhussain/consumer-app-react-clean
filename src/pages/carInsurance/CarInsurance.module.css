@@ -1003,3 +1003,227 @@
 .retryButton:active {
   transform: translateY(0);
 }
+
+/* ============================================
+   MOBILE RESPONSIVE STYLES
+   ============================================ */
+
+@media (max-width: 768px) {
+
+  /* Featured Quote Card - Column Layout on Mobile */
+  .featuredQuoteCard {
+    flex-direction: column;
+  }
+
+  /* Featured Left Section - Full Width on Mobile */
+  .featuredLeft {
+    flex: 1;
+    width: 100%;
+  }
+
+  /* Featured Right Section - Full Width on Mobile */
+  .featuredRight {
+    flex: 1;
+    width: 100%;
+  }
+
+  /* Featured Heading - Mobile Specs */
+  .featuredHeading {
+    color: var(--Gray-900, #121926);
+    font-family: Inter;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 26px;
+    /* 130% */
+    margin: 0 0 16px 0;
+  }
+
+  /* Featured Description - Mobile Specs */
+  .featuredDescription {
+    color: var(--Gray-900, #121926);
+    font-family: var(--Font-family-font-family-body, Inter);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 15px;
+    /* 125% */
+    margin: 0 0 24px 0;
+  }
+
+  /* Poursuivre Button - 100% Width on Mobile */
+  .poursuivreButton {
+    width: 100%;
+  }
+
+  /* Vos Protections Section - Mobile Styles */
+
+  /* Protections Title */
+  .protectionsTitle {
+    color: var(--Gray-900, #121926);
+    font-family: var(--Font-family-font-family-body, Inter);
+    font-size: var(--Font-size-text-lg, 18px);
+    font-style: normal;
+    font-weight: 600;
+    line-height: var(--Line-height-text-lg, 28px);
+    /* 155.556% */
+  }
+
+  /* Personnaliser Link - Mobile */
+  .personnaliserLink {
+    color: #1A1ABA;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 29.532px;
+    /* 210.945% */
+  }
+
+  /* Protections Card - Single Column on Mobile */
+  .protectionsCard {
+    column-count: 1;
+  }
+
+  /* Protection Item - 32px Gap */
+  .protectionItem {
+    margin-bottom: 32px;
+  }
+
+  /* Protection Name - Mobile */
+  .protectionName {
+    color: #000;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 14px;
+    /* 100% */
+  }
+
+  /* Protection Description - Mobile */
+  .protectionDescription {
+    color: #535862;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    /* 142.857% */
+  }
+
+  /* Protection Coverage - Mobile */
+  .protectionCoverage {
+    color: #1A1ABA;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19px;
+    /* 135.714% */
+  }
+
+  /* Autres options d'assureurs reconnus - Mobile Styles */
+
+  /* Comparison Table Container - Keep as table for proper width */
+  .comparisonTable {
+    display: table;
+    width: 100%;
+    border: none;
+  }
+
+
+  /* Logo - Mobile Specs */
+  .providerLogoSmall {
+    width: 70px;
+    height: 24px;
+    aspect-ratio: 35/12;
+    max-width: 70px;
+    max-height: 24px;
+  }
+
+  /* Show only pricing column */
+  .providerPricing {
+    display: table-cell !important;
+    width: auto;
+    padding: 0 12px !important;
+    flex: 1;
+  }
+
+  /* Price Container - Hide Yearly Pricing */
+  .priceContainer {
+    flex-wrap: wrap;
+  }
+
+  /* Hide yearly pricing text on mobile */
+  /* This hides everything after "a month or" */
+  .priceContainer .priceUnitSmall:nth-child(3)~* {
+    display: none;
+  }
+
+  /* Alternative: If the above doesn't work, hide specific elements */
+  .priceUnitSmall:nth-of-type(2),
+  .priceUnitSmall:nth-of-type(4) {
+    display: none;
+  }
+
+  /* Keep only: amount, currency, and "a month" text visible */
+  .priceAmountLarge,
+  .priceCurrencySmall,
+  .priceUnitSmall:first-of-type {
+    display: inline-block;
+  }
+
+
+  /* Show only actions column */
+  .providerActions {
+    display: table-cell !important;
+    width: auto;
+    padding: 0 !important;
+  }
+
+  /* Hide provider name column */
+  .providerNameColumn {
+    display: none !important;
+  }
+
+  /* Poursuivre Button - Mobile Specs */
+  .poursuivreButtonSmall {
+    display: flex;
+    width: 97px;
+    height: 32px;
+    padding: var(--spacing-md, 8px) var(--spacing-lg, 12px);
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-xs, 4px);
+    border-radius: var(--radius-md, 8px);
+    border: 2px solid var(--Gradient-skeuemorphic-gradient-border, rgba(255, 255, 255, 0.12));
+    background: #1A1ABA;
+    box-shadow: 0 0 0 1px var(--Colors-Effects-Shadows-shadow-skeumorphic-inner-border, rgba(10, 13, 18, 0.18)) inset,
+      0 -2px 0 0 var(--Colors-Effects-Shadows-shadow-skeumorphic-inner, rgba(10, 13, 18, 0.05)) inset,
+      0 1px 2px 0 var(--Colors-Effects-Shadows-shadow-xs, rgba(10, 13, 18, 0.05));
+  }
+
+  /* Interested Button - Mobile (same as poursuivre) */
+  .interestedButtonSmall {
+    display: flex;
+    width: 97px;
+    height: 32px;
+    padding: var(--spacing-md, 8px) var(--spacing-lg, 12px);
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-xs, 4px);
+    border-radius: var(--radius-md, 8px);
+    box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+  }
+
+  /* Hide expand button on mobile */
+  .expandButton {
+    display: none;
+  }
+
+  /* Hide expanded row details on mobile */
+  .expandedRow {
+    display: none !important;
+  }
+}
