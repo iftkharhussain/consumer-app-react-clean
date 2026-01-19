@@ -38,10 +38,10 @@
 
 /* Modal Body */
 .modalBody {
-  padding: 34px 56px;
-  background: #fff;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
+    padding: 34px 56px;
+    background: #fff;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
 }
 
 .modalTitle {
@@ -61,7 +61,7 @@
     font-style: normal;
     font-weight: 400;
     line-height: 19.688px;
-    margin: 0 0 16px 0;
+    margin: 0 0 24px 0;
     max-width: 600px;
 }
 
@@ -103,7 +103,7 @@
 /* Footer Buttons */
 .modalFooter {
     display: flex;
-    gap: 30px;
+    gap: 16px;
 }
 
 .primaryButton {
@@ -111,7 +111,7 @@
     width: 100%;
     display: flex;
     height: 36px;
-    padding: var(--spacing-md, 8px) var(--spacing-lg, 12px);
+    padding: var(--spacing-md, 10px) var(--spacing-lg, 9px);
     justify-content: center;
     align-items: center;
     gap: var(--spacing-xs, 4px);
@@ -119,8 +119,8 @@
     border: 2px solid var(--Gradient-skeuemorphic-gradient-border, rgba(255, 255, 255, 0.12));
     background: #1A1ABA;
     box-shadow: 0 0 0 1px var(--Colors-Effects-Shadows-shadow-skeumorphic-inner-border, rgba(10, 13, 18, 0.18)) inset,
-                0 -2px 0 0 var(--Colors-Effects-Shadows-shadow-skeumorphic-inner, rgba(10, 13, 18, 0.05)) inset,
-                0 1px 2px 0 var(--Colors-Effects-Shadows-shadow-xs, rgba(10, 13, 18, 0.05));
+        0 -2px 0 0 var(--Colors-Effects-Shadows-shadow-skeumorphic-inner, rgba(10, 13, 18, 0.05)) inset,
+        0 1px 2px 0 var(--Colors-Effects-Shadows-shadow-xs, rgba(10, 13, 18, 0.05));
     color: var(--Component-colors-Components-Buttons-Primary-button-primary-fg, #FFF);
     font-family: var(--Font-family-font-family-body, Inter);
     font-size: var(--Font-size-text-sm, 14px);
@@ -137,7 +137,7 @@
     width: 100%;
     display: flex;
     height: 36px;
-    padding: var(--spacing-md, 8px) var(--spacing-lg, 12px);
+    padding: var(--spacing-md, 10px) var(--spacing-lg, 9px);
     justify-content: center;
     align-items: center;
     gap: var(--spacing-xs, 4px);
@@ -145,8 +145,8 @@
     border: 2px solid var(--Gradient-skeuemorphic-gradient-border, rgba(255, 255, 255, 0.12));
     background: #FFF;
     box-shadow: 0 0 0 1px var(--Colors-Effects-Shadows-shadow-skeumorphic-inner-border, rgba(10, 13, 18, 0.18)) inset,
-                0 -2px 0 0 var(--Colors-Effects-Shadows-shadow-skeumorphic-inner, rgba(10, 13, 18, 0.05)) inset,
-                0 1px 2px 0 var(--Colors-Effects-Shadows-shadow-xs, rgba(10, 13, 18, 0.05));
+        0 -2px 0 0 var(--Colors-Effects-Shadows-shadow-skeumorphic-inner, rgba(10, 13, 18, 0.05)) inset,
+        0 1px 2px 0 var(--Colors-Effects-Shadows-shadow-xs, rgba(10, 13, 18, 0.05));
     color: #535862;
     font-family: var(--Font-family-font-family-body, Inter);
     font-size: var(--Font-size-text-sm, 14px);
@@ -163,10 +163,15 @@
     .modalTitle {
         font-size: 24px;
         line-height: 28px;
+        margin-bottom: 26px;
     }
 
     .modalBody {
-        padding: 24px 20px;
+        padding: 32px;
+    }
+
+    .modalContent :global(.ant-tabs-nav-operations) {
+        display: none !important;
     }
 
     .tabsContainer {
@@ -180,6 +185,6 @@
 
     .modalFooter {
         flex-direction: column;
-        padding: 0 20px 24px;
+        padding: 0;
     }
 }

@@ -118,7 +118,7 @@
 
     /* Adjust main content for mobile header */
     body.mobile-view .main-body-wrapper {
-        padding-top: 80px !important;
+        padding-top: 95px !important;
     }
 
     /* Adjust content margin for mobile */

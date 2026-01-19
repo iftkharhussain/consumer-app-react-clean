@@ -1,6 +1,6 @@
 .orderProductPage {
     max-width: 825px;
-    padding: 0px 24px;
+    padding: 0;
 }
 
 /* Main Heading */
@@ -51,7 +51,7 @@
     color: #000;
     text-overflow: ellipsis;
     font-family: var(--Font-family-font-family-body, Inter);
-    font-size: var(--Font-size-text-sm, 14px);
+    font-size: var(--Font-size-text-sm, 20px);
     font-style: normal;
     font-weight: 600;
     line-height: var(--Line-height-text-sm, 20px);
@@ -110,7 +110,7 @@
 .protectionsTitle {
     color: #000;
     font-family: Inter;
-    font-size: 12px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 600;
     line-height: 1;
@@ -123,6 +123,7 @@
     gap: 8px;
     margin-bottom: 10px;
 }
+
 .protectionItem:last-child {
     margin-bottom: 0px;
 }
@@ -142,7 +143,7 @@
 .protectionName {
     color: #535862;
     font-family: Inter;
-    font-size: 12px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 400;
     line-height: 1;
@@ -229,7 +230,18 @@
     .contentContainer {
         grid-template-columns: 1fr;
     }
-    
+
+    .leftColumn {
+        border-right: none;
+        border-top: 1px solid #D9D9D9;
+        order: 2;
+    }
+
+    .rightColumn {
+        border-top: none;
+        order: 1;
+    }
+
     .mainHeading {
         font-size: 24px;
         line-height: 28px;

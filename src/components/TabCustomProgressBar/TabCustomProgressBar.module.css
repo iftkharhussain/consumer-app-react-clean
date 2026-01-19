@@ -54,7 +54,7 @@
 .tabLabelWithProgress {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 8px;
     width: 100%;
 }
@@ -107,13 +107,28 @@
 }
 
 
-.customTabs :global(.ant-tabs-tab-btn){
+.customTabs :global(.ant-tabs-tab-btn) {
     width: 100%;
 }
+
 .TabCustomProgressBar_tabLabel {
     text-align: left;
 }
 
-.customTabs :global(.ant-tabs-nav-list){
+.customTabs :global(.ant-tabs-nav-list) {
     gap: 8px;
+}
+
+@media (max-width: 768px) {
+    .tabsContainer {
+        padding: 29px 32px !important;
+    }
+
+    .overallProgress {
+        display: none;
+    }
+
+    .tabLabel {
+        font-size: 10px;
+    }
 }
