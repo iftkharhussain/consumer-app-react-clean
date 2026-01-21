@@ -401,8 +401,8 @@ const InitialContent = ({
                     onClick={handlePersonnaliserClick}
                     style={{ opacity: isPersonnaliserLoading ? 0.6 : 1, pointerEvents: isPersonnaliserLoading ? 'none' : 'auto' }}
                 >
-                    {isPersonnaliserLoading ? 'Chargement...' : 'Personnaliser'}
                     {!isPersonnaliserLoading && <img src="/images/config.svg" alt="" className={styles.configIcon} />}
+                    {isPersonnaliserLoading ? 'Chargement...' : 'Personnaliser'}
                 </a>
             </div>
 

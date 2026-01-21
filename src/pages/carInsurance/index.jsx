@@ -94,55 +94,69 @@ const CarInsurance = () => {
   };
 
   return (
-    <div className={styles.carInsurancePage}>
-      {/* Resubmit Alert - Shows if user resubmitted form with different info */}
-      {showResubmitAlert && (
-        <ResubmitAlert onClose={handleCloseResubmitAlert} />
-      )}
+    <>
+      <div className={styles.carInsurancePage}>
+        {/* Resubmit Alert - Shows if user resubmitted form with different info */}
+        {showResubmitAlert && (
+          <ResubmitAlert onClose={handleCloseResubmitAlert} />
+        )}
 
-      {/* Initial Loading Modal - Shows for ~5 seconds */}
-      <LoadingModal
-        isOpen={showLoadingModal}
-        onClose={handleLoadingModalClose}
-        userName={userName}
-        steps={loadingSteps}
-        totalDuration={5000}
-        autoClose={true}
-      />
+        {/* Initial Loading Modal - Shows for ~5 seconds */}
+        <LoadingModal
+          isOpen={showLoadingModal}
+          onClose={handleLoadingModalClose}
+          userName={userName}
+          steps={loadingSteps}
+          totalDuration={5000}
+          autoClose={true}
+        />
 
-      {/* Main Content - Shows after loading modal closes */}
-      {!showLoadingModal && (
-        <>
-          {showCustomize ? (
-            <CustomizeProtections onBack={handleBackToMain} />
-          ) : !showEstimate ? (
-            <InitialContent
-              onInterestedClick={handleInterestedClick}
-              onCustomize={handleCustomize}
-              quoteData={quoteData}
-              quoteLoading={quoteLoading}
-              quoteStatus={quoteStatus}
-              hasQuote={hasQuote}
-              hasFailed={hasFailed}
-              isPending={isPending}
-              quoteError={quoteError}
-              isAuthenticated={isAuthenticated}
-              onRetryQuote={refreshQuote}
-              userName={userName}
+        {/* Main Content - Shows after loading modal closes */}
+        {!showLoadingModal && (
+          <>
+            {showCustomize ? (
+              <CustomizeProtections onBack={handleBackToMain} />
+            ) : !showEstimate ? (
+              <InitialContent
+                onInterestedClick={handleInterestedClick}
+                onCustomize={handleCustomize}
+                quoteData={quoteData}
+                quoteLoading={quoteLoading}
+                quoteStatus={quoteStatus}
+                hasQuote={hasQuote}
+                hasFailed={hasFailed}
+                isPending={isPending}
+                quoteError={quoteError}
+                isAuthenticated={isAuthenticated}
+                onRetryQuote={refreshQuote}
+                userName={userName}
+              />
+            ) : (
+              <EstimateContent quoteData={quoteData} />
+            )}
+
+            {/* Interested Modal */}
+            <InterestedModal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              onAccept={handleAccept}
             />
-          ) : (
-            <EstimateContent quoteData={quoteData} />
-          )}
+          </>
+        )}
+      </div>
 
-          {/* Interested Modal */}
-          <InterestedModal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            onAccept={handleAccept}
-          />
-        </>
+      {/* Fixed Bottom Bar - Shows only on customize page - Outside carInsurancePage */}
+      {!showLoadingModal && showCustomize && (
+        <div className={styles.fixedBottomContainer}>
+          <button className={styles.primaryButton}>
+            Recalculer mon prix
+          </button>
+          <button className={styles.secondaryButton} onClick={handleBackToMain}>
+            Retour
+          </button>
+        </div>
       )}
-    </div>
+    </>
   );
 };
 

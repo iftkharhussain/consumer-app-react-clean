@@ -100,6 +100,7 @@ const AppLayout = ({ heading, children, _style }) => {
             style={{
               background: '#F8FAFC',
               padding: _style?.contentPadding ?? '32px 32px 0',
+              position: 'relative',
               ...(_style?.wrapper || {}),
             }}
           >

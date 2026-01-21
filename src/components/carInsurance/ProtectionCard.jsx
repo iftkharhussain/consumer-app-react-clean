@@ -17,7 +17,8 @@ const ProtectionCard = ({
     alwaysIncluded = false,
     showDetailsLink = false,
     onDetailsClick,
-    detailsContent
+    detailsContent,
+    imageWidth
 }) => {
     const [isDetailsExpanded, setIsDetailsExpanded] = React.useState(false);
 
@@ -38,12 +39,7 @@ const ProtectionCard = ({
                             {alwaysIncluded ? (
                                 <span className={styles.alwaysIncluded}>Toujours inclus</span>
                             ) : (
-                                <CoverageStatus
-                                    active={vehicle.included}
-                                    onChange={(checked) => onVehicleToggle && onVehicleToggle(index, checked)}
-                                    activeText="couvert"
-                                    inactiveText="non couvert"
-                                />
+                                <Switch defaultChecked size="small"/>
                             )}
                         </div>
                     ))}
@@ -53,7 +49,7 @@ const ProtectionCard = ({
             <div className={styles.protectionContent}>
                 <h3 className={styles.protectionTitle}>{title}</h3>
                 <span style={{ textAlign: 'center' }}>
-                    {image && <img src={image} alt="protection" className={styles.carImage} />}
+                    {image && <img src={image} alt="protection" className={styles.carImage} style={imageWidth ? { width: `${imageWidth}px` } : {}} />}
 
                     {description && (
                         <p className={styles.protectionDesc}>{description}</p>

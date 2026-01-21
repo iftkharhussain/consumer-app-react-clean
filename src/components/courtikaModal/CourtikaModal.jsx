@@ -54,11 +54,14 @@ const CourtikaModal = ({ isOpen, onClose }) => {
             <div className={styles.modalContent}>
                 {isLoading && (
                     <div className={styles.loadingOverlay}>
-                        <img
-                            src="/images/39259805852ef0453b2b0f98eee91406934e42f6.gif"
-                            alt="Chargement"
-                            className={styles.loadingGif}
-                        />
+                        <div className={styles.loadingContent}>
+                            <h3 className={styles.loadingText}>Nous vous connectons à un courtier..</h3>
+                            <img
+                                src="/images/39259805852ef0453b2b0f98eee91406934e42f6.gif"
+                                alt="Chargement"
+                                className={styles.loadingGif}
+                            />
+                        </div>
                     </div>
                 )}
                 {/* Progress Bar */}

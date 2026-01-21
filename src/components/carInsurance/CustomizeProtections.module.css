@@ -3,9 +3,71 @@
   max-width: 826px;
 }
 
-/* Fixed Bottom Container - Hidden by default (shown only on mobile) */
+/* Fixed Bottom Container */
 .fixedBottomContainer {
-  display: none;
+  position: absolute;
+  bottom: -32px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 26px 32px;
+  background: #FFF;
+  box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.primaryButton {
+  display: flex;
+  width: 267.988px;
+  height: 48px;
+  padding: 8px 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  border-radius: 8px;
+  border: none;
+  background: #1A1ABA;
+  cursor: pointer;
+  color: #FFF;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+  transition: all 0.2s ease;
+}
+
+.primaryButton:hover {
+  background: #14148F;
+}
+
+.secondaryButton {
+  display: flex;
+  width: 267.988px;
+  height: 48px;
+  padding: 8px 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  background: #FFF;
+  box-shadow: 0 0 0 1px rgba(10, 13, 18, 0.18) inset, 0 -2px 0 0 rgba(10, 13, 18, 0.05) inset, 0 1px 2px 0 rgba(10, 13, 18, 0.05);
+  cursor: pointer;
+  color: #535862;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+  transition: all 0.2s ease;
+}
+
+.secondaryButton:hover {
+  background: #F9FAFB;
 }
 
 
@@ -19,21 +81,26 @@
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
-  line-height: var(--Line-height-text-sm, 20px);
-  background: none;
+  line-height: 18px;
+  background: transparent;
   border: none;
+  border-radius: 6px;
   cursor: pointer;
-  padding: 0;
-  margin-bottom: 10px;
-  margin-left: 5px;
+  padding: 6px 10px;
+  margin-bottom: 16px;
+  transition: all 0.2s ease;
 }
 
 .backButton:hover {
-  text-decoration: underline;
+  background: #F0F4FF;
+  color: #1A1ABA;
+  text-decoration: none;
 }
 
 .backIcon {
-  width: 5px;
+  width: 12px;
+  height: 12px;
+  object-fit: contain;
 }
 
 /* Page Heading */
@@ -380,7 +447,7 @@
 }
 
 /* Custom Switch Styling */
-.customizeContainer :global(.ant-switch) {
+/* .customizeContainer :global(.ant-switch) {
   background-color: #fff;
   min-width: 25px;
   height: 11px;
@@ -399,7 +466,7 @@
 
 .customizeContainer :global(.ant-switch-handle::before) {
   border-radius: 50%;
-}
+} */
 
 /* Responsive */
 @media (max-width: 768px) {

@@ -31,6 +31,23 @@
     pointer-events: all;
 }
 
+.loadingContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.loadingText {
+    color: #1A1ABA;
+    font-family: Inter;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    margin: 0 0 20px 0;
+}
+
 .loadingGif {
     width: 250px;
     height: auto;

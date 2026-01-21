@@ -73,6 +73,7 @@ const CustomizeProtections = ({ onBack }) => {
                     onAmountChange={(delta) => handleAmountChange('collision', delta)}
                     vehicles={vehicles}
                     onVehicleToggle={handleVehicleToggle}
+                    imageWidth={130}
                 />
 
                 <ProtectionCard
@@ -85,6 +86,7 @@ const CustomizeProtections = ({ onBack }) => {
                     onAmountChange={(delta) => handleAmountChange('accidents', delta)}
                     vehicles={vehicles}
                     alwaysIncluded={true}
+                    imageWidth={95}
                 />
             </div>
 
@@ -103,6 +105,7 @@ const CustomizeProtections = ({ onBack }) => {
                     onVehicleToggle={handleVehicleToggle}
                     showDetailsLink={true}
                     detailsContent="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
+                    imageWidth={75}
                 />
 
                 <ProtectionCard
@@ -110,17 +113,11 @@ const CustomizeProtections = ({ onBack }) => {
                     image="/images/car5.svg"
                     description="Aide et remorquage en cas de panne ou d'imprévu sur la route."
                     vehicles={vehicles}
-                    alwaysIncluded={true}
+                    onVehicleToggle={handleVehicleToggle}
                     showDetailsLink={true}
                     detailsContent="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor."
+                    imageWidth={120}
                 />
-            </div>
-
-            {/* Fixed Bottom Container - Mobile Only */}
-            <div className={styles.fixedBottomContainer}>
-                <button className={styles.recalculateButton}>
-                    Recalculer mon prix
-                </button>
             </div>
         </div>
     );
