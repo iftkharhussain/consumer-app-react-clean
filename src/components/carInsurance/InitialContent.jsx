@@ -35,7 +35,8 @@ const InitialContent = ({
     quoteError,
     isAuthenticated = true,
     onRetryQuote,
-    userName = 'User'
+    userName = 'User',
+    userProductId
 }) => {
     const [expandedProviders, setExpandedProviders] = useState({});
     const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false);
@@ -542,6 +543,15 @@ const InitialContent = ({
             <CourtikaModal
                 isOpen={isCourtikaModalOpen}
                 onClose={() => setIsCourtikaModalOpen(false)}
+                userProductId={userProductId}
+                selectedQuote={featuredProvider ? {
+                    insurerName: featuredProvider.name,
+                    carrierCode: featuredProvider.carrierCode,
+                    logo: featuredProvider.logo,
+                    monthlyPrice: featuredProvider.price,
+                    yearlyPrice: featuredProvider.yearlyPrice,
+                    isIntactDiscount: isIntactCarrier(featuredProvider.carrierCode)
+                } : null}
             />
         </>
     );

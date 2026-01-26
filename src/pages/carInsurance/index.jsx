@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import InterestedModal from '../../components/interestedModal';
 import InitialContent from '../../components/carInsurance/InitialContent';
 import EstimateContent from '../../components/carInsurance/EstimateContent';
@@ -8,6 +9,7 @@ import CustomizeProtections from '../../components/carInsurance/CustomizeProtect
 import LoadingModal from '../../components/loadingModal';
 import ResubmitAlert from '../../components/ResubmitAlert';
 import useQuote from '../../hooks/useQuote';
+import { checkPendingOrder } from '../../services/api/productOrderService';
 import styles from './CarInsurance.module.css';
 
 /**
@@ -20,6 +22,7 @@ import styles from './CarInsurance.module.css';
  */
 const CarInsurance = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showEstimate, setShowEstimate] = useState(false);
   const [showCustomize, setShowCustomize] = useState(false);
@@ -40,6 +43,24 @@ const CarInsurance = () => {
     }
   }, []);
 
+  // Check for pending order on mount
+  useEffect(() => {
+    const checkForPendingOrder = async () => {
+      try {
+        const result = await checkPendingOrder('car-insurance');
+        if (result.success && result.hasPendingOrder && result.userProductId) {
+          // Redirect to product order page
+          navigate(`/car-insurance/product-order/${result.userProductId}`);
+        }
+      } catch (error) {
+        // Silently fail - don't block page load if check fails
+        console.error('Failed to check pending order:', error);
+      }
+    };
+
+    checkForPendingOrder();
+  }, [navigate]);
+
   const handleCloseResubmitAlert = () => {
     setShowResubmitAlert(false);
   };
@@ -55,6 +76,7 @@ const CarInsurance = () => {
     isPending,
     error: quoteError,
     isAuthenticated,
+    userProductId,
     refresh: refreshQuote
   } = useQuote('car-insurance');
 
@@ -130,6 +152,7 @@ const CarInsurance = () => {
                 isAuthenticated={isAuthenticated}
                 onRetryQuote={refreshQuote}
                 userName={userName}
+                userProductId={userProductId}
               />
             ) : (
               <EstimateContent quoteData={quoteData} />

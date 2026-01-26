@@ -1,21 +1,76 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Modal } from 'antd';
+import { Modal, message } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import TabCustomProgressBar from '../TabCustomProgressBar';
 import styles from './CourtikaModal.module.css';
+import { fortusService } from '../../services/api/fortusService';
 
-const CourtikaModal = ({ isOpen, onClose }) => {
+/**
+ * CourtikaModal - Call request modal for Fortus Leads
+ * 
+ * Props:
+ * - isOpen: boolean - Whether modal is open
+ * - onClose: function - Close handler
+ * - userProductId: string (RECOMMENDED) - User product ID from user_products collection
+ * - productSlug: string (FALLBACK) - Product slug (e.g., 'car-insurance')
+ * - selectedQuote: object - Selected insurer quote details to save with order
+ * 
+ * Prefer passing userProductId as it's more reliable than productSlug matching
+ */
+const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insurance', selectedQuote }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [requestStatus, setRequestStatus] = useState(null); // 'success', 'error', null
     const timerRef = useRef(null);
+    const navigate = useNavigate();
 
-    const handleDemanderAppel = () => {
+    const handleDemanderAppel = async () => {
         if (timerRef.current) {
             clearTimeout(timerRef.current);
         }
         setIsLoading(true);
-        timerRef.current = setTimeout(() => {
-            window.location.href = '/car-insurance/product-order';
-        }, 4000);
-        console.log('Demander un appel clicked');
+        setRequestStatus(null);
+        console.log('Demander un appel clicked - calling Fortus API');
+
+        try {
+            // Prefer userProductId over productSlug for more reliable matching
+            const params = userProductId 
+                ? { userProductId, selectedQuote } 
+                : { productSlug, selectedQuote };
+            
+            console.log('[CourtikaModal] Request params:', params);
+            
+            // Call Fortus API to send the lead
+            const result = await fortusService.requestCall(params);
+            
+            if (result.success) {
+                console.log('Fortus request successful:', result);
+                setRequestStatus('success');
+                message.success('Votre demande a été envoyée avec succès!');
+                
+                // Get userProductId from response if not already available
+                const productId = result.data?.userProductId || userProductId;
+                
+                // Redirect to product order page
+                timerRef.current = setTimeout(() => {
+                    if (productId) {
+                        navigate(`/car-insurance/product-order/${productId}`);
+                    } else {
+                        // Fallback if no userProductId available
+                        window.location.reload();
+                    }
+                }, 2000);
+            } else {
+                console.warn('Fortus request failed:', result);
+                setRequestStatus('error');
+                message.error(result.message || 'Une erreur est survenue. Veuillez réessayer.');
+                setIsLoading(false);
+            }
+        } catch (error) {
+            console.error('Fortus API error:', error);
+            setRequestStatus('error');
+            message.error('Une erreur est survenue. Veuillez réessayer.');
+            setIsLoading(false);
+        }
     };
 
     const handleAttendre = () => {

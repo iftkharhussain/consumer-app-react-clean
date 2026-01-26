@@ -37,6 +37,7 @@ export const useQuote = (productSlug, options = {}) => {
   const [quoteStatus, setQuoteStatus] = useState(null);
   const [quoteData, setQuoteData] = useState(null);
   const [quoteId, setQuoteId] = useState(null);
+  const [userProductId, setUserProductId] = useState(null);
   const [isAuthed, setIsAuthed] = useState(true);
   const [pollAttempts, setPollAttempts] = useState(0);
 
@@ -139,6 +140,11 @@ export const useQuote = (productSlug, options = {}) => {
       }
 
       if (response.success) {
+        // Save userProductId from response
+        if (response.userProductId) {
+          setUserProductId(response.userProductId);
+        }
+
         // Check if we got a quoteId for polling (new async flow)
         if (response.quoteId && ['pending', 'processing', 'fetching'].includes(response.quoteStatus || response.status)) {
           
@@ -261,6 +267,7 @@ export const useQuote = (productSlug, options = {}) => {
     quoteStatus,
     quoteData,
     quoteId,
+    userProductId,
 
     // Computed
     isLoading: loading || ['pending', 'processing', 'fetching'].includes(quoteStatus),
