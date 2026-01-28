@@ -716,6 +716,21 @@
   margin: 0 auto;
 }
 
+.providerNameFallback {
+  max-width: 100px;
+  max-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1A1ABA;
+  text-align: center;
+  line-height: 1.2;
+  padding: 4px;
+}
+
 .providerNameColumn {
   width: 170px;
   padding-right: 20px !important;

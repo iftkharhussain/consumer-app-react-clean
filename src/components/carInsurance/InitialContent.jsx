@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Rate, Spin, Radio } from 'antd';
 import PageHeader from '../pageHeader';
 import Button from '../button/Button';
@@ -45,10 +45,16 @@ const InitialContent = ({
     const [isOptionsLoading, setIsOptionsLoading] = useState(false);
     const [isPersonnaliserLoading, setIsPersonnaliserLoading] = useState(false);
     const [billingPeriod, setBillingPeriod] = useState('Mensuel');
+    const [imageErrors, setImageErrors] = useState({}); // Track image loading errors
 
     // Transform quote details into display format
     const [featuredProvider, setFeaturedProvider] = useState(null);
     const [comparisonProviders, setComparisonProviders] = useState([]);
+    
+    // Handle image loading errors
+    const handleImageError = (providerId) => {
+        setImageErrors(prev => ({ ...prev, [providerId]: true }));
+    };
 
     // Process quote results when available
     useEffect(() => {
@@ -75,9 +81,17 @@ const InitialContent = ({
                 const featured = intactCarrier || availableCarriers[0];
 
                 // Calculate price - use annualPremium/monthlyPremium if available, otherwise calculate
-                // If premium is 0 (test/sandbox), show placeholder
+                // If premium is 0 (test/sandbox), show random placeholder between 100-300
                 const annualPremium = featured.annualPremium || featured.premium || 0;
-                const monthlyPrice = featured.monthlyPremium || (annualPremium > 0 ? Math.round(annualPremium / 12) : null);
+                
+                // Generate random monthly price between 100-300 if premium is 0 or missing
+                let monthlyPrice;
+                if (annualPremium > 0) {
+                    monthlyPrice = featured.monthlyPremium || Math.round(annualPremium / 12);
+                } else {
+                    // Random price between 100-300 for demo
+                    monthlyPrice = Math.floor(Math.random() * (300 - 100 + 1)) + 100;
+                }
 
                 // Get display name from carrier code or use the name from response
                 const displayName = featured.carrierCode
@@ -89,7 +103,7 @@ const InitialContent = ({
                     carrierCode: featured.carrierCode,
                     logo: getCarrierLogo(featured.carrierCode || featured.name),
                     price: monthlyPrice,
-                    yearlyPrice: annualPremium > 0 ? annualPremium : null,
+                    yearlyPrice: annualPremium > 0 ? annualPremium : monthlyPrice * 12,
                     rating: 4.5,
                     benefits: extractBenefits(featured),
                     coverages: featured.coverages || [],
@@ -100,7 +114,15 @@ const InitialContent = ({
                 // This ensures L'Unique shows in the table with real values when it's the only carrier
                 const allCarriersForComparison = availableCarriers.map((result, index) => {
                     const annual = result.annualPremium || result.premium || 0;
-                    const monthly = result.monthlyPremium || (annual > 0 ? Math.round(annual / 12) : null);
+                    
+                    // Generate random monthly price between 100-300 if premium is 0 or missing
+                    let monthly;
+                    if (annual > 0) {
+                        monthly = result.monthlyPremium || Math.round(annual / 12);
+                    } else {
+                        // Random price between 100-300 for demo
+                        monthly = Math.floor(Math.random() * (300 - 100 + 1)) + 100;
+                    }
 
                     // Get display name from carrier code or use the name from response
                     const providerName = result.carrierCode
@@ -113,7 +135,7 @@ const InitialContent = ({
                         carrierCode: result.carrierCode,
                         logo: getCarrierLogo(result.carrierCode || result.name),
                         monthlyPrice: monthly,
-                        yearlyPrice: annual > 0 ? annual : null,
+                        yearlyPrice: annual > 0 ? annual : monthly * 12,
                         rating: 4.5,
                         details: extractBenefits(result),
                         coverages: result.coverages || [],
@@ -124,6 +146,7 @@ const InitialContent = ({
             }
         }
     }, [quoteData]);
+    
     const toggleProvider = (providerId) => {
         setExpandedProviders(prev => ({
             ...prev,
@@ -319,6 +342,15 @@ const InitialContent = ({
     const displayFeaturedProvider = featuredProvider || fallbackFeaturedProvider;
     const displayComparisonProviders = comparisonProviders.length > 0 ? comparisonProviders : fallbackComparisonProviders;
 
+    // Sort comparison providers by price (lowest to highest) for display
+    const sortedComparisonProviders = React.useMemo(() => {
+        return [...displayComparisonProviders].sort((a, b) => {
+            const priceA = a.monthlyPrice || 0;
+            const priceB = b.monthlyPrice || 0;
+            return priceA - priceB;
+        });
+    }, [displayComparisonProviders]);
+
     // Determine if we should show loading state (only when authenticated and actually loading)
     const shouldShowLoading = quoteLoading && isAuthenticated && !hasQuote;
 
@@ -485,15 +517,22 @@ const InitialContent = ({
                     <Section variant="card" style={{ padding: '0px' }}>
                         <table className={styles.comparisonTable}>
                             <tbody>
-                                {displayComparisonProviders.map((provider) => (
+                                {sortedComparisonProviders.map((provider) => (
                                     <React.Fragment key={provider.id}>
                                         <tr className={styles.providerRow}>
                                             <td className={styles.providerLogoColumn}>
-                                                <img
-                                                    src={provider.logo}
-                                                    alt={provider.name}
-                                                    className={styles.providerLogoSmall}
-                                                />
+                                                {imageErrors[provider.id] ? (
+                                                    <div className={styles.providerNameFallback}>
+                                                        {provider.name.toUpperCase()}
+                                                    </div>
+                                                ) : (
+                                                    <img
+                                                        src={provider.logo}
+                                                        alt={provider.name}
+                                                        className={styles.providerLogoSmall}
+                                                        onError={() => handleImageError(provider.id)}
+                                                    />
+                                                )}
                                             </td>
 
                                             <td className={styles.providerNameColumn}>
