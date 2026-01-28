@@ -13,8 +13,11 @@ const ProtectionCard = ({
     amountDelta = 1,
     benefitsList,
     vehicles,
+    vehicleToggles = [],
     onVehicleToggle,
     alwaysIncluded = false,
+    included,
+    onToggle,
     showDetailsLink = false,
     onDetailsClick,
     detailsContent,
@@ -39,10 +42,28 @@ const ProtectionCard = ({
                             {alwaysIncluded ? (
                                 <span className={styles.alwaysIncluded}>Toujours inclus</span>
                             ) : (
-                                <Switch defaultChecked size="small"/>
+                                <Switch 
+                                    checked={vehicleToggles[index] || false} 
+                                    onChange={(checked) => onVehicleToggle && onVehicleToggle(index, checked)}
+                                    size="small"
+                                />
                             )}
                         </div>
                     ))}
+                </div>
+            )}
+
+            {/* Main Protection Toggle Header (for cards without vehicles but with toggle) */}
+            {(!vehicles || vehicles.length === 0) && !alwaysIncluded && onToggle && (
+                <div className={styles.protectionCardHeader}>
+                    <div className={styles.vehicleToggleRow}>
+                        <span className={styles.vehicleName}>{title}</span>
+                        <Switch 
+                            checked={included} 
+                            onChange={(checked) => onToggle(checked)}
+                            size="small"
+                        />
+                    </div>
                 </div>
             )}
 

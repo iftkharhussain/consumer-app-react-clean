@@ -113,6 +113,29 @@ export const getQuotesByLead = async (leadId) => {
   return response.data;
 };
 
+// ============================================
+// RECALCULATE QUOTE (TEMPORARY - NO DB SAVE)
+// ============================================
+
+/**
+ * Request a recalculated quote with modified coverages
+ * 
+ * Used when user modifies protection settings in the customize page.
+ * Returns temporary quote data - NOT saved to database.
+ * Quote only gets persisted when user clicks "Demander un appel".
+ * 
+ * @param {string} userProductId - User product ID
+ * @param {Object} protections - Modified protection settings
+ * @returns {Promise<Object>} Temporary quote response
+ */
+export const recalculateQuote = async (userProductId, protections) => {
+  const response = await apiClient.post('/api/quote/recalculate', {
+    userProductId,
+    protections
+  });
+  return response.data;
+};
+
 export default {
   fetchQuote,
   requestQuote,
@@ -122,5 +145,7 @@ export default {
   getQuoteDetails,
   // Async polling
   checkQuoteStatus,
-  getQuotesByLead
+  getQuotesByLead,
+  // Recalculate
+  recalculateQuote
 };

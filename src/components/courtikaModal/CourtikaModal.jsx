@@ -14,10 +14,11 @@ import { fortusService } from '../../services/api/fortusService';
  * - userProductId: string (RECOMMENDED) - User product ID from user_products collection
  * - productSlug: string (FALLBACK) - Product slug (e.g., 'car-insurance')
  * - selectedQuote: object - Selected insurer quote details to save with order
+ * - recalculatedQuote: object - Temporary quote from recalculation (to be saved when user accepts)
  * 
  * Prefer passing userProductId as it's more reliable than productSlug matching
  */
-const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insurance', selectedQuote }) => {
+const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insurance', selectedQuote, recalculatedQuote = null }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [requestStatus, setRequestStatus] = useState(null); // 'success', 'error', null
     const timerRef = useRef(null);
@@ -34,8 +35,8 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
         try {
             // Prefer userProductId over productSlug for more reliable matching
             const params = userProductId 
-                ? { userProductId, selectedQuote } 
-                : { productSlug, selectedQuote };
+                ? { userProductId, selectedQuote, recalculatedQuote } 
+                : { productSlug, selectedQuote, recalculatedQuote };
             
             console.log('[CourtikaModal] Request params:', params);
             

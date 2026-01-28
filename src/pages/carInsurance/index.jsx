@@ -10,6 +10,7 @@ import LoadingModal from '../../components/loadingModal';
 import ResubmitAlert from '../../components/ResubmitAlert';
 import useQuote from '../../hooks/useQuote';
 import { checkPendingOrder } from '../../services/api/productOrderService';
+import { recalculateQuote } from '../../services/api/quoteService';
 import styles from './CarInsurance.module.css';
 
 /**
@@ -28,6 +29,11 @@ const CarInsurance = () => {
   const [showCustomize, setShowCustomize] = useState(false);
   const [showLoadingModal, setShowLoadingModal] = useState(true);
   const [showResubmitAlert, setShowResubmitAlert] = useState(false);
+  const [hasProtectionChanges, setHasProtectionChanges] = useState(false);
+  const [protectionsData, setProtectionsData] = useState(null);
+  const [isRecalculating, setIsRecalculating] = useState(false);
+  const [recalculatedQuote, setRecalculatedQuote] = useState(null);
+  const [recalculateError, setRecalculateError] = useState(null);
 
   // Get user profile from Redux state
   const userProfile = useSelector(state => state.app?.user_profile);
@@ -107,12 +113,52 @@ const CarInsurance = () => {
     setShowEstimate(true);
   };
 
-  const handleCustomize = () => {
-    setShowCustomize(true);
-  };
-
   const handleBackToMain = () => {
     setShowCustomize(false);
+    setHasProtectionChanges(false); // Reset when leaving customize page
+    setProtectionsData(null);
+  };
+
+  const handleProtectionsChange = useCallback((hasChanges, protections) => {
+    setHasProtectionChanges(hasChanges);
+    setProtectionsData(protections);
+  }, []);
+
+  // Handle recalculate quote with modified protections
+  const handleRecalculateQuote = async () => {
+    if (!protectionsData || !userProductId) return;
+    
+    setIsRecalculating(true);
+    setRecalculateError(null);
+    setShowCustomize(false);  // Navigate back to main view
+    setShowLoadingModal(true); // Show loading
+    
+    try {
+      const result = await recalculateQuote(userProductId, protectionsData);
+      
+      if (result.success) {
+        // Set temporary recalculated quote data
+        setRecalculatedQuote({
+          ...result.quote,
+          protections: protectionsData, // Keep track of the protections used
+          isTemporary: true
+        });
+      } else {
+        setRecalculateError(result.message || 'Failed to recalculate quote');
+      }
+    } catch (err) {
+      console.error('[CarInsurance] Recalculate error:', err);
+      setRecalculateError(err.message || 'An error occurred');
+    } finally {
+      setIsRecalculating(false);
+      setShowLoadingModal(false);
+    }
+  };
+
+  // Reset recalculated quote when going back to customize
+  const handleCustomize = () => {
+    setShowCustomize(true);
+    // Don't reset recalculatedQuote - user might want to compare
   };
 
   return (
@@ -137,22 +183,27 @@ const CarInsurance = () => {
         {!showLoadingModal && (
           <>
             {showCustomize ? (
-              <CustomizeProtections onBack={handleBackToMain} />
+              <CustomizeProtections 
+                onBack={handleBackToMain} 
+                userProductId={userProductId}
+                onProtectionsChange={handleProtectionsChange}
+              />
             ) : !showEstimate ? (
               <InitialContent
                 onInterestedClick={handleInterestedClick}
                 onCustomize={handleCustomize}
-                quoteData={quoteData}
-                quoteLoading={quoteLoading}
+                quoteData={recalculatedQuote || quoteData}
+                quoteLoading={quoteLoading || isRecalculating}
                 quoteStatus={quoteStatus}
-                hasQuote={hasQuote}
+                hasQuote={hasQuote || !!recalculatedQuote}
                 hasFailed={hasFailed}
                 isPending={isPending}
-                quoteError={quoteError}
+                quoteError={recalculateError || quoteError}
                 isAuthenticated={isAuthenticated}
                 onRetryQuote={refreshQuote}
                 userName={userName}
                 userProductId={userProductId}
+                recalculatedQuote={recalculatedQuote}
               />
             ) : (
               <EstimateContent quoteData={quoteData} />
@@ -171,8 +222,12 @@ const CarInsurance = () => {
       {/* Fixed Bottom Bar - Shows only on customize page - Outside carInsurancePage */}
       {!showLoadingModal && showCustomize && (
         <div className={styles.fixedBottomContainer}>
-          <button className={styles.primaryButton}>
-            Recalculer mon prix
+          <button 
+            className={styles.primaryButton}
+            disabled={!hasProtectionChanges || isRecalculating}
+            onClick={handleRecalculateQuote}
+          >
+            {isRecalculating ? 'Chargement...' : 'Recalculer mon prix'}
           </button>
           <button className={styles.secondaryButton} onClick={handleBackToMain}>
             Retour

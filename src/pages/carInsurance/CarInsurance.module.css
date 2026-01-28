@@ -47,6 +47,12 @@
   background: #14148F;
 }
 
+.primaryButton:disabled {
+  background: #D1D5DB;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .secondaryButton {
   display: flex;
   width: 267.988px;

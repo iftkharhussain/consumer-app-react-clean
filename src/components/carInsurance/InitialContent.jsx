@@ -36,7 +36,8 @@ const InitialContent = ({
     isAuthenticated = true,
     onRetryQuote,
     userName = 'User',
-    userProductId
+    userProductId,
+    recalculatedQuote = null // Temporary quote from recalculation (not saved to DB yet)
 }) => {
     const [expandedProviders, setExpandedProviders] = useState({});
     const [isOptionsModalOpen, setIsOptionsModalOpen] = useState(false);
@@ -552,6 +553,7 @@ const InitialContent = ({
                     yearlyPrice: featuredProvider.yearlyPrice,
                     isIntactDiscount: isIntactCarrier(featuredProvider.carrierCode)
                 } : null}
+                recalculatedQuote={recalculatedQuote}
             />
         </>
     );
