@@ -46,6 +46,7 @@ const InitialContent = ({
     const [isPersonnaliserLoading, setIsPersonnaliserLoading] = useState(false);
     const [billingPeriod, setBillingPeriod] = useState('Mensuel');
     const [imageErrors, setImageErrors] = useState({}); // Track image loading errors
+    const [selectedInsurer, setSelectedInsurer] = useState(null); // Track which insurer button was clicked
 
     // Transform quote details into display format
     const [featuredProvider, setFeaturedProvider] = useState(null);
@@ -418,7 +419,16 @@ const InitialContent = ({
                         <Button
                             type="primary"
                             className={styles.poursuivreButton}
-                            onClick={() => setIsCourtikaModalOpen(true)}
+                            onClick={() => {
+                                setSelectedInsurer({
+                                    insurerName: displayFeaturedProvider.name,
+                                    carrierCode: displayFeaturedProvider.carrierCode,
+                                    logo: displayFeaturedProvider.logo,
+                                    monthlyPrice: displayFeaturedProvider.price,
+                                    yearlyPrice: displayFeaturedProvider.yearlyPrice
+                                });
+                                setIsCourtikaModalOpen(true);
+                            }}
                         >
                             Poursuivre
                         </Button>
@@ -555,7 +565,16 @@ const InitialContent = ({
                                                 <Button
                                                     type="primary"
                                                     className={styles.poursuivreButtonSmall}
-                                                    onClick={onInterestedClick}
+                                                    onClick={() => {
+                                                        setSelectedInsurer({
+                                                            insurerName: provider.name,
+                                                            carrierCode: provider.carrierCode,
+                                                            logo: provider.logo,
+                                                            monthlyPrice: provider.monthlyPrice,
+                                                            yearlyPrice: provider.yearlyPrice
+                                                        });
+                                                        setIsCourtikaModalOpen(true);
+                                                    }}
                                                 >
                                                     Poursuivre
                                                 </Button>
@@ -584,14 +603,7 @@ const InitialContent = ({
                 isOpen={isCourtikaModalOpen}
                 onClose={() => setIsCourtikaModalOpen(false)}
                 userProductId={userProductId}
-                selectedQuote={featuredProvider ? {
-                    insurerName: featuredProvider.name,
-                    carrierCode: featuredProvider.carrierCode,
-                    logo: featuredProvider.logo,
-                    monthlyPrice: featuredProvider.price,
-                    yearlyPrice: featuredProvider.yearlyPrice,
-                    isIntactDiscount: isIntactCarrier(featuredProvider.carrierCode)
-                } : null}
+                selectedQuote={selectedInsurer}
                 recalculatedQuote={recalculatedQuote}
             />
         </>

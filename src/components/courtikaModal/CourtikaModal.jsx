@@ -33,10 +33,13 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
         console.log('Demander un appel clicked - calling Fortus API');
 
         try {
+            // Extract carrier code from selected quote
+            const carrierCode = selectedQuote?.carrierCode;
+            
             // Prefer userProductId over productSlug for more reliable matching
             const params = userProductId 
-                ? { userProductId, selectedQuote, recalculatedQuote } 
-                : { productSlug, selectedQuote, recalculatedQuote };
+                ? { userProductId, selectedQuote, recalculatedQuote, carrierCode } 
+                : { productSlug, selectedQuote, recalculatedQuote, carrierCode };
             
             console.log('[CourtikaModal] Request params:', params);
             
