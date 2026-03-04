@@ -63,11 +63,15 @@ const InitialContent = ({
         // quoteData contains { carriers: [...], carriersCount, responseTime }
         if (quoteData?.carriers && Array.isArray(quoteData.carriers)) {
 
-            // Filter available carriers
-            // Check both 'available' flag (legacy) and 'status: success' (new async flow)
-            const availableCarriers = quoteData.carriers.filter(r => 
-                r.available === true || r.status === 'success'
-            );
+            // Filter available carriers with valid premium
+            // Exclude:
+            // - Failed carriers (status === 'failed' or available === false)
+            // - Carriers with 0 or missing premium
+            const availableCarriers = quoteData.carriers.filter(r => {
+                const isAvailable = r.available === true || r.status === 'success';
+                const hasPremium = (r.annualPremium || r.premium || 0) > 0;
+                return isAvailable && hasPremium;
+            });
 
             if (availableCarriers.length > 0) {
                 // Find Intact as the featured provider (always show Intact first)
@@ -81,18 +85,9 @@ const InitialContent = ({
                 // Fallback to first carrier if Intact not found
                 const featured = intactCarrier || availableCarriers[0];
 
-                // Calculate price - use annualPremium/monthlyPremium if available, otherwise calculate
-                // If premium is 0 (test/sandbox), show random placeholder between 100-300
+                // Calculate price - use annualPremium/monthlyPremium if available
                 const annualPremium = featured.annualPremium || featured.premium || 0;
-                
-                // Generate random monthly price between 100-300 if premium is 0 or missing
-                let monthlyPrice;
-                if (annualPremium > 0) {
-                    monthlyPrice = featured.monthlyPremium || Math.round(annualPremium / 12);
-                } else {
-                    // Random price between 100-300 for demo
-                    monthlyPrice = Math.floor(Math.random() * (300 - 100 + 1)) + 100;
-                }
+                const monthlyPrice = featured.monthlyPremium || Math.round(annualPremium / 12);
 
                 // Get display name from carrier code or use the name from response
                 const displayName = featured.carrierCode
@@ -104,26 +99,17 @@ const InitialContent = ({
                     carrierCode: featured.carrierCode,
                     logo: getCarrierLogo(featured.carrierCode || featured.name),
                     price: monthlyPrice,
-                    yearlyPrice: annualPremium > 0 ? annualPremium : monthlyPrice * 12,
+                    yearlyPrice: annualPremium,
                     rating: 4.5,
                     benefits: extractBenefits(featured),
                     coverages: featured.coverages || [],
                     quoteDetails: featured.quoteDetails || {}
                 });
 
-                // For comparison providers: include ALL carriers (including the featured one)
-                // This ensures L'Unique shows in the table with real values when it's the only carrier
+                // For comparison providers: include ALL valid carriers (with premium > 0)
                 const allCarriersForComparison = availableCarriers.map((result, index) => {
                     const annual = result.annualPremium || result.premium || 0;
-                    
-                    // Generate random monthly price between 100-300 if premium is 0 or missing
-                    let monthly;
-                    if (annual > 0) {
-                        monthly = result.monthlyPremium || Math.round(annual / 12);
-                    } else {
-                        // Random price between 100-300 for demo
-                        monthly = Math.floor(Math.random() * (300 - 100 + 1)) + 100;
-                    }
+                    const monthly = result.monthlyPremium || Math.round(annual / 12);
 
                     // Get display name from carrier code or use the name from response
                     const providerName = result.carrierCode
@@ -136,7 +122,7 @@ const InitialContent = ({
                         carrierCode: result.carrierCode,
                         logo: getCarrierLogo(result.carrierCode || result.name),
                         monthlyPrice: monthly,
-                        yearlyPrice: annual > 0 ? annual : monthly * 12,
+                        yearlyPrice: annual,
                         rating: 4.5,
                         details: extractBenefits(result),
                         coverages: result.coverages || [],
