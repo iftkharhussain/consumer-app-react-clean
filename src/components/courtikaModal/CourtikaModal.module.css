@@ -1,25 +1,26 @@
 .courtikaModal :global(.ant-modal-content) {
     padding: 0;
     border-radius: 12px;
+    background: #f8fafc;
 }
 
 .courtikaModal :global(.ant-modal-close) {
     top: 16px;
     right: 16px;
+    color: #697586;
 }
 
-.modalContent {
-    padding: 0;
-    border-radius: 12px;
-    overflow: hidden;
-    background: #eeeeee;
+.modalContainer {
     position: relative;
 }
 
 .contentHidden {
     visibility: hidden;
+    height: 0;
+    overflow: hidden;
 }
 
+/* Loading Overlay */
 .loadingOverlay {
     position: absolute;
     inset: 0;
@@ -29,6 +30,7 @@
     background: #fff;
     z-index: 1000;
     pointer-events: all;
+    border-radius: 12px;
 }
 
 .loadingContent {
@@ -39,9 +41,8 @@
 
 .loadingText {
     color: #1A1ABA;
-    font-family: Inter;
+    font-family: Inter, sans-serif;
     font-size: 25px;
-    font-style: normal;
     font-weight: 700;
     line-height: 1;
     text-align: center;
@@ -53,155 +54,460 @@
     height: auto;
 }
 
-/* Modal Body */
-.modalBody {
-    padding: 34px 56px;
-    background: #fff;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
+/* Main Card */
+.mainCard {
+    background: #ffffff;
+    border: 1px solid #e9eaeb;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
-.modalTitle {
-    color: #121926;
-    font-family: Inter;
-    font-size: 32px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 1;
-    margin: 0 0 16px 0;
+/* Card Header */
+.cardHeader {
+    padding: 32px 32px 24px;
+    border-bottom: 1px solid #e9eaeb;
+    text-align: center;
 }
 
-.modalDescription {
-    color: var(--Noir-Principale, #282828);
-    font-family: Inter;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 19.688px;
-    margin: 0 0 24px 0;
-    max-width: 600px;
-}
-
-.modalDescription strong {
-    font-weight: 600;
-}
-
-.modalLorem {
-    color: var(--Noir-Principale, #282828);
-    font-family: Inter;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 19.688px;
-    margin: 0 0 24px 0;
-}
-
-.modalSubtitle {
-    color: #121926;
-    font-family: Inter;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 19.688px;
-    margin: 0 0 16px 0;
-}
-
-.logoContainer {
+.logoTransition {
     display: flex;
-    justify-content: flex-start;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
 }
 
-.courtikaLogo {
-    width: 145px;
+.logoBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e9eaeb;
+    padding: 8px;
+}
+
+.logoBoxHighlight {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 2px solid rgba(26, 26, 186, 0.2);
+    padding: 8px;
+}
+
+.logoImage {
+    width: 100%;
+    height: 100%;
     object-fit: contain;
+}
+
+.animatedDots {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #1a1aba;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+.mainTitle {
+    color: #121926;
+    font-family: Inter, sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 0 0 8px 0;
+}
+
+.mainDescription {
+    color: #535862;
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
+    margin: 0;
+    max-width: 580px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Card Content */
+.cardContent {
+    padding: 24px;
+}
+
+/* Selection Summary */
+.selectionSummary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8fafc;
+    border: 1px solid #e9eaeb;
+    border-radius: 8px;
+    padding: 16px;
     margin-bottom: 24px;
 }
 
-/* Footer Buttons */
-.modalFooter {
+.summaryLeft {
     display: flex;
-    gap: 16px;
+    align-items: center;
+    gap: 12px;
 }
 
-.primaryButton {
-    flex: 1;
-    width: 100%;
+.insurerLogoBox {
+    width: 48px;
+    height: 48px;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e9eaeb;
+    padding: 8px;
     display: flex;
-    height: 36px;
-    padding: var(--spacing-md, 10px) var(--spacing-lg, 9px);
-    justify-content: center;
     align-items: center;
-    gap: var(--spacing-xs, 4px);
-    border-radius: var(--radius-md, 8px);
-    border: 2px solid var(--Gradient-skeuemorphic-gradient-border, rgba(255, 255, 255, 0.12));
-    background: #1A1ABA;
-    box-shadow: 0 0 0 1px var(--Colors-Effects-Shadows-shadow-skeumorphic-inner-border, rgba(10, 13, 18, 0.18)) inset,
-        0 -2px 0 0 var(--Colors-Effects-Shadows-shadow-skeumorphic-inner, rgba(10, 13, 18, 0.05)) inset,
-        0 1px 2px 0 var(--Colors-Effects-Shadows-shadow-xs, rgba(10, 13, 18, 0.05));
-    color: var(--Component-colors-Components-Buttons-Primary-button-primary-fg, #FFF);
-    font-family: var(--Font-family-font-family-body, Inter);
-    font-size: var(--Font-size-text-sm, 14px);
-    font-style: normal;
+    justify-content: center;
+}
+
+.insurerLogo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.summaryLabel {
+    color: #697586;
+    font-size: 13px;
+    font-weight: 400;
+    margin: 0 0 2px 0;
+}
+
+.summaryInsurer {
+    color: #121926;
+    font-size: 15px;
     font-weight: 600;
-    line-height: var(--Line-height-text-sm, 20px);
-    cursor: pointer;
-    transition: background 0.2s;
+    margin: 0;
 }
 
+.summaryRight {
+    text-align: right;
+}
 
-.secondaryButton {
-    flex: 1;
-    width: 100%;
+.summaryPrice {
+    color: #121926;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 2px 0;
+}
+
+.summaryOldPrice {
+    color: #697586;
+    font-size: 12px;
+    font-weight: 400;
+    text-decoration: line-through;
+    margin: 0;
+}
+
+/* Question */
+.questionTitle {
+    color: #121926;
+    font-family: Inter, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 0 0 16px 0;
+}
+
+/* Options Container */
+.optionsContainer {
     display: flex;
-    height: 36px;
-    padding: var(--spacing-md, 10px) var(--spacing-lg, 9px);
-    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.optionButton {
+    width: 100%;
+    padding: 16px;
+    border-radius: 8px;
+    border: 2px solid #e9eaeb;
+    background: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.optionButton:hover {
+    border-color: #d5d7da;
+}
+
+.optionSelected {
+    border-color: #1a1aba;
+    background: rgba(26, 26, 186, 0.05);
+}
+
+.optionContent {
+    display: flex;
     align-items: center;
-    gap: var(--spacing-xs, 4px);
-    border-radius: var(--radius-md, 8px);
-    border: 2px solid var(--Gradient-skeuemorphic-gradient-border, rgba(255, 255, 255, 0.12));
-    background: #FFF;
-    box-shadow: 0 0 0 1px var(--Colors-Effects-Shadows-shadow-skeumorphic-inner-border, rgba(10, 13, 18, 0.18)) inset,
-        0 -2px 0 0 var(--Colors-Effects-Shadows-shadow-skeumorphic-inner, rgba(10, 13, 18, 0.05)) inset,
-        0 1px 2px 0 var(--Colors-Effects-Shadows-shadow-xs, rgba(10, 13, 18, 0.05));
+    gap: 12px;
+}
+
+.radioButton {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #d5d7da;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.radioSelected {
+    background: #1a1aba;
+    border-color: #1a1aba;
+}
+
+.radioInner {
+    width: 10px;
+    height: 10px;
+    background: #ffffff;
+    border-radius: 50%;
+}
+
+.iconBox {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #697586;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.iconBoxActive {
+    background: #1a1aba;
+    color: #ffffff;
+}
+
+.optionText {
+    flex: 1;
+}
+
+.optionTitle {
+    color: #121926;
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 2px 0;
+}
+
+.optionDescription {
     color: #535862;
-    font-family: var(--Font-family-font-family-body, Inter);
-    font-size: var(--Font-size-text-sm, 14px);
-    font-style: normal;
-    font-weight: 600;
-    line-height: var(--Line-height-text-sm, 20px);
-    cursor: pointer;
-    transition: all 0.2s;
+    font-size: 13px;
+    font-weight: 400;
+    margin: 0;
 }
 
+.onlineIndicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pulsingDot {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+}
+
+.pulsingDot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+    75%, 100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+.onlineText {
+    color: #16a34a;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+/* CTA Button */
+.ctaButton {
+    width: 100%;
+    background: #1a1aba;
+    color: #ffffff;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-family: Inter, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    margin-bottom: 16px;
+}
+
+.ctaButton:hover {
+    background: #1515a0;
+}
+
+.ctaButton svg {
+    transition: transform 0.2s ease;
+}
+
+.ctaButton:hover svg {
+    transform: translateX(4px);
+}
+
+/* Trust Signals */
+.trustSignals {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e9eaeb;
+}
+
+.trustItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #697586;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.trustItem svg {
+    color: #22c55e;
+}
+
+/* FAQ Section */
+.faqToggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    color: #1a1aba;
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px;
+    transition: color 0.2s ease;
+}
+
+.faqToggle:hover {
+    color: #1515a0;
+}
+
+.faqContent {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.faqItem {
+    font-size: 12px;
+}
+
+.faqQuestion {
+    color: #121926;
+    font-weight: 600;
+    margin: 0 0 2px 0;
+}
+
+.faqAnswer {
+    color: #535862;
+    font-weight: 400;
+    margin: 0;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
-    .modalTitle {
-        font-size: 24px;
-        line-height: 28px;
-        margin-bottom: 26px;
+    .cardHeader {
+        padding: 24px 16px 20px;
     }
 
-    .modalBody {
-        padding: 32px;
+    .cardContent {
+        padding: 16px;
     }
 
-    .modalContent :global(.ant-tabs-nav-operations) {
-        display: none !important;
+    .mainTitle {
+        font-size: 18px;
     }
 
-    .tabsContainer {
-        padding: 16px 20px 0;
+    .mainDescription {
+        font-size: 12px;
     }
 
-    .overallProgress {
-        top: 16px;
-        right: 20px;
+    .logoBox,
+    .logoBoxHighlight {
+        width: 56px;
+        height: 56px;
     }
 
-    .modalFooter {
+    .selectionSummary {
         flex-direction: column;
-        padding: 0;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .summaryRight {
+        text-align: left;
+        width: 100%;
+    }
+
+    .trustSignals {
+        flex-direction: column;
+        gap: 8px;
     }
 }

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Modal, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import TabCustomProgressBar from '../TabCustomProgressBar';
 import styles from './CourtikaModal.module.css';
 import { fortusService } from '../../services/api/fortusService';
 
@@ -21,6 +20,8 @@ import { fortusService } from '../../services/api/fortusService';
 const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insurance', selectedQuote, recalculatedQuote = null }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [requestStatus, setRequestStatus] = useState(null); // 'success', 'error', null
+    const [selectedOption, setSelectedOption] = useState('now'); // 'now' or 'later'
+    const [showFAQ, setShowFAQ] = useState(false);
     const timerRef = useRef(null);
     const navigate = useNavigate();
 
@@ -77,12 +78,25 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
         }
     };
 
+    const handleContinue = () => {
+        if (selectedOption === 'now') {
+            // Call immediately
+            handleDemanderAppel();
+        } else {
+            // Schedule for later - could navigate to Calendly or similar
+            // For now, just trigger the call request
+            handleDemanderAppel();
+        }
+    };
+
     const handleAttendre = () => {
         if (timerRef.current) {
             clearTimeout(timerRef.current);
             timerRef.current = null;
         }
         setIsLoading(false);
+        setSelectedOption('now');
+        setShowFAQ(false);
         onClose();
     };
 
@@ -94,23 +108,58 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
         };
     }, []);
 
-    const tabs = [
-        { label: 'Soumission reçu', progress: '100%' },
-        { label: 'Acheter avec Courtika', progress: '0%' },
-        { label: "C'est terminé!", progress: '0%' },
-    ];
+    // Icon components (simple SVG icons)
+    const PhoneIcon = () => (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        </svg>
+    );
+
+    const CalendarIcon = () => (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+    );
+
+    const ArrowRightIcon = () => (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+    );
+
+    const CheckIcon = () => (
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+    );
+
+    const ChevronDownIcon = () => (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    );
+
+    const ChevronUpIcon = () => (
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    );
 
     return (
         <Modal
             open={isOpen}
-            onCancel={onClose}
+            onCancel={handleAttendre}
             footer={null}
-            width={800}
+            width={680}
             centered
-            closable={false}
+            closable={true}
             className={styles.courtikaModal}
         >
-            <div className={styles.modalContent}>
+            <div className={styles.modalContainer}>
                 {isLoading && (
                     <div className={styles.loadingOverlay}>
                         <div className={styles.loadingContent}>
@@ -123,54 +172,180 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
                         </div>
                     </div>
                 )}
-                {/* Progress Bar */}
-                <div className={isLoading ? styles.contentHidden : ''}>
-                    <TabCustomProgressBar 
-                        tabs={tabs}
-                        activeKey="1"
-                        style={{padding: '29px 60px'}}
-                        progressPercentage={33}
-                    />
-                </div>
 
-                {/* Modal Body */}
-                <div className={`${styles.modalBody} ${isLoading ? styles.contentHidden : ''}`}>
-                    <h2 className={styles.modalTitle}>
-                        Achetez au téléphone avec Courtika
-                    </h2>
+                <div className={`${styles.mainCard} ${isLoading ? styles.contentHidden : ''}`}>
+                    {/* Header */}
+                    <div className={styles.cardHeader}>
+                        {/* Logo Transition */}
+                        <div className={styles.logoTransition}>
+                            <div className={styles.logoBox}>
+                                <img 
+                                    src="/images/norga-blue-logo.png" 
+                                    alt="Norga" 
+                                    className={styles.logoImage}
+                                />
+                            </div>
+                            
+                            <div className={styles.animatedDots}>
+                                <div className={styles.dot} style={{ animationDelay: '0ms' }}></div>
+                                <div className={styles.dot} style={{ animationDelay: '300ms' }}></div>
+                                <div className={styles.dot} style={{ animationDelay: '600ms' }}></div>
+                            </div>
+                            
+                            <div className={styles.logoBoxHighlight}>
+                                <img 
+                                    src="/images/courtika-assurances-inc.png" 
+                                    alt="Courtika" 
+                                    className={styles.logoImage}
+                                />
+                            </div>
+                        </div>
 
-                    <p className={styles.modalDescription}>
-                        Norga collabore avec Courtika, courtier en assurance de dommages certifié à l'AMF. Courtika peut répondre à vos questions, vérifier vos informations et vous aider à finaliser l'achat de votre assurance. <strong>Cliquez sur « Demander un appel » pour continuer.</strong>
-                    </p>
-
-                    <p className={styles.modalSubtitle}>
-                        Courtier en assurance de dommages certifié à l'AMF:
-                    </p>
-
-                    <div className={styles.logoContainer}>
-                        <img 
-                            src="/images/courtika-assurances-inc.png" 
-                            alt="Courtika" 
-                            className={styles.courtikaLogo}
-                        />
+                        <h1 className={styles.mainTitle}>
+                            Finalisez votre achat avec Courtika
+                        </h1>
+                        <p className={styles.mainDescription}>
+                            Norga collabore avec Courtika, cabinet en assurance de dommages certifié à l'AMF. Courtika peut répondre à vos questions, vérifier vos informations et vous aider à finaliser l'achat de votre assurance.
+                        </p>
                     </div>
-                {/* Footer Buttons */}
-                <div className={styles.modalFooter}>
-                    <button 
-                        className={styles.primaryButton}
-                        onClick={handleDemanderAppel}
-                    >
-                        Demander un appel
-                    </button>
-                    <button 
-                        className={styles.secondaryButton}
-                        onClick={handleAttendre}
-                    >
-                        Attendre
-                    </button>
-                </div>
-                </div>
 
+                    {/* Content */}
+                    <div className={styles.cardContent}>
+                        {/* Selection Summary */}
+                        {selectedQuote && (
+                            <div className={styles.selectionSummary}>
+                                <div className={styles.summaryLeft}>
+                                    <div className={styles.insurerLogoBox}>
+                                        <img 
+                                            src={selectedQuote.logo} 
+                                            alt={selectedQuote.insurerName}
+                                            className={styles.insurerLogo}
+                                        />
+                                    </div>
+                                    <div>
+                                        <p className={styles.summaryLabel}>Votre sélection</p>
+                                        <p className={styles.summaryInsurer}>{selectedQuote.insurerName}</p>
+                                    </div>
+                                </div>
+                                <div className={styles.summaryRight}>
+                                    <p className={styles.summaryPrice}>{selectedQuote.monthlyPrice}$/mois</p>
+                                    {selectedQuote.yearlyPrice && (
+                                        <p className={styles.summaryOldPrice}>{selectedQuote.yearlyPrice}$/an</p>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Question */}
+                        <h2 className={styles.questionTitle}>
+                            Comment souhaitez-vous être contacté ?
+                        </h2>
+
+                        {/* Options */}
+                        <div className={styles.optionsContainer}>
+                            {/* Option 1 - Call Now */}
+                            <button
+                                onClick={() => setSelectedOption('now')}
+                                className={`${styles.optionButton} ${selectedOption === 'now' ? styles.optionSelected : ''}`}
+                            >
+                                <div className={styles.optionContent}>
+                                    <div className={`${styles.radioButton} ${selectedOption === 'now' ? styles.radioSelected : ''}`}>
+                                        {selectedOption === 'now' && <div className={styles.radioInner} />}
+                                    </div>
+
+                                    <div className={`${styles.iconBox} ${selectedOption === 'now' ? styles.iconBoxActive : ''}`}>
+                                        <PhoneIcon />
+                                    </div>
+                                    
+                                    <div className={styles.optionText}>
+                                        <h3 className={styles.optionTitle}>Appeler maintenant</h3>
+                                        <p className={styles.optionDescription}>Ligne d'appel prioritaire</p>
+                                    </div>
+
+                                    {selectedOption === 'now' && (
+                                        <div className={styles.onlineIndicator}>
+                                            <div className={styles.pulsingDot}></div>
+                                            <span className={styles.onlineText}>5 courtiers en ligne</span>
+                                        </div>
+                                    )}
+                                </div>
+                            </button>
+
+                            {/* Option 2 - Schedule Later */}
+                            <button
+                                onClick={() => setSelectedOption('later')}
+                                className={`${styles.optionButton} ${selectedOption === 'later' ? styles.optionSelected : ''}`}
+                            >
+                                <div className={styles.optionContent}>
+                                    <div className={`${styles.radioButton} ${selectedOption === 'later' ? styles.radioSelected : ''}`}>
+                                        {selectedOption === 'later' && <div className={styles.radioInner} />}
+                                    </div>
+
+                                    <div className={`${styles.iconBox} ${selectedOption === 'later' ? styles.iconBoxActive : ''}`}>
+                                        <CalendarIcon />
+                                    </div>
+                                    
+                                    <div className={styles.optionText}>
+                                        <h3 className={styles.optionTitle}>Planifier un appel plus tard</h3>
+                                        <p className={styles.optionDescription}>Choisissez votre créneau</p>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+
+                        {/* CTA Button */}
+                        <button 
+                            className={styles.ctaButton}
+                            onClick={handleContinue}
+                        >
+                            {selectedOption === 'now' ? 'Appeler maintenant' : 'Continuer'}
+                            <ArrowRightIcon />
+                        </button>
+
+                        {/* Trust Signals */}
+                        <div className={styles.trustSignals}>
+                            <div className={styles.trustItem}>
+                                <CheckIcon />
+                                <span>Certifié AMF</span>
+                            </div>
+                            <div className={styles.trustItem}>
+                                <CheckIcon />
+                                <span>100% gratuit</span>
+                            </div>
+                            <div className={styles.trustItem}>
+                                <CheckIcon />
+                                <span>Sans engagement</span>
+                            </div>
+                        </div>
+
+                        {/* FAQ Toggle */}
+                        <button
+                            onClick={() => setShowFAQ(!showFAQ)}
+                            className={styles.faqToggle}
+                        >
+                            Questions fréquentes
+                            {showFAQ ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                        </button>
+
+                        {/* FAQ Content */}
+                        {showFAQ && (
+                            <div className={styles.faqContent}>
+                                <div className={styles.faqItem}>
+                                    <p className={styles.faqQuestion}>Que se passe-t-il pendant l'appel ?</p>
+                                    <p className={styles.faqAnswer}>Le courtier vérifie vos informations et finalise votre contrat (~15 min).</p>
+                                </div>
+                                <div className={styles.faqItem}>
+                                    <p className={styles.faqQuestion}>Le prix va-t-il changer ?</p>
+                                    <p className={styles.faqAnswer}>Le prix affiché est une estimation. Le courtier confirmera le prix final après vérification.</p>
+                                </div>
+                                <div className={styles.faqItem}>
+                                    <p className={styles.faqQuestion}>Puis-je annuler ?</p>
+                                    <p className={styles.faqAnswer}>Oui, vous pouvez annuler ou modifier à tout moment sans frais.</p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div>
         </Modal>
     );
