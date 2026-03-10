@@ -229,6 +229,62 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 					</Link>
 				),
 			},
+			{
+				key: 'call-confirmation',
+				selectPaths: ['/call-confirmation'],
+				icon: (
+					<Link to='/call-confirmation'>
+						<InfoCircle />
+					</Link>
+				),
+				label: (
+					<Link to='/call-confirmation' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Call Confirmation
+					</Link>
+				),
+			},
+			{
+				key: 'fallback-no-quotes',
+				selectPaths: ['/fallback-no-quotes'],
+				icon: (
+					<Link to='/fallback-no-quotes'>
+						<InfoCircle />
+					</Link>
+				),
+				label: (
+					<Link to='/fallback-no-quotes' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Fallback No Quotes
+					</Link>
+				),
+			},
+			{
+				key: 'schedule-call',
+				selectPaths: ['/schedule-call'],
+				icon: (
+					<Link to='/schedule-call'>
+						<InfoCircle />
+					</Link>
+				),
+				label: (
+					<Link to='/schedule-call' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Schedule Call
+					</Link>
+				),
+			},
+			{
+				key: 'schedule-confirmation',
+				selectPaths: ['/schedule-confirmation'],
+				icon: (
+					<Link to='/schedule-confirmation'>
+						<InfoCircle />
+					</Link>
+				),
+				label: (
+					<Link to='/schedule-confirmation' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Schedule Confirmation
+					</Link>
+				),
+			},
 			// {
 			// 	key: 'complete-form',
 			// 	selectPaths: ['/question'],
