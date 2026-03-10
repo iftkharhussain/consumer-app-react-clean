@@ -1,0 +1,52 @@
+.container {
+  max-width: 1000px;
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 24px;
+  align-self: flex-start;
+  transition: color 0.2s ease;
+}
+
+.backButton:hover {
+  color: #111827;
+}
+
+.backIcon {
+  font-size: 14px;
+  margin-right: 4px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.calendlyPlaceholder {
+  background-color: #d1d5db;
+  flex: 1;
+  border-radius: 8px;
+  width: 100%;
+  min-height: 400px;
+}
