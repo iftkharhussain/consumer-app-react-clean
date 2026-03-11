@@ -1,0 +1,466 @@
+.fallbackContainer {
+  max-width: 800px;
+  padding: 40px 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: #333;
+}
+
+.headerSection {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.warningIconWrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #fff4e5;
+  border: 1px solid #ffdebc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+}
+
+.warningIcon {
+  font-size: 28px;
+  color: #ed6c02;
+}
+
+.mainTitle {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #1a1a1a;
+}
+
+.subTitle {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.actionCard {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.cardTitle {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #1a1a1a;
+}
+
+.statusSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.courtikaLogo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e5e7eb;
+  padding: 8px 16px;
+  border-radius: 8px;
+  height: 48px;
+  background-color: white;
+}
+
+.courtikaImageLogo {
+  max-width: 140px;
+  max-height: 28px;
+  object-fit: contain;
+}
+
+.statusInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #e6f4ea;
+  color: #137333;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #137333;
+}
+
+.statusText {
+  font-size: 13px;
+  color: #666;
+  margin: 4px 0 0 0;
+}
+
+.alertBox {
+  background-color: #f3f4fd;
+  border: 1px solid #e0e4f8;
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.alertIcon {
+  font-size: 20px;
+  color: #3b5bdb;
+  margin-top: 2px;
+}
+
+.alertContent {
+  flex: 1;
+}
+
+.alertTitle {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #1f01c8;
+}
+
+.alertText {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.benefitsSection {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 32px;
+  border: 1px solid #e5e7eb;
+}
+
+.benefitsTitle {
+  font-weight: 600;
+  font-size: 15px;
+  margin: 0 0 16px 0;
+  color: #1a1a1a;
+}
+
+.benefitsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.benefitsList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+.checkIcon {
+  color: #1f01c8;
+  font-size: 16px;
+  margin-top: 2px;
+}
+
+.primaryButton {
+  width: 100%;
+  height: 52px;
+  border-radius: 8px;
+  background-color: #1f01c8 !important;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: white !important;
+  border: none;
+}
+
+.primaryButton:hover {
+  background-color: #18009e !important;
+}
+
+.footerNote {
+  text-align: center;
+  font-size: 13px;
+  color: #888;
+  margin: 16px 0 0 0;
+}
+
+.aboutCard {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 32px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.aboutTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #1a1a1a;
+}
+
+.aboutText {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  margin: 0 0 24px 0;
+}
+
+.certificationSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.amfLogoPlaceholder {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.amfImageLogo {
+  max-width: 120px;
+  max-height: 48px;
+  object-fit: contain;
+}
+
+.certText {
+  display: flex;
+  flex-direction: column;
+}
+
+.certTitle {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 2px 0;
+  color: #1a1a1a;
+}
+
+.certSubtitle {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+}
+
+/* Submitted State Styles */
+
+.successBanner {
+  background-color: #eaf8f1;
+  border: 1px solid #d0f0db;
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.successIcon {
+  font-size: 20px;
+  color: #137333;
+  margin-top: 2px;
+}
+
+.successContent {
+  flex: 1;
+}
+
+.successTitle {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #137333;
+}
+
+.successText {
+  font-size: 14px;
+  color: #137333;
+  margin: 0;
+}
+
+.submittedCardTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 16px 0;
+  text-align: left;
+}
+
+.statusSectionLeft {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 24px;
+}
+
+.infoList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.infoList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.infoIcon {
+  color: #6b7280;
+  font-size: 18px;
+  margin-top: 2px;
+}
+
+.infoText {
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.infoLink {
+  display: block;
+  font-size: 13px;
+  color: #1f01c8;
+  text-decoration: none;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.infoLink:hover {
+  text-decoration: underline;
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.secondaryOutlineButton {
+  width: 100%;
+  height: 52px;
+  border-radius: 8px;
+  background-color: white !important;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #374151 !important;
+  border: 1px solid #d1d5db !important;
+  box-shadow: none !important;
+}
+
+.secondaryOutlineButton:hover {
+  background-color: #f9fafb !important;
+  color: #111827 !important;
+}
+
+/* --- Mobile Responsive Optimizations --- */
+@media (max-width: 768px) {
+  .fallbackContainer {
+    padding: 24px 16px;
+  }
+
+  .actionCard, .aboutCard, .benefitsSection {
+    padding: 16px 12px;
+  }
+
+  .warningIconWrapper {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+
+  .warningIcon {
+    font-size: 24px;
+  }
+
+  .mainTitle {
+    font-size: 22px;
+  }
+
+  .subTitle {
+    font-size: 14px;
+  }
+
+  .cardTitle, .submittedCardTitle {
+    font-size: 18px;
+  }
+
+  .statusSection, .statusSectionLeft {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .courtikaLogo {
+    width: 100%;
+    max-width: 200px;
+  }
+
+  .alertBox {
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .primaryButton, .secondaryOutlineButton {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .aboutTitle, .benefitsTitle {
+    font-size: 16px;
+  }
+
+  .benefitsList li, .infoText {
+    font-size: 13px;
+  }
+
+  .certificationSection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .successBanner {
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .amfImageLogo {
+    max-width: 100px;
+  }
+}

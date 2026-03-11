@@ -1,0 +1,543 @@
+.fallbackContainer {
+  max-width: 1000px;
+  padding: 40px 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: #333;
+}
+
+.actionCard {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.successBanner {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #dcfce7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+}
+
+.successIcon {
+  font-size: 32px;
+  color: #22c55e;
+}
+
+.mainTitle {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #111827;
+}
+
+.phoneNumberHighlight {
+  color: #1f01c8;
+}
+
+.subTitle {
+  font-size: 16px;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0 auto 40px;
+  max-width: 600px;
+}
+
+.cardLayout {
+  display: flex;
+  gap: 24px;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .cardLayout {
+    flex-direction: column;
+  }
+}
+
+.selectionCard {
+  flex: 1;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 24px;
+}
+
+.brokerCard {
+  flex: 1;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 24px;
+}
+
+.cardHeading {
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.insurerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.insurerLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.insurerLogoBox {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.insurerLogo {
+  max-width: 44px;
+  max-height: 44px;
+  object-fit: contain;
+}
+
+.insurerName {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.priceContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.priceMain {
+  font-size: 24px;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.priceOld {
+  font-size: 14px;
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+
+.discountBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #eef2ff;
+  color: #4f46e5;
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 1px solid #c7d2fe;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.protectionsTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 16px;
+}
+
+.protectionsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.protectionsList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 15px;
+  color: #4b5563;
+  margin-bottom: 8px;
+}
+
+.checkIcon {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.statusSectionLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.courtikaLogo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e5e7eb;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background-color: white;
+  min-width: 140px;
+  height: 56px;
+}
+
+.courtikaImageLogo {
+  max-width: 110px;
+  max-height: 28px;
+  object-fit: contain;
+}
+
+.statusInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #dcfce7;
+  color: #166534;
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #166534;
+}
+
+.infoList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.infoList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.infoIcon {
+  color: #6b7280;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.infoText {
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.infoLink {
+  display: block;
+  font-size: 13px;
+  color: #1f01c8;
+  text-decoration: none;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.infoLink:hover {
+  text-decoration: underline;
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.primaryButton {
+  width: 100%;
+  height: 48px;
+  border-radius: 8px;
+  background-color: #1f01c8 !important;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  color: white !important;
+  border: none;
+}
+
+.buttonIconLeft {
+  margin-right: 8px;
+}
+
+.buttonIconRight {
+  margin-left: 8px;
+}
+
+.primaryButton:hover {
+  background-color: #18009e !important;
+}
+
+.secondaryOutlineButton {
+  width: 100%;
+  height: 48px;
+  border-radius: 8px;
+  background-color: white !important;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #374151 !important;
+  border: 1px solid #d1d5db !important;
+  box-shadow: none !important;
+}
+
+.secondaryOutlineButton:hover {
+  background-color: #f9fafb !important;
+  color: #111827 !important;
+}
+
+/* About Card */
+.aboutCard {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 32px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  text-align: left;
+}
+
+.aboutTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #111827;
+}
+
+.aboutText {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+}
+
+.websiteLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #1f01c8;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  margin-bottom: 24px;
+}
+
+.websiteLink:hover {
+  text-decoration: underline;
+}
+
+.benefitsBox {
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.separator {
+  border: 0;
+  border-top: 1px solid #f3f4f6;
+  margin: 0 0 24px 0;
+}
+
+.benefitsBoxTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.benefitsBoxList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.benefitsBoxList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.benefitsBoxIcon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.certificationSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.amfLogoPlaceholder {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.amfImageLogo {
+  max-width: 120px;
+  max-height: 48px;
+  object-fit: contain;
+}
+
+.certText {
+  display: flex;
+  flex-direction: column;
+}
+
+.certTitle {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 2px 0;
+  color: #111827;
+}
+
+.certSubtitle {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* --- Mobile Responsive Optimizations --- */
+@media (max-width: 768px) {
+  .fallbackContainer {
+    padding: 24px 16px;
+  }
+
+  .actionCard, .aboutCard {
+    padding: 16px 12px;
+  }
+
+  .successBanner {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+
+  .successIcon {
+    font-size: 24px;
+  }
+
+  .mainTitle {
+    font-size: 22px;
+  }
+
+  .subTitle {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .selectionCard, .brokerCard {
+    padding: 12px;
+  }
+
+  .insurerName {
+    font-size: 18px;
+  }
+
+  .priceMain {
+    font-size: 22px;
+  }
+
+  .insurerRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .priceContainer {
+    align-items: flex-start;
+  }
+
+  .statusSectionLeft {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .infoList li {
+    font-size: 14px;
+  }
+
+  .infoText {
+    font-size: 13px;
+  }
+
+  .primaryButton, .secondaryOutlineButton {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .aboutTitle {
+    font-size: 16px;
+  }
+
+  .benefitsBox {
+    padding: 16px;
+  }
+
+  .benefitsBoxList li {
+    font-size: 13px;
+  }
+
+  .certificationSection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .amfImageLogo {
+    max-width: 100px;
+  }
+}

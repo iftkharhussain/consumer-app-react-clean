@@ -94,13 +94,22 @@ const AppLayout = ({ heading, children, _style }) => {
             <ChevronRightDouble style={{ color: '#697586' }} />
           </div>
         }
-        <Content style={{ marginLeft: collapsed ? 80 : 292 }} >
+        <Content style={{ 
+          marginLeft: isMobileView ? 0 : (collapsed ? 80 : 300), 
+          minWidth: 0, // Helps with deeply nested flex/overflow elements
+          width: isMobileView ? '100%' : `calc(100% - ${collapsed ? 80 : 300}px)`, 
+        }} >
           <div
             className='main-body-wrapper'
             style={{
               background: '#F8FAFC',
-              padding: _style?.contentPadding ?? '32px 32px 0',
+              padding: _style?.contentPadding ?? (isMobileView ? '16px 0 0' : '32px 32px 0'),
               position: 'relative',
+              overflowX: 'auto', // Allows scrolling internal contents instead of globally overlapping the sidebar
+              minHeight: '100vh',
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100%',
               ...(_style?.wrapper || {}),
             }}
           >

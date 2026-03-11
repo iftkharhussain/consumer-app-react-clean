@@ -34,6 +34,11 @@ const ForgotPassword = React.lazy(() => import('./pages/forgotPassword/index'));
 const QuestionPage = React.lazy(() => import('./pages/question/index'));
 const Logout = React.lazy(() => import('./pages/logout/index'));
 const OrderProduct = React.lazy(() => import('./pages/product-order'));
+const FallbackNoQuotes = React.lazy(() => import('./pages/fallbackNoQuotes/index'));
+const ScheduleCall = React.lazy(() => import('./pages/scheduleCall/index'));
+const CallConfirmation = React.lazy(() => import('./pages/callConfirmation/index'));
+const ScheduleConfirmation = React.lazy(() => import('./pages/scheduleConfirmation/index'));
+const FifteenMinutesRedirect = React.lazy(() => import('./pages/fifteenMinutesRedirect/index'));
 const Results = React.lazy(() => import('./pages/results/index'));
 const PrivateWrapper = ({ auth: { isAuthenticated }, heading, _style }) => {
 	return isAuthenticated === true ? (
@@ -116,6 +121,13 @@ function App(props) {
 							<Route path="/question" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
 							<Route path="/overview" element={<Suspense fallback={<div>Loading...</div>}><Overview /></Suspense>} />
 							<Route path="/car-insurance" element={<Suspense fallback={<div>Loading...</div>}><CarInsurance /></Suspense>} />
+							<Route path="/car-insurance/product-order/:userProductId?" element={<Suspense fallback={<div>Loading...</div>}><OrderProduct /></Suspense>} />
+							<Route path="/fallback-no-quotes" element={<Suspense fallback={<div>Loading...</div>}><FallbackNoQuotes /></Suspense>} />
+							<Route path="/schedule-call" element={<Suspense fallback={<div>Loading...</div>}><ScheduleCall /></Suspense>} />
+							<Route path="/call-confirmation" element={<Suspense fallback={<div>Loading...</div>}><CallConfirmation /></Suspense>} />
+							<Route path="/schedule-confirmation" element={<Suspense fallback={<div>Loading...</div>}><ScheduleConfirmation /></Suspense>} />
+							<Route path="/15-minutes-redirect" element={<Suspense fallback={<div>Loading...</div>}><FifteenMinutesRedirect /></Suspense>} />
+							<Route path="/question-public" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
 							<Route path="/car-insurance/product-order/:userProductId?" element={<Suspense fallback={<div>Loading...</div>}><OrderProduct /></Suspense>} />					<Route path="/results" element={<Suspense fallback={<div>Loading...</div>}><Results /></Suspense>} />							<Route path="/question-public" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
 							<Route path="/logout" element={<Logout />} />
 						</Route>
