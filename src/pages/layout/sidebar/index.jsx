@@ -285,6 +285,20 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 					</Link>
 				),
 			},
+			{
+				key: '15-minutes-redirect',
+				selectPaths: ['/15-minutes-redirect'],
+				icon: (
+					<Link to='/15-minutes-redirect'>
+						<InfoCircle />
+					</Link>
+				),
+				label: (
+					<Link to='/15-minutes-redirect' style={{ color: 'inherit', textDecoration: 'none' }}>
+						15 Minutes Redirect
+					</Link>
+				),
+			},
 			// {
 			// 	key: 'complete-form',
 			// 	selectPaths: ['/question'],
