@@ -34,6 +34,7 @@ const ForgotPassword = React.lazy(() => import('./pages/forgotPassword/index'));
 const QuestionPage = React.lazy(() => import('./pages/question/index'));
 const Logout = React.lazy(() => import('./pages/logout/index'));
 const OrderProduct = React.lazy(() => import('./pages/product-order'));
+const Results = React.lazy(() => import('./pages/results/index'));
 const PrivateWrapper = ({ auth: { isAuthenticated }, heading, _style }) => {
 	return isAuthenticated === true ? (
 		<Layout _style={_style}>
@@ -115,8 +116,7 @@ function App(props) {
 							<Route path="/question" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
 							<Route path="/overview" element={<Suspense fallback={<div>Loading...</div>}><Overview /></Suspense>} />
 							<Route path="/car-insurance" element={<Suspense fallback={<div>Loading...</div>}><CarInsurance /></Suspense>} />
-							<Route path="/car-insurance/product-order/:userProductId?" element={<Suspense fallback={<div>Loading...</div>}><OrderProduct /></Suspense>} />
-							<Route path="/question-public" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
+							<Route path="/car-insurance/product-order/:userProductId?" element={<Suspense fallback={<div>Loading...</div>}><OrderProduct /></Suspense>} />					<Route path="/results" element={<Suspense fallback={<div>Loading...</div>}><Results /></Suspense>} />							<Route path="/question-public" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
 							<Route path="/logout" element={<Logout />} />
 						</Route>
 						{/* Messages, Notifications, and Settings routes with no page padding */}
