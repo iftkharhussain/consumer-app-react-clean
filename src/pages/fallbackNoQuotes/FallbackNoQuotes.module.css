@@ -387,3 +387,80 @@
   background-color: #f9fafb !important;
   color: #111827 !important;
 }
+
+/* --- Mobile Responsive Optimizations --- */
+@media (max-width: 768px) {
+  .fallbackContainer {
+    padding: 24px 16px;
+  }
+
+  .actionCard, .aboutCard, .benefitsSection {
+    padding: 16px 12px;
+  }
+
+  .warningIconWrapper {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+
+  .warningIcon {
+    font-size: 24px;
+  }
+
+  .mainTitle {
+    font-size: 22px;
+  }
+
+  .subTitle {
+    font-size: 14px;
+  }
+
+  .cardTitle, .submittedCardTitle {
+    font-size: 18px;
+  }
+
+  .statusSection, .statusSectionLeft {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .courtikaLogo {
+    width: 100%;
+    max-width: 200px;
+  }
+
+  .alertBox {
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .primaryButton, .secondaryOutlineButton {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .aboutTitle, .benefitsTitle {
+    font-size: 16px;
+  }
+
+  .benefitsList li, .infoText {
+    font-size: 13px;
+  }
+
+  .certificationSection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .successBanner {
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .amfImageLogo {
+    max-width: 100px;
+  }
+}

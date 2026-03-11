@@ -448,3 +448,96 @@
   color: #6b7280;
   margin: 0;
 }
+
+/* --- Mobile Responsive Optimizations --- */
+@media (max-width: 768px) {
+  .fallbackContainer {
+    padding: 24px 16px;
+  }
+
+  .actionCard, .aboutCard {
+    padding: 16px 12px;
+  }
+
+  .successBanner {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+
+  .successIcon {
+    font-size: 24px;
+  }
+
+  .mainTitle {
+    font-size: 22px;
+  }
+
+  .subTitle {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .selectionCard, .brokerCard {
+    padding: 12px;
+  }
+
+  .insurerName {
+    font-size: 18px;
+  }
+
+  .priceMain {
+    font-size: 22px;
+  }
+
+  .insurerRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .priceContainer {
+    align-items: flex-start;
+  }
+
+  .statusSectionLeft {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .infoList li {
+    font-size: 14px;
+  }
+
+  .infoText {
+    font-size: 13px;
+  }
+
+  .primaryButton, .secondaryOutlineButton {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .aboutTitle {
+    font-size: 16px;
+  }
+
+  .benefitsBox {
+    padding: 16px;
+  }
+
+  .benefitsBoxList li {
+    font-size: 13px;
+  }
+
+  .certificationSection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .amfImageLogo {
+    max-width: 100px;
+  }
+}

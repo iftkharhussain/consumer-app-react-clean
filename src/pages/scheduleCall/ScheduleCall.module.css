@@ -50,3 +50,13 @@
   width: 100%;
   min-height: 400px;
 }
+
+/* --- Mobile Responsive Optimizations --- */
+@media (max-width: 768px) {
+  .container {
+    padding: 24px 16px;
+  }
+  .card {
+    padding: 16px 12px;
+  }
+}
