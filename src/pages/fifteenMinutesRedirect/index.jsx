@@ -1,11 +1,18 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { PageContent } from 'components';
 import { Button } from 'antd';
-import { ClockCircleOutlined, SearchOutlined, CheckOutlined } from '@ant-design/icons';
+import { ClockCircleOutlined, SearchOutlined, CheckOutlined, CalendarOutlined, InfoCircleOutlined, PhoneOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import styles from './FifteenMinutesRedirect.module.css';
 
 const FifteenMinutesRedirect = () => {
   const initialized = useRef(false);
+
+  const navigate = useNavigate();
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isScheduleOpen, setIsScheduleOpen] = useState(false);
 
   useEffect(() => {
     if (!initialized.current) {
@@ -14,12 +21,20 @@ const FifteenMinutesRedirect = () => {
     }
   }, []);
 
+  const handleSubmit = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setIsSubmitted(true);
+    }, 1500);
+  };
+
   return (
     <PageContent pageType="overview">
       <div className={styles.container}>
         
         {/* Header Section */}
-        <div className={styles.successBanner}>
+        <div className={styles.clockIconWrapper}>
           <ClockCircleOutlined className={styles.clockIcon} />
         </div>
         
@@ -36,7 +51,9 @@ const FifteenMinutesRedirect = () => {
 
         {/* Action Card */}
         <div className={styles.card}>
-          <h2 className={styles.cardTitleCenter}>Voulez-vous que Courtika continue à magasiner pour vous?</h2>
+          {!isSubmitted ? (
+            <>
+              <h2 className={styles.cardTitleCenter}>Voulez-vous que Courtika continue à magasiner pour vous?</h2>
           
           <div className={styles.brokerHeader}>
             <div className={styles.courtikaLogoBox}>
@@ -77,12 +94,67 @@ const FifteenMinutesRedirect = () => {
             </ul>
           </div>
 
-          <Button type="primary" className={styles.primaryButton} size="large">
-            <CheckOutlined /> Oui, je veux que Courtika magasine pour moi
-          </Button>
-          <div className={styles.buttonSubtext}>
-            Sans frais • Sans engagement • Vous gardez le contrôle
-          </div>
+              <Button type="primary" className={styles.primaryButton} size="large" onClick={handleSubmit} loading={isLoading}>
+                {!isLoading && <CheckOutlined />} Oui, je veux que Courtika magasine pour moi
+              </Button>
+              <div className={styles.buttonSubtext}>
+                Sans frais • Sans engagement • Vous gardez le contrôle
+              </div>
+            </>
+          ) : (
+            <>
+              <div className={styles.successBanner}>
+                <CheckOutlined className={styles.successIcon} />
+                <div className={styles.successContent}>
+                  <h3 className={styles.successTitle}>Vos informations ont été transmises à Courtika!</h3>
+                  <p className={styles.successText}>Un courtier attend <strong>votre appel</strong> pour vous aider à trouver le meilleur prix</p>
+                </div>
+              </div>
+
+              <h2 className={styles.submittedCardTitle}>Coordonnées de Courtika:</h2>
+              
+              <div className={styles.statusSectionLeft}>
+                <div className={styles.courtikaLogoBoxLeft}>
+                  <img src="/images/courtika-assurances-inc.png" alt="Courtika" className={styles.courtikaImageLogo} />
+                </div>
+                <div className={styles.statusInfoLeft}>
+                  <div className={styles.statusBadge}>
+                    <div className={styles.statusDot}></div>
+                    Disponible maintenant
+                  </div>
+                  <div className={styles.statusSubtitleLeft}>Courtiers certifiés prêts à vous aider</div>
+                </div>
+              </div>
+
+              <ul className={styles.infoList}>
+                <li>
+                  <CalendarOutlined className={styles.infoIcon} />
+                  <div>
+                    <span className={styles.infoText}>Ouvert aujourd'hui de 8:30 - 16:30</span>
+                    <a href="#" className={styles.infoLink} onClick={(e) => { e.preventDefault(); setIsScheduleOpen(true); }}>Voir l'horaire complet</a>
+                  </div>
+                </li>
+                <li>
+                  <ClockCircleOutlined className={styles.infoIcon} />
+                  <span className={styles.infoText}>Durée de l'appel: environ 15 min</span>
+                </li>
+                <li>
+                  <InfoCircleOutlined className={styles.infoIcon} />
+                  <span className={styles.infoText}>Ayez votre permis de conduire et les papiers d'immatriculation du véhicule à portée de main.</span>
+                </li>
+              </ul>
+
+              <div className={styles.actionButtons}>
+                <Button type="primary" className={styles.primaryButton} size="large" href="tel:+14507629240">
+                  <PhoneOutlined className={styles.phoneIcon} /> Appeler maintenant: 1 (450) 762-9240
+                </Button>
+                
+                <Button className={styles.secondaryOutlineButton} size="large" onClick={() => navigate('/schedule-call')}>
+                  <CalendarOutlined /> Planifier l'appel plus tard
+                </Button>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Why clients choose Courtika Card */}
@@ -146,6 +218,7 @@ const FifteenMinutesRedirect = () => {
         </div>
         
       </div>
+      <ScheduleModal isOpen={isScheduleOpen} onClose={() => setIsScheduleOpen(false)} />
     </PageContent>
   );
 };

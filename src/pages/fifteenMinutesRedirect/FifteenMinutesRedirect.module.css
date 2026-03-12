@@ -7,7 +7,7 @@
   text-align: center;
 }
 
-.successBanner {
+.clockIconWrapper {
   width: 64px;
   height: 64px;
   border-radius: 50%;
@@ -115,7 +115,20 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #166534;
+  background-color: oklch(62.7% .194 149.214);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 oklch(62.7% .194 149.214 / 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px oklch(62.7% .194 149.214 / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 oklch(62.7% .194 149.214 / 0);
+  }
 }
 
 .statusSubtitle {
@@ -192,6 +205,156 @@
   color: #6b7280;
   text-align: center;
   margin-top: 12px;
+}
+
+/* Submitted State Styles */
+
+.successBanner {
+  background-color: #eaf8f1;
+  border: 1px solid #d0f0db;
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.successIcon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  font-size: 20px;
+  color: #137333;
+  margin-top: 2px;
+}
+
+.successContent {
+  flex: 1;
+}
+
+.successTitle {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #137333;
+}
+
+.successText {
+  font-size: 14px;
+  color: #137333;
+  margin: 0;
+}
+
+.submittedCardTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 16px 0;
+  text-align: left;
+}
+
+.statusSectionLeft {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 24px;
+}
+
+.courtikaLogoBoxLeft {
+  border: 1px solid #e5e7eb;
+  padding: 8px 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+}
+
+.statusInfoLeft {
+  display: flex;
+  flex-direction: column;
+}
+
+.statusSubtitleLeft {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+.infoList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.infoList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.infoIcon {
+  color: #6b7280;
+  font-size: 18px;
+  margin-top: 2px;
+}
+
+.infoText {
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.infoLink {
+  display: block;
+  font-size: 13px;
+  color: #1f01c8;
+  text-decoration: none;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.infoLink:hover {
+  text-decoration: underline;
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.secondaryOutlineButton {
+  width: 100%;
+  min-height: 52px;
+  height: auto !important;
+  padding: 12px 16px;
+  white-space: normal !important;
+  border-radius: 8px;
+  background-color: white !important;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #374151 !important;
+  border: 1px solid #d1d5db !important;
+  box-shadow: none !important;
+}
+
+.secondaryOutlineButton:hover {
+  background-color: #f9fafb !important;
+  color: #111827 !important;
+}
+
+.phoneIcon {
+  transform: scaleX(-1);
 }
 
 /* Second Card */
@@ -310,7 +473,7 @@
     width: 100%;
   }
 
-  .successBanner {
+  .clockIconWrapper {
     width: 48px;
     height: 48px;
     margin-bottom: 16px;
@@ -345,32 +508,39 @@
     word-break: break-word;
   }
 
-  .cardTitleCenter {
+  .cardTitleCenter, .submittedCardTitle {
     font-size: 16px;
+    text-align: center;
   }
 
-  .brokerHeader {
+  .brokerHeader, .statusSectionLeft {
     flex-direction: column;
     align-items: center;
     gap: 12px;
   }
 
-  .courtikaLogoBox {
+  .courtikaLogoBox, .courtikaLogoBoxLeft {
     width: 100%;
     max-width: 100%; /* Better scaling below 200px */
   }
 
-  .statusInfo {
+  .statusInfo, .statusInfoLeft {
     align-items: center;
     text-align: center;
   }
 
-  .primaryButton {
-    height: auto;
-    padding: 12px;
+  .successBanner {
+    padding: 16px;
+    align-items: flex-start;
+  }
+
+  .primaryButton, .secondaryOutlineButton {
+    min-height: 44px;
+    padding: 8px 12px;
     font-size: 14px;
     text-wrap: wrap;
     white-space: normal;
+    height: auto;
   }
 
   .buttonSubtext {
@@ -382,7 +552,7 @@
     font-size: 16px;
   }
 
-  .aboutText {
+  .aboutText, .infoText {
     font-size: 13px;
   }
 

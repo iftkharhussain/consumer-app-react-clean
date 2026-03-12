@@ -233,7 +233,20 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #166534;
+  background-color: oklch(62.7% .194 149.214);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 oklch(62.7% .194 149.214 / 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px oklch(62.7% .194 149.214 / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 oklch(62.7% .194 149.214 / 0);
+  }
 }
 
 .infoList {
