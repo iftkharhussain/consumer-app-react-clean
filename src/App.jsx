@@ -115,7 +115,8 @@ function App(props) {
 							<Route path="/question" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
 							<Route path="/overview" element={<Suspense fallback={<div>Loading...</div>}><Overview /></Suspense>} />
 							<Route path="/car-insurance" element={<Suspense fallback={<div>Loading...</div>}><Results /></Suspense>} />
-							<Route path="/car-insurance/product-order/:userProductId?" element={<Suspense fallback={<div>Loading...</div>}><OrderProduct /></Suspense>} />					<Route path="/results" element={<Suspense fallback={<div>Loading...</div>}><Results /></Suspense>} />							<Route path="/question-public" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
+							<Route path="/car-insurance/product-order/:userProductId?" element={<Suspense fallback={<div>Loading...</div>}><OrderProduct /></Suspense>} />
+							<Route path="/question-public" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
 							<Route path="/logout" element={<Logout />} />
 						</Route>
 						{/* Messages, Notifications, and Settings routes with no page padding */}

@@ -8,6 +8,7 @@ import CustomizeProtections from '../../components/carInsurance/CustomizeProtect
 import LoadingModal from '../../components/loadingModal';
 import CourtikaModal from '../../components/courtikaModal';
 import ResubmitAlert from '../../components/ResubmitAlert';
+import FallbackNoQuotes from '../fallbackNoQuotes';
 import useQuote from '../../hooks/useQuote';
 import { checkPendingOrder } from '../../services/api/productOrderService';
 import { recalculateQuote } from '../../services/api/quoteService';
@@ -340,10 +341,7 @@ const Results = () => {
 
                 {/* Show error state */}
                 {hasFailed && (
-                  <div style={{ textAlign: 'center', padding: '50px' }}>
-                    <p style={{ color: 'red' }}>Une erreur est survenue lors du chargement des soumissions.</p>
-                    <Button type="primary" onClick={refreshQuote}>Réessayer</Button>
-                  </div>
+                  <FallbackNoQuotes />
                 )}
 
                 {/* Show results when data is available */}

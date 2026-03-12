@@ -171,20 +171,6 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 				),
 			},
 			{
-				key: 'results',
-				selectPaths: ['/results'],
-				icon: (
-					<Link to='/results'>
-						<CheckDone01 />
-					</Link>
-				),
-				label: (
-					<Link to='/results' style={{ color: 'inherit', textDecoration: 'none' }}>
-						Results
-					</Link>
-				),
-			},
-			{
 				key: 'advisors',
 				selectPaths: ['/advisors', '/my-advisors'],
 				icon: (
@@ -254,20 +240,6 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 				label: (
 					<Link to='/call-confirmation' style={{ color: 'inherit', textDecoration: 'none' }}>
 						Call Confirmation
-					</Link>
-				),
-			},
-			{
-				key: 'fallback-no-quotes',
-				selectPaths: ['/fallback-no-quotes'],
-				icon: (
-					<Link to='/fallback-no-quotes'>
-						<InfoCircle />
-					</Link>
-				),
-				label: (
-					<Link to='/fallback-no-quotes' style={{ color: 'inherit', textDecoration: 'none' }}>
-						Fallback No Quotes
 					</Link>
 				),
 			},
