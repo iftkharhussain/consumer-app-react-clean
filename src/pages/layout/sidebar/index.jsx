@@ -171,6 +171,20 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 				),
 			},
 			{
+				key: 'results',
+				selectPaths: ['/results'],
+				icon: (
+					<Link to='/results'>
+						<CheckDone01 />
+					</Link>
+				),
+				label: (
+					<Link to='/results' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Results
+					</Link>
+				),
+			},
+			{
 				key: 'advisors',
 				selectPaths: ['/advisors', '/my-advisors'],
 				icon: (

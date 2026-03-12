@@ -1,0 +1,826 @@
+/* Results Page Styles */
+
+.resultsContainer {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+.resultsContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+/* Timer Section */
+.timerSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: #535862;
+}
+
+.timerIcon {
+  font-size: 16px;
+}
+
+.timerText {
+  font-weight: 400;
+}
+
+.timerValue {
+  font-weight: 600;
+  color: #121926;
+}
+
+/* Recommended Card */
+.recommendedCard {
+  margin-bottom: 32px;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.recommendedCard:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.recommendedBadge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(to right, #1a1aba, #2525c5);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(26, 26, 186, 0.3);
+  z-index: 10;
+}
+
+.badgeIcon {
+  font-size: 12px;
+}
+
+.cardContent {
+  display: flex;
+  gap: 32px;
+}
+
+/* Left Column */
+.leftColumn {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.logoContainer {
+  width: 160px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e9eaeb;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.insurerLogo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.priceSection {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.priceDisplay {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+}
+
+.oldPrice {
+  font-size: 20px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-decoration: line-through;
+  margin-right: 4px;
+}
+
+.mainPrice {
+  font-size: 52px;
+  font-weight: 900;
+  color: #1a1aba;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.priceSuffix {
+  font-size: 16px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.discountBadge {
+  background-color: rgba(26, 26, 186, 0.1);
+  color: #1a1aba;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  width: 100%;
+  border: 1px solid rgba(26, 26, 186, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.discountIcon {
+  font-size: 14px;
+}
+
+.savingsText {
+  font-size: 10px;
+  color: #697586;
+  text-align: center;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.billingToggle {
+  display: inline-flex;
+  background-color: #f1f5f9;
+  border-radius: 8px;
+  padding: 4px;
+  gap: 4px;
+  width: 100%;
+}
+
+.toggleButton {
+  flex: 1;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggleButton:hover {
+  color: #1a1aba;
+}
+
+.toggleActive {
+  background-color: white;
+  color: #1a1aba;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Right Column */
+.rightColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(to bottom right, #e8ebff, #f0f3ff, #dce2ff);
+  border-radius: 16px;
+  padding: 32px;
+  margin: -24px -24px -24px 8px;
+}
+
+.recommendedTitle {
+  font-size: 28px;
+  font-weight: 600;
+  color: #121926;
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+
+.highlightText {
+  background: linear-gradient(to right, #1a1aba, #2525c5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 600;
+}
+
+.recommendedDescription {
+  font-size: 14px;
+  color: #535862;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.boldText {
+  font-weight: 600;
+  color: #121926;
+}
+
+.selectButton {
+  background: linear-gradient(to right, #1a1aba, #2525c5);
+  font-weight: 700;
+  font-size: 16px;
+  padding: 16px 24px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(26, 26, 186, 0.3);
+  border: none;
+}
+
+.selectButton:hover {
+  background: linear-gradient(to right, #1515a0, #1d1db0);
+  box-shadow: 0 6px 24px rgba(26, 26, 186, 0.4);
+  transform: scale(1.02);
+}
+
+.selectButton:active {
+  transform: scale(0.99);
+}
+
+/* Protections Card */
+.protectionsCard {
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9eaeb;
+  margin-bottom: 24px;
+}
+
+.protectionsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #121926;
+  margin: 0;
+}
+
+.customizeButton {
+  font-size: 13px;
+  color: #1a1aba;
+  font-weight: 500;
+  padding: 0;
+}
+
+.protectionsList {
+  display: flex;
+  flex-direction: column;
+}
+
+.protectionItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #e9eaeb;
+}
+
+.protectionItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.protectionIcon {
+  color: #10b981;
+  font-size: 16px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.protectionContent {
+  flex: 1;
+}
+
+.protectionRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.protectionInfo {
+  flex: 1;
+}
+
+.protectionTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #121926;
+  margin: 0 0 4px 0;
+}
+
+.protectionDescription {
+  font-size: 12px;
+  color: #535862;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.coverageText {
+  font-size: 13px;
+  color: #697586;
+  white-space: nowrap;
+}
+
+.coverageLabel {
+  font-weight: 400;
+}
+
+.coverageValue {
+  font-weight: 600;
+  color: #121926;
+}
+
+/* Other Insurers Section */
+.otherInsurersSection {
+  margin-bottom: 32px;
+}
+
+.insurersList {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.insurerCard {
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+}
+
+.insurerCard:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.insurerContent {
+  display: flex;
+  align-items:flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.insurerMain {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+}
+
+.insurerLogoWrapper {
+  width: 160px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e9eaeb;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  height: 80px;
+}
+
+.insurerDetails {
+  flex: 1;
+}
+
+.insurerName {
+  font-size: 15px;
+  font-weight: 600;
+  color: #121926;
+  margin: 0 0 8px 0;
+}
+
+.insurerPrice {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.insurerOldPrice {
+  font-size: 16px;
+  color: #94a3b8;
+  text-decoration: line-through;
+  font-weight: 600;
+}
+
+.insurerMainPrice {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1aba;
+  line-height: 1;
+}
+
+.insurerPriceSuffix {
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.alternativePrice {
+  font-size: 11px;
+  color: #697586;
+  margin-left: 8px;
+}
+
+.insurerDiscount {
+  background-color: rgba(26, 26, 186, 0.1);
+  color: #1a1aba;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(26, 26, 186, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.insurerDiscountIcon {
+  font-size: 12px;
+}
+
+.insurerActions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.insurerSelectButton {
+  background: linear-gradient(to right, #1a1aba, #2525c5);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 24px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(26, 26, 186, 0.2);
+  border: none;
+}
+
+.insurerSelectButton:hover {
+  background: linear-gradient(to right, #1515a0, #1d1db0);
+  box-shadow: 0 4px 12px rgba(26, 26, 186, 0.3);
+}
+
+.detailsButton {
+  color: #1a1aba;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0;
+  height: auto;
+}
+
+/* Expanded Details */
+.expandedDetails {
+  margin-top: 16px;
+  padding-top: 16px;
+  background: linear-gradient(to bottom right, #f8fafc, #f1f5f9);
+  padding: 20px;
+  border-radius: 8px;
+  margin: 16px -24px -24px -24px;
+}
+
+.savingsInfo {
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e9eaeb;
+}
+
+.savingsInfo p {
+  font-size: 12px;
+  color: #697586;
+  font-weight: 500;
+  margin: 0;
+}
+
+.expandedProtections {
+}
+
+.expandedTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #121926;
+  margin: 0 0 12px 0;
+}
+
+.expandedProtectionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.expandedProtectionItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.expandedProtectionIcon {
+  color: #10b981;
+  font-size: 16px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.expandedProtectionContent {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.expandedProtectionTitle {
+  font-weight: 600;
+  color: #121926;
+}
+
+.expandedCoverage {
+  color: #697586;
+  white-space: nowrap;
+  font-size: 11px;
+}
+
+.expandedCoverageLabel {
+  font-weight: 400;
+}
+
+.expandedCoverageValue {
+  font-weight: 600;
+  color: #121926;
+}
+
+/* More Insurers Card */
+.moreInsurersCard {
+  background: linear-gradient(to bottom right, #e8ebff, #f0f3ff, #dce2ff);
+  border: 2px solid rgba(26, 26, 186, 0.2);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.moreInsurersCard:hover {
+  border-color: rgba(26, 26, 186, 0.4);
+  box-shadow: 0 4px 16px rgba(26, 26, 186, 0.1);
+}
+
+.moreInsurersContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.moreInsurersMain {
+  display: flex;
+  align-items: stretch;
+  gap: 20px;
+  flex: 1;
+}
+
+.moreInsurersIconWrapper {
+  width: 160px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e9eaeb;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.moreInsurersIcon {
+  text-align: center;
+}
+
+.moreInsurersNumber {
+  font-size: 32px;
+  font-weight: 900;
+  background: linear-gradient(to right, #1a1aba, #2525c5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  display: block;
+}
+
+.moreInsurersLabel {
+  font-size: 9px;
+  color: #1a1aba;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 2px;
+  margin-bottom: 0;
+}
+
+.moreInsurersInfo {
+  flex: 1;
+}
+
+.moreInsurersTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #121926;
+  line-height: 1.3;
+  margin: 0 0 8px 0;
+}
+
+.moreInsurersDescription {
+  font-size: 13px;
+  color: #535862;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.moreInsurersActions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.courtikaButton {
+  background: linear-gradient(to right, #1a1aba, #2525c5);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 24px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(26, 26, 186, 0.2);
+  border: none;
+  white-space: nowrap;
+}
+
+.courtikaButton:hover {
+  background: linear-gradient(to right, #1515a0, #1d1db0);
+  box-shadow: 0 4px 12px rgba(26, 26, 186, 0.3);
+}
+
+.freeText {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* FAQ Section */
+.faqCard {
+  border-radius: 12px;
+  border: 1px solid #e9eaeb;
+  padding: 32px;
+}
+
+.faqHeader {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.faqTitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: #121926;
+  margin: 0 0 8px 0;
+}
+
+.faqSubtitle {
+  font-size: 14px;
+  color: #535862;
+  margin: 0;
+}
+
+.faqCollapse {
+  max-width: 768px;
+  margin: 0 auto;
+  background-color: transparent;
+  border: none;
+}
+
+.faqPanel {
+  border-top: 1px solid #e9eaeb;
+  border-radius: 0 !important;
+  margin-bottom: 0;
+}
+
+.faqPanel:first-child {
+  border-top: none;
+}
+
+.faqAnswer {
+  font-size: 13px;
+  color: #535862;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .cardContent {
+    flex-direction: column;
+  }
+
+  .leftColumn {
+    width: 100%;
+  }
+
+  .rightColumn {
+    margin: 8px -24px -24px -24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .resultsContent {
+    padding: 16px;
+  }
+
+  .cardContent {
+    gap: 16px;
+  }
+
+  .insurerMain {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .insurerLogoWrapper {
+    width: 120px;
+    height: 60px;
+  }
+
+  .insurerContent {
+    flex-direction: column;
+  }
+
+  .insurerActions {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .insurerSelectButton {
+    flex: 1;
+  }
+
+  .moreInsurersContent {
+    flex-direction: column;
+  }
+
+  .moreInsurersMain {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .moreInsurersActions {
+    width: 100%;
+  }
+
+  .courtikaButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .mainPrice {
+    font-size: 40px;
+  }
+
+  .recommendedTitle {
+    font-size: 22px;
+  }
+
+  .sectionTitle {
+    font-size: 16px;
+  }
+}
