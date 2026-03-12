@@ -26,7 +26,7 @@ const Notifications = React.lazy(() => import('./pages/notifications/index'));
 const Settings = React.lazy(() => import('./pages/settings/index'));
 const Explore = React.lazy(() => import('./pages/explore/index'));
 const BoostSavings = React.lazy(() => import('./pages/boostSavings/index'));
-const CarInsurance = React.lazy(() => import('./pages/carInsurance/index'));
+const Results = React.lazy(() => import('./pages/results/index'));
 const Profile = React.lazy(() => import('./pages/settings/profile'));
 const Security = React.lazy(() => import('./pages/settings/security'));
 const ResetPassword = React.lazy(() => import('./pages/resetPassword/index'));
@@ -34,12 +34,6 @@ const ForgotPassword = React.lazy(() => import('./pages/forgotPassword/index'));
 const QuestionPage = React.lazy(() => import('./pages/question/index'));
 const Logout = React.lazy(() => import('./pages/logout/index'));
 const OrderProduct = React.lazy(() => import('./pages/product-order'));
-const FallbackNoQuotes = React.lazy(() => import('./pages/fallbackNoQuotes/index'));
-const ScheduleCall = React.lazy(() => import('./pages/scheduleCall/index'));
-const CallConfirmation = React.lazy(() => import('./pages/callConfirmation/index'));
-const ScheduleConfirmation = React.lazy(() => import('./pages/scheduleConfirmation/index'));
-const FifteenMinutesRedirect = React.lazy(() => import('./pages/fifteenMinutesRedirect/index'));
-const Results = React.lazy(() => import('./pages/results/index'));
 const PrivateWrapper = ({ auth: { isAuthenticated }, heading, _style }) => {
 	return isAuthenticated === true ? (
 		<Layout _style={_style}>
@@ -114,20 +108,13 @@ function App(props) {
 				<Router>
 					<Routes>
 						<Route element={<PrivateWrapper auth={{ isAuthenticated: isAuth }} _style={layoutStyles} />}>
-							<Route path="/" element={<Suspense fallback={<div>Loading...</div>}><CarInsurance /></Suspense>} />
+							<Route path="/" element={<Suspense fallback={<div>Loading...</div>}><Results /></Suspense>} />
 							<Route path="/my-advisors" element={<Suspense fallback={<div>Loading...</div>}><MyAdvisors /></Suspense>} />
 							<Route path="/explore" element={<Suspense fallback={<div>Loading...</div>}><Explore /></Suspense>} />
 							<Route path="/boost-savings" element={<Suspense fallback={<div>Loading...</div>}><BoostSavings /></Suspense>} />
 							<Route path="/question" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
 							<Route path="/overview" element={<Suspense fallback={<div>Loading...</div>}><Overview /></Suspense>} />
-							<Route path="/car-insurance" element={<Suspense fallback={<div>Loading...</div>}><CarInsurance /></Suspense>} />
-							<Route path="/car-insurance/product-order/:userProductId?" element={<Suspense fallback={<div>Loading...</div>}><OrderProduct /></Suspense>} />
-							<Route path="/fallback-no-quotes" element={<Suspense fallback={<div>Loading...</div>}><FallbackNoQuotes /></Suspense>} />
-							<Route path="/schedule-call" element={<Suspense fallback={<div>Loading...</div>}><ScheduleCall /></Suspense>} />
-							<Route path="/call-confirmation" element={<Suspense fallback={<div>Loading...</div>}><CallConfirmation /></Suspense>} />
-							<Route path="/schedule-confirmation" element={<Suspense fallback={<div>Loading...</div>}><ScheduleConfirmation /></Suspense>} />
-							<Route path="/15-minutes-redirect" element={<Suspense fallback={<div>Loading...</div>}><FifteenMinutesRedirect /></Suspense>} />
-							<Route path="/question-public" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
+							<Route path="/car-insurance" element={<Suspense fallback={<div>Loading...</div>}><Results /></Suspense>} />
 							<Route path="/car-insurance/product-order/:userProductId?" element={<Suspense fallback={<div>Loading...</div>}><OrderProduct /></Suspense>} />					<Route path="/results" element={<Suspense fallback={<div>Loading...</div>}><Results /></Suspense>} />							<Route path="/question-public" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
 							<Route path="/logout" element={<Logout />} />
 						</Route>
