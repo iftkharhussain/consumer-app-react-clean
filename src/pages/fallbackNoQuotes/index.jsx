@@ -17,6 +17,7 @@ const FallbackNoQuotes = () => {
   const navigate = useNavigate();
   const initialized = useRef(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
 
   useEffect(() => {
@@ -27,7 +28,11 @@ const FallbackNoQuotes = () => {
   }, []);
 
   const handleSubmit = () => {
-    setIsSubmitted(true);
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setIsSubmitted(true);
+    }, 1500);
   };
 
   return (
@@ -94,8 +99,8 @@ const FallbackNoQuotes = () => {
                 </ul>
               </div>
 
-              <Button type="primary" className={styles.primaryButton} size="large" onClick={handleSubmit}>
-                <CheckOutlined /> Oui, continuer avec Courtika
+              <Button type="primary" className={styles.primaryButton} size="large" onClick={handleSubmit} loading={isLoading}>
+                {!isLoading && <CheckOutlined />} Oui, continuer avec Courtika
               </Button>
               
               <p className={styles.footerNote}>Aucune obligation • Vous gardez le contrôle</p>
@@ -145,7 +150,7 @@ const FallbackNoQuotes = () => {
 
               <div className={styles.actionButtons}>
                 <Button type="primary" className={styles.primaryButton} size="large" href="tel:+14507629240">
-                  <PhoneOutlined /> Appeler maintenant: 1 (450) 762-9240
+                  <PhoneOutlined className={styles.phoneIcon} /> Appeler maintenant: 1 (450) 762-9240
                 </Button>
                 
                 <Button className={styles.secondaryOutlineButton} size="large" onClick={() => navigate('/schedule-call')}>
