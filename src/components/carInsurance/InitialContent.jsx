@@ -51,7 +51,7 @@ const InitialContent = ({
     // Transform quote details into display format
     const [featuredProvider, setFeaturedProvider] = useState(null);
     const [comparisonProviders, setComparisonProviders] = useState([]);
-    
+
     // Handle image loading errors
     const handleImageError = (providerId) => {
         setImageErrors(prev => ({ ...prev, [providerId]: true }));
@@ -133,7 +133,7 @@ const InitialContent = ({
             }
         }
     }, [quoteData]);
-    
+
     const toggleProvider = (providerId) => {
         setExpandedProviders(prev => ({
             ...prev,
@@ -387,10 +387,12 @@ const InitialContent = ({
                             </>
                         )}
 
-                        <BillingToggle
-                            value={billingPeriod}
-                            onChange={setBillingPeriod}
-                        />
+                        <div style={{ marginTop: 'auto' }}>
+                            <BillingToggle
+                                value={billingPeriod}
+                                onChange={setBillingPeriod}
+                            />
+                        </div>
                     </div>
 
                     <div className={styles.featuredRight}>

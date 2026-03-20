@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Button, Card, Collapse, Divider, Spin } from 'antd';
-import { CheckOutlined, ClockCircleOutlined, DownOutlined, UpOutlined, LoadingOutlined } from '@ant-design/icons';
+import { CheckOutlined, ClockCircleOutlined, DownOutlined, UpOutlined, LoadingOutlined, StarFilled } from '@ant-design/icons';
 import CustomizeProtections from '../../components/carInsurance/CustomizeProtections';
 import LoadingModal from '../../components/loadingModal';
 import CourtikaModal from '../../components/courtikaModal';
@@ -23,7 +23,7 @@ const Results = () => {
   const [expandedFAQ, setExpandedFAQ] = useState([0]);
   const [expandedInsurer, setExpandedInsurer] = useState(null);
   const [billingPeriod, setBillingPeriod] = useState('monthly'); // 'monthly' or 'yearly'
-  const [timeLeft, setTimeLeft] = useState(600); // 10 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(900); // 15 minutes in seconds
   const [showLoadingModal, setShowLoadingModal] = useState(true);
   const [showResubmitAlert, setShowResubmitAlert] = useState(false);
   const [showCustomize, setShowCustomize] = useState(false);
@@ -42,9 +42,9 @@ const Results = () => {
   const authUser = useSelector(state => state.app?.auth);
 
   // Get user's first name from Redux, fallback to 'User'
-  const userName = userProfile?.firstName || authUser?.firstName || 
-                   userProfile?.fullName?.split(' ')[0] || authUser?.fullName?.split(' ')[0] || 
-                   t('user') || 'User';
+  const userName = userProfile?.firstName || authUser?.firstName ||
+    userProfile?.fullName?.split(' ')[0] || authUser?.fullName?.split(' ')[0] ||
+    t('user') || 'User';
 
   // Fetch quote on page load
   const {
@@ -164,41 +164,119 @@ const Results = () => {
     return recommendedInsurer.coverages.map(coverage => {
       const code = String(coverage.code || '').toUpperCase();
       let title = coverage.name || code;
+      let description = '';
       let type = null;
       let coverageValue = null;
 
-      // Map common coverage codes to French names
-      const coverageNames = {
-        'TPL': 'Responsabilité civile',
-        'TP': 'Responsabilité civile',
-        'COL': 'Collision et renversement (B2)',
-        'COLL': 'Collision et renversement (B2)',
-        'CMP': 'Accidents sans collision ni renversement (B3)',
-        'COMP': 'Accidents sans collision ni renversement (B3)',
-        'AB': 'Indemnités d\'accident',
-        'DCPD': 'Indemnisation directe',
-        'UA': 'Automobile non assurée',
-        'SEF44': 'Protection de la famille',
-        '20': 'Assistance routière (FAQ 20)',
-        '33': 'Assistance routière (FAQ 33)',
-        '27': 'Assurance des personnes (FAQ 27)',
+      // Map coverage codes to French names and descriptions
+      const coverageInfo = {
+        'TPL': {
+          title: 'Responsabilité civile',
+          description: 'Vous serez couvert pour les dommages corporels ou matériels que vous causez à d\'autres personnes lors d\'un accident d\'automobile où vous êtes responsable. Cette protection peut aussi couvrir les frais juridiques si vous êtes poursuivi.'
+        },
+        'TP': {
+          title: 'Responsabilité civile',
+          description: 'Vous serez couvert pour les dommages corporels ou matériels que vous causez à d\'autres personnes lors d\'un accident d\'automobile où vous êtes responsable. Cette protection peut aussi couvrir les frais juridiques si vous êtes poursuivi.'
+        },
+        'COL': {
+          title: 'Collision ou versement (B2)',
+          description: 'Vous serez couvert pour les dommages à votre véhicule causés par : une collision avec un autre véhicule, un impact avec un objet fixe ou un renversement, peu importe qui est responsable.'
+        },
+        'COLL': {
+          title: 'Collision ou versement (B2)',
+          description: 'Vous serez couvert pour les dommages à votre véhicule causés par : une collision avec un autre véhicule, un impact avec un objet fixe ou un renversement, peu importe qui est responsable.'
+        },
+        'CMP': {
+          title: 'Accident sans collision ni versement (B3)',
+          description: 'Vous serez couvert pour les dommages à votre véhicule en lien avec des situations autre qu\'une collision ou un renversement comme par exemple un feu, un vol, un bris de vitre, un vandalisme ou une collision avec un animal.'
+        },
+        'COMP': {
+          title: 'Accident sans collision ni versement (B3)',
+          description: 'Vous serez couvert pour les dommages à votre véhicule en lien avec des situations autre qu\'une collision ou un renversement comme par exemple un feu, un vol, un bris de vitre, un vandalisme ou une collision avec un animal.'
+        },
+        '34': {
+          title: 'Protection supplémentaire (FAQ 34)',
+          description: 'Suite à un accident d\'auto, vous serez couvert pour les frais médicaux non couverts par la SAAQ pour les dommages corporels. Vous pourriez aussi recevoir une indemnité pour décès et mutilation. Cet avenant inclut aussi votre conjoint (e) et enfants à votre charge.'
+        },
+        '33': {
+          title: 'Assistance routière (FAQ 33)',
+          description: 'Aide et remorquage en cas de panne ou d\'imprévu sur la route.'
+        },
+        '20': {
+          title: 'Assistance routière (FAQ 20)',
+          description: 'Aide et remorquage en cas de panne ou d\'imprévu sur la route.'
+        },
+        '27': {
+          title: 'Assurance des personnes (FAQ 27)',
+          description: 'Protection pour les dommages corporels et indemnités en cas d\'accident.'
+        },
+        'AB': {
+          title: 'Indemnités d\'accident',
+          description: 'Couverture pour les blessures corporelles suite à un accident automobile.'
+        },
+        'DCPD': {
+          title: 'Indemnisation directe',
+          description: 'Protection pour les dommages matériels causés par un tiers.'
+        },
+        'UA': {
+          title: 'Automobile non assurée',
+          description: 'Protection en cas d\'accident causé par un véhicule non assuré.'
+        },
+        'SEF44': {
+          title: 'Protection de la famille',
+          description: 'Protection étendue pour les membres de votre famille.'
+        }
       };
 
-      if (coverageNames[code]) {
-        title = coverageNames[code];
+      // Check for PAK codes (pak12, pak7, pak13, etc.)
+      const isPakCode = code.includes('PAK') || /pak\d+/i.test(code);
+      
+      if (isPakCode) {
+        title = 'Protections bonifiées';
+        description = 'Ce regroupement inclut des protections supplémentaires qui viennent bonifier votre assurance automobile. Elles offrent une protection plus complète dans plusieurs situations du quotidien, comme lors de l\'utilisation d\'un véhicule loué ou emprunté, ou lorsque votre véhicule est temporairement inutilisable.';
+      } else if (coverageInfo[code]) {
+        title = coverageInfo[code].title;
+        description = coverageInfo[code].description;
       }
 
-      if (coverage.limit) {
+      // Helper function to extract first part of limit (before "/-$1")
+      const extractLimitValue = (limit) => {
+        if (!limit) return null;
+        const parts = limit.split('/-');
+        return parts[0].trim();
+      };
+
+      // Determine coverage value and type based on coverage code
+      if (code === 'TP' || code === 'TPL') {
+        // For TP/TPL, show limit (Couverture)
         type = 'couverture';
-        coverageValue = coverage.limit;
-      } else if (coverage.deductible) {
-        type = 'franchise';
-        coverageValue = `${coverage.deductible} $`;
+        coverageValue = extractLimitValue(coverage.limit);
+      } else if (code === 'CMP' || code === 'COMP' || code === 'COL' || code === 'COLL') {
+        // For CMP/COMP/COL/COLL, show deductible (Franchise)
+        if (coverage.deductible && coverage.deductible !== -1) {
+          type = 'franchise';
+          coverageValue = `${coverage.deductible} $`;
+        }
+      } else if (code === '34' || code === '33' || code === '20' || code === '27') {
+        // For FAQ codes, show limit (Couverture)
+        if (coverage.limit) {
+          type = 'couverture';
+          coverageValue = extractLimitValue(coverage.limit);
+        }
+      } else {
+        // Default behavior for other coverage codes
+        if (coverage.limit && coverage.limit !== '-$1/-$1') {
+          type = 'couverture';
+          coverageValue = extractLimitValue(coverage.limit);
+        } else if (coverage.deductible && coverage.deductible !== -1) {
+          type = 'franchise';
+          coverageValue = `${coverage.deductible} $`;
+        }
       }
 
       return {
         title,
-        description: coverage.description || '',
+        description: description || coverage.description || '',
         coverage: coverageValue,
         type
       };
@@ -254,15 +332,15 @@ const Results = () => {
 
   const handleRecalculateQuote = async () => {
     if (!protectionsData || !userProductId) return;
-    
+
     setIsRecalculating(true);
     setRecalculateError(null);
     setShowCustomize(false);
     setShowLoadingModal(true);
-    
+
     try {
       const result = await recalculateQuote(userProductId, protectionsData);
-      
+
       if (result.success) {
         setRecalculatedQuote({
           ...result.quote,
@@ -323,8 +401,8 @@ const Results = () => {
       {!showLoadingModal && (
         <>
           {showCustomize ? (
-            <CustomizeProtections 
-              onBack={handleBackToMain} 
+            <CustomizeProtections
+              onBack={handleBackToMain}
               userProductId={userProductId}
               onProtectionsChange={handleProtectionsChange}
             />
@@ -357,7 +435,7 @@ const Results = () => {
                     {/* Recommended Insurer Card */}
                     <Card className={styles.recommendedCard}>
                       <div className={styles.recommendedBadge}>
-                        <CheckOutlined className={styles.badgeIcon} />
+                        <StarFilled className={styles.badgeIcon} />
                         <span>Recommandé</span>
                       </div>
 
@@ -470,9 +548,9 @@ const Results = () => {
                               <div className={styles.insurerContent}>
                                 <div className={styles.insurerMain}>
                                   <div className={styles.insurerLogoWrapper}>
-                                    <img 
-                                      src={insurer.logo} 
-                                      alt={insurer.name} 
+                                    <img
+                                      src={insurer.logo}
+                                      alt={insurer.name}
                                       className={styles.insurerLogo}
                                       onError={(e) => { e.target.style.display = 'none'; }}
                                     />
@@ -624,20 +702,20 @@ const Results = () => {
 
       {/* Fixed Bottom Bar - Shows only on customize page */}
       {!showLoadingModal && showCustomize && (
-        <div style={{ 
-          position: 'fixed', 
-          bottom: 0, 
-          left: 0, 
-          right: 0, 
-          padding: '20px', 
-          backgroundColor: 'white', 
-          boxShadow: '0 -2px 8px rgba(0,0,0,0.1)', 
+        <div style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          padding: '20px',
+          backgroundColor: 'white',
+          boxShadow: '0 -2px 8px rgba(0,0,0,0.1)',
           zIndex: 1000,
           display: 'flex',
           gap: '10px',
           justifyContent: 'center'
         }}>
-          <Button 
+          <Button
             type="primary"
             size="large"
             disabled={!hasProtectionChanges || isRecalculating}
