@@ -479,47 +479,18 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 							)} */}
 
 							{/* User Profile Section with Popover */}
-							<Popover
-								content={
-									<div style={{ minWidth: '180px' }}>
-										<div style={{ padding: '8px 0', borderBottom: '1px solid #f0f0f0', marginBottom: '8px' }}>
-											<div style={{ fontWeight: 600, color: '#1f2937' }}>{firstName || 'User'} {lastName || ''}</div>
-											<div style={{ fontSize: '12px', color: '#6b7280' }}>{email || ''}</div>
-										</div>
-										<Link to="/settings" style={{ display: 'flex', alignItems: 'center', padding: '8px 0', color: '#374151', textDecoration: 'none' }}>
-											<Settings01 style={{ marginRight: 8, width: 16, height: 16 }} />
-											{t('settings') || 'Settings'}
-										</Link>
-										<div
-											onClick={handleLogout}
-											style={{
-												display: 'flex',
-												alignItems: 'center',
-												padding: '8px 0',
-												color: '#ef4444',
-												cursor: logoutLoading ? 'wait' : 'pointer',
-												opacity: logoutLoading ? 0.6 : 1
-											}}
-										>
-											<LogOut01 style={{ marginRight: 8, width: 16, height: 16 }} />
-											{logoutLoading ? 'Logging out...' : (t('logout') || 'Logout')}
-										</div>
-									</div>
-								}
-								trigger="click"
-								placement="topRight"
-							>
+							{/* Popover disabled: no popup on click */}
 								<div className={styles.userProfile} style={{ cursor: 'pointer' }}>
-									<img
-										src={profilePic ? `${serverUrl}${profilePic}` : '/images/Avatar.png'}
-										alt="User Avatar"
-										className={styles.userAvatar}
-									/>
+										{/* <img
+											src={profilePic ? `${serverUrl}${profilePic}` : '/images/Avatar.png'}
+											alt="User Avatar"
+											className={styles.userAvatar}
+										/> */}
 									<div className={styles.userInfo}>
-										<div className={styles.userNameRow}>
-											<span className={styles.userLevel}>Level 1</span>
-											<span className={styles.levelBadge}>1 category to level up</span>
-										</div>
+											{/* <div className={styles.userNameRow}>
+												<span className={styles.userLevel}>Level 1</span>
+												<span className={styles.levelBadge}>1 category to level up</span>
+											</div> */}
 										<div className={styles.userName}>
 											{firstName || 'John Paul'}
 										</div>
@@ -528,7 +499,6 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 										</div>
 									</div>
 								</div>
-							</Popover>
 						</div>
 					)}
 				</div>
