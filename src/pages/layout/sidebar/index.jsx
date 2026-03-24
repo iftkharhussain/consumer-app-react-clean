@@ -317,11 +317,15 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 
 		];
 
-		if (userType === 'admin') {
-			setSideMenu([...menuItemsAdvisor, ...getAdminMenuItems(), ...menuItemsOther]);
-		} else {
-			setSideMenu([...menuItemsAdvisor, ...menuItemsOther]);
-		}
+		// Previous full sidebar logic (kept for reference):
+		// if (userType === 'admin') {
+		// 	setSideMenu([...menuItemsAdvisor, ...getAdminMenuItems(), ...menuItemsOther]);
+		// } else {
+		// 	setSideMenu([...menuItemsAdvisor, ...menuItemsOther]);
+		// }
+
+		// Active behavior: keep only the first sidebar link (Car Insurance).
+		setSideMenu(menuItemsAdvisor.slice(0, 1));
 	}, [userType, leadDefaultPath]);
 
 	useEffect(() => {
