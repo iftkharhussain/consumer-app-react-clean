@@ -64,7 +64,7 @@ const EstimateContent = () => {
                     <div className={styles.choiceLeft}>
                         <h3 className={styles.choiceTitle}>Votre choix</h3>
                         <span className={styles.choiceLabel}>Intact assurance:</span>
-                        <div className={styles.choicePrice}>90$ / mois</div>
+                        <div className={styles.choicePrice}>90 $ / mois</div>
                     </div>
                     <div className={styles.choiceRight}>
                         <img src="/images/intact-insurance.svg" alt="Intact" className={styles.choiceLogo} />

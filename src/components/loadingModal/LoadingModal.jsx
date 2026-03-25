@@ -83,7 +83,7 @@ const LoadingModal = ({
     if (!isOpen) return null;
 
     // Default heading uses translation with user's name
-    const displayHeading = heading || t('loadingModal.shoppingInsurers', { userName }) || `${userName}, nous magasinons les assureurs pour vous...`;
+    // const displayHeading = heading || t('loadingModal.shoppingInsurers', { userName }) || `${userName}, nous magasinons les assureurs pour vous...`;
 
     return (
         <div className={styles.modalOverlay}>
@@ -114,20 +114,20 @@ const LoadingModal = ({
                             transform="rotate(-90 49.5 49.5)"
                         />
                     </svg>
-                    <img
+                    {/* <img
                         src="/images/quote-loading.png"
                         alt="Loading"
                         className={styles.carIcon}
-                    />
+                    /> */}
                 </div>
 
-                {/* Heading */}
-                <h2 className={styles.heading}>
+                {/* Heading disabled - show only circle loading */}
+                {/* <h2 className={styles.heading}>
                     {displayHeading}
-                </h2>
+                </h2> */}
 
-                {/* Progress Steps */}
-                <table className={styles.stepsList}>
+                {/* Progress Steps disabled - show only circle loading */}
+                {/* <table className={styles.stepsList}>
                     <tbody>
                         {steps.map((step, index) => (
                             <tr key={index} className={styles.stepItem}>
@@ -146,7 +146,7 @@ const LoadingModal = ({
                             </tr>
                         ))}
                     </tbody>
-                </table>
+                </table> */}
             </div>
         </div>
     );

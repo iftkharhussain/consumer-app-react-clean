@@ -108,9 +108,9 @@ const OrderProduct = () => {
                     
                     <div className={styles.priceContainer}>
                         {selectedQuote.oldMonthlyPrice && (
-                            <span className={styles.oldPrice}>{selectedQuote.oldMonthlyPrice} $ / mo</span>
+                            <span className={styles.oldPrice}>{selectedQuote.oldMonthlyPrice} $ / mois</span>
                         )}
-                        <span className={styles.newPrice}>{monthlyPrice} $ / mo</span>
+                        <span className={styles.newPrice}>{monthlyPrice} $ / mois</span>
                     </div>
                     
                     {isIntact && (

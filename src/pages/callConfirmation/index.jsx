@@ -52,8 +52,8 @@ const CallConfirmation = () => {
                   <span className={styles.insurerName}>Intact</span>
                 </div>
                 <div className={styles.priceContainer}>
-                  <span className={styles.priceMain}>90$/mois</span>
-                  <span className={styles.priceOld}>110$/mois</span>
+                  <span className={styles.priceMain}>90 $/mois</span>
+                  <span className={styles.priceOld}>110 $/mois</span>
                 </div>
               </div>
               

@@ -1,7 +1,16 @@
+.courtikaModal :global(.ant-modal-wrap) {
+    background: rgba(0, 0, 0, 0.45);
+}
+
 .courtikaModal :global(.ant-modal-content) {
     padding: 0;
     border-radius: 12px;
-    background: #f8fafc;
+    background: #ffffff !important;
+    overflow: hidden;
+}
+
+.courtikaModal :global(.ant-modal-body) {
+    background: #ffffff !important;
 }
 
 .courtikaModal :global(.ant-modal-close) {
@@ -10,8 +19,11 @@
     color: #697586;
 }
 
-.modalContainer {
+.courtikaModal :global(.modalContainer) {
     position: relative;
+    background: #ffffff !important;
+    border-radius: 12px;
+    min-height: 320px;
 }
 
 .contentHidden {
@@ -21,13 +33,13 @@
 }
 
 /* Loading Overlay */
-.loadingOverlay {
+.courtikaModal :global(.loadingOverlay) {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #fff;
+    background: #ffffff !important;
     z-index: 1000;
     pointer-events: all;
     border-radius: 12px;
@@ -37,6 +49,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    background: #ffffff !important;
+    border-radius: 12px;
+    padding: 24px;
 }
 
 .loadingText {
@@ -47,11 +62,20 @@
     line-height: 1;
     text-align: center;
     margin: 0 0 20px 0;
+    opacity: 1 !important;
+    background: #ffffff;
+    padding: 8px 16px;
+    border-radius: 8px;
 }
 
 .loadingGif {
     width: 250px;
     height: auto;
+    display: block;
+    background: #ffffff !important;
+    border-radius: 10px;
+    padding: 16px;
+    opacity: 1 !important;
 }
 
 /* Main Card */

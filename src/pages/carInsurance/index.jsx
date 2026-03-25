@@ -17,8 +17,8 @@ import styles from './CarInsurance.module.css';
  * CarInsurance Page
  * 
  * This page handles the car insurance quote flow:
- * 1. Shows initial loading modal (5 seconds) while quote fetch starts in background
- * 2. After loading modal closes, shows the page content
+ * 1. Shows initial loading modal while quote fetch is in progress
+ * 2. Modal closes automatically when quote data is loaded or fails
  * 3. InitialContent shows skeletons on insurer cards while quote is loading
  */
 const CarInsurance = () => {
@@ -66,6 +66,13 @@ const CarInsurance = () => {
 
     checkForPendingOrder();
   }, [navigate]);
+
+  // Close loading modal when quote data is loaded
+  useEffect(() => {
+    if (!quoteLoading && (hasQuote || hasFailed)) {
+      setShowLoadingModal(false);
+    }
+  }, [quoteLoading, hasQuote, hasFailed]);
 
   const handleCloseResubmitAlert = () => {
     setShowResubmitAlert(false);
@@ -169,14 +176,14 @@ const CarInsurance = () => {
           <ResubmitAlert onClose={handleCloseResubmitAlert} />
         )}
 
-        {/* Initial Loading Modal - Shows for ~5 seconds */}
+        {/* Initial Loading Modal - Shows while quote data is loading */}
         <LoadingModal
           isOpen={showLoadingModal}
           onClose={handleLoadingModalClose}
           userName={userName}
           steps={loadingSteps}
           totalDuration={5000}
-          autoClose={true}
+          autoClose={false}
         />
 
         {/* Main Content - Shows after loading modal closes */}

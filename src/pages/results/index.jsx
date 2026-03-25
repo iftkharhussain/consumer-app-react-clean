@@ -66,6 +66,7 @@ const Results = () => {
       setTimeLeft((prevTime) => {
         if (prevTime <= 0) {
           clearInterval(timer);
+          navigate('/fifteen-minutes-redirect');
           return 0;
         }
         return prevTime - 1;
@@ -73,7 +74,7 @@ const Results = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [navigate]);
 
   // Check for resubmit alert flag on mount
   useEffect(() => {
@@ -99,6 +100,13 @@ const Results = () => {
 
     checkForPendingOrder();
   }, [navigate]);
+
+  // Close loading modal when quote data is loaded
+  useEffect(() => {
+    if (!quoteLoading && (hasQuote || hasFailed)) {
+      setShowLoadingModal(false);
+    }
+  }, [quoteLoading, hasQuote, hasFailed]);
 
   // Process quote data when available
   useEffect(() => {
@@ -131,11 +139,13 @@ const Results = () => {
           };
         });
 
-        setInsurers(transformedInsurers);
+        // Sort insurers by price (cheapest first)
+        const sortedInsurers = transformedInsurers.sort((a, b) => a.price - b.price);
 
-        // Find Intact as recommended or use first
-        const intactInsurer = transformedInsurers.find(ins => isIntactCarrier(ins.carrierCode));
-        setRecommendedInsurer(intactInsurer || transformedInsurers[0]);
+        setInsurers(sortedInsurers);
+
+        // Set cheapest insurer as recommended (first in sorted list)
+        setRecommendedInsurer(sortedInsurers[0]);
       }
     }
   }, [quoteData]);
@@ -154,6 +164,27 @@ const Results = () => {
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
+
+  // Helper function to format currency in French format (10 000 $ instead of $10,000)
+  const formatFrenchCurrency = useCallback((value) => {
+    if (!value) return null;
+    
+    // Remove existing currency symbols and formatting
+    let numStr = String(value).replace(/[$,\s]/g, '');
+    
+    // Extract numeric value
+    const num = parseFloat(numStr);
+    if (isNaN(num)) return value; // Return original if not a number
+    
+    // Format with space as thousands separator
+    const formatted = num.toLocaleString('fr-CA', { 
+      useGrouping: true,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).replace(/,/g, ' '); // Ensure space separator (some browsers may use comma)
+    
+    return `${formatted} $`;
+  }, []);
 
   // Extract protections from quote data
   const protections = useMemo(() => {
@@ -250,27 +281,30 @@ const Results = () => {
       if (code === 'TP' || code === 'TPL') {
         // For TP/TPL, show limit (Couverture)
         type = 'couverture';
-        coverageValue = extractLimitValue(coverage.limit);
+        const rawValue = extractLimitValue(coverage.limit);
+        coverageValue = formatFrenchCurrency(rawValue);
       } else if (code === 'CMP' || code === 'COMP' || code === 'COL' || code === 'COLL') {
         // For CMP/COMP/COL/COLL, show deductible (Franchise)
         if (coverage.deductible && coverage.deductible !== -1) {
           type = 'franchise';
-          coverageValue = `${coverage.deductible} $`;
+          coverageValue = formatFrenchCurrency(coverage.deductible);
         }
       } else if (code === '34' || code === '33' || code === '20' || code === '27') {
         // For FAQ codes, show limit (Couverture)
         if (coverage.limit) {
           type = 'couverture';
-          coverageValue = extractLimitValue(coverage.limit);
+          const rawValue = extractLimitValue(coverage.limit);
+          coverageValue = formatFrenchCurrency(rawValue);
         }
       } else {
         // Default behavior for other coverage codes
         if (coverage.limit && coverage.limit !== '-$1/-$1') {
           type = 'couverture';
-          coverageValue = extractLimitValue(coverage.limit);
+          const rawValue = extractLimitValue(coverage.limit);
+          coverageValue = formatFrenchCurrency(rawValue);
         } else if (coverage.deductible && coverage.deductible !== -1) {
           type = 'franchise';
-          coverageValue = `${coverage.deductible} $`;
+          coverageValue = formatFrenchCurrency(coverage.deductible);
         }
       }
 
@@ -281,7 +315,7 @@ const Results = () => {
         type
       };
     });
-  }, [recommendedInsurer]);
+  }, [recommendedInsurer, formatFrenchCurrency]);
 
   const faqs = [
     {
@@ -394,7 +428,7 @@ const Results = () => {
         userName={userName}
         steps={loadingSteps}
         totalDuration={5000}
-        autoClose={true}
+        autoClose={false}
       />
 
       {/* Main Content */}
@@ -457,7 +491,7 @@ const Results = () => {
                               <span className={styles.mainPrice}>
                                 {billingPeriod === 'monthly' ? recommendedInsurer.price : recommendedInsurer.yearlyPrice}
                               </span>
-                              <span className={styles.priceSuffix}>$ / {billingPeriod === 'monthly' ? 'mois' : 'année'}</span>
+                              <span className={styles.priceSuffix}> $ / {billingPeriod === 'monthly' ? 'mois' : 'année'}</span>
                             </div>
                           </div>
 
@@ -506,9 +540,9 @@ const Results = () => {
                       <Card className={styles.protectionsCard}>
                         <div className={styles.protectionsHeader}>
                           <h2 className={styles.sectionTitle}>Vos protections</h2>
-                          <Button type="link" className={styles.customizeButton} onClick={handleCustomize}>
+                          {/* <Button type="link" className={styles.customizeButton} onClick={handleCustomize}>
                             Personnaliser
-                          </Button>
+                          </Button> */}
                         </div>
                         <div className={styles.protectionsList}>
                           {protections.map((protection, index) => (
@@ -562,12 +596,12 @@ const Results = () => {
                                         {billingPeriod === 'monthly' ? insurer.price : insurer.yearlyPrice}
                                       </span>
                                       <span className={styles.insurerPriceSuffix}>
-                                        $ / {billingPeriod === 'monthly' ? 'mois' : 'année'}
+                                         $ / {billingPeriod === 'monthly' ? 'mois' : 'année'}
                                       </span>
                                       <span className={styles.alternativePrice}>
                                         {billingPeriod === 'monthly'
-                                          ? `ou ${insurer.yearlyPrice}$ par année`
-                                          : `ou ${insurer.price}$ par mois`}
+                                          ? `ou ${insurer.yearlyPrice} $ par année`
+                                          : `ou ${insurer.price} $ par mois`}
                                       </span>
                                     </div>
                                   </div>
@@ -615,7 +649,7 @@ const Results = () => {
                                             {coverage.limit && (
                                               <span className={styles.expandedCoverage}>
                                                 <span className={styles.expandedCoverageLabel}>Couverture : </span>
-                                                <span className={styles.expandedCoverageValue}>{coverage.limit}</span>
+                                                <span className={styles.expandedCoverageValue}>{formatFrenchCurrency(coverage.limit)}</span>
                                               </span>
                                             )}
                                           </div>

@@ -55,14 +55,9 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
                 // Get userProductId from response if not already available
                 const productId = result.data?.userProductId || userProductId;
                 
-                // Redirect to product order page
+                // Redirect to call confirmation page
                 timerRef.current = setTimeout(() => {
-                    if (productId) {
-                        navigate(`/car-insurance/product-order/${productId}`);
-                    } else {
-                        // Fallback if no userProductId available
-                        window.location.reload();
-                    }
+                    navigate('/call-confirmation');
                 }, 2000);
             } else {
                 console.warn('Fortus request failed:', result);
@@ -83,9 +78,9 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
             // Call immediately
             handleDemanderAppel();
         } else {
-            // Schedule for later - could navigate to Calendly or similar
-            // For now, just trigger the call request
-            handleDemanderAppel();
+            // Schedule for later - navigate to schedule page
+            onClose();
+            navigate('/schedule-call');
         }
     };
 
@@ -158,16 +153,22 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
             centered
             closable={true}
             className={styles.courtikaModal}
+            modalRender={(modal) => (
+                <div style={{ background: '#ffffff', borderRadius: '12px' }}>
+                    {modal}
+                </div>
+            )}
         >
-            <div className={styles.modalContainer}>
+            <div className={styles.modalContainer} style={{ background: '#ffffff' }}>
                 {isLoading && (
-                    <div className={styles.loadingOverlay}>
-                        <div className={styles.loadingContent}>
-                            <h3 className={styles.loadingText}>Nous vous connectons à un courtier..</h3>
+                    <div className={styles.loadingOverlay} style={{ background: '#ffffff' }}>
+                        <div className={styles.loadingContent} style={{ background: '#ffffff' }}>
+                            <h3 className={styles.loadingText} style={{ background: '#ffffff', opacity: 1 }}>Nous vous connectons à un courtier..</h3>
                             <img
                                 src="/images/39259805852ef0453b2b0f98eee91406934e42f6.gif"
                                 alt="Chargement"
                                 className={styles.loadingGif}
+                                style={{ background: '#ffffff', opacity: 1 }}
                             />
                         </div>
                     </div>
@@ -228,9 +229,9 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
                                     </div>
                                 </div>
                                 <div className={styles.summaryRight}>
-                                    <p className={styles.summaryPrice}>{selectedQuote.monthlyPrice}$/mois</p>
+                                    <p className={styles.summaryPrice}>{selectedQuote.monthlyPrice} $/mois</p>
                                     {selectedQuote.yearlyPrice && (
-                                        <p className={styles.summaryOldPrice}>{selectedQuote.yearlyPrice}$/an</p>
+                                        <p className={styles.summaryOldPrice}>{selectedQuote.yearlyPrice} $/an</p>
                                     )}
                                 </div>
                             </div>

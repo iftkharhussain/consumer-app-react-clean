@@ -34,6 +34,10 @@ const ForgotPassword = React.lazy(() => import('./pages/forgotPassword/index'));
 const QuestionPage = React.lazy(() => import('./pages/question/index'));
 const Logout = React.lazy(() => import('./pages/logout/index'));
 const OrderProduct = React.lazy(() => import('./pages/product-order'));
+const CallConfirmation = React.lazy(() => import('./pages/callConfirmation/index'));
+const FifteenMinutesRedirect = React.lazy(() => import('./pages/fifteenMinutesRedirect/index'));
+const ScheduleCall = React.lazy(() => import('./pages/scheduleCall/index'));
+const ScheduleConfirmation = React.lazy(() => import('./pages/scheduleConfirmation/index'));
 const PrivateWrapper = ({ auth: { isAuthenticated }, heading, _style }) => {
 	return isAuthenticated === true ? (
 		<Layout _style={_style}>
@@ -108,22 +112,26 @@ function App(props) {
 				<Router>
 					<Routes>
 						<Route element={<PrivateWrapper auth={{ isAuthenticated: isAuth }} _style={layoutStyles} />}>
-							<Route path="/" element={<Suspense fallback={<div>Loading...</div>}><Results /></Suspense>} />
+							<Route path="/" element={<Suspense fallback={<div></div>}><Results /></Suspense>} />
 							<Route path="/my-advisors" element={<Suspense fallback={<div>Loading...</div>}><MyAdvisors /></Suspense>} />
 							<Route path="/explore" element={<Suspense fallback={<div>Loading...</div>}><Explore /></Suspense>} />
 							<Route path="/boost-savings" element={<Suspense fallback={<div>Loading...</div>}><BoostSavings /></Suspense>} />
 							<Route path="/question" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
-							<Route path="/overview" element={<Suspense fallback={<div>Loading...</div>}><Overview /></Suspense>} />
-							<Route path="/car-insurance" element={<Suspense fallback={<div>Loading...</div>}><Results /></Suspense>} />
-							<Route path="/car-insurance/product-order/:userProductId?" element={<Suspense fallback={<div>Loading...</div>}><OrderProduct /></Suspense>} />
-							<Route path="/question-public" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
+							<Route path="/overview" element={<Suspense fallback={<div></div>}><Overview /></Suspense>} />
+							<Route path="/car-insurance" element={<Suspense fallback={<div></div>}><Results /></Suspense>} />
+							<Route path="/car-insurance/product-order/:userProductId?" element={<Suspense fallback={<div></div>}><OrderProduct /></Suspense>} />
+							<Route path="/call-confirmation" element={<Suspense fallback={<div></div>}><CallConfirmation /></Suspense>} />
+							<Route path="/fifteen-minutes-redirect" element={<Suspense fallback={<div></div>}><FifteenMinutesRedirect /></Suspense>} />
+							<Route path="/schedule-call" element={<Suspense fallback={<div></div>}><ScheduleCall /></Suspense>} />
+							<Route path="/schedule-confirmation" element={<Suspense fallback={<div></div>}><ScheduleConfirmation /></Suspense>} />
+							<Route path="/question-public" element={<Suspense fallback={<div></div>}><QuestionPage /></Suspense>} />
 							<Route path="/logout" element={<Logout />} />
 						</Route>
 						{/* Messages, Notifications, and Settings routes with no page padding */}
 						<Route element={<PrivateWrapper auth={{ isAuthenticated: isAuth }} _style={{ contentPadding: 0 }} />}>
-							<Route path="/messages" element={<Suspense fallback={<div>Loading...</div>}><Messages /></Suspense>} />
-							<Route path="/notifications" element={<Suspense fallback={<div>Loading...</div>}><Notifications /></Suspense>} />
-							<Route path="/settings" element={<Suspense fallback={<div>Loading...</div>}><Settings /></Suspense>} />
+							<Route path="/messages" element={<Suspense fallback={<div></div>}><Messages /></Suspense>} />
+							<Route path="/notifications" element={<Suspense fallback={<div></div>}><Notifications /></Suspense>} />
+							<Route path="/settings" element={<Suspense fallback={<div></div>}><Settings /></Suspense>} />
 						</Route>
 						{/* Public routes - no authentication required */}
 						<Route exact path="/auth/lead-login" element={<Suspense fallback={<div>Loading...</div>}><LeadLogin /></Suspense>} />
