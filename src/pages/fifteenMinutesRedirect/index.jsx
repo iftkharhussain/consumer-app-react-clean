@@ -5,6 +5,7 @@ import { ClockCircleOutlined, SearchOutlined, CheckOutlined, CalendarOutlined, I
 import { useNavigate } from 'react-router-dom';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import styles from './FifteenMinutesRedirect.module.css';
+import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
 
 const FifteenMinutesRedirect = () => {
   const initialized = useRef(false);
@@ -41,8 +42,7 @@ const FifteenMinutesRedirect = () => {
         <h1 className={styles.mainTitle}>Vos soumissions ont expiré</h1>
         
         <p className={styles.subTitle}>
-          Ne vous inquiétez pas! Courtika peut continuer à magasiner pour vous et trouver encore de<br/>
-          meilleures options. Continuez avec eux pour finaliser votre assurance.
+       Ne vous inquiétez pas! Vous n’avez pas perdu votre progression. Courtika peut continuer à magasiner avec vous et trouver encore plus d’options. Continuez avec eux en cliquant ci-dessous, et nous leur enverrons vos informations afin qu’un courtier puisse vous aider au téléphone.
         </p>
 
         <div className={styles.infoButton}>
@@ -53,16 +53,16 @@ const FifteenMinutesRedirect = () => {
         <div className={styles.card}>
           {!isSubmitted ? (
             <>
-              <h2 className={styles.cardTitleCenter}>Voulez-vous que Courtika continue à magasiner pour vous?</h2>
+              <h2 className={styles.cardTitleCenter}>Aimeriez-vous que Courtika continue à magasiner avec vous?</h2>
           
           <div className={styles.brokerHeader}>
             <div className={styles.courtikaLogoBox}>
               <img src="/images/courtika-assurances-inc.png" alt="Courtika" className={styles.courtikaImageLogo} />
             </div>
             <div className={styles.statusInfo}>
-              <div className={styles.statusBadge}>
-                <div className={styles.statusDot}></div>
-                Disponible maintenant
+              <div className={`${styles.statusBadge} ${!isOpenNow() ? styles.statusBadgeClosed : ''}`}>
+                <div className={`${styles.statusDot} ${!isOpenNow() ? styles.statusDotClosed : ''}`}></div>
+                {isOpenNow() ? 'Disponible maintenant' : 'Fermé maintenant'}
               </div>
               <div className={styles.statusSubtitle}>Courtiers certifiés prêts à vous aider</div>
             </div>
@@ -95,7 +95,7 @@ const FifteenMinutesRedirect = () => {
           </div>
 
               <Button type="primary" className={styles.primaryButton} size="large" onClick={handleSubmit} loading={isLoading}>
-                {!isLoading && <CheckOutlined />} Oui, je veux que Courtika magasine pour moi
+                {!isLoading && <CheckOutlined />}Oui, je veux magasiner avec Courtika
               </Button>
               <div className={styles.buttonSubtext}>
                 Sans frais • Sans engagement • Vous gardez le contrôle
@@ -118,9 +118,9 @@ const FifteenMinutesRedirect = () => {
                   <img src="/images/courtika-assurances-inc.png" alt="Courtika" className={styles.courtikaImageLogo} />
                 </div>
                 <div className={styles.statusInfoLeft}>
-                  <div className={styles.statusBadge}>
-                    <div className={styles.statusDot}></div>
-                    Disponible maintenant
+                  <div className={`${styles.statusBadge} ${!isOpenNow() ? styles.statusBadgeClosed : ''}`}>
+                    <div className={`${styles.statusDot} ${!isOpenNow() ? styles.statusDotClosed : ''}`}></div>
+                    {isOpenNow() ? 'Disponible maintenant' : 'Fermé maintenant'}
                   </div>
                   <div className={styles.statusSubtitleLeft}>Courtiers certifiés prêts à vous aider</div>
                 </div>
@@ -130,7 +130,7 @@ const FifteenMinutesRedirect = () => {
                 <li>
                   <CalendarOutlined className={styles.infoIcon} />
                   <div>
-                    <span className={styles.infoText}>Ouvert aujourd'hui de 8:30 - 16:30</span>
+                    <span className={styles.infoText}>{getFormattedTodayHours()}</span>
                     <a href="#" className={styles.infoLink} onClick={(e) => { e.preventDefault(); setIsScheduleOpen(true); }}>Voir l'horaire complet</a>
                   </div>
                 </li>

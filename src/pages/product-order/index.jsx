@@ -4,6 +4,7 @@ import { Spin } from 'antd';
 import ExploreProducts from '../../components/exploreProducts';
 import FAQ from '../../components/faq';
 import { getOrderDetails } from '../../services/api/productOrderService';
+import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
 import styles from './ProductOrder.module.css';
 
 const OrderProduct = () => {
@@ -77,9 +78,9 @@ const OrderProduct = () => {
     const companyName = advisorInfo.companyName || 'Courtika Assurances Inc';
     const companyLogo = advisorInfo.logo || '/images/courtika-assurances-inc.png';
     const phone = advisorInfo.phone || 'XXX XXX XXXX';
-    const isOpen = advisorInfo.isOpen || false;
-    const openStatus = advisorInfo.openStatus || 'Fermé';
-    const formattedHours = advisorInfo.formattedHours || 'Ouvert de 8:30 à 16:30 du lundi au vendredi';
+    const isOpen = advisorInfo.isOpen !== undefined ? advisorInfo.isOpen : isOpenNow();
+    const openStatus = advisorInfo.openStatus || (isOpen ? 'Ouvert' : 'Fermé');
+    const formattedHours = advisorInfo.formattedHours || getFormattedTodayHours();
     const callDuration = advisorInfo.callDuration || 10;
     const maxRetries = advisorInfo.maxRetries || 2;
 
@@ -125,7 +126,7 @@ const OrderProduct = () => {
                         <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
                         <div className={styles.protectionDetails}>
                             <p className={styles.protectionName}>Protection dommage matériel</p>
-                            <p className={styles.protectionAmount}>2 000 000 $</p>
+                            <p className={styles.protectionAmount}>2 000 000$</p>
                         </div>
                     </div>
                     
@@ -133,7 +134,7 @@ const OrderProduct = () => {
                         <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
                         <div className={styles.protectionDetails}>
                             <p className={styles.protectionName}>Protection accident et collision</p>
-                            <p className={styles.protectionAmount}>500 $</p>
+                            <p className={styles.protectionAmount}>500$</p>
                         </div>
                     </div>
                     
@@ -141,7 +142,7 @@ const OrderProduct = () => {
                         <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
                         <div className={styles.protectionDetails}>
                             <p className={styles.protectionName}>Protection dommage matériel</p>
-                            <p className={styles.protectionAmount}>250 $</p>
+                            <p className={styles.protectionAmount}>250$</p>
                         </div>
                     </div>
                 </div>

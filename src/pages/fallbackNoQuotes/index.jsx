@@ -12,6 +12,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import styles from './FallbackNoQuotes.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
+import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
 
 const FallbackNoQuotes = () => {
   const navigate = useNavigate();
@@ -39,19 +40,23 @@ const FallbackNoQuotes = () => {
     <PageContent pageType="overview">
       <div className={styles.fallbackContainer}>
       
-        <div className={styles.headerSection}>
-          <div className={styles.warningIconWrapper}>
-            <WarningOutlined className={styles.warningIcon} />
+        {!isSubmitted && (
+          <div className={styles.headerSection}>
+            <div className={styles.warningIconWrapper}>
+              <WarningOutlined className={styles.warningIcon} />
+            </div>
+            <h1 className={styles.mainTitle}>Impossible de générer vos soumissions</h1>
+            <p className={styles.subTitle}>
+             Nous éprouvons actuellement des difficultés techniques pour traiter votre demande. Pas de souci! Votre progression a bien été enregistrée et un courtier chez Courtika peut vous aider rapidement à compléter votre démarche. Cliquez ci-dessous pour poursuivre avec eux par téléphone
+            </p>
           </div>
-          <h1 className={styles.mainTitle}>Impossible de générer vos soumissions</h1>
-          <p className={styles.subTitle}>
-            Nous éprouvons actuellement des difficultés techniques pour traiter votre demande. Pas de soucis!<br />
-            Un courtier chez Courtika peut vous aider rapidement.
-          </p>
-        </div>
+        )}
 
         {/* Action Card */}
-        <div className={styles.actionCard}>
+        <div 
+          key={isSubmitted ? 'submitted' : 'prompt'} 
+          className={`${styles.actionCard} ${isSubmitted ? styles.submitted : ''}`}
+        >
           {!isSubmitted ? (
             <>
               <h2 className={styles.cardTitle}>Aimeriez-vous continuer avec Courtika?</h2>
@@ -61,9 +66,9 @@ const FallbackNoQuotes = () => {
                   <img src="/images/courtika-assurances-inc.png" alt="Courtika" className={styles.courtikaImageLogo} />
                 </div>
                 <div className={styles.statusInfo}>
-                  <div className={styles.statusBadge}>
-                    <div className={styles.statusDot}></div>
-                    Disponible maintenant
+                  <div className={`${styles.statusBadge} ${!isOpenNow() ? styles.statusBadgeClosed : ''}`}>
+                    <div className={`${styles.statusDot} ${!isOpenNow() ? styles.statusDotClosed : ''}`}></div>
+                    {isOpenNow() ? 'Disponible maintenant' : 'Fermé maintenant'}
                   </div>
                   <p className={styles.statusText}>Courtiers certifiés prêts à vous aider</p>
                 </div>
@@ -111,7 +116,7 @@ const FallbackNoQuotes = () => {
                 <CheckOutlined className={styles.successIcon} />
                 <div className={styles.successContent}>
                   <h3 className={styles.successTitle}>Vos informations ont été transmises à Courtika!</h3>
-                  <p className={styles.successText}>Un courtier attend <strong>votre appel</strong> pour vous aider</p>
+                  <p className={styles.successText}>Un courtier attend   <strong>votre appel</strong> au 1 (450) 762-9240</p>
                 </div>
               </div>
 
@@ -122,9 +127,9 @@ const FallbackNoQuotes = () => {
                   <img src="/images/courtika-assurances-inc.png" alt="Courtika" className={styles.courtikaImageLogo} />
                 </div>
                 <div className={styles.statusInfo}>
-                  <div className={styles.statusBadge}>
-                    <div className={styles.statusDot}></div>
-                    Disponible maintenant
+                  <div className={`${styles.statusBadge} ${!isOpenNow() ? styles.statusBadgeClosed : ''}`}>
+                    <div className={`${styles.statusDot} ${!isOpenNow() ? styles.statusDotClosed : ''}`}></div>
+                    {isOpenNow() ? 'Disponible maintenant' : 'Fermé maintenant'}
                   </div>
                   <p className={styles.statusText}>Courtiers certifiés prêts à vous aider</p>
                 </div>
@@ -134,7 +139,7 @@ const FallbackNoQuotes = () => {
                 <li>
                   <CalendarOutlined className={styles.infoIcon} />
                   <div>
-                    <span className={styles.infoText}>Ouvert aujourd'hui de 8:30 - 16:30</span>
+                    <span className={styles.infoText}>{getFormattedTodayHours()}</span>
                     <a href="#" className={styles.infoLink} onClick={(e) => { e.preventDefault(); setIsScheduleOpen(true); }}>Voir l'horaire complet</a>
                   </div>
                 </li>
@@ -146,10 +151,16 @@ const FallbackNoQuotes = () => {
                   <InfoCircleOutlined className={styles.infoIcon} />
                   <span className={styles.infoText}>Ayez votre permis de conduire et les papiers d'immatriculation du véhicule à portée de main.</span>
                 </li>
+                <li className={styles.desktopOnly}>
+                  <PhoneOutlined className={styles.infoIcon} style={{ transform: 'scaleX(-1)' }} />
+                  <div>
+                    <span className={styles.infoText}>Ligne prioritaire : <a href="tel:+14507629240" className={styles.infoLink} style={{display: 'inline', marginTop: '0', color: '#1f01c8'}}>1 (450) 762-9240</a></span>
+                  </div>
+                </li>
               </ul>
 
               <div className={styles.actionButtons}>
-                <Button type="primary" className={styles.primaryButton} size="large" href="tel:+14507629240">
+                <Button type="primary" className={`${styles.primaryButton} ${styles.mobileOnly}`} size="large" href="tel:+14507629240">
                   <PhoneOutlined className={styles.phoneIcon} /> Appeler maintenant: 1 (450) 762-9240
                 </Button>
                 

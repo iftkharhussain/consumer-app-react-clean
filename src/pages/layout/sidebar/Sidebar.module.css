@@ -50,7 +50,7 @@
 .logoHeader .logoWithVersion {
   display: flex;
   align-items: center;
-  gap: calc(var(--spacing) * 2);
+  gap: calc(var(--spacing) * 1);
 }
 
 .logoHeader .logoWithVersion img {

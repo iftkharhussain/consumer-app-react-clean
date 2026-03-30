@@ -72,7 +72,7 @@ const ScheduleCall = () => {
         <div className={styles.card}>
           <div 
             ref={widgetContainerRef}
-            style={{ minWidth: '320px', height: '700px' }}
+            style={{ width: '100%', height: '1200px' }}
           />
         </div>
       </div>

@@ -2,17 +2,10 @@ import React from 'react';
 import { Modal } from 'antd';
 import { CalendarOutlined } from '@ant-design/icons';
 import styles from './ScheduleModal.module.css';
+import { getFullSchedule } from '../../utils/businessHours';
 
 const ScheduleModal = ({ isOpen, onClose }) => {
-  const scheduleData = [
-    { day: 'Dimanche', hours: 'Fermé', isToday: false },
-    { day: 'Lundi', hours: '8:30 - 16:30', isToday: false },
-    { day: 'Mardi', hours: '8:30 - 16:30', isToday: true },
-    { day: 'Mercredi', hours: '8:30 - 16:30', isToday: false },
-    { day: 'Jeudi', hours: '8:30 - 16:30', isToday: false },
-    { day: 'Vendredi', hours: '8:30 - 16:30', isToday: false },
-    { day: 'Samedi', hours: 'Fermé', isToday: false },
-  ];
+  const scheduleData = getFullSchedule();
 
   return (
     <Modal

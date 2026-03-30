@@ -3,6 +3,7 @@ import { PageContent } from 'components';
 import { useNavigate } from 'react-router-dom';
 import styles from './ScheduleConfirmation.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
+import { getFormattedTodayHours } from '../../utils/businessHours';
 
 const ScheduleConfirmation = () => {
   const navigate = useNavigate();
@@ -27,10 +28,10 @@ const ScheduleConfirmation = () => {
             </svg>
           </div>
           
-          <h1 className={styles.mainTitle}>Parfait! Votre rendez-vous téléphonique est confirmé</h1>
+          <h1 className={styles.mainTitle}>Génial! Votre rendez-vous téléphonique est confirmé.</h1>
           
           <p className={styles.subTitle}>
-            Nous avons envoyé votre demande à un courtier en assurance de dommages chez Courtika.<br />Celui-ci vous appellera au moment prévu pour répondre à vos questions et finaliser les détails.
+            Nous avons envoyé votre demande à un courtier en assurance de dommages chez Courtika. Celui-ci vous appellera au moment prévu pour répondre à vos questions et finaliser les détails.
           </p>
 
           <div className={styles.cardLayout}>
@@ -46,8 +47,8 @@ const ScheduleConfirmation = () => {
                   <span className={styles.insurerName}>Intact</span>
                 </div>
                 <div className={styles.priceContainer}>
-                  <span className={styles.priceMain}>90 $/mois</span>
-                  <span className={styles.priceOld}>110 $/mois</span>
+                  <span className={styles.priceMain}>90$/mois</span>
+                  <span className={styles.priceOld}>110$/mois</span>
                 </div>
               </div>
               
@@ -65,19 +66,19 @@ const ScheduleConfirmation = () => {
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
                         <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
-                    <span>Protection dommage matériel 2 000 000 $</span>
+                    <span>Protection dommage matériel 2 000 000$</span>
                   </li>
                   <li>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
                         <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
-                    <span>Protection accident et collision 500 $</span>
+                    <span>Protection accident et collision 500$</span>
                   </li>
                   <li>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
                         <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
-                    <span>Protection dommage matériel 250 $</span>
+                    <span>Protection dommage matériel 250$</span>
                   </li>
                 </ul>
               </div>
@@ -93,7 +94,7 @@ const ScheduleConfirmation = () => {
                 </div>
                 <div>
                   <div className={styles.brokerBoxTitle}>Courtika</div>
-                  <div className={styles.brokerBoxSubtitle}>Courtier en assurance de dommages</div>
+                  <div className={styles.brokerBoxSubtitle}>Cabinet en assurance de dommages</div>
                 </div>
               </div>
 
@@ -116,7 +117,7 @@ const ScheduleConfirmation = () => {
                     <polyline points="12 6 12 12 16 14"></polyline>
                   </svg>
                   <div>
-                    <span className={styles.infoText}>Ouvert aujourd'hui de 8:30 - 16:30</span>
+                    <span className={styles.infoText}>{getFormattedTodayHours()}</span>
                     <a href="#" className={styles.infoLink} onClick={(e) => { e.preventDefault(); setIsScheduleOpen(true); }}>Voir l'horaire complet</a>
                   </div>
                 </li>

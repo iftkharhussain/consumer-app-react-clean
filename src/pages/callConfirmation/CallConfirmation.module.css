@@ -47,7 +47,7 @@
   color: #6b7280;
   line-height: 1.5;
   margin: 0 auto 40px;
-  max-width: 600px;
+  max-width: 800px;
 }
 
 .cardLayout {
@@ -58,7 +58,7 @@
 
 @media (max-width: 768px) {
   .cardLayout {
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
 }
 
@@ -140,7 +140,6 @@
 .priceOld {
   font-size: 14px;
   color: #9ca3af;
-  text-decoration: line-through;
 }
 
 .discountBadge {
@@ -227,25 +226,48 @@
   border-radius: 16px;
   font-size: 14px;
   font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.statusBadgeClosed {
+  background-color: #fee2e2;
+  color: #991b1b;
 }
 
 .statusDot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: oklch(62.7% .194 149.214);
-  animation: pulse 2s infinite;
+  background-color: #22c55e;
+  animation: pulseOpen 2s infinite;
 }
 
-@keyframes pulse {
+.statusDotClosed {
+  background-color: #ef4444;
+  animation: pulseClosed 2s infinite;
+}
+
+@keyframes pulseOpen {
   0% {
-    box-shadow: 0 0 0 0 oklch(62.7% .194 149.214 / 0.7);
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
   }
   70% {
-    box-shadow: 0 0 0 8px oklch(62.7% .194 149.214 / 0);
+    box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 oklch(62.7% .194 149.214 / 0);
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+  }
+}
+
+@keyframes pulseClosed {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
   }
 }
 
@@ -292,6 +314,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  margin-top: 24px;
 }
 
 .primaryButton {
@@ -310,14 +333,6 @@
 
 .buttonIconLeft {
   margin-right: 8px;
-}
-
-.buttonIconRight {
-  margin-left: 8px;
-}
-
-.primaryButton:hover {
-  background-color: #18009e !important;
 }
 
 .secondaryOutlineButton {
@@ -341,7 +356,6 @@
   color: #111827 !important;
 }
 
-/* About Card */
 .aboutCard {
   background: white;
   border-radius: 12px;
@@ -432,12 +446,6 @@
   border-top: 1px solid #f3f4f6;
 }
 
-.amfLogoPlaceholder {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
 .amfImageLogo {
   max-width: 120px;
   max-height: 48px;
@@ -462,6 +470,15 @@
   margin: 0;
 }
 
+/* --- Visibility Utilities --- */
+.desktopOnly {
+  display: flex !important;
+}
+
+.mobileOnly {
+  display: none !important;
+}
+
 /* --- Mobile Responsive Optimizations --- */
 @media (max-width: 768px) {
   .fallbackContainer {
@@ -470,16 +487,6 @@
 
   .actionCard, .aboutCard {
     padding: 16px 12px;
-  }
-
-  .successBanner {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 16px;
-  }
-
-  .successIcon {
-    font-size: 24px;
   }
 
   .mainTitle {
@@ -495,22 +502,15 @@
     padding: 12px;
   }
 
-  .insurerName {
-    font-size: 18px;
-  }
-
-  .priceMain {
-    font-size: 22px;
-  }
-
   .insurerRow {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
   }
 
   .priceContainer {
-    align-items: flex-start;
+    align-items: flex-end;
   }
 
   .statusSectionLeft {
@@ -519,12 +519,8 @@
     gap: 12px;
   }
 
-  .infoList li {
-    font-size: 14px;
-  }
-
-  .infoText {
-    font-size: 13px;
+  .actionButtons {
+    display: flex; /* Show buttons on mobile */
   }
 
   .primaryButton, .secondaryOutlineButton {
@@ -532,16 +528,12 @@
     font-size: 14px;
   }
 
-  .aboutTitle {
-    font-size: 16px;
+  .desktopOnly {
+    display: none !important;
   }
 
-  .benefitsBox {
-    padding: 16px;
-  }
-
-  .benefitsBoxList li {
-    font-size: 13px;
+  .mobileOnly {
+    display: flex !important;
   }
 
   .certificationSection {

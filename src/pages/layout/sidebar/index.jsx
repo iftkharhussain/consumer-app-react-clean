@@ -152,7 +152,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 				),
 				label: (
 					<Link to='/car-insurance' style={{ color: 'inherit', textDecoration: 'none' }}>
-						Car Insurance
+						Assurance auto
 					</Link>
 				),
 			},
@@ -436,7 +436,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 								<img src={!collapsed ? '/images/norga-blue-logo.png' : '/images/logo-single.png'}
 									className={`mob-none ${collapsed ? 'collapsed' : ''}`} alt='Norga' style={{ maxWidth: '100px' }}
 								/>
-								{!collapsed && <div className={styles.version}>&nbsp; v0.6</div>}
+								{!collapsed && <div className={styles.version}>Beta</div>}
 							</Link>
 						</div>
 						{onMobileClose && <button className="mobile-sidebar-close mobile-only" onClick={onMobileClose} aria-label="Close menu" type="button"><XClose style={{ width: 20, height: 20, color: '#697586' }} /></button>}

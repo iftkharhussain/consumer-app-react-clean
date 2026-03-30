@@ -4,6 +4,7 @@ import Button from '../button/Button';
 import ContactSection from '../contactSection';
 import RatingSection from '../ratingSection';
 import styles from './InterestedModal.module.css';
+import { getFormattedTodayHours } from '../../utils/businessHours';
 
 const InterestedModal = ({ isOpen, onClose, onAccept, variant = 'default' }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -143,7 +144,7 @@ const InterestedModal = ({ isOpen, onClose, onAccept, variant = 'default' }) => 
 
           <div className={styles.detailItem}>
             <img src="/images/calendar.svg" alt="Calendar" className={styles.detailIcon} />
-            <span className={styles.detailText}>Ouvert de 8:30 à 16:30 du lundi au vendredi</span>
+            <span className={styles.detailText}>{getFormattedTodayHours()}</span>
           </div>
 
           <div className={styles.detailItem}>
