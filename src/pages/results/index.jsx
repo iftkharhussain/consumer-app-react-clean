@@ -123,9 +123,12 @@ const Results = () => {
         const transformedInsurers = availableCarriers.map((carrier, index) => {
           const annual = carrier.annualPremium || carrier.premium || 0;
           const monthly = carrier.monthlyPremium || Math.round(annual / 12);
-          const displayName = carrier.carrierCode
+          
+          let rawName = carrier.carrierCode
             ? getCarrierName(carrier.carrierCode)
             : (carrier.name || carrier.carrierName || `Provider ${index + 1}`);
+            
+          const displayName = rawName.replace(/\s+(Assurances?|Insurance)$/i, '').trim();
 
           return {
             id: carrier.carrierCode || `carrier-${index}`,
@@ -416,11 +419,6 @@ const Results = () => {
 
   return (
     <>
-      {/* Resubmit Alert */}
-      {showResubmitAlert && (
-        <ResubmitAlert onClose={handleCloseResubmitAlert} />
-      )}
-
       {/* Initial Loading Modal */}
       <LoadingModal
         isOpen={showLoadingModal}
@@ -488,11 +486,28 @@ const Results = () => {
                           {/* Price Section */}
                           <div className={styles.priceSection}>
                             <div className={styles.priceDisplay}>
+                              <span className={styles.priceSuffixBalanced} aria-hidden="true">
+                                 $ / {billingPeriod === 'monthly' ? 'mois' : 'année'}
+                              </span>
+                              
+                              {recommendedInsurer.oldPrice && (
+                                <span className={styles.oldPrice}>
+                                  {billingPeriod === 'monthly' ? recommendedInsurer.oldPrice : recommendedInsurer.oldYearlyPrice}
+                                </span>
+                              )}
+
                               <span className={styles.mainPrice}>
                                 {billingPeriod === 'monthly' ? recommendedInsurer.price : recommendedInsurer.yearlyPrice}
                               </span>
                               <span className={styles.priceSuffix}> $ / {billingPeriod === 'monthly' ? 'mois' : 'année'}</span>
                             </div>
+
+                            {recommendedInsurer.discount && (
+                              <div className={styles.discountBadge}>
+                                <StarFilled className={styles.discountIcon} />
+                                <span>{recommendedInsurer.discountLabel || 'Rabais appliqué'}</span>
+                              </div>
+                            )}
                           </div>
 
                           {/* Toggle */}

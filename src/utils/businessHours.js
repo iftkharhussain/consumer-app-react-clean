@@ -1,0 +1,98 @@
+/**
+ * Business hours utility to handle Montreal timezone and opening hours
+ */
+
+const DAYS_FR = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+
+const BUSINESS_HOURS = {
+  'Lundi': { start: '10:30', end: '18:00', label: '10:30 - 18:00' },
+  'Mardi': { start: '08:30', end: '18:00', label: '8:30 - 18:00' },
+  'Mercredi': { start: '08:30', end: '18:00', label: '8:30 - 18:00' },
+  'Jeudi': { start: '08:30', end: '18:00', label: '8:30 - 18:00' },
+  'Vendredi': { start: '08:30', end: '16:30', label: '8:30 - 16:30' },
+  'Samedi': null,
+  'Dimanche': { start: '08:30', end: '16:30', label: '8:30 - 16:30' },
+};
+
+/**
+ * Gets the current date/time in Montreal timezone
+ */
+export const getMontrealTime = () => {
+    try {
+        return new Date(new Date().toLocaleString("en-US", { timeZone: "America/Montreal" }));
+    } catch (e) {
+        // Fallback to local time if timezone is not supported
+        return new Date();
+    }
+};
+
+/**
+ * Returns business hours for a specific day name (in French)
+ */
+export const getHoursForDay = (dayName) => {
+    return BUSINESS_HOURS[dayName] || null;
+};
+
+/**
+ * Returns formatted hours list for the schedule modal
+ */
+export const getFullSchedule = () => {
+    const montrealDate = getMontrealTime();
+    const currentDayIndex = montrealDate.getDay();
+    
+    return DAYS_FR.map((day, index) => {
+        const hours = BUSINESS_HOURS[day];
+        return {
+            day,
+            hours: hours ? hours.label : 'Fermé',
+            isToday: index === currentDayIndex
+        };
+    });
+};
+
+/**
+ * Checks if the business is currently open in Montreal
+ */
+export const isOpenNow = () => {
+    const montrealDate = getMontrealTime();
+    const dayName = DAYS_FR[montrealDate.getDay()];
+    const hours = BUSINESS_HOURS[dayName];
+    
+    if (!hours) return false;
+    
+    const [startHour, startMin] = hours.start.split(':').map(Number);
+    const [endHour, endMin] = hours.end.split(':').map(Number);
+    
+    const currentHour = montrealDate.getHours();
+    const currentMin = montrealDate.getMinutes();
+    
+    const currentTimeMinutes = currentHour * 60 + currentMin;
+    const startTimeMinutes = startHour * 60 + startMin;
+    const endTimeMinutes = endHour * 60 + endMin;
+    
+    return currentTimeMinutes >= startTimeMinutes && currentTimeMinutes < endTimeMinutes;
+};
+
+/**
+ * Returns a string like "Ouvert aujourd'hui de 8:30 - 16:30"
+ */
+export const getFormattedTodayHours = () => {
+    const montrealDate = getMontrealTime();
+    const dayName = DAYS_FR[montrealDate.getDay()];
+    const hours = BUSINESS_HOURS[dayName];
+    
+    if (!hours) return "Fermé aujourd'hui";
+    
+    return `Ouvert aujourd'hui de ${hours.label}`;
+};
+
+/**
+ * Returns a simple string for the current day's hours or "Fermé"
+ */
+export const getTodayHoursLabel = () => {
+    const montrealDate = getMontrealTime();
+    const dayName = DAYS_FR[montrealDate.getDay()];
+    const hours = BUSINESS_HOURS[dayName];
+    
+    return hours ? hours.label : 'Fermé';
+};

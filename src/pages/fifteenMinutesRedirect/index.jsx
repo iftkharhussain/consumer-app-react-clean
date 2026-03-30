@@ -5,6 +5,7 @@ import { ClockCircleOutlined, SearchOutlined, CheckOutlined, CalendarOutlined, I
 import { useNavigate } from 'react-router-dom';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import styles from './FifteenMinutesRedirect.module.css';
+import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
 
 const FifteenMinutesRedirect = () => {
   const initialized = useRef(false);
@@ -60,9 +61,9 @@ const FifteenMinutesRedirect = () => {
               <img src="/images/courtika-assurances-inc.png" alt="Courtika" className={styles.courtikaImageLogo} />
             </div>
             <div className={styles.statusInfo}>
-              <div className={styles.statusBadge}>
-                <div className={styles.statusDot}></div>
-                Disponible maintenant
+              <div className={`${styles.statusBadge} ${!isOpenNow() ? styles.statusBadgeClosed : ''}`}>
+                <div className={`${styles.statusDot} ${!isOpenNow() ? styles.statusDotClosed : ''}`}></div>
+                {isOpenNow() ? 'Disponible maintenant' : 'Fermé maintenant'}
               </div>
               <div className={styles.statusSubtitle}>Courtiers certifiés prêts à vous aider</div>
             </div>
@@ -118,9 +119,9 @@ const FifteenMinutesRedirect = () => {
                   <img src="/images/courtika-assurances-inc.png" alt="Courtika" className={styles.courtikaImageLogo} />
                 </div>
                 <div className={styles.statusInfoLeft}>
-                  <div className={styles.statusBadge}>
-                    <div className={styles.statusDot}></div>
-                    Disponible maintenant
+                  <div className={`${styles.statusBadge} ${!isOpenNow() ? styles.statusBadgeClosed : ''}`}>
+                    <div className={`${styles.statusDot} ${!isOpenNow() ? styles.statusDotClosed : ''}`}></div>
+                    {isOpenNow() ? 'Disponible maintenant' : 'Fermé maintenant'}
                   </div>
                   <div className={styles.statusSubtitleLeft}>Courtiers certifiés prêts à vous aider</div>
                 </div>
@@ -130,7 +131,7 @@ const FifteenMinutesRedirect = () => {
                 <li>
                   <CalendarOutlined className={styles.infoIcon} />
                   <div>
-                    <span className={styles.infoText}>Ouvert aujourd'hui de 8:30 - 16:30</span>
+                    <span className={styles.infoText}>{getFormattedTodayHours()}</span>
                     <a href="#" className={styles.infoLink} onClick={(e) => { e.preventDefault(); setIsScheduleOpen(true); }}>Voir l'horaire complet</a>
                   </div>
                 </li>

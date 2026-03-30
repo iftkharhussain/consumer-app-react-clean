@@ -7,6 +7,7 @@ import GetInTouch from '../getInTouch';
 import MoreOptions from '../moreOptions';
 import InterestedModal from '../interestedModal';
 import ContactSection from '../contactSection';
+import { getFormattedTodayHours } from '../../utils/businessHours';
 import styles from './EstimateContent.module.css';
 
 const EstimateContent = () => {
@@ -45,7 +46,7 @@ const EstimateContent = () => {
 
                     <div className={styles.detailItem}>
                         <img src="/images/calendar.svg" alt="Calendar" className={styles.detailIcon} />
-                        <span className={styles.detailText}>Ouvert de 8:30 à 16:30 du lundi au vendredi</span>
+                        <span className={styles.detailText}>{getFormattedTodayHours()}</span>
                     </div>
 
                     <div className={styles.detailItem}>

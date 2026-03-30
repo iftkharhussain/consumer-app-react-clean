@@ -12,6 +12,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import styles from './FallbackNoQuotes.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
+import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
 
 const FallbackNoQuotes = () => {
   const navigate = useNavigate();
@@ -61,9 +62,9 @@ const FallbackNoQuotes = () => {
                   <img src="/images/courtika-assurances-inc.png" alt="Courtika" className={styles.courtikaImageLogo} />
                 </div>
                 <div className={styles.statusInfo}>
-                  <div className={styles.statusBadge}>
-                    <div className={styles.statusDot}></div>
-                    Disponible maintenant
+                  <div className={`${styles.statusBadge} ${!isOpenNow() ? styles.statusBadgeClosed : ''}`}>
+                    <div className={`${styles.statusDot} ${!isOpenNow() ? styles.statusDotClosed : ''}`}></div>
+                    {isOpenNow() ? 'Disponible maintenant' : 'Fermé maintenant'}
                   </div>
                   <p className={styles.statusText}>Courtiers certifiés prêts à vous aider</p>
                 </div>
@@ -122,9 +123,9 @@ const FallbackNoQuotes = () => {
                   <img src="/images/courtika-assurances-inc.png" alt="Courtika" className={styles.courtikaImageLogo} />
                 </div>
                 <div className={styles.statusInfo}>
-                  <div className={styles.statusBadge}>
-                    <div className={styles.statusDot}></div>
-                    Disponible maintenant
+                  <div className={`${styles.statusBadge} ${!isOpenNow() ? styles.statusBadgeClosed : ''}`}>
+                    <div className={`${styles.statusDot} ${!isOpenNow() ? styles.statusDotClosed : ''}`}></div>
+                    {isOpenNow() ? 'Disponible maintenant' : 'Fermé maintenant'}
                   </div>
                   <p className={styles.statusText}>Courtiers certifiés prêts à vous aider</p>
                 </div>
@@ -134,7 +135,7 @@ const FallbackNoQuotes = () => {
                 <li>
                   <CalendarOutlined className={styles.infoIcon} />
                   <div>
-                    <span className={styles.infoText}>Ouvert aujourd'hui de 8:30 - 16:30</span>
+                    <span className={styles.infoText}>{getFormattedTodayHours()}</span>
                     <a href="#" className={styles.infoLink} onClick={(e) => { e.preventDefault(); setIsScheduleOpen(true); }}>Voir l'horaire complet</a>
                   </div>
                 </li>
@@ -146,10 +147,16 @@ const FallbackNoQuotes = () => {
                   <InfoCircleOutlined className={styles.infoIcon} />
                   <span className={styles.infoText}>Ayez votre permis de conduire et les papiers d'immatriculation du véhicule à portée de main.</span>
                 </li>
+                <li className={styles.desktopOnly}>
+                  <PhoneOutlined className={styles.infoIcon} style={{ transform: 'scaleX(-1)' }} />
+                  <div>
+                    <span className={styles.infoText}>Ligne prioritaire : <a href="tel:+14507629240" className={styles.infoLink} style={{display: 'inline', marginTop: '0', color: '#1f01c8'}}>1 (450) 762-9240</a></span>
+                  </div>
+                </li>
               </ul>
 
               <div className={styles.actionButtons}>
-                <Button type="primary" className={styles.primaryButton} size="large" href="tel:+14507629240">
+                <Button type="primary" className={`${styles.primaryButton} ${styles.mobileOnly}`} size="large" href="tel:+14507629240">
                   <PhoneOutlined className={styles.phoneIcon} /> Appeler maintenant: 1 (450) 762-9240
                 </Button>
                 

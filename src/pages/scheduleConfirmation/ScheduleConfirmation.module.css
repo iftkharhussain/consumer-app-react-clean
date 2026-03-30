@@ -54,7 +54,7 @@
 
 @media (max-width: 768px) {
   .cardLayout {
-    flex-direction: column;
+    flex-direction: column-reverse;
   }
 }
 
@@ -136,7 +136,6 @@
 .priceOld {
   font-size: 14px;
   color: #9ca3af;
-  text-decoration: line-through;
 }
 
 .discountBadge {
@@ -426,8 +425,25 @@
   margin: 0;
 }
 
+/* --- Visibility Utilities --- */
+.desktopOnly {
+  display: flex !important;
+}
+
+.mobileOnly {
+  display: none !important;
+}
+
 /* --- Mobile Responsive Optimizations --- */
 @media (max-width: 768px) {
+  .desktopOnly {
+    display: none !important;
+  }
+
+  .mobileOnly {
+    display: flex !important;
+  }
+
   .fallbackContainer {
     padding: 24px 16px;
   }
@@ -456,13 +472,27 @@
   }
 
   .insurerRow {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
   }
 
   .priceContainer {
-    align-items: flex-start;
+    align-items: flex-end;
+  }
+
+  .insurerLogoBox {
+    width: 48px;
+    height: 48px;
+  }
+
+  .insurerName {
+    font-size: 16px;
+  }
+
+  .priceMain {
+    font-size: 18px;
   }
 
   .insurerName {

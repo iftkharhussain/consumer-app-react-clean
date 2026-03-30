@@ -3,6 +3,7 @@ import { Modal, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import styles from './CourtikaModal.module.css';
 import { fortusService } from '../../services/api/fortusService';
+import { isOpenNow } from '../../utils/businessHours';
 
 /**
  * CourtikaModal - Call request modal for Fortus Leads
@@ -51,6 +52,9 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
                 console.log('Fortus request successful:', result);
                 setRequestStatus('success');
                 message.success('Votre demande a été envoyée avec succès!');
+                
+                // Trigger the phone call dialer
+                window.location.href = 'tel:18552451906';
                 
                 // Get userProductId from response if not already available
                 const productId = result.data?.userProductId || userProductId;
@@ -264,9 +268,11 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
                                     </div>
 
                                     {selectedOption === 'now' && (
-                                        <div className={styles.onlineIndicator}>
-                                            <div className={styles.pulsingDot}></div>
-                                            <span className={styles.onlineText}>5 courtiers en ligne</span>
+                                        <div className={`${styles.onlineIndicator} ${!isOpenNow() ? styles.onlineIndicatorClosed : ''}`}>
+                                            <div className={`${styles.pulsingDot} ${!isOpenNow() ? styles.pulsingDotClosed : ''}`}></div>
+                                            <span className={`${styles.onlineText} ${!isOpenNow() ? styles.onlineTextClosed : ''}`}>
+                                                {isOpenNow() ? 'Ouvert' : 'Fermé'}
+                                            </span>
                                         </div>
                                     )}
                                 </div>
@@ -299,7 +305,7 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
                             className={styles.ctaButton}
                             onClick={handleContinue}
                         >
-                            {selectedOption === 'now' ? 'Appeler maintenant' : 'Continuer'}
+                            {selectedOption === 'now' ? (isOpenNow() ? 'Appeler maintenant' : 'Demander un appel') : 'Continuer'}
                             <ArrowRightIcon />
                         </button>
 

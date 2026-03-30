@@ -3,6 +3,7 @@ import { PageContent } from 'components';
 import { useNavigate } from 'react-router-dom';
 import styles from './ScheduleConfirmation.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
+import { getFormattedTodayHours } from '../../utils/businessHours';
 
 const ScheduleConfirmation = () => {
   const navigate = useNavigate();
@@ -116,7 +117,7 @@ const ScheduleConfirmation = () => {
                     <polyline points="12 6 12 12 16 14"></polyline>
                   </svg>
                   <div>
-                    <span className={styles.infoText}>Ouvert aujourd'hui de 8:30 - 16:30</span>
+                    <span className={styles.infoText}>{getFormattedTodayHours()}</span>
                     <a href="#" className={styles.infoLink} onClick={(e) => { e.preventDefault(); setIsScheduleOpen(true); }}>Voir l'horaire complet</a>
                   </div>
                 </li>

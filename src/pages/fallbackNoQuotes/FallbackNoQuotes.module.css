@@ -99,25 +99,48 @@
   font-size: 13px;
   font-weight: 600;
   width: fit-content;
+  transition: all 0.3s ease;
+}
+
+.statusBadgeClosed {
+  background-color: #fce8e6;
+  color: #c5221f;
 }
 
 .statusDot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: oklch(62.7% .194 149.214);
-  animation: pulse 2s infinite;
+  background-color: #1e8e3e;
+  animation: pulseOpen 2s infinite;
 }
 
-@keyframes pulse {
+.statusDotClosed {
+  background-color: #d93025;
+  animation: pulseClosed 2s infinite;
+}
+
+@keyframes pulseOpen {
   0% {
-    box-shadow: 0 0 0 0 oklch(62.7% .194 149.214 / 0.7);
+    box-shadow: 0 0 0 0 rgba(30, 142, 62, 0.7);
   }
   70% {
-    box-shadow: 0 0 0 6px oklch(62.7% .194 149.214 / 0);
+    box-shadow: 0 0 0 6px rgba(30, 142, 62, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 oklch(62.7% .194 149.214 / 0);
+    box-shadow: 0 0 0 0 rgba(30, 142, 62, 0);
+  }
+}
+
+@keyframes pulseClosed {
+  0% {
+    box-shadow: 0 0 0 0 rgba(217, 48, 37, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(217, 48, 37, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(217, 48, 37, 0);
   }
 }
 
@@ -417,8 +440,26 @@
   color: #111827 !important;
 }
 
+/* --- Visibility Utilities --- */
+.desktopOnly {
+  display: flex !important;
+}
+
+.mobileOnly {
+  display: flex !important;
+}
+
+@media (min-width: 769px) {
+  .mobileOnly {
+    display: none !important;
+  }
+}
+
 /* --- Mobile Responsive Optimizations --- */
 @media (max-width: 768px) {
+  .desktopOnly {
+    display: none !important;
+  }
   .fallbackContainer {
     padding: 24px 16px;
   }

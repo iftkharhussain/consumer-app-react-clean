@@ -16,7 +16,7 @@ const MobileNavbar = ({ onMenuClick }) => {
                         alt="Norga"
                         className="norga-logo"
                     />
-                    <span className="version-text">v0.6</span>
+                    <span className="version-text">Beta</span>
                 </Link>
             </div>
 

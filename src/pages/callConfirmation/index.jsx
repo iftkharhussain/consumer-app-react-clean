@@ -11,6 +11,7 @@ import {
 } from '@ant-design/icons';
 import styles from './CallConfirmation.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
+import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
 
 const CallConfirmation = () => {
   const navigate = useNavigate();
@@ -98,9 +99,9 @@ const CallConfirmation = () => {
                   <img src="/images/courtika-assurances-inc.png" alt="Courtika" className={styles.courtikaImageLogo} />
                 </div>
                 <div className={styles.statusInfo}>
-                  <div className={styles.statusBadge}>
-                    <div className={styles.statusDot}></div>
-                    Ouvert
+                  <div className={`${styles.statusBadge} ${!isOpenNow() ? styles.statusBadgeClosed : ''}`}>
+                    <div className={`${styles.statusDot} ${!isOpenNow() ? styles.statusDotClosed : ''}`}></div>
+                    {isOpenNow() ? 'Ouvert' : 'Fermé'}
                   </div>
                 </div>
               </div>
@@ -114,7 +115,7 @@ const CallConfirmation = () => {
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                   </svg>
                   <div>
-                    <span className={styles.infoText}>Ouvert aujourd'hui de 8:30 - 16:30</span>
+                    <span className={styles.infoText}>{getFormattedTodayHours()}</span>
                     <a href="#" className={styles.infoLink} onClick={(e) => { e.preventDefault(); setIsScheduleOpen(true); }}>Voir l'horaire complet</a>
                   </div>
                 </li>
@@ -133,10 +134,18 @@ const CallConfirmation = () => {
                   </svg>
                   <span className={styles.infoText}>Ayez votre permis de conduire et les papiers d'immatriculation du véhicule à portée de main.</span>
                 </li>
+                <li className={styles.desktopOnly}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.infoIcon}>
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                  </svg>
+                  <div>
+                     <span className={styles.infoText}>Ligne prioritaire : <a href="tel:+14507629240" className={styles.infoLink} style={{display: 'inline', marginTop: '0', color: '#1f01c8'}}>1 (450) 762-9240</a></span>
+                  </div>
+                </li>
               </ul>
 
               <div className={styles.actionButtons}>
-                <Button type="primary" className={styles.primaryButton} size="large" href="tel:+14507629240">
+                <Button type="primary" className={`${styles.primaryButton} ${styles.mobileOnly}`} size="large" href="tel:+14507629240">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.buttonIconLeft}>
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                   </svg>
