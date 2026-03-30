@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { PageContent } from 'components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import styles from './ScheduleCall.module.css';
 
 const ScheduleCall = () => {
+  const { userProductId } = useParams();
   const initialized = useRef(false);
   const calendlyLoaded = useRef(false);
   const redirected = useRef(false);
@@ -49,7 +50,7 @@ const ScheduleCall = () => {
         if (!redirected.current) {
           redirected.current = true;
           setTimeout(() => {
-            navigate('/schedule-confirmation');
+            navigate(userProductId ? `/schedule-confirmation/${userProductId}` : '/schedule-confirmation');
           }, 300);
         }
       }

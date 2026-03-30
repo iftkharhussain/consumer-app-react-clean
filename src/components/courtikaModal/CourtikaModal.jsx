@@ -44,33 +44,51 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
                 : { productSlug, selectedQuote, recalculatedQuote, carrierCode };
             
             console.log('[CourtikaModal] Request params:', params);
+            console.log('[CourtikaModal] userProductId prop:', userProductId);
             
             // Call Fortus API to send the lead
             const result = await fortusService.requestCall(params);
             
+            console.log('[CourtikaModal] Fortus API response:', result);
+            
             if (result.success) {
-                console.log('Fortus request successful:', result);
+                console.log('[CourtikaModal] Request successful');
                 setRequestStatus('success');
                 message.success('Votre demande a été envoyée avec succès!');
-                
-                // Trigger the phone call dialer
-                window.location.href = 'tel:18552451906';
                 
                 // Get userProductId from response if not already available
                 const productId = result.data?.userProductId || userProductId;
                 
-                // Redirect to call confirmation page
-                timerRef.current = setTimeout(() => {
-                    navigate('/call-confirmation');
-                }, 2000);
+                console.log('[CourtikaModal] ProductId from response:', result.data?.userProductId);
+                console.log('[CourtikaModal] ProductId from props:', userProductId);
+                console.log('[CourtikaModal] Final productId to use:', productId);
+                
+                if (!productId) {
+                    console.error('[CourtikaModal] ERROR: No userProductId available');
+                    message.error('Erreur: Impossible de rediriger vers la page de confirmation');
+                    setIsLoading(false);
+                    setRequestStatus('error');
+                    return;
+                }
+                
+                console.log('[CourtikaModal] Navigating to:', `/car-insurance/product-order/${productId}`);
+                
+                // Close modal first
+                onClose();
+                
+                // Redirect to product order page
+                navigate(`/car-insurance/product-order/${productId}`);
             } else {
-                console.warn('Fortus request failed:', result);
+                console.warn('[CourtikaModal] Request failed:', result);
+                console.error('[CourtikaModal] Error message:', result.message);
+                console.error('[CourtikaModal] Error code:', result.error);
                 setRequestStatus('error');
                 message.error(result.message || 'Une erreur est survenue. Veuillez réessayer.');
                 setIsLoading(false);
             }
         } catch (error) {
-            console.error('Fortus API error:', error);
+            console.error('[CourtikaModal] Fortus API exception:', error);
+            console.error('[CourtikaModal] Error stack:', error.stack);
             setRequestStatus('error');
             message.error('Une erreur est survenue. Veuillez réessayer.');
             setIsLoading(false);
@@ -84,7 +102,8 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
         } else {
             // Schedule for later - navigate to schedule page
             onClose();
-            navigate('/schedule-call');
+            const scheduleUrl = userProductId ? `/schedule-call/${userProductId}` : '/schedule-call';
+            navigate(scheduleUrl);
         }
     };
 

@@ -1,14 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PageContent } from 'components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Spin, Button } from 'antd';
 import styles from './ScheduleConfirmation.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { getFormattedTodayHours } from '../../utils/businessHours';
+import { getOrderDetails, checkPendingOrder } from '../../services/api/productOrderService';
 
 const ScheduleConfirmation = () => {
   const navigate = useNavigate();
+  const { userProductId: urlUserProductId } = useParams();
   const initialized = useRef(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [orderData, setOrderData] = useState(null);
 
   useEffect(() => {
     if (!initialized.current) {
@@ -16,6 +22,98 @@ const ScheduleConfirmation = () => {
       initialized.current = true;
     }
   }, []);
+
+  useEffect(() => {
+    const fetchOrderDetails = async () => {
+      try {
+        setLoading(true);
+        
+        let productIdToFetch = urlUserProductId;
+        
+        // If no userProductId in URL, check for pending order
+        if (!productIdToFetch) {
+          console.log('[ScheduleConfirmation] No userProductId in URL, checking for pending order...');
+          const pendingOrderResponse = await checkPendingOrder('car-insurance');
+          
+          if (pendingOrderResponse.success && pendingOrderResponse.hasPendingOrder && pendingOrderResponse.userProductId) {
+            productIdToFetch = pendingOrderResponse.userProductId;
+            console.log('[ScheduleConfirmation] Found pending order:', productIdToFetch);
+          }
+        }
+        
+        // If we have a productId, fetch order details
+        if (productIdToFetch) {
+          const response = await getOrderDetails(productIdToFetch);
+          
+          if (response.success) {
+            setOrderData(response.data);
+          } else {
+            console.warn('[ScheduleConfirmation] Failed to load order:', response.message);
+            setError(response.message || 'Failed to load order details');
+          }
+        } else {
+          // No order found, show page with defaults
+          console.log('[ScheduleConfirmation] No pending order found, showing defaults');
+        }
+      } catch (err) {
+        console.error('[ScheduleConfirmation] Error fetching order details:', err);
+        setError('Failed to load order details');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrderDetails();
+  }, [urlUserProductId]);
+
+  // Loading state
+  if (loading) {
+    return (
+      <PageContent pageType="overview">
+        <div className={styles.fallbackContainer}>
+          <div style={{ textAlign: 'center', padding: '100px 0' }}>
+            <Spin size="large" />
+            <p style={{ marginTop: '20px', fontSize: '16px', color: '#666' }}>Chargement de votre demande...</p>
+          </div>
+        </div>
+      </PageContent>
+    );
+  }
+
+  // Error state
+  if (error && orderData === null) {
+    return (
+      <PageContent pageType="overview">
+        <div className={styles.fallbackContainer}>
+          <div className={styles.actionCard}>
+            <h1 className={styles.mainTitle} style={{ color: '#dc2626' }}>Erreur</h1>
+            <p className={styles.subTitle}>{error}</p>
+            <Button type="primary" onClick={() => navigate('/car-insurance')} style={{ marginTop: '20px' }}>
+              Retour aux résultats
+            </Button>
+          </div>
+        </div>
+      </PageContent>
+    );
+  }
+
+  // Extract data from orderData (or use defaults if no data)
+  const selectedQuote = orderData?.selectedQuote || {};
+  const advisorInfo = orderData?.advisorInfo || {};
+  const insurerName = selectedQuote.insurerName || 'Intact Insurance';
+  const insurerLogo = selectedQuote.logo || '/images/intact-insurance.svg';
+  const monthlyPrice = selectedQuote.monthlyPrice || '90 $';
+  const yearlyPrice = selectedQuote.yearlyPrice || '1 080 $';
+  const isIntactDiscount = selectedQuote.isIntactDiscount || false;
+  
+  // Advisor details
+  const companyName = advisorInfo.companyName || 'Courtika Assurances Inc';
+  const companyLogo = advisorInfo.logo || '/images/courtika-assurances-inc.png';
+  const phone = advisorInfo.phone || '1 (450) 762-9240';
+  const phoneDigits = phone.replace(/\D/g, '');
+  const phoneLink = advisorInfo.phoneLink || `tel:+${phoneDigits}`;
+  const formattedHours = advisorInfo.formattedHours || 'Ouvert aujourd\'hui de 8:30 - 16:30';
+  const callDuration = advisorInfo.callDuration || 15;
 
   return (
     <PageContent pageType="overview">
@@ -42,22 +140,24 @@ const ScheduleConfirmation = () => {
               <div className={styles.insurerRow}>
                 <div className={styles.insurerLeft}>
                   <div className={styles.insurerLogoBox}>
-                    <img src="/images/intact-insurance.svg" alt="Intact" className={styles.insurerLogo} />
+                    <img src={insurerLogo} alt={insurerName} className={styles.insurerLogo} />
                   </div>
-                  <span className={styles.insurerName}>Intact</span>
+                  <span className={styles.insurerName}>{insurerName}</span>
                 </div>
                 <div className={styles.priceContainer}>
-                  <span className={styles.priceMain}>90$/mois</span>
-                  <span className={styles.priceOld}>110$/mois</span>
+                  <span className={styles.priceMain}>{monthlyPrice}/mois</span>
+                  {yearlyPrice && <span className={styles.priceOld}>{yearlyPrice}/an</span>}
                 </div>
               </div>
               
-              <div className={styles.discountBadge}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.discountIcon}>
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                Rabais Courtika appliqué
-              </div>
+              {isIntactDiscount && (
+                <div className={styles.discountBadge}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.discountIcon}>
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Rabais {companyName} appliqué
+                </div>
+              )}
 
               <div className={styles.protectionsSection}>
                 <h3 className={styles.protectionsTitle}>Vos protections</h3>
@@ -90,11 +190,11 @@ const ScheduleConfirmation = () => {
               
               <div className={styles.brokerBox}>
                 <div className={styles.brokerBoxLogo}>
-                  <img src="/images/courtika-assurances-inc.png" alt="Courtika" />
+                  <img src={companyLogo} alt={companyName} />
                 </div>
                 <div>
-                  <div className={styles.brokerBoxTitle}>Courtika</div>
-                  <div className={styles.brokerBoxSubtitle}>Cabinet en assurance de dommages</div>
+                  <div className={styles.brokerBoxTitle}>{companyName}</div>
+                  <div className={styles.brokerBoxSubtitle}>Courtier en assurance de dommages</div>
                 </div>
               </div>
 
@@ -107,7 +207,7 @@ const ScheduleConfirmation = () => {
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                   </svg>
                   <div>
-                    <span className={styles.infoText}>23 mars • 9:00 AM • 15 min</span>
+                    <span className={styles.infoText}>23 mars • 9:00 AM • {callDuration} min</span>
                     <div className={styles.infoSubtext}>Le courtier vous appellera à ce moment</div>
                   </div>
                 </li>
@@ -117,7 +217,7 @@ const ScheduleConfirmation = () => {
                     <polyline points="12 6 12 12 16 14"></polyline>
                   </svg>
                   <div>
-                    <span className={styles.infoText}>{getFormattedTodayHours()}</span>
+                    <span className={styles.infoText}>{formattedHours}</span>
                     <a href="#" className={styles.infoLink} onClick={(e) => { e.preventDefault(); setIsScheduleOpen(true); }}>Voir l'horaire complet</a>
                   </div>
                 </li>
@@ -126,7 +226,7 @@ const ScheduleConfirmation = () => {
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                   </svg>
                   <div>
-                     <span className={styles.infoText}>Ligne prioritaire : <a href="tel:+14507629240" className={styles.infoLink} style={{display: 'inline', marginTop: '0', color: '#1f01c8'}}>1 (450) 762-9240</a></span>
+                     <span className={styles.infoText}>Ligne prioritaire : <a href={phoneLink} className={styles.infoLink} style={{display: 'inline', marginTop: '0', color: '#1f01c8'}}>{phone}</a></span>
                   </div>
                 </li>
               </ul>
@@ -155,7 +255,7 @@ const ScheduleConfirmation = () => {
 
         {/* Why clients choose Courtika Card */}
         <div className={styles.aboutCard}>
-          <h2 className={styles.aboutTitle}>Pourquoi nos clients choisissent Courtika</h2>
+          <h2 className={styles.aboutTitle}>Pourquoi nos clients choisissent {companyName}</h2>
           <p className={styles.aboutText}>
             Un cabinet de courtage en assurance de dommages avec plus de 50 ans d'expérience et 90+ courtiers qui comparent pour vous auprès de 30+ assureurs.
           </p>
@@ -172,7 +272,7 @@ const ScheduleConfirmation = () => {
           <hr className={styles.separator} />
 
           <div className={styles.benefitsBox}>
-            <h3 className={styles.benefitsBoxTitle}>Il vous facilite la vie! Le service chez Courtika, c'est :</h3>
+            <h3 className={styles.benefitsBoxTitle}>Il vous facilite la vie! Le service chez {companyName}, c'est :</h3>
             <ul className={styles.benefitsBoxList}>
               <li>
                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F57C00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.benefitsBoxIcon}>
@@ -220,7 +320,7 @@ const ScheduleConfirmation = () => {
               <img src="/images/logo-amf-header 1.png" alt="Autorité des marchés financiers" className={styles.amfImageLogo} />
             </div>
             <div className={styles.certText}>
-              <h4 className={styles.certTitle}>Courtika est certifié par l'AMF</h4>
+              <h4 className={styles.certTitle}>{companyName} est certifié par l'AMF</h4>
               <p className={styles.certSubtitle}>Autorité des marchés financiers du Québec</p>
             </div>
           </div>

@@ -230,20 +230,6 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 				),
 			},
 			{
-				key: 'call-confirmation',
-				selectPaths: ['/call-confirmation'],
-				icon: (
-					<Link to='/call-confirmation'>
-						<InfoCircle />
-					</Link>
-				),
-				label: (
-					<Link to='/call-confirmation' style={{ color: 'inherit', textDecoration: 'none' }}>
-						Call Confirmation
-					</Link>
-				),
-			},
-			{
 				key: 'schedule-call',
 				selectPaths: ['/schedule-call'],
 				icon: (

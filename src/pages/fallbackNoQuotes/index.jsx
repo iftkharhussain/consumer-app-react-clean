@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PageContent } from 'components';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import { 
   WarningOutlined, 
   CheckOutlined,
@@ -13,27 +13,73 @@ import { useNavigate } from 'react-router-dom';
 import styles from './FallbackNoQuotes.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
+import { fortusService } from '../../services/api/fortusService';
 
-const FallbackNoQuotes = () => {
+/**
+ * FallbackNoQuotes - Displayed when quote generation fails
+ * 
+ * Props:
+ * - userProductId: string - User product ID from user_products collection
+ * - productSlug: string - Product slug (e.g., 'car-insurance')
+ */
+const FallbackNoQuotes = ({ userProductId, productSlug = 'car-insurance' }) => {
   const navigate = useNavigate();
   const initialized = useRef(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+  const timerRef = useRef(null);
 
   useEffect(() => {
     if (!initialized.current) {
       document.title = 'Impossible de générer vos soumissions - Consumer App';
       initialized.current = true;
     }
+
+    // Cleanup timer on unmount
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
   }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
     setIsLoading(true);
-    setTimeout(() => {
+    console.log('[FallbackNoQuotes] Sending ezLead and email notification');
+
+    try {
+      // Prepare params for fortusService - no selectedQuote since quotes failed
+      const params = userProductId 
+        ? { userProductId, selectedQuote: null, recalculatedQuote: null } 
+        : { productSlug, selectedQuote: null, recalculatedQuote: null };
+      
+      console.log('[FallbackNoQuotes] Request params:', params);
+      
+      // Call Fortus API to send the lead and email
+      const result = await fortusService.requestCall(params);
+      
+      if (result.success) {
+        console.log('[FallbackNoQuotes] Request successful:', result);
+        setIsLoading(false);
+        setIsSubmitted(true);
+        message.success('Votre demande a été envoyée avec succès!');
+        
+        // Stay on this page to show contact information
+        // No redirect needed since quote generation failed
+      } else {
+        console.warn('[FallbackNoQuotes] Request failed:', result);
+        setIsLoading(false);
+        message.error(result.message || 'Une erreur est survenue. Veuillez réessayer.');
+      }
+    } catch (error) {
+      console.error('[FallbackNoQuotes] API error:', error);
       setIsLoading(false);
-      setIsSubmitted(true);
-    }, 1500);
+      message.error('Une erreur est survenue. Veuillez réessayer.');
+    }
   };
 
   return (
@@ -164,7 +210,11 @@ const FallbackNoQuotes = () => {
                   <PhoneOutlined className={styles.phoneIcon} /> Appeler maintenant: 1 (450) 762-9240
                 </Button>
                 
-                <Button className={styles.secondaryOutlineButton} size="large" onClick={() => navigate('/schedule-call')}>
+                <Button 
+                  className={styles.secondaryOutlineButton} 
+                  size="large" 
+                  onClick={() => navigate(userProductId ? `/schedule-call/${userProductId}` : '/schedule-call')}
+                >
                   <CalendarOutlined /> Planifier l'appel plus tard
                 </Button>
               </div>
