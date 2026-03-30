@@ -447,7 +447,7 @@ const InitialContent = ({
                     <p className={styles.protectionDescription}>
                         Couvre les dommages à ce qui ne vous appartient pas quand vous causez un accident
                     </p>
-                    <p className={styles.protectionCoverage}>Couverture : 2 000 000 $</p>
+                    <p className={styles.protectionCoverage}>Couverture : 2 000 000$</p>
                 </div>
 
                 <div className={styles.protectionItem}>

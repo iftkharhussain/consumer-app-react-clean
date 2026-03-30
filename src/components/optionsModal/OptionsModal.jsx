@@ -9,9 +9,9 @@ const OptionsModal = ({ isOpen, onClose, onRecalculate }) => {
     const [selectedOptions, setSelectedOptions] = useState([]);
 
     const franchiseOptions = [
-        { value: '500', label: '500 $' },
-        { value: '1000', label: '1000 $' },
-        { value: '2000', label: '2000 $' },
+        { value: '500', label: '500$' },
+        { value: '1000', label: '1000$' },
+        { value: '2000', label: '2000$' },
     ];
 
     const checkboxOptions = [

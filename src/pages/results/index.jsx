@@ -167,8 +167,29 @@ const Results = () => {
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
+ 
+  // Custom Arrow Icon from user
+  const CustomArrowIcon = ({ rotate = 0, size = '1.2em' }) => (
+    <span 
+      role="img" 
+      aria-label="arrow" 
+      className="anticon" 
+      style={{ 
+        display: 'inline-flex', 
+        alignItems: 'center',
+        transform: `rotate(${rotate}deg)`,
+        transition: 'transform 0.3s',
+        verticalAlign: '-0.125em',
+        fontSize: size
+      }}
+    >
+      <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </span>
+  );
 
-  // Helper function to format currency in French format (10 000 $ instead of $10,000)
+  // Helper function to format currency in French format (10 000$ instead of $10,000)
   const formatFrenchCurrency = useCallback((value) => {
     if (!value) return null;
     
@@ -186,8 +207,22 @@ const Results = () => {
       maximumFractionDigits: 0
     }).replace(/,/g, ' '); // Ensure space separator (some browsers may use comma)
     
-    return `${formatted} $`;
+    return `${formatted}$`;
   }, []);
+
+  // Map of coverage codes to their display titles
+  const coverageLabels = {
+    'TP': 'Responsabilité civile',
+    'TPL': 'Responsabilité civile',
+    'COMP': 'Accident sans collision ni versement',
+    'CMP': 'Accident sans collision ni versement',
+    '34': 'Protection supplémentaire',
+    '33': 'Assistance routière',
+    '20': 'Assistance routière',
+    '27': 'Assurance des personnes',
+    'COL': 'Collision ou versement',
+    'COLL': 'Collision ou versement'
+  };
 
   // Extract protections from quote data
   const protections = useMemo(() => {
@@ -487,7 +522,7 @@ const Results = () => {
                           <div className={styles.priceSection}>
                             <div className={styles.priceDisplay}>
                               <span className={styles.priceSuffixBalanced} aria-hidden="true">
-                                 $ / {billingPeriod === 'monthly' ? 'mois' : 'année'}
+                                 $/{billingPeriod === 'monthly' ? 'mois' : 'année'}
                               </span>
                               
                               {recommendedInsurer.oldPrice && (
@@ -499,7 +534,7 @@ const Results = () => {
                               <span className={styles.mainPrice}>
                                 {billingPeriod === 'monthly' ? recommendedInsurer.price : recommendedInsurer.yearlyPrice}
                               </span>
-                              <span className={styles.priceSuffix}> $ / {billingPeriod === 'monthly' ? 'mois' : 'année'}</span>
+                              <span className={styles.priceSuffix}>$/{billingPeriod === 'monthly' ? 'mois' : 'année'}</span>
                             </div>
 
                             {recommendedInsurer.discount && (
@@ -611,12 +646,12 @@ const Results = () => {
                                         {billingPeriod === 'monthly' ? insurer.price : insurer.yearlyPrice}
                                       </span>
                                       <span className={styles.insurerPriceSuffix}>
-                                         $ / {billingPeriod === 'monthly' ? 'mois' : 'année'}
+                                         $/{billingPeriod === 'monthly' ? 'mois' : 'année'}
                                       </span>
                                       <span className={styles.alternativePrice}>
                                         {billingPeriod === 'monthly'
-                                          ? `ou ${insurer.yearlyPrice} $ par année`
-                                          : `ou ${insurer.price} $ par mois`}
+                                          ? `ou ${insurer.yearlyPrice}$ par année`
+                                          : `ou ${insurer.price}$ par mois`}
                                       </span>
                                     </div>
                                   </div>
@@ -636,11 +671,11 @@ const Results = () => {
                                   >
                                     {expandedInsurer === insurer.id ? (
                                       <>
-                                        Moins de détails <UpOutlined />
+                                        Moins de détails <CustomArrowIcon rotate={180} />
                                       </>
                                     ) : (
                                       <>
-                                        Voir détails <DownOutlined />
+                                        Voir détails <CustomArrowIcon />
                                       </>
                                     )}
                                   </Button>
@@ -654,22 +689,44 @@ const Results = () => {
                                   <div className={styles.expandedProtections}>
                                     <h4 className={styles.expandedTitle}>Protections incluses</h4>
                                     <div className={styles.expandedProtectionsList}>
-                                      {insurer.coverages.slice(0, 3).map((coverage, index) => (
-                                        <div key={index} className={styles.expandedProtectionItem}>
-                                          <CheckOutlined className={styles.expandedProtectionIcon} />
-                                          <div className={styles.expandedProtectionContent}>
-                                            <span className={styles.expandedProtectionTitle}>
-                                              {coverage.name || coverage.code}
-                                            </span>
-                                            {coverage.limit && (
-                                              <span className={styles.expandedCoverage}>
-                                                <span className={styles.expandedCoverageLabel}>Couverture : </span>
-                                                <span className={styles.expandedCoverageValue}>{formatFrenchCurrency(coverage.limit)}</span>
+                                      {insurer.coverages.slice(0, 3).map((coverage, index) => {
+                                        const upperCode = String(coverage.code || '').toUpperCase();
+                                        const displayTitle = coverage.name && !/^[A-Z0-9]+$/.test(coverage.name) 
+                                          ? coverage.name 
+                                          : (coverageLabels[upperCode] || coverage.name || coverage.code);
+
+                                        // Determine label and value
+                                        let label = 'Couverture';
+                                        let value = coverage.limit && coverage.limit !== '-$1/-$1' ? coverage.limit : null;
+                                        
+                                        if (['CMP', 'COMP', 'COL', 'COLL'].includes(upperCode)) {
+                                          if (coverage.deductible && coverage.deductible !== -1 && coverage.deductible !== '-1') {
+                                            label = 'Franchise';
+                                            value = coverage.deductible;
+                                          } else {
+                                            value = null; // Don't show if no deductible for these specific types
+                                          }
+                                        } else if (value && typeof value === 'string' && value.includes('/-')) {
+                                          value = value.split('/-')[0].trim();
+                                        }
+
+                                        if (!value || value === '-1' || value === -1 || value === '-1$') return null;
+
+                                        return (
+                                          <div key={index} className={styles.expandedProtectionItem}>
+                                            <CheckOutlined className={styles.expandedProtectionIcon} />
+                                            <div className={styles.expandedProtectionContent}>
+                                              <span className={styles.expandedProtectionTitle}>
+                                                {displayTitle}
                                               </span>
-                                            )}
+                                              <span className={styles.expandedCoverage}>
+                                                <span className={styles.expandedCoverageLabel}>{label} : </span>
+                                                <span className={styles.expandedCoverageValue}>{formatFrenchCurrency(value)}</span>
+                                              </span>
+                                            </div>
                                           </div>
-                                        </div>
-                                      ))}
+                                        );
+                                      })}
                                     </div>
                                   </div>
                                 </div>
@@ -724,6 +781,7 @@ const Results = () => {
                         onChange={setExpandedFAQ}
                         className={styles.faqCollapse}
                         expandIconPosition="end"
+                        expandIcon={({ isActive }) => <CustomArrowIcon rotate={isActive ? 180 : 0} />}
                       >
                         {faqs.map((faq, index) => (
                           <Panel header={faq.question} key={index} className={styles.faqPanel}>

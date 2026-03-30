@@ -40,18 +40,18 @@ const STATUS = {
 
 // Loading steps for new users
 const NEW_USER_STEPS = [
-  { key: 'verifying', icon: <SafetyOutlined />, text: 'Verifying your credentials...' },
-  { key: 'creating', icon: <UserAddOutlined />, text: 'Creating your account...' },
-  { key: 'settingUp', icon: <RocketOutlined />, text: 'Setting up your profile...' },
-  { key: 'preparing', icon: <RocketOutlined />, text: 'Preparing your dashboard...' }
+  { key: 'verifying', icon: <SafetyOutlined />, text: 'Vérification de vos identifiants...' },
+  { key: 'creating', icon: <UserAddOutlined />, text: 'Création de votre compte...' },
+  { key: 'settingUp', icon: <RocketOutlined />, text: 'Configuration de votre profil...' },
+  { key: 'preparing', icon: <RocketOutlined />, text: 'Préparation de votre tableau de bord...' }
 ];
 
 // Loading steps for existing users (duplicates)
 const EXISTING_USER_STEPS = [
-  { key: 'verifying', icon: <SafetyOutlined />, text: 'Verifying your credentials...' },
-  { key: 'accountExists', icon: <CheckCircleOutlined />, text: 'Account already exists' },
-  { key: 'credentialsMatched', icon: <SafetyOutlined />, text: 'Credentials matched successfully' },
-  { key: 'redirecting', icon: <RocketOutlined />, text: 'Redirecting to your account...' }
+  { key: 'verifying', icon: <SafetyOutlined />, text: 'Vérification de vos identifiants...' },
+  { key: 'accountExists', icon: <CheckCircleOutlined />, text: 'Le compte existe déjà' },
+  { key: 'credentialsMatched', icon: <SafetyOutlined />, text: 'Identifiants validés avec succès' },
+  { key: 'redirecting', icon: <RocketOutlined />, text: 'Redirection vers votre compte...' }
 ];
 
 const LeadLogin = () => {
@@ -217,8 +217,8 @@ const LeadLogin = () => {
 
           <Title level={3} className={styles.title}>
             {isExistingUser
-              ? (t('verifyingAccount') || 'Verifying Your Account')
-              : (t('creatingYourAccount') || 'Creating Your Account')
+              ? (t('verifyingAccount') || 'Vérification de votre compte')
+              : (t('creatingYourAccount') || 'Création de votre compte')
             }
           </Title>
 
@@ -251,19 +251,19 @@ const LeadLogin = () => {
           </div>
 
           <Title level={3} className={styles.title}>
-            {t('noTokenProvided') || 'No Authentication Token'}
+            {t('noTokenProvided') || 'Aucun jeton d\'authentification'}
           </Title>
 
           <Paragraph className={styles.description}>
-            {t('noTokenProvidedDescription') || 'No authentication token was provided. Please use the link from your form submission.'}
+            {t('noTokenProvidedDescription') || 'Aucun jeton d\'authentification n\'a été fourni. Veuillez utiliser le lien de votre soumission de formulaire.'}
           </Paragraph>
 
           <Button type="primary" size="large" onClick={handleGoToLogin} className={styles.primaryBtn}>
-            {t('goToLogin') || 'Go to Login'}
+            {t('goToLogin') || 'Aller à la connexion'}
           </Button>
 
           <div className={styles.support}>
-            <Text type="secondary">{t('needHelp') || 'Need help?'} </Text>
+            <Text type="secondary">{t('needHelp') || 'Besoin d\'aide?'} </Text>
             <a href={`tel:${SUPPORT_PHONE.replace(/[^0-9+]/g, '')}`} className={styles.phoneLink}>
               <PhoneOutlined /> {SUPPORT_PHONE}
             </a>
@@ -284,8 +284,8 @@ const LeadLogin = () => {
 
           <Title level={3} className={styles.successTitle}>
             {isNewUser
-              ? (t('accountCreated') || 'Account Created Successfully!')
-              : (t('welcomeBack') || 'Welcome Back!')}
+              ? (t('accountCreated') || 'Compte créé avec succès!')
+              : (t('welcomeBack') || 'Bienvenue!')}
           </Title>
 
           {userData && (
@@ -296,14 +296,14 @@ const LeadLogin = () => {
 
           <Paragraph className={styles.description}>
             {isNewUser
-              ? (t('accountReadyRedirecting') || 'Your account is ready. Redirecting to your dashboard...')
-              : (t('credentialsValidated') || 'Your credentials have been validated. Redirecting to your account...')}
+              ? (t('accountReadyRedirecting') || 'Votre compte est prêt. Redirection vers votre tableau de bord...')
+              : (t('credentialsValidated') || 'Vos identifiants ont été validés. Redirection vers votre compte...')}
           </Paragraph>
 
           {!isNewUser && (
             <div className={styles.successBadge}>
               <CheckCircleOutlined style={{ color: '#52c41a', marginRight: 8 }} />
-              <Text type="secondary">{t('credentialsMatched') || 'Credentials matched'}</Text>
+              <Text type="secondary">{t('credentialsMatched') || 'Identifiants validés'}</Text>
             </div>
           )}
 
@@ -323,26 +323,26 @@ const LeadLogin = () => {
           </div>
 
           <Title level={3} className={styles.title}>
-            {t('credentialsMismatch') || 'Account Verification Required'}
+            {t('credentialsMismatch') || 'Vérification du compte requise'}
           </Title>
 
           <Paragraph className={styles.description}>
             {credentialsMismatch?.phoneMismatch && credentialsMismatch?.emailMismatch ? (
               t('phonEmailMismatchMessage') ||
-              'We found that both your phone number and email are different from what we have on record. Please login with your original credentials.'
+              'Nous avons constaté que votre numéro de téléphone et votre email sont différents de ceux que nous avons enregistrés. Veuillez vous connecter avec vos identifiants d\'origine.'
             ) : credentialsMismatch?.phoneMismatch ? (
               t('phoneMismatchMessage') ||
-              'We found a different phone number for your account. Please login with your original phone number or use the correct email and password.'
+              'Nous avons trouvé un numéro de téléphone différent pour votre compte. Veuillez vous connecter avec votre numéro de téléphone d\'origine ou utiliser l\'email et le mot de passe corrects.'
             ) : (
               t('emailMismatchMessage') ||
-              'We found a different email for your account. Please login with your original email and password or use phone verification.'
+              'Nous avons trouvé un email différent pour votre compte. Veuillez vous connecter avec votre email et mot de passe d\'origine ou utiliser la vérification par téléphone.'
             )}
           </Paragraph>
 
           {submittedCredentials && (
             <div className={styles.credentialsInfo}>
               <Text type="secondary" className={styles.credLabel}>
-                {t('submittedInfo') || 'Information you submitted:'}
+                {t('submittedInfo') || 'Informations que vous avez soumises'}
               </Text>
               {submittedCredentials.phone && (
                 <Text className={styles.credValue}>
@@ -358,11 +358,11 @@ const LeadLogin = () => {
           )}
 
           <Button type="primary" size="large" onClick={handleGoToLogin} className={styles.primaryBtn}>
-            {t('goToLogin') || 'Go to Login'}
+            {t('goToLogin') || 'Aller à la connexion'}
           </Button>
 
           <div className={styles.support}>
-            <Text type="secondary">{t('needHelp') || 'Need help?'} </Text>
+            <Text type="secondary">{t('needHelp') || 'Besoin d\'aide?'} </Text>
             <a href={`tel:${SUPPORT_PHONE.replace(/[^0-9+]/g, '')}`} className={styles.phoneLink}>
               <PhoneOutlined /> {SUPPORT_PHONE}
             </a>
@@ -381,19 +381,19 @@ const LeadLogin = () => {
         </div>
 
         <Title level={3} className={styles.errorTitle}>
-          {t('authenticationFailed') || 'Authentication Failed'}
+          {t('authenticationFailed') || 'Échec de l\'authentification'}
         </Title>
 
         <Paragraph className={styles.description}>
-          {errorMessage || t('tokenExpiredOrInvalid') || 'Your login link may have expired or is invalid.'}
+          {errorMessage || t('tokenExpiredOrInvalid') || 'Votre lien de connexion a peut-être expiré ou est invalide.'}
         </Paragraph>
 
         <Text type="secondary" className={styles.helpText}>
-          {t('tokenExpiredHelp') || 'Login links expire after 20 minutes for security.'}
+          {t('tokenExpiredHelp') || 'Les liens de connexion expirent après 20 minutes pour des raisons de sécurité.'}
         </Text>
 
         <div className={styles.support}>
-          <Text type="secondary">{t('needAssistance') || 'Need assistance?'} </Text>
+          <Text type="secondary">{t('needAssistance') || 'Besoin d\'assistance?'} </Text>
           <a href={`tel:${SUPPORT_PHONE.replace(/[^0-9+]/g, '')}`} className={styles.phoneLink}>
             <PhoneOutlined /> {SUPPORT_PHONE}
           </a>

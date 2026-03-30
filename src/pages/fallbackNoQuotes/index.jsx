@@ -40,19 +40,23 @@ const FallbackNoQuotes = () => {
     <PageContent pageType="overview">
       <div className={styles.fallbackContainer}>
       
-        <div className={styles.headerSection}>
-          <div className={styles.warningIconWrapper}>
-            <WarningOutlined className={styles.warningIcon} />
+        {!isSubmitted && (
+          <div className={styles.headerSection}>
+            <div className={styles.warningIconWrapper}>
+              <WarningOutlined className={styles.warningIcon} />
+            </div>
+            <h1 className={styles.mainTitle}>Impossible de générer vos soumissions</h1>
+            <p className={styles.subTitle}>
+             Nous éprouvons actuellement des difficultés techniques pour traiter votre demande. Pas de souci! Votre progression a bien été enregistrée et un courtier chez Courtika peut vous aider rapidement à compléter votre démarche. Cliquez ci-dessous pour poursuivre avec eux par téléphone
+            </p>
           </div>
-          <h1 className={styles.mainTitle}>Impossible de générer vos soumissions</h1>
-          <p className={styles.subTitle}>
-            Nous éprouvons actuellement des difficultés techniques pour traiter votre demande. Pas de soucis!<br />
-            Un courtier chez Courtika peut vous aider rapidement.
-          </p>
-        </div>
+        )}
 
         {/* Action Card */}
-        <div className={styles.actionCard}>
+        <div 
+          key={isSubmitted ? 'submitted' : 'prompt'} 
+          className={`${styles.actionCard} ${isSubmitted ? styles.submitted : ''}`}
+        >
           {!isSubmitted ? (
             <>
               <h2 className={styles.cardTitle}>Aimeriez-vous continuer avec Courtika?</h2>
@@ -112,7 +116,7 @@ const FallbackNoQuotes = () => {
                 <CheckOutlined className={styles.successIcon} />
                 <div className={styles.successContent}>
                   <h3 className={styles.successTitle}>Vos informations ont été transmises à Courtika!</h3>
-                  <p className={styles.successText}>Un courtier attend <strong>votre appel</strong> pour vous aider</p>
+                  <p className={styles.successText}>Un courtier attend   <strong>votre appel</strong> au 1 (450) 762-9240</p>
                 </div>
               </div>
 

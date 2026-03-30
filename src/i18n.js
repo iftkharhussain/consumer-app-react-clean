@@ -29,8 +29,8 @@ i18n
         translation: frTranslation,
       },
     },
-    lng: localSettings?.language || 'en', // Set default language based on Redux store
-    fallbackLng: 'en', // Fallback language
+    lng: localSettings?.language || 'fr', // Set default language based on Redux store
+    fallbackLng: 'fr', // Fallback language
     interpolation: {
       escapeValue: false,
     },

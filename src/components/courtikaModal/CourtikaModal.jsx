@@ -21,7 +21,7 @@ import { isOpenNow } from '../../utils/businessHours';
 const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insurance', selectedQuote, recalculatedQuote = null }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [requestStatus, setRequestStatus] = useState(null); // 'success', 'error', null
-    const [selectedOption, setSelectedOption] = useState('now'); // 'now' or 'later'
+    const [selectedOption, setSelectedOption] = useState(isOpenNow() ? 'now' : 'later'); // 'now' or 'later'
     const [showFAQ, setShowFAQ] = useState(false);
     const timerRef = useRef(null);
     const navigate = useNavigate();
@@ -94,7 +94,7 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
             timerRef.current = null;
         }
         setIsLoading(false);
-        setSelectedOption('now');
+        setSelectedOption(isOpenNow() ? 'now' : 'later');
         setShowFAQ(false);
         onClose();
     };
@@ -233,9 +233,9 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
                                     </div>
                                 </div>
                                 <div className={styles.summaryRight}>
-                                    <p className={styles.summaryPrice}>{selectedQuote.monthlyPrice} $/mois</p>
+                                    <p className={styles.summaryPrice}>{selectedQuote.monthlyPrice}$/mois</p>
                                     {selectedQuote.yearlyPrice && (
-                                        <p className={styles.summaryOldPrice}>{selectedQuote.yearlyPrice} $/an</p>
+                                        <p className={styles.summaryOldPrice}>{selectedQuote.yearlyPrice}$/an</p>
                                     )}
                                 </div>
                             </div>
@@ -249,34 +249,36 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
                         {/* Options */}
                         <div className={styles.optionsContainer}>
                             {/* Option 1 - Call Now */}
-                            <button
-                                onClick={() => setSelectedOption('now')}
-                                className={`${styles.optionButton} ${selectedOption === 'now' ? styles.optionSelected : ''}`}
-                            >
-                                <div className={styles.optionContent}>
-                                    <div className={`${styles.radioButton} ${selectedOption === 'now' ? styles.radioSelected : ''}`}>
-                                        {selectedOption === 'now' && <div className={styles.radioInner} />}
-                                    </div>
-
-                                    <div className={`${styles.iconBox} ${selectedOption === 'now' ? styles.iconBoxActive : ''}`}>
-                                        <PhoneIcon />
-                                    </div>
-                                    
-                                    <div className={styles.optionText}>
-                                        <h3 className={styles.optionTitle}>Appeler maintenant</h3>
-                                        <p className={styles.optionDescription}>Ligne d'appel prioritaire</p>
-                                    </div>
-
-                                    {selectedOption === 'now' && (
-                                        <div className={`${styles.onlineIndicator} ${!isOpenNow() ? styles.onlineIndicatorClosed : ''}`}>
-                                            <div className={`${styles.pulsingDot} ${!isOpenNow() ? styles.pulsingDotClosed : ''}`}></div>
-                                            <span className={`${styles.onlineText} ${!isOpenNow() ? styles.onlineTextClosed : ''}`}>
-                                                {isOpenNow() ? 'Ouvert' : 'Fermé'}
-                                            </span>
+                            {isOpenNow() && (
+                                <button
+                                    onClick={() => setSelectedOption('now')}
+                                    className={`${styles.optionButton} ${selectedOption === 'now' ? styles.optionSelected : ''}`}
+                                >
+                                    <div className={styles.optionContent}>
+                                        <div className={`${styles.radioButton} ${selectedOption === 'now' ? styles.radioSelected : ''}`}>
+                                            {selectedOption === 'now' && <div className={styles.radioInner} />}
                                         </div>
-                                    )}
-                                </div>
-                            </button>
+
+                                        <div className={`${styles.iconBox} ${selectedOption === 'now' ? styles.iconBoxActive : ''}`}>
+                                            <PhoneIcon />
+                                        </div>
+                                        
+                                        <div className={styles.optionText}>
+                                            <h3 className={styles.optionTitle}>Appeler maintenant</h3>
+                                            <p className={styles.optionDescription}>Ligne d'appel prioritaire</p>
+                                        </div>
+
+                                        {selectedOption === 'now' && (
+                                            <div className={`${styles.onlineIndicator} ${!isOpenNow() ? styles.onlineIndicatorClosed : ''}`}>
+                                                <div className={`${styles.pulsingDot} ${!isOpenNow() ? styles.pulsingDotClosed : ''}`}></div>
+                                                <span className={`${styles.onlineText} ${!isOpenNow() ? styles.onlineTextClosed : ''}`}>
+                                                    {isOpenNow() ? 'Ouvert' : 'Fermé'}
+                                                </span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </button>
+                            )}
 
                             {/* Option 2 - Schedule Later */}
                             <button

@@ -126,7 +126,7 @@ const OrderProduct = () => {
                         <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
                         <div className={styles.protectionDetails}>
                             <p className={styles.protectionName}>Protection dommage matériel</p>
-                            <p className={styles.protectionAmount}>2 000 000 $</p>
+                            <p className={styles.protectionAmount}>2 000 000$</p>
                         </div>
                     </div>
                     
@@ -134,7 +134,7 @@ const OrderProduct = () => {
                         <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
                         <div className={styles.protectionDetails}>
                             <p className={styles.protectionName}>Protection accident et collision</p>
-                            <p className={styles.protectionAmount}>500 $</p>
+                            <p className={styles.protectionAmount}>500$</p>
                         </div>
                     </div>
                     
@@ -142,7 +142,7 @@ const OrderProduct = () => {
                         <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
                         <div className={styles.protectionDetails}>
                             <p className={styles.protectionName}>Protection dommage matériel</p>
-                            <p className={styles.protectionAmount}>250 $</p>
+                            <p className={styles.protectionAmount}>250$</p>
                         </div>
                     </div>
                 </div>

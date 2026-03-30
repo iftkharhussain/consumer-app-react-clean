@@ -37,7 +37,7 @@ const CallConfirmation = () => {
           <h1 className={styles.mainTitle}>Génial! Appelez Courtika au <span className={styles.phoneNumberHighlight}>1 (450) 762-9240</span></h1>
           
           <p className={styles.subTitle}>
-            Nous avons envoyé votre demande à un courtier en assurance de dommages chez Courtika. Appelez-les dès que possible pour qu'il réponde à vos questions et finalise les détails.
+          Appelez Courtika dès que possible. Nous leur avons transmis votre demande afin qu’un courtier en assurance de dommages puisse répondre à vos questions et finaliser les détails avec vous.
           </p>
 
           <div className={styles.cardLayout}>
@@ -53,8 +53,8 @@ const CallConfirmation = () => {
                   <span className={styles.insurerName}>Intact</span>
                 </div>
                 <div className={styles.priceContainer}>
-                  <span className={styles.priceMain}>90 $/mois</span>
-                  <span className={styles.priceOld}>110 $/mois</span>
+                  <span className={styles.priceMain}>90$/mois</span>
+                  <span className={styles.priceOld}>110$/mois</span>
                 </div>
               </div>
               
@@ -72,19 +72,19 @@ const CallConfirmation = () => {
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
                         <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
-                    <span>Protection dommage matériel 2 000 000 $</span>
+                    <span>Protection dommage matériel 2 000 000$</span>
                   </li>
                   <li>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
                         <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
-                    <span>Protection accident et collision 500 $</span>
+                    <span>Protection accident et collision 500$</span>
                   </li>
                   <li>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
                         <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
-                    <span>Protection dommage matériel 250 $</span>
+                    <span>Protection dommage matériel 250$</span>
                   </li>
                 </ul>
               </div>

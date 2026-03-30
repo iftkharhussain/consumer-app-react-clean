@@ -42,8 +42,7 @@ const FifteenMinutesRedirect = () => {
         <h1 className={styles.mainTitle}>Vos soumissions ont expiré</h1>
         
         <p className={styles.subTitle}>
-          Ne vous inquiétez pas! Courtika peut continuer à magasiner pour vous et trouver encore de<br/>
-          meilleures options. Continuez avec eux pour finaliser votre assurance.
+       Ne vous inquiétez pas! Vous n’avez pas perdu votre progression. Courtika peut continuer à magasiner avec vous et trouver encore plus d’options. Continuez avec eux en cliquant ci-dessous, et nous leur enverrons vos informations afin qu’un courtier puisse vous aider au téléphone.
         </p>
 
         <div className={styles.infoButton}>
@@ -54,7 +53,7 @@ const FifteenMinutesRedirect = () => {
         <div className={styles.card}>
           {!isSubmitted ? (
             <>
-              <h2 className={styles.cardTitleCenter}>Voulez-vous que Courtika continue à magasiner pour vous?</h2>
+              <h2 className={styles.cardTitleCenter}>Aimeriez-vous que Courtika continue à magasiner avec vous?</h2>
           
           <div className={styles.brokerHeader}>
             <div className={styles.courtikaLogoBox}>
@@ -96,7 +95,7 @@ const FifteenMinutesRedirect = () => {
           </div>
 
               <Button type="primary" className={styles.primaryButton} size="large" onClick={handleSubmit} loading={isLoading}>
-                {!isLoading && <CheckOutlined />} Oui, je veux que Courtika magasine pour moi
+                {!isLoading && <CheckOutlined />}Oui, je veux magasiner avec Courtika
               </Button>
               <div className={styles.buttonSubtext}>
                 Sans frais • Sans engagement • Vous gardez le contrôle
