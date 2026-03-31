@@ -480,9 +480,25 @@
   margin: 0;
 }
 
-/* --- Mobile Responsive Optimizations --- */
+/* --- Visibility Utilities --- */
+.desktopOnly {
+  display: flex !important;
+}
+
+.mobileOnly {
+  display: none !important;
+}
+
 /* --- Mobile Responsive Optimizations --- */
 @media (max-width: 768px) {
+  .desktopOnly {
+    display: none !important;
+  }
+  
+  .mobileOnly {
+    display: flex !important;
+  }
+
   .container {
     padding: 24px 16px;
     box-sizing: border-box;

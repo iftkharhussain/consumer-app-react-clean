@@ -34,20 +34,24 @@ const FifteenMinutesRedirect = () => {
     <PageContent pageType="overview">
       <div className={styles.container}>
         
-        {/* Header Section */}
-        <div className={styles.clockIconWrapper}>
-          <ClockCircleOutlined className={styles.clockIcon} />
-        </div>
-        
-        <h1 className={styles.mainTitle}>Vos soumissions ont expiré</h1>
-        
-        <p className={styles.subTitle}>
-       Ne vous inquiétez pas! Vous n’avez pas perdu votre progression. Courtika peut continuer à magasiner avec vous et trouver encore plus d’options. Continuez avec eux en cliquant ci-dessous, et nous leur enverrons vos informations afin qu’un courtier puisse vous aider au téléphone.
-        </p>
+        {/* Header Section - Only show before submission */}
+        {!isSubmitted && (
+          <>
+            <div className={styles.clockIconWrapper}>
+              <ClockCircleOutlined className={styles.clockIcon} />
+            </div>
+            
+            <h1 className={styles.mainTitle}>Vos soumissions ont expiré</h1>
+            
+            <p className={styles.subTitle}>
+              Ne vous inquiétez pas! Vous n’avez pas perdu votre progression. Courtika peut continuer à magasiner avec vous et trouver encore plus d’options. Continuez avec eux en cliquant ci-dessous, et nous leur enverrons vos informations afin qu’un courtier puisse vous aider au téléphone.
+            </p>
 
-        <div className={styles.infoButton}>
-          <SearchOutlined /> Courtika a accès à 30+ assureurs et pourrait peut-être vous trouver un meilleur prix
-        </div>
+            <div className={styles.infoButton}>
+              <SearchOutlined /> Courtika a accès à 30+ assureurs et pourrait peut-être vous trouver un meilleur prix
+            </div>
+          </>
+        )}
 
         {/* Action Card */}
         <div className={styles.card}>
@@ -142,10 +146,16 @@ const FifteenMinutesRedirect = () => {
                   <InfoCircleOutlined className={styles.infoIcon} />
                   <span className={styles.infoText}>Ayez votre permis de conduire et les papiers d'immatriculation du véhicule à portée de main.</span>
                 </li>
+                <li className={styles.desktopOnly}>
+                  <PhoneOutlined className={styles.infoIcon} />
+                  <div>
+                    <span className={styles.infoText}>Ligne prioritaire : <a href="tel:+14507629240" className={styles.infoLink} style={{display: 'inline', marginTop: '0', color: '#1f01c8'}}>1 (450) 762-9240</a></span>
+                  </div>
+                </li>
               </ul>
 
               <div className={styles.actionButtons}>
-                <Button type="primary" className={styles.primaryButton} size="large" href="tel:+14507629240">
+                <Button type="primary" className={`${styles.primaryButton} ${styles.mobileOnly}`} size="large" href="tel:+14507629240">
                   <PhoneOutlined className={styles.phoneIcon} /> Appeler maintenant: 1 (450) 762-9240
                 </Button>
                 

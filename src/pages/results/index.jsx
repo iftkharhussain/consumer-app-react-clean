@@ -757,7 +757,14 @@ const Results = () => {
                                 <Button
                                   type="primary"
                                   className={styles.courtikaButton}
-                                  onClick={() => setIsCourtikaModalOpen(true)}
+                                  onClick={() => {
+                                    setSelectedInsurer({
+                                      insurerName: "Magasiner plus d'options avec Courtika",
+                                      logo: "/images/courtika-assurances-inc.png",
+                                      isCourtikaSearch: true
+                                    });
+                                    setIsCourtikaModalOpen(true);
+                                  }}
                                 >
                                   Parler à Courtika
                                 </Button>

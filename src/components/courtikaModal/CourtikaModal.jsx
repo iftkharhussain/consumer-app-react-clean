@@ -232,12 +232,14 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
                                         <p className={styles.summaryInsurer}>{selectedQuote.insurerName}</p>
                                     </div>
                                 </div>
-                                <div className={styles.summaryRight}>
-                                    <p className={styles.summaryPrice}>{selectedQuote.monthlyPrice}$/mois</p>
-                                    {selectedQuote.yearlyPrice && (
-                                        <p className={styles.summaryOldPrice}>{selectedQuote.yearlyPrice}$/an</p>
-                                    )}
-                                </div>
+                                {!selectedQuote.isCourtikaSearch && (
+                                    <div className={styles.summaryRight}>
+                                        <p className={styles.summaryPrice}>{selectedQuote.monthlyPrice}$/mois</p>
+                                        {selectedQuote.yearlyPrice && (
+                                            <p className={styles.summaryOldPrice}>{selectedQuote.yearlyPrice}$/an</p>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         )}
 
