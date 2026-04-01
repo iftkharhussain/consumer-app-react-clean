@@ -1,186 +1,57 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PageContent } from 'components';
-import { Button, message, Spin } from 'antd';
-import { ClockCircleOutlined, SearchOutlined, CheckOutlined, CalendarOutlined, InfoCircleOutlined, PhoneOutlined, LoadingOutlined } from '@ant-design/icons';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Button } from 'antd';
+import { ClockCircleOutlined, SearchOutlined, CheckOutlined, CalendarOutlined, InfoCircleOutlined, PhoneOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
-import { fortusService } from '../../services/api/fortusService';
-import { getOrderDetails, checkPendingOrder } from '../../services/api/productOrderService';
 import styles from './FifteenMinutesRedirect.module.css';
 import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
 
 const FifteenMinutesRedirect = () => {
   const initialized = useRef(false);
-  const timerRef = useRef(null);
+
   const navigate = useNavigate();
-  const { userProductId } = useParams();
-  
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
-  
-  // API data states
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [orderData, setOrderData] = useState(null);
 
   useEffect(() => {
     if (!initialized.current) {
       document.title = 'Vos soumissions ont expiré - Consumer App';
       initialized.current = true;
     }
-
-    // Cleanup timer on unmount
-    return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-    };
   }, []);
 
-  // Fetch order details on mount
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        let productId = userProductId;
-
-        // If no userProductId in URL, check for pending order
-        if (!productId) {
-          console.log('[FifteenMinutesRedirect] No userProductId, checking for pending order...');
-          const pendingResult = await checkPendingOrder('car-insurance');
-          
-          if (pendingResult.success && pendingResult.hasPendingOrder) {
-            productId = pendingResult.userProductId;
-            console.log('[FifteenMinutesRedirect] Found pending order:', productId);
-          }
-        }
-
-        // Fetch order details if we have a productId
-        if (productId) {
-          console.log('[FifteenMinutesRedirect] Fetching order details for:', productId);
-          const result = await getOrderDetails(productId);
-          
-          if (result.success) {
-            setOrderData(result.data);
-            console.log('[FifteenMinutesRedirect] Order data loaded:', result.data);
-          } else {
-            console.warn('[FifteenMinutesRedirect] Failed to fetch order:', result.message);
-            setError(result.message);
-          }
-        } else {
-          console.log('[FifteenMinutesRedirect] No productId available, using defaults');
-        }
-      } catch (err) {
-        console.error('[FifteenMinutesRedirect] Error fetching data:', err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [userProductId]);
-
-  const handleSubmit = async () => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
+  const handleSubmit = () => {
     setIsLoading(true);
-    console.log('[FifteenMinutesRedirect] Sending ezLead and email notification');
-
-    try {
-      // Prepare params for fortusService
-      const params = userProductId 
-        ? { userProductId, selectedQuote: orderData?.selectedQuote || null, recalculatedQuote: null } 
-        : { productSlug: 'car-insurance', selectedQuote: orderData?.selectedQuote || null, recalculatedQuote: null };
-      
-      console.log('[FifteenMinutesRedirect] Request params:', params);
-      
-      // Call Fortus API to send the lead and email
-      const result = await fortusService.requestCall(params);
-      
-      if (result.success) {
-        console.log('[FifteenMinutesRedirect] Request successful:', result);
-        setIsLoading(false);
-        setIsSubmitted(true);
-        message.success('Votre demande a été envoyée avec succès!');
-        
-        // Stay on this page to show contact information
-        // No redirect needed
-      } else {
-        console.warn('[FifteenMinutesRedirect] Request failed:', result);
-        setIsLoading(false);
-        message.error(result.message || 'Une erreur est survenue. Veuillez réessayer.');
-      }
-    } catch (error) {
-      console.error('[FifteenMinutesRedirect] API error:', error);
+    setTimeout(() => {
       setIsLoading(false);
-      message.error('Une erreur est survenue. Veuillez réessayer.');
-    }
+      setIsSubmitted(true);
+    }, 1500);
   };
-
-  // Extract dynamic data from API response
-  const selectedQuote = orderData?.selectedQuote || {};
-  const advisorInfo = orderData?.advisorInfo || {};
-  
-  // Insurer info
-  const insurerLogo = selectedQuote.logo || '/images/courtika-assurances-inc.png';
-  const insurerName = selectedQuote.insurerName || 'Courtika';
-  
-  // Company info
-  const companyName = advisorInfo.companyName || 'Courtika Assurances Inc.';
-  const companyLogo = advisorInfo.companyLogo || '/images/courtika-assurances-inc.png';
-  const companyPhone = advisorInfo.phone || '1 (450) 762-9240';
-  
-  // Office hours
-  const officeHours = advisorInfo.officeHours || {};
-  const isOpen = officeHours.isOpen || false;
-  const openStatus = isOpen ? 'Disponible maintenant' : 'Fermé actuellement';
-  const formattedHours = officeHours.formattedToday || 'Ouvert aujourd\'hui de 8:30 - 16:30';
-  const callDuration = advisorInfo.estimatedCallDuration || 'environ 15 min';
-  
-  // Generate phone link
-  const phoneDigits = companyPhone.replace(/\D/g, '');
-  const phoneLink = `tel:+${phoneDigits}`;
-
-  // Show loading state
-  if (loading) {
-    return (
-      <PageContent pageType="overview">
-        <div style={{ textAlign: 'center', padding: '50px' }}>
-          <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
-          <p style={{ marginTop: 20 }}>Chargement des informations...</p>
-        </div>
-      </PageContent>
-    );
-  }
-
-  // Show error state (but continue with defaults)
-  if (error) {
-    console.warn('[FifteenMinutesRedirect] Error loading data, using defaults:', error);
-  }
 
   return (
     <PageContent pageType="overview">
       <div className={styles.container}>
         
-        {/* Header Section */}
-        <div className={styles.clockIconWrapper}>
-          <ClockCircleOutlined className={styles.clockIcon} />
-        </div>
-        
-        <h1 className={styles.mainTitle}>Vos soumissions ont expiré</h1>
-        
-        <p className={styles.subTitle}>
-       Ne vous inquiétez pas! Vous n’avez pas perdu votre progression. Courtika peut continuer à magasiner avec vous et trouver encore plus d’options. Continuez avec eux en cliquant ci-dessous, et nous leur enverrons vos informations afin qu’un courtier puisse vous aider au téléphone.
-        </p>
+        {/* Header Section - Only show before submission */}
+        {!isSubmitted && (
+          <>
+            <div className={styles.clockIconWrapper}>
+              <ClockCircleOutlined className={styles.clockIcon} />
+            </div>
+            
+            <h1 className={styles.mainTitle}>Vos soumissions ont expiré</h1>
+            
+            <p className={styles.subTitle}>
+              Ne vous inquiétez pas! Vous n’avez pas perdu votre progression. Courtika peut continuer à magasiner avec vous et trouver encore plus d’options. Continuez avec eux en cliquant ci-dessous, et nous leur enverrons vos informations afin qu’un courtier puisse vous aider au téléphone.
+            </p>
 
-        <div className={styles.infoButton}>
-          <SearchOutlined /> Courtika a accès à 30+ assureurs et pourrait peut-être vous trouver un meilleur prix
-        </div>
+            <div className={styles.infoButton}>
+              <SearchOutlined /> Courtika a accès à 30+ assureurs et pourrait peut-être vous trouver un meilleur prix
+            </div>
+          </>
+        )}
 
         {/* Action Card */}
         <div className={styles.card}>
@@ -190,7 +61,7 @@ const FifteenMinutesRedirect = () => {
           
           <div className={styles.brokerHeader}>
             <div className={styles.courtikaLogoBox}>
-              <img src={companyLogo} alt={companyName} className={styles.courtikaImageLogo} />
+              <img src="/images/courtika-assurances-inc.png" alt="Courtika" className={styles.courtikaImageLogo} />
             </div>
             <div className={styles.statusInfo}>
               <div className={`${styles.statusBadge} ${!isOpenNow() ? styles.statusBadgeClosed : ''}`}>
@@ -248,7 +119,7 @@ const FifteenMinutesRedirect = () => {
               
               <div className={styles.statusSectionLeft}>
                 <div className={styles.courtikaLogoBoxLeft}>
-                  <img src={companyLogo} alt={companyName} className={styles.courtikaImageLogo} />
+                  <img src="/images/courtika-assurances-inc.png" alt="Courtika" className={styles.courtikaImageLogo} />
                 </div>
                 <div className={styles.statusInfoLeft}>
                   <div className={`${styles.statusBadge} ${!isOpenNow() ? styles.statusBadgeClosed : ''}`}>
@@ -269,24 +140,26 @@ const FifteenMinutesRedirect = () => {
                 </li>
                 <li>
                   <ClockCircleOutlined className={styles.infoIcon} />
-                  <span className={styles.infoText}>Durée de l'appel: {callDuration}</span>
+                  <span className={styles.infoText}>Durée de l'appel: environ 15 min</span>
                 </li>
                 <li>
                   <InfoCircleOutlined className={styles.infoIcon} />
                   <span className={styles.infoText}>Ayez votre permis de conduire et les papiers d'immatriculation du véhicule à portée de main.</span>
                 </li>
+                <li className={styles.desktopOnly}>
+                  <PhoneOutlined className={styles.infoIcon} />
+                  <div>
+                    <span className={styles.infoText}>Ligne prioritaire : <a href="tel:+14507629240" className={styles.infoLink} style={{display: 'inline', marginTop: '0', color: '#1f01c8'}}>1 (450) 762-9240</a></span>
+                  </div>
+                </li>
               </ul>
 
               <div className={styles.actionButtons}>
-                <Button type="primary" className={styles.primaryButton} size="large" href={phoneLink}>
-                  <PhoneOutlined className={styles.phoneIcon} /> Appeler maintenant: {companyPhone}
+                <Button type="primary" className={`${styles.primaryButton} ${styles.mobileOnly}`} size="large" href="tel:+14507629240">
+                  <PhoneOutlined className={styles.phoneIcon} /> Appeler maintenant: 1 (450) 762-9240
                 </Button>
                 
-                <Button 
-                  className={styles.secondaryOutlineButton} 
-                  size="large" 
-                  onClick={() => navigate(userProductId ? `/schedule-call/${userProductId}` : '/schedule-call')}
-                >
+                <Button className={styles.secondaryOutlineButton} size="large" onClick={() => navigate('/schedule-call')}>
                   <CalendarOutlined /> Planifier l'appel plus tard
                 </Button>
               </div>
