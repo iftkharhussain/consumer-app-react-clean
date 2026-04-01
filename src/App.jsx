@@ -34,6 +34,7 @@ const ForgotPassword = React.lazy(() => import('./pages/forgotPassword/index'));
 const QuestionPage = React.lazy(() => import('./pages/question/index'));
 const Logout = React.lazy(() => import('./pages/logout/index'));
 const OrderProduct = React.lazy(() => import('./pages/product-order'));
+const CallConfirmation = React.lazy(() => import('./pages/callConfirmation/index'));
 const FifteenMinutesRedirect = React.lazy(() => import('./pages/fifteenMinutesRedirect/index'));
 const ScheduleCall = React.lazy(() => import('./pages/scheduleCall/index'));
 const ScheduleConfirmation = React.lazy(() => import('./pages/scheduleConfirmation/index'));
@@ -119,10 +120,10 @@ function App(props) {
 							<Route path="/overview" element={<Suspense fallback={<div></div>}><Overview /></Suspense>} />
 							<Route path="/car-insurance" element={<Suspense fallback={<div></div>}><Results /></Suspense>} />
 							<Route path="/car-insurance/product-order/:userProductId?" element={<Suspense fallback={<div></div>}><OrderProduct /></Suspense>} />
-
-							<Route path="/fifteen-minutes-redirect/:userProductId?" element={<Suspense fallback={<div></div>}><FifteenMinutesRedirect /></Suspense>} />
-					<Route path="/schedule-call/:userProductId?" element={<Suspense fallback={<div></div>}><ScheduleCall /></Suspense>} />
-					<Route path="/schedule-confirmation/:userProductId?" element={<Suspense fallback={<div></div>}><ScheduleConfirmation /></Suspense>} />
+							<Route path="/call-confirmation" element={<Suspense fallback={<div></div>}><CallConfirmation /></Suspense>} />
+							<Route path="/fifteen-minutes-redirect" element={<Suspense fallback={<div></div>}><FifteenMinutesRedirect /></Suspense>} />
+							<Route path="/schedule-call" element={<Suspense fallback={<div></div>}><ScheduleCall /></Suspense>} />
+							<Route path="/schedule-confirmation" element={<Suspense fallback={<div></div>}><ScheduleConfirmation /></Suspense>} />
 							<Route path="/question-public" element={<Suspense fallback={<div></div>}><QuestionPage /></Suspense>} />
 							<Route path="/logout" element={<Logout />} />
 						</Route>

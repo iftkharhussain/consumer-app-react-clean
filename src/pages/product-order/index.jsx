@@ -1,323 +1,194 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { PageContent } from 'components';
-import { Button, Spin } from 'antd';
-import { useNavigate, useParams } from 'react-router-dom';
-import { 
-  CheckOutlined,
-  CalendarOutlined,
-  ClockCircleOutlined,
-  InfoCircleOutlined,
-  PhoneOutlined
-} from '@ant-design/icons';
-import styles from './CallConfirmation.module.css';
-import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { Spin } from 'antd';
+import ExploreProducts from '../../components/exploreProducts';
+import FAQ from '../../components/faq';
 import { getOrderDetails } from '../../services/api/productOrderService';
+import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
+import styles from './ProductOrder.module.css';
 
 const OrderProduct = () => {
-  const navigate = useNavigate();
-  const { userProductId } = useParams();
-  const initialized = useRef(false);
-  const [isScheduleOpen, setIsScheduleOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [orderData, setOrderData] = useState(null);
+    const { userProductId } = useParams();
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [orderData, setOrderData] = useState(null);
 
-  useEffect(() => {
-    if (!initialized.current) {
-      document.title = 'Appelez Courtika - Consumer App';
-      initialized.current = true;
-    }
-  }, []);
+    useEffect(() => {
+        const fetchOrderDetails = async () => {
+            if (!userProductId) {
+                setError('No order ID provided');
+                setLoading(false);
+                return;
+            }
 
-  useEffect(() => {
-    const fetchOrderDetails = async () => {
-      if (!userProductId) {
-        setError('No order ID provided');
-        setLoading(false);
-        return;
-      }
+            try {
+                setLoading(true);
+                const response = await getOrderDetails(userProductId);
+                
+                if (response.success) {
+                    setOrderData(response.order);
+                } else {
+                    setError(response.message || 'Failed to load order details');
+                }
+            } catch (err) {
+                console.error('Error fetching order details:', err);
+                setError('Failed to load order details');
+            } finally {
+                setLoading(false);
+            }
+        };
 
-      try {
-        setLoading(true);
-        const response = await getOrderDetails(userProductId);
-        
-        if (response.success) {
-          setOrderData(response.data);
-        } else {
-          setError(response.message || 'Failed to load order details');
-        }
-      } catch (err) {
-        console.error('Error fetching order details:', err);
-        setError('Failed to load order details');
-      } finally {
-        setLoading(false);
-      }
+        fetchOrderDetails();
+    }, [userProductId]);
+
+    const handleExploreProducts = () => {
+        console.log('Explore products clicked');
+        // Add navigation logic here
     };
 
-    fetchOrderDetails();
-  }, [userProductId]);
+    if (loading) {
+        return (
+            <div className={styles.orderProductPage}>
+                <div style={{ textAlign: 'center', padding: '100px 0' }}>
+                    <Spin size="large" />
+                    <p style={{ marginTop: '20px' }}>Chargement de votre demande...</p>
+                </div>
+            </div>
+        );
+    }
 
-  // Loading state
-  if (loading) {
+    if (error || !orderData) {
+        return (
+            <div className={styles.orderProductPage}>
+                <h1 className={styles.mainHeading}>Erreur</h1>
+                <p className={styles.mainDescription}>{error || 'Commande non trouvée'}</p>
+            </div>
+        );
+    }
+
+    const selectedQuote = orderData.selectedQuote || {};
+    const advisorInfo = orderData.advisorInfo || {};
+    const insurerName = selectedQuote.insurerName || 'Intact Insurance';
+    const insurerLogo = selectedQuote.logo || '/images/intact-insurance.svg';
+    const monthlyPrice = selectedQuote.monthlyPrice || 90;
+    const yearlyPrice = selectedQuote.yearlyPrice || 1080;
+    const isIntact = selectedQuote.isIntactDiscount || false;
+
+    // Advisor details
+    const companyName = advisorInfo.companyName || 'Courtika Assurances Inc';
+    const companyLogo = advisorInfo.logo || '/images/courtika-assurances-inc.png';
+    const phone = advisorInfo.phone || 'XXX XXX XXXX';
+    const isOpen = advisorInfo.isOpen !== undefined ? advisorInfo.isOpen : isOpenNow();
+    const openStatus = advisorInfo.openStatus || (isOpen ? 'Ouvert' : 'Fermé');
+    const formattedHours = advisorInfo.formattedHours || getFormattedTodayHours();
+    const callDuration = advisorInfo.callDuration || 10;
+    const maxRetries = advisorInfo.maxRetries || 2;
+
     return (
-      <PageContent pageType="overview">
-        <div style={{ textAlign: 'center', padding: '50px' }}>
-          <Spin size="large" />
-          <p style={{ marginTop: 20 }}>Chargement de votre demande...</p>
+        <div className={styles.orderProductPage}>
+            <h1 className={styles.mainHeading}>
+                Génial, un courtier vous appellera bientôt!
+            </h1>
+            
+            <p className={styles.mainDescription}>
+                Nous avons envoyé votre demande à un courtier en assurance de dommages chez {companyName}. 
+                Celui-ci vous appellera dès que possible pour répondre à vos questions et finaliser les détails. 
+                <strong> Assurez-vous de répondre au {phone}</strong>
+            </p>
+
+            <div className={styles.contentContainer}>
+                {/* Left Column - Insurance Provider */}
+                <div className={styles.leftColumn}>
+                    <h2 className={styles.columnTitle}>L'assureur choisit:</h2>
+                    
+                    <img 
+                        src={insurerLogo} 
+                        alt={insurerName} 
+                        className={styles.intactLogo}
+                    />
+                    
+                    <div className={styles.priceContainer}>
+                        {selectedQuote.oldMonthlyPrice && (
+                            <span className={styles.oldPrice}>{selectedQuote.oldMonthlyPrice} $ / mois</span>
+                        )}
+                        <span className={styles.newPrice}>{monthlyPrice} $ / mois</span>
+                    </div>
+                    
+                    {isIntact && (
+                        <div className={styles.rabaisBadge}>
+                            Rabais Intact appliqué!
+                        </div>
+                    )}
+                    
+                    <h3 className={styles.protectionsTitle}>Vos protections</h3>
+                    
+                    <div className={styles.protectionItem}>
+                        <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
+                        <div className={styles.protectionDetails}>
+                            <p className={styles.protectionName}>Protection dommage matériel</p>
+                            <p className={styles.protectionAmount}>2 000 000$</p>
+                        </div>
+                    </div>
+                    
+                    <div className={styles.protectionItem}>
+                        <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
+                        <div className={styles.protectionDetails}>
+                            <p className={styles.protectionName}>Protection accident et collision</p>
+                            <p className={styles.protectionAmount}>500$</p>
+                        </div>
+                    </div>
+                    
+                    <div className={styles.protectionItem}>
+                        <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
+                        <div className={styles.protectionDetails}>
+                            <p className={styles.protectionName}>Protection dommage matériel</p>
+                            <p className={styles.protectionAmount}>250$</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Right Column - Broker Details */}
+                <div className={styles.rightColumn}>
+                    <h2 className={styles.brokerTitle}>Votre courtier en assurance de dommages:</h2>
+                    
+                    <img 
+                        src={companyLogo} 
+                        alt={companyName} 
+                        className={styles.courtikaLogo}
+                    />
+                    
+                    <p className={isOpen ? styles.statusOpen : styles.statusClosed}>
+                        {openStatus}
+                    </p>
+                    
+                    <p className={styles.callSoon}>Un courtier vous appellera sous peu</p>
+                    
+                    <div className={styles.infoRow}>
+                        <img src="/images/calendar.svg" alt="calendar" className={styles.infoIcon} />
+                        <span className={styles.infoText}>{formattedHours}</span>
+                    </div>
+                    
+                    <div className={styles.infoRow}>
+                        <img src="/images/clock.svg" alt="clock" className={styles.infoIcon} />
+                        <span className={styles.infoText}>Durée de l'appel: {callDuration} min</span>
+                    </div>
+                    
+                    <div className={styles.infoRow}>
+                        <img src="/images/bell-ringing-01.svg" alt="bell" className={styles.infoIcon} />
+                        <span className={styles.infoText}>Si vous ne répondez pas, nous essayerons encore {maxRetries} fois.</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Explore Products Section */}
+            <ExploreProducts onExplore={handleExploreProducts} />
+
+            {/* FAQ Section */}
+            <div style={{ marginTop: '48px' }}>
+                <FAQ />
+            </div>
         </div>
-      </PageContent>
     );
-  }
-
-  // Error state
-  if (error || !orderData) {
-    return (
-      <PageContent pageType="overview">
-        <div className={styles.fallbackContainer}>
-          <div className={styles.actionCard}>
-            <h1 className={styles.mainTitle} style={{ color: '#dc2626' }}>Erreur</h1>
-            <p className={styles.subTitle}>{error || 'Commande non trouvée'}</p>
-            <Button type="primary" onClick={() => navigate('/car-insurance')} style={{ marginTop: '20px' }}>
-              Retour aux résultats
-            </Button>
-          </div>
-        </div>
-      </PageContent>
-    );
-  }
-
-  // Extract data from orderData
-  const selectedQuote = orderData.selectedQuote || {};
-  const advisorInfo = orderData.advisorInfo || {};
-  const insurerName = selectedQuote.insurerName || 'Intact Insurance';
-  const insurerLogo = selectedQuote.logo || '/images/intact-insurance.svg';
-  const monthlyPrice = selectedQuote.monthlyPrice || '90 $';
-  const yearlyPrice = selectedQuote.yearlyPrice || '1 080 $';
-  const isIntactDiscount = selectedQuote.isIntactDiscount || false;
-  
-  // Advisor details
-  const companyName = advisorInfo.companyName || 'Courtika Assurances Inc';
-  const companyLogo = advisorInfo.logo || '/images/courtika-assurances-inc.png';
-  const phone = advisorInfo.phone || '1 (450) 762-9240';
-  // Convert phone to tel: link format (remove all non-digits and add +1 prefix)
-  const phoneDigits = phone.replace(/\D/g, '');
-  const phoneLink = advisorInfo.phoneLink || `tel:+${phoneDigits}`;
-  const isOpen = advisorInfo.isOpen !== undefined ? advisorInfo.isOpen : true;
-  const openStatus = advisorInfo.openStatus || (isOpen ? 'Ouvert' : 'Fermé');
-  const formattedHours = advisorInfo.formattedHours || 'Ouvert aujourd\'hui de 8:30 - 16:30';
-  const callDuration = advisorInfo.callDuration || 15;
-
-  return (
-    <PageContent pageType="overview">
-      <div className={styles.fallbackContainer}>
-        {/* Action Card */}
-        <div className={styles.actionCard}>
-          <div className={styles.successBanner}>
-            <CheckOutlined className={styles.successIcon} />
-          </div>
-          
-          <h1 className={styles.mainTitle}>Génial! Appelez {companyName} au <span className={styles.phoneNumberHighlight}>{phone}</span></h1>
-          
-          <p className={styles.subTitle}>
-            Nous avons envoyé votre demande à un courtier en assurance de dommages chez {companyName}. Appelez-les dès que possible pour qu'il réponde à vos questions et finalise les détails.
-          </p>
-
-          <div className={styles.cardLayout}>
-            {/* Left Card: Votre sélection */}
-            <div className={styles.selectionCard}>
-              <h2 className={styles.cardHeading}>Votre sélection</h2>
-              
-              <div className={styles.insurerRow}>
-                <div className={styles.insurerLeft}>
-                  <div className={styles.insurerLogoBox}>
-                    <img src={insurerLogo} alt={insurerName} className={styles.insurerLogo} />
-                  </div>
-                  <span className={styles.insurerName}>{insurerName}</span>
-                </div>
-                <div className={styles.priceContainer}>
-                  <span className={styles.priceMain}>{monthlyPrice}/mois</span>
-                  {yearlyPrice && <span className={styles.priceOld}>{yearlyPrice}/an</span>}
-                </div>
-              </div>
-              
-              {isIntactDiscount && (
-                <div className={styles.discountBadge}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.discountIcon}>
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                  Rabais {companyName} appliqué
-                </div>
-              )}
-
-              <div className={styles.protectionsSection}>
-                <h3 className={styles.protectionsTitle}>Vos protections</h3>
-                <ul className={styles.protectionsList}>
-                  <li>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    <span>Protection dommage matériel 2 000 000 $</span>
-                  </li>
-                  <li>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    <span>Protection accident et collision 500 $</span>
-                  </li>
-                  <li>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    <span>Protection dommage matériel 250 $</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Right Card: Broker Information */}
-            <div className={styles.brokerCard}>
-              <h2 className={styles.cardHeading}>Votre courtier en assurance de dommages:</h2>
-              
-              <div className={styles.statusSectionLeft}>
-                <div className={styles.courtikaLogo}>
-                  <img src={companyLogo} alt={companyName} className={styles.courtikaImageLogo} />
-                </div>
-                <div className={styles.statusInfo}>
-                  <div className={`${styles.statusBadge} ${!isOpen ? styles.statusBadgeClosed : ''}`}>
-                    <div className={styles.statusDot}></div>
-                    {openStatus}
-                  </div>
-                </div>
-              </div>
-
-              <ul className={styles.infoList}>
-                <li>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.infoIcon}>
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                  </svg>
-                  <div>
-                    <span className={styles.infoText}>{formattedHours}</span>
-                    <a href="#" className={styles.infoLink} onClick={(e) => { e.preventDefault(); setIsScheduleOpen(true); }}>Voir l'horaire complet</a>
-                  </div>
-                </li>
-                <li>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.infoIcon}>
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
-                  </svg>
-                  <span className={styles.infoText}>Durée de l'appel: environ {callDuration} min</span>
-                </li>
-                <li>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.infoIcon}>
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="16" x2="12" y2="12"></line>
-                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                  </svg>
-                  <span className={styles.infoText}>Ayez votre permis de conduire et les papiers d'immatriculation du véhicule à portée de main.</span>
-                </li>
-              </ul>
-
-              <div className={styles.actionButtons}>
-                <Button type="primary" className={styles.primaryButton} size="large" href={phoneLink}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.buttonIconLeft}>
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                  </svg>
-                  Appeler maintenant
-                </Button>
-                
-                <Button className={styles.secondaryOutlineButton} size="large" onClick={() => navigate(`/schedule-call/${userProductId}`)}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.buttonIconLeft}>
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                  </svg>
-                  Planifier l'appel plus tard
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Why clients choose Courtika Card */}
-        <div className={styles.aboutCard}>
-          <h2 className={styles.aboutTitle}>Pourquoi nos clients choisissent {companyName}</h2>
-          <p className={styles.aboutText}>
-            Un cabinet de courtage en assurance de dommages avec plus de 50 ans d'expérience et 90+ courtiers qui comparent pour vous auprès de 30+ assureurs.
-          </p>
-          
-          <a href="https://www.courtika.com" target="_blank" rel="noopener noreferrer" className={styles.websiteLink}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.globeIcon}>
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="2" y1="12" x2="22" y2="12"></line>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-            </svg>
-            www.courtika.com
-          </a>
-
-          <hr className={styles.separator} />
-
-          <div className={styles.benefitsBox}>
-            <h3 className={styles.benefitsBoxTitle}>Il vous facilite la vie! Le service chez {companyName}, c'est :</h3>
-            <ul className={styles.benefitsBoxList}>
-              <li>
-                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F57C00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.benefitsBoxIcon}>
-                   <circle cx="12" cy="8" r="7"></circle>
-                   <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-                 </svg>
-                 <span><strong>Plus de 50 ans d'expérience</strong> et 7 bureaux établis au Québec</span>
-              </li>
-              <li>
-                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F57C00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.benefitsBoxIcon}>
-                   <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
-                   <path d="M9 22v-4h6v4"></path>
-                   <path d="M8 6h.01"></path>
-                   <path d="M16 6h.01"></path>
-                   <path d="M12 6h.01"></path>
-                   <path d="M12 10h.01"></path>
-                   <path d="M12 14h.01"></path>
-                   <path d="M16 10h.01"></path>
-                   <path d="M16 14h.01"></path>
-                   <path d="M8 10h.01"></path>
-                   <path d="M8 14h.01"></path>
-                 </svg>
-                 <span><strong>Accès à 30+ assureurs</strong> : incluant des marchés spécialisés difficiles à trouver</span>
-              </li>
-              <li>
-                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F57C00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.benefitsBoxIcon}>
-                   <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                   <circle cx="9" cy="7" r="4"></circle>
-                   <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                   <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                 </svg>
-                 <span><strong>90+ courtiers qualifiés</strong> : toujours à l'avant-garde du service et de l'expertise</span>
-              </li>
-              <li>
-                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F57C00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.benefitsBoxIcon}>
-                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                 </svg>
-                 <span><strong>Disponible du lundi au vendredi par téléphone</strong> : 100% gratuit, aucun frais</span>
-              </li>
-            </ul>
-          </div>
-          
-          <div className={styles.certificationSection}>
-            <div className={styles.amfLogoPlaceholder}>
-              <img src="/images/logo-amf-header 1.png" alt="Autorité des marchés financiers" className={styles.amfImageLogo} />
-            </div>
-            <div className={styles.certText}>
-              <h4 className={styles.certTitle}>{companyName} est certifié par l'AMF</h4>
-              <p className={styles.certSubtitle}>Autorité des marchés financiers du Québec</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <ScheduleModal isOpen={isScheduleOpen} onClose={() => setIsScheduleOpen(false)} />
-    </PageContent>
-  );
 };
 
 export default OrderProduct;

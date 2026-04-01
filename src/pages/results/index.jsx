@@ -66,7 +66,7 @@ const Results = () => {
       setTimeLeft((prevTime) => {
         if (prevTime <= 0) {
           clearInterval(timer);
-          navigate(userProductId ? `/fifteen-minutes-redirect/${userProductId}` : '/fifteen-minutes-redirect');
+          navigate('/fifteen-minutes-redirect');
           return 0;
         }
         return prevTime - 1;
@@ -486,10 +486,7 @@ const Results = () => {
 
                 {/* Show error state */}
                 {hasFailed && (
-                  <FallbackNoQuotes 
-                    userProductId={userProductId}
-                    productSlug="car-insurance"
-                  />
+                  <FallbackNoQuotes />
                 )}
 
                 {/* Show results when data is available */}
