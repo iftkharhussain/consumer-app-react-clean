@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { PageContent } from 'components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import styles from './ScheduleCall.module.css';
 
@@ -10,6 +10,8 @@ const ScheduleCall = () => {
   const redirected = useRef(false);
   const widgetContainerRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { userProductId } = location.state || {};
 
   useEffect(() => {
     if (!initialized.current) {
@@ -45,11 +47,15 @@ const ScheduleCall = () => {
     const handleCalendlyEvent = (e) => {
       // Check if message is from Calendly
       if (e.origin === 'https://calendly.com' && e.data && e.data.event === 'calendly.event_scheduled') {
-        // Redirect to confirmation page
+        // Redirect to confirmation page with userProductId
         if (!redirected.current) {
           redirected.current = true;
           setTimeout(() => {
-            navigate('/schedule-confirmation');
+            if (userProductId) {
+              navigate(`/schedule-confirmation/${userProductId}`);
+            } else {
+              navigate('/schedule-confirmation');
+            }
           }, 300);
         }
       }

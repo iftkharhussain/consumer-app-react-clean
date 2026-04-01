@@ -85,13 +85,15 @@ const Results = () => {
     }
   }, []);
 
-  // Check for pending order on mount
+  // Check for pending order on mount - redirect to call-confirmation if user has already chosen insurer
   useEffect(() => {
     const checkForPendingOrder = async () => {
       try {
         const result = await checkPendingOrder('car-insurance');
         if (result.success && result.hasPendingOrder && result.userProductId) {
-          navigate(`/car-insurance/product-order/${result.userProductId}`);
+          // Redirect to call confirmation page (user has already selected insurer)
+          console.log('[Results] Pending order found, redirecting to call-confirmation:', result.userProductId);
+          navigate(`/call-confirmation/${result.userProductId}`);
         }
       } catch (error) {
         console.error('Failed to check pending order:', error);

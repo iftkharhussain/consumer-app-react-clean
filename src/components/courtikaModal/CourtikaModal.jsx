@@ -80,14 +80,44 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
         }
     };
 
-    const handleContinue = () => {
+    const handleContinue = async () => {
         if (selectedOption === 'now') {
             // Call immediately
             handleDemanderAppel();
         } else {
-            // Schedule for later - navigate to schedule page
-            onClose();
-            navigate('/schedule-call');
+            // Schedule for later - save order first, then navigate to schedule page
+            setIsLoading(true);
+            try {
+                // Extract carrier code from selected quote
+                const carrierCode = selectedQuote?.carrierCode;
+                
+                // Prefer userProductId over productSlug for more reliable matching
+                const params = userProductId 
+                    ? { userProductId, selectedQuote, recalculatedQuote, carrierCode, scheduleLater: true } 
+                    : { productSlug, selectedQuote, recalculatedQuote, carrierCode, scheduleLater: true };
+                
+                console.log('[CourtikaModal] Saving order for schedule later:', params);
+                
+                // Save the order (but don't send to Fortus yet)
+                const result = await fortusService.requestCall(params);
+                
+                if (result.success) {
+                    const productId = result.data?.userProductId || userProductId;
+                    console.log('[CourtikaModal] Order saved, navigating to schedule-call with productId:', productId);
+                    
+                    setIsLoading(false);
+                    onClose();
+                    navigate('/schedule-call', { state: { userProductId: productId, selectedQuote, recalculatedQuote } });
+                } else {
+                    console.warn('Failed to save order:', result);
+                    setIsLoading(false);
+                    message.error(result.message || 'Une erreur est survenue.');
+                }
+            } catch (error) {
+                console.error('Error saving order:', error);
+                setIsLoading(false);
+                message.error('Une erreur est survenue.');
+            }
         }
     };
 
