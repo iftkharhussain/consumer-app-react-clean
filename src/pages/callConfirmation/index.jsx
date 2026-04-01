@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PageContent } from 'components';
-import { Button } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { Button, Spin } from 'antd';
+import { useNavigate, useParams } from 'react-router-dom';
 import { 
   CheckOutlined,
   CalendarOutlined,
@@ -12,11 +12,16 @@ import {
 import styles from './CallConfirmation.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
+import { getOrderDetails, checkPendingOrder } from '../../services/api/productOrderService';
 
 const CallConfirmation = () => {
   const navigate = useNavigate();
+  const { userProductId: urlUserProductId } = useParams();
   const initialized = useRef(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [orderData, setOrderData] = useState(null);
 
   useEffect(() => {
     if (!initialized.current) {
@@ -24,6 +29,118 @@ const CallConfirmation = () => {
       initialized.current = true;
     }
   }, []);
+
+  useEffect(() => {
+    const fetchOrderDetails = async () => {
+      try {
+        setLoading(true);
+        
+        let productIdToFetch = urlUserProductId;
+        
+        // If no userProductId in URL, check for pending order
+        if (!productIdToFetch) {
+          console.log('[CallConfirmation] No userProductId in URL, checking for pending order...');
+          const pendingOrderResponse = await checkPendingOrder('car-insurance');
+          
+          if (pendingOrderResponse.success && pendingOrderResponse.hasPendingOrder && pendingOrderResponse.userProductId) {
+            productIdToFetch = pendingOrderResponse.userProductId;
+            console.log('[CallConfirmation] Found pending order:', productIdToFetch);
+          }
+        }
+        
+        // If we have a productId, fetch order details
+        if (productIdToFetch) {
+          const response = await getOrderDetails(productIdToFetch);
+          
+          if (response.success) {
+            setOrderData(response.data);
+          } else {
+            console.warn('[CallConfirmation] Failed to load order:', response.message);
+            setError(response.message || 'Failed to load order details');
+          }
+        } else {
+          // No order found, show page with defaults
+          console.log('[CallConfirmation] No pending order found, showing defaults');
+        }
+      } catch (err) {
+        console.error('[CallConfirmation] Error fetching order details:', err);
+        setError('Failed to load order details');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrderDetails();
+  }, [urlUserProductId]);
+
+  // Loading state
+  if (loading) {
+    return (
+      <PageContent pageType="overview">
+        <div className={styles.fallbackContainer}>
+          <div style={{ textAlign: 'center', padding: '100px 0' }}>
+            <Spin size="large" />
+            <p style={{ marginTop: '20px', fontSize: '16px', color: '#666' }}>Chargement de votre demande...</p>
+          </div>
+        </div>
+      </PageContent>
+    );
+  }
+
+  // Extract data from orderData (or use defaults if no data)
+  const selectedQuote = orderData?.selectedQuote || {};
+  const advisorInfo = orderData?.advisorInfo || {};
+  const insurerName = selectedQuote.insurerName || 'Intact Insurance';
+  const insurerLogo = selectedQuote.logo || '/images/intact-insurance.svg';
+  const monthlyPrice = selectedQuote.monthlyPrice || '90 $';
+  const yearlyPrice = selectedQuote.yearlyPrice || '1 080 $';
+  const isIntactDiscount = selectedQuote.isIntactDiscount || false;
+  
+  // Advisor details
+  const companyName = advisorInfo.companyName || 'Courtika Assurances Inc';
+  const companyLogo = advisorInfo.logo || '/images/courtika-assurances-inc.png';
+  const phone = '1 (450) 762-9240';
+  const phoneDigits = phone.replace(/\D/g, '');
+  const phoneLink = `tel:+${phoneDigits}`;
+  const isOpen = advisorInfo.isOpen !== undefined ? advisorInfo.isOpen : isOpenNow();
+  const openStatus = advisorInfo.openStatus || (isOpen ? 'Ouvert' : 'Fermé');
+  const formattedHours = advisorInfo.formattedHours || getFormattedTodayHours();
+  const callDuration = advisorInfo.callDuration || 15;
+  
+  // Coverages
+  const coverages = orderData?.coverages || [];
+  
+  // Helper function to format coverage names
+  const formatCoverageName = (coverage) => {
+    const csioCode = coverage.csioCode || coverage.code || coverage.id || '';
+    const limit = coverage.limit1 || coverage.limit || '';
+    const deductible = coverage.deductible || '';
+    
+    // CSIO Code mapping to French names
+    const coverageNames = {
+      '20': 'Responsabilité civile',
+      '21': 'Protection accident et collision',
+      '22': 'Protection tous risques',
+      '23': 'Protection contre les risques spécifiés',
+      '24': 'Protection complémentaire',
+      '43': 'Avenant 43 - Remplacement automobile',
+      '27': 'Avenant 27 - Indemnité de remplacement',
+      'CIV': 'Responsabilité civile',
+      'COL': 'Collision',
+      'COMP': 'Tous risques'
+    };
+    
+    const name = coverageNames[csioCode] || `Protection ${csioCode}`;
+    
+    if (limit && deductible && deductible !== -1) {
+      return `${name}: ${Number(limit).toLocaleString('en-US')}$ (franchise: ${Number(deductible).toLocaleString('en-US')}$)`;
+    } else if (limit) {
+      return `${name}: ${Number(limit).toLocaleString('en-US')}$`;
+    } else if (deductible && deductible !== -1) {
+      return `${name}: (franchise: ${Number(deductible).toLocaleString('en-US')}$)`;
+    }
+    return `${name}:`;
+  };
 
   return (
     <PageContent pageType="overview">
@@ -34,10 +151,10 @@ const CallConfirmation = () => {
             <CheckOutlined className={styles.successIcon} />
           </div>
           
-          <h1 className={styles.mainTitle}>Génial! Appelez Courtika au <span className={styles.phoneNumberHighlight}>1 (450) 762-9240</span></h1>
+          <h1 className={styles.mainTitle}>Génial! Appelez {companyName} au <span className={styles.phoneNumberHighlight}>{phone}</span></h1>
           
           <p className={styles.subTitle}>
-          Appelez Courtika dès que possible. Nous leur avons transmis votre demande afin qu’un courtier en assurance de dommages puisse répondre à vos questions et finaliser les détails avec vous.
+          Appelez {companyName} dès que possible. Nous leur avons transmis votre demande afin qu’un courtier en assurance de dommages puisse répondre à vos questions et finaliser les détails avec vous.
           </p>
 
           <div className={styles.cardLayout}>
@@ -48,44 +165,59 @@ const CallConfirmation = () => {
               <div className={styles.insurerRow}>
                 <div className={styles.insurerLeft}>
                   <div className={styles.insurerLogoBox}>
-                    <img src="/images/intact-insurance.svg" alt="Intact" className={styles.insurerLogo} />
+                    <img src={insurerLogo} alt={insurerName} className={styles.insurerLogo} />
                   </div>
-                  <span className={styles.insurerName}>Intact</span>
+                  <span className={styles.insurerName}>{insurerName}</span>
                 </div>
                 <div className={styles.priceContainer}>
-                  <span className={styles.priceMain}>90$/mois</span>
-                  <span className={styles.priceOld}>110$/mois</span>
+                  <span className={styles.priceMain}>{monthlyPrice}/mois</span>
+                  {yearlyPrice && <span className={styles.priceOld}>{yearlyPrice}/an</span>}
                 </div>
               </div>
               
-              <div className={styles.discountBadge}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.discountIcon}>
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                Rabais Courtika appliqué
-              </div>
+              {isIntactDiscount && (
+                <div className={styles.discountBadge}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.discountIcon}>
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Rabais Courtika appliqué
+                </div>
+              )}
 
               <div className={styles.protectionsSection}>
                 <h3 className={styles.protectionsTitle}>Vos protections</h3>
                 <ul className={styles.protectionsList}>
-                  <li>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    <span>Protection dommage matériel 2 000 000$</span>
-                  </li>
-                  <li>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    <span>Protection accident et collision 500$</span>
-                  </li>
-                  <li>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    <span>Protection dommage matériel 250$</span>
-                  </li>
+                  {coverages.length > 0 ? (
+                    coverages.map((coverage, index) => (
+                      <li key={index}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>{formatCoverageName(coverage)}</span>
+                      </li>
+                    ))
+                  ) : (
+                    <>
+                      <li>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Protection responsabilité civile 2 000 000$</span>
+                      </li>
+                      <li>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Protection collision 500$</span>
+                      </li>
+                      <li>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Protection tous risques 250$</span>
+                      </li>
+                    </>
+                  )}
                 </ul>
               </div>
             </div>
@@ -96,12 +228,12 @@ const CallConfirmation = () => {
               
               <div className={styles.statusSectionLeft}>
                 <div className={styles.courtikaLogo}>
-                  <img src="/images/courtika-assurances-inc.png" alt="Courtika" className={styles.courtikaImageLogo} />
+                  <img src={companyLogo} alt={companyName} className={styles.courtikaImageLogo} />
                 </div>
                 <div className={styles.statusInfo}>
-                  <div className={`${styles.statusBadge} ${!isOpenNow() ? styles.statusBadgeClosed : ''}`}>
-                    <div className={`${styles.statusDot} ${!isOpenNow() ? styles.statusDotClosed : ''}`}></div>
-                    {isOpenNow() ? 'Ouvert' : 'Fermé'}
+                  <div className={`${styles.statusBadge} ${!isOpen ? styles.statusBadgeClosed : ''}`}>
+                    <div className={`${styles.statusDot} ${!isOpen ? styles.statusDotClosed : ''}`}></div>
+                    {openStatus}
                   </div>
                 </div>
               </div>
@@ -115,7 +247,7 @@ const CallConfirmation = () => {
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                   </svg>
                   <div>
-                    <span className={styles.infoText}>{getFormattedTodayHours()}</span>
+                    <span className={styles.infoText}>{formattedHours}</span>
                     <a href="#" className={styles.infoLink} onClick={(e) => { e.preventDefault(); setIsScheduleOpen(true); }}>Voir l'horaire complet</a>
                   </div>
                 </li>
@@ -124,7 +256,7 @@ const CallConfirmation = () => {
                     <circle cx="12" cy="12" r="10"></circle>
                     <polyline points="12 6 12 12 16 14"></polyline>
                   </svg>
-                  <span className={styles.infoText}>Durée de l'appel: environ 15 min</span>
+                  <span className={styles.infoText}>Durée de l’appel: environ {callDuration} min</span>
                 </li>
                 <li>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.infoIcon}>
@@ -139,20 +271,20 @@ const CallConfirmation = () => {
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                   </svg>
                   <div>
-                     <span className={styles.infoText}>Ligne prioritaire : <a href="tel:+14507629240" className={styles.infoLink} style={{display: 'inline', marginTop: '0', color: '#1f01c8'}}>1 (450) 762-9240</a></span>
+                     <span className={styles.infoText}>Ligne prioritaire : <a href={phoneLink} className={styles.infoLink} style={{display: 'inline', marginTop: '0', color: '#1f01c8'}}>{phone}</a></span>
                   </div>
                 </li>
               </ul>
 
               <div className={styles.actionButtons}>
-                <Button type="primary" className={`${styles.primaryButton} ${styles.mobileOnly}`} size="large" href="tel:+14507629240">
+                <Button type="primary" className={`${styles.primaryButton} ${styles.mobileOnly}`} size="large" href={phoneLink}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.buttonIconLeft}>
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                   </svg>
                   Appeler maintenant
                 </Button>
                 
-                <Button className={styles.secondaryOutlineButton} size="large" onClick={() => navigate('/schedule-call')}>
+                <Button className={styles.secondaryOutlineButton} size="large" onClick={() => navigate(`/schedule-call/${urlUserProductId || ''}`)}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.buttonIconLeft}>
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>

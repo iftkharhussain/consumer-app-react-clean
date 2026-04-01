@@ -26,7 +26,7 @@ const OrderProduct = () => {
                 const response = await getOrderDetails(userProductId);
                 
                 if (response.success) {
-                    setOrderData(response.order);
+                    setOrderData(response.data);
                 } else {
                     setError(response.message || 'Failed to load order details');
                 }
@@ -77,12 +77,48 @@ const OrderProduct = () => {
     // Advisor details
     const companyName = advisorInfo.companyName || 'Courtika Assurances Inc';
     const companyLogo = advisorInfo.logo || '/images/courtika-assurances-inc.png';
-    const phone = advisorInfo.phone || 'XXX XXX XXXX';
+    const phone = '1 (450) 762-9240';
     const isOpen = advisorInfo.isOpen !== undefined ? advisorInfo.isOpen : isOpenNow();
     const openStatus = advisorInfo.openStatus || (isOpen ? 'Ouvert' : 'Fermé');
     const formattedHours = advisorInfo.formattedHours || getFormattedTodayHours();
     const callDuration = advisorInfo.callDuration || 10;
     const maxRetries = advisorInfo.maxRetries || 2;
+    
+    // Coverages
+    const coverages = orderData?.coverages || [];
+    
+    // Helper function to format coverage for display
+    const formatCoverage = (coverage) => {
+      const csioCode = coverage.csioCode || coverage.code || coverage.id || '';
+      const limit = coverage.limit1 || coverage.limit || '';
+      const deductible = coverage.deductible || '';
+      
+      // CSIO Code mapping to French names
+      const coverageNames = {
+        '20': 'Responsabilité civile',
+        '21': 'Protection accident et collision',
+        '22': 'Protection tous risques',
+        '23': 'Protection contre les risques spécifiés',
+        '24': 'Protection complémentaire',
+        '43': 'Avenant 43 - Remplacement automobile',
+        '27': 'Avenant 27 - Indemnité de remplacement',
+        'CIV': 'Responsabilité civile',
+        'COL': 'Collision',
+        'COMP': 'Tous risques'
+      };
+      
+      const name = coverageNames[csioCode] || `Protection ${csioCode}`;
+      let amount = '';
+      
+      if (limit) {
+        amount = `${Number(limit).toLocaleString('en-US')}$`;
+      }
+      if (deductible && deductible !== -1) {
+        amount += amount ? ` (${Number(deductible).toLocaleString('en-US')}$)` : `${Number(deductible).toLocaleString('en-US')}$`;
+      }
+      
+      return { name, amount: amount || 'Inclus' };
+    };
 
     return (
         <div className={styles.orderProductPage}>
@@ -122,29 +158,46 @@ const OrderProduct = () => {
                     
                     <h3 className={styles.protectionsTitle}>Vos protections</h3>
                     
-                    <div className={styles.protectionItem}>
-                        <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
-                        <div className={styles.protectionDetails}>
-                            <p className={styles.protectionName}>Protection dommage matériel</p>
-                            <p className={styles.protectionAmount}>2 000 000$</p>
+                    {coverages.length > 0 ? (
+                      coverages.map((coverage, index) => {
+                        const { name, amount } = formatCoverage(coverage);
+                        return (
+                          <div key={index} className={styles.protectionItem}>
+                            <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
+                            <div className={styles.protectionDetails}>
+                              <p className={styles.protectionName}>{name}</p>
+                              <p className={styles.protectionAmount}>{amount}</p>
+                            </div>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <>
+                        <div className={styles.protectionItem}>
+                          <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
+                          <div className={styles.protectionDetails}>
+                            <p className={styles.protectionName}>Responsabilité civile</p>
+                            <p className={styles.protectionAmount}>2 000 000 $</p>
+                          </div>
                         </div>
-                    </div>
-                    
-                    <div className={styles.protectionItem}>
-                        <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
-                        <div className={styles.protectionDetails}>
-                            <p className={styles.protectionName}>Protection accident et collision</p>
-                            <p className={styles.protectionAmount}>500$</p>
+                        
+                        <div className={styles.protectionItem}>
+                          <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
+                          <div className={styles.protectionDetails}>
+                            <p className={styles.protectionName}>Protection collision</p>
+                            <p className={styles.protectionAmount}>500 $</p>
+                          </div>
                         </div>
-                    </div>
-                    
-                    <div className={styles.protectionItem}>
-                        <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
-                        <div className={styles.protectionDetails}>
-                            <p className={styles.protectionName}>Protection dommage matériel</p>
-                            <p className={styles.protectionAmount}>250$</p>
+                        
+                        <div className={styles.protectionItem}>
+                          <img src="/images/Tick.svg" alt="check" className={styles.tickIcon} />
+                          <div className={styles.protectionDetails}>
+                            <p className={styles.protectionName}>Protection tous risques</p>
+                            <p className={styles.protectionAmount}>250 $</p>
+                          </div>
                         </div>
-                    </div>
+                      </>
+                    )}
                 </div>
 
                 {/* Right Column - Broker Details */}

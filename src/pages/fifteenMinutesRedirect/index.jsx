@@ -1,19 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PageContent } from 'components';
-import { Button } from 'antd';
+import { Button, Spin, message } from 'antd';
 import { ClockCircleOutlined, SearchOutlined, CheckOutlined, CalendarOutlined, InfoCircleOutlined, PhoneOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import styles from './FifteenMinutesRedirect.module.css';
 import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
+import { getOrderDetails, checkPendingOrder } from '../../services/api/productOrderService';
+import fortusService from '../../services/api/fortusService';
 
 const FifteenMinutesRedirect = () => {
   const initialized = useRef(false);
-
   const navigate = useNavigate();
+  const { userProductId: urlUserProductId } = useParams();
+  
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [orderData, setOrderData] = useState(null);
 
   useEffect(() => {
     if (!initialized.current) {
@@ -22,13 +28,98 @@ const FifteenMinutesRedirect = () => {
     }
   }, []);
 
-  const handleSubmit = () => {
-    setIsLoading(true);
-    setTimeout(() => {
+  useEffect(() => {
+    const fetchOrderDetails = async () => {
+      try {
+        setLoading(true);
+        
+        let productIdToFetch = urlUserProductId;
+        
+        // If no userProductId in URL, check for pending order
+        if (!productIdToFetch) {
+          console.log('[FifteenMinutesRedirect] No userProductId in URL, checking for pending order...');
+          const pendingOrderResponse = await checkPendingOrder('car-insurance');
+          
+          if (pendingOrderResponse.success && pendingOrderResponse.hasPendingOrder && pendingOrderResponse.userProductId) {
+            productIdToFetch = pendingOrderResponse.userProductId;
+            console.log('[FifteenMinutesRedirect] Found pending order:', productIdToFetch);
+          }
+        }
+        
+        // If we have a productId, fetch order details
+        if (productIdToFetch) {
+          const response = await getOrderDetails(productIdToFetch);
+          
+          if (response.success) {
+            setOrderData(response.data);
+          } else {
+            console.warn('[FifteenMinutesRedirect] Failed to load order:', response.message);
+            setError(response.message || 'Failed to load order details');
+          }
+        } else {
+          // No order found, show page with defaults
+          console.log('[FifteenMinutesRedirect] No pending order found, showing defaults');
+        }
+      } catch (err) {
+        console.error('[FifteenMinutesRedirect] Error fetching order details:', err);
+        setError('Failed to load order details');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrderDetails();
+  }, [urlUserProductId]);
+
+  const handleSubmit = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Send ezLead request
+      const result = await fortusService.requestCall({
+        userProductId: urlUserProductId || orderData?.userProductId,
+        productSlug: 'car-insurance'
+      });
+      
+      if (result.success) {
+        message.success('Votre demande a été envoyée avec succès!');
+        setIsSubmitted(true);
+      } else {
+        message.error(result.message || 'Une erreur est survenue. Veuillez réessayer.');
+      }
+    } catch (error) {
+      console.error('Error sending request:', error);
+      message.error('Une erreur est survenue. Veuillez réessayer.');
+    } finally {
       setIsLoading(false);
-      setIsSubmitted(true);
-    }, 1500);
+    }
   };
+
+  // Loading state for initial data fetch
+  if (loading) {
+    return (
+      <PageContent pageType="overview">
+        <div className={styles.container}>
+          <div style={{ textAlign: 'center', padding: '100px 0' }}>
+            <Spin size="large" />
+            <p style={{ marginTop: '20px', fontSize: '16px', color: '#666' }}>Chargement...</p>
+          </div>
+        </div>
+      </PageContent>
+    );
+  }
+
+  // Extract data from orderData (or use defaults if no data)
+  const advisorInfo = orderData?.advisorInfo || {};
+  const companyName = advisorInfo.companyName || 'Courtika Assurances Inc';
+  const companyLogo = advisorInfo.logo || '/images/courtika-assurances-inc.png';
+  const phone = '1 (450) 762-9240';
+  const phoneDigits = phone.replace(/\D/g, '');
+  const phoneLink = `tel:+${phoneDigits}`;
+  const isOpen = advisorInfo.isOpen !== undefined ? advisorInfo.isOpen : isOpenNow();
+  const openStatus = advisorInfo.openStatus || (isOpen ? 'Disponible maintenant' : 'Fermé maintenant');
+  const formattedHours = advisorInfo.formattedHours || getFormattedTodayHours();
+  const callDuration = advisorInfo.callDuration || 15;
 
   return (
     <PageContent pageType="overview">
@@ -44,11 +135,11 @@ const FifteenMinutesRedirect = () => {
             <h1 className={styles.mainTitle}>Vos soumissions ont expiré</h1>
             
             <p className={styles.subTitle}>
-              Ne vous inquiétez pas! Vous n’avez pas perdu votre progression. Courtika peut continuer à magasiner avec vous et trouver encore plus d’options. Continuez avec eux en cliquant ci-dessous, et nous leur enverrons vos informations afin qu’un courtier puisse vous aider au téléphone.
+              Ne vous inquiétez pas! Vous n'avez pas perdu votre progression. {companyName} peut continuer à magasiner avec vous et trouver encore plus d'options. Continuez avec eux en cliquant ci-dessous, et nous leur enverrons vos informations afin qu'un courtier puisse vous aider au téléphone.
             </p>
 
             <div className={styles.infoButton}>
-              <SearchOutlined /> Courtika a accès à 30+ assureurs et pourrait peut-être vous trouver un meilleur prix
+              <SearchOutlined /> {companyName} a accès à 30+ assureurs et pourrait peut-être vous trouver un meilleur prix
             </div>
           </>
         )}
@@ -57,16 +148,16 @@ const FifteenMinutesRedirect = () => {
         <div className={styles.card}>
           {!isSubmitted ? (
             <>
-              <h2 className={styles.cardTitleCenter}>Aimeriez-vous que Courtika continue à magasiner avec vous?</h2>
+              <h2 className={styles.cardTitleCenter}>Aimeriez-vous que {companyName} continue à magasiner avec vous?</h2>
           
           <div className={styles.brokerHeader}>
             <div className={styles.courtikaLogoBox}>
-              <img src="/images/courtika-assurances-inc.png" alt="Courtika" className={styles.courtikaImageLogo} />
+              <img src={companyLogo} alt={companyName} className={styles.courtikaImageLogo} />
             </div>
             <div className={styles.statusInfo}>
-              <div className={`${styles.statusBadge} ${!isOpenNow() ? styles.statusBadgeClosed : ''}`}>
-                <div className={`${styles.statusDot} ${!isOpenNow() ? styles.statusDotClosed : ''}`}></div>
-                {isOpenNow() ? 'Disponible maintenant' : 'Fermé maintenant'}
+              <div className={`${styles.statusBadge} ${!isOpen ? styles.statusBadgeClosed : ''}`}>
+                <div className={`${styles.statusDot} ${!isOpen ? styles.statusDotClosed : ''}`}></div>
+                {openStatus}
               </div>
               <div className={styles.statusSubtitle}>Courtiers certifiés prêts à vous aider</div>
             </div>
@@ -99,7 +190,7 @@ const FifteenMinutesRedirect = () => {
           </div>
 
               <Button type="primary" className={styles.primaryButton} size="large" onClick={handleSubmit} loading={isLoading}>
-                {!isLoading && <CheckOutlined />}Oui, je veux magasiner avec Courtika
+                {!isLoading && <CheckOutlined />}Oui, je veux magasiner avec {companyName}
               </Button>
               <div className={styles.buttonSubtext}>
                 Sans frais • Sans engagement • Vous gardez le contrôle
@@ -110,21 +201,21 @@ const FifteenMinutesRedirect = () => {
               <div className={styles.successBanner}>
                 <CheckOutlined className={styles.successIcon} />
                 <div className={styles.successContent}>
-                  <h3 className={styles.successTitle}>Vos informations ont été transmises à Courtika!</h3>
+                  <h3 className={styles.successTitle}>Vos informations ont été transmises à {companyName}!</h3>
                   <p className={styles.successText}>Un courtier attend <strong>votre appel</strong> pour vous aider à trouver le meilleur prix</p>
                 </div>
               </div>
 
-              <h2 className={styles.submittedCardTitle}>Coordonnées de Courtika:</h2>
+              <h2 className={styles.submittedCardTitle}>Coordonnées de {companyName}:</h2>
               
               <div className={styles.statusSectionLeft}>
                 <div className={styles.courtikaLogoBoxLeft}>
-                  <img src="/images/courtika-assurances-inc.png" alt="Courtika" className={styles.courtikaImageLogo} />
+                  <img src={companyLogo} alt={companyName} className={styles.courtikaImageLogo} />
                 </div>
                 <div className={styles.statusInfoLeft}>
-                  <div className={`${styles.statusBadge} ${!isOpenNow() ? styles.statusBadgeClosed : ''}`}>
-                    <div className={`${styles.statusDot} ${!isOpenNow() ? styles.statusDotClosed : ''}`}></div>
-                    {isOpenNow() ? 'Disponible maintenant' : 'Fermé maintenant'}
+                  <div className={`${styles.statusBadge} ${!isOpen ? styles.statusBadgeClosed : ''}`}>
+                    <div className={`${styles.statusDot} ${!isOpen ? styles.statusDotClosed : ''}`}></div>
+                    {openStatus}
                   </div>
                   <div className={styles.statusSubtitleLeft}>Courtiers certifiés prêts à vous aider</div>
                 </div>
@@ -134,13 +225,13 @@ const FifteenMinutesRedirect = () => {
                 <li>
                   <CalendarOutlined className={styles.infoIcon} />
                   <div>
-                    <span className={styles.infoText}>{getFormattedTodayHours()}</span>
+                    <span className={styles.infoText}>{formattedHours}</span>
                     <a href="#" className={styles.infoLink} onClick={(e) => { e.preventDefault(); setIsScheduleOpen(true); }}>Voir l'horaire complet</a>
                   </div>
                 </li>
                 <li>
                   <ClockCircleOutlined className={styles.infoIcon} />
-                  <span className={styles.infoText}>Durée de l'appel: environ 15 min</span>
+                  <span className={styles.infoText}>Durée de l’appel: environ {callDuration} min</span>
                 </li>
                 <li>
                   <InfoCircleOutlined className={styles.infoIcon} />
@@ -149,17 +240,17 @@ const FifteenMinutesRedirect = () => {
                 <li className={styles.desktopOnly}>
                   <PhoneOutlined className={styles.infoIcon} />
                   <div>
-                    <span className={styles.infoText}>Ligne prioritaire : <a href="tel:+14507629240" className={styles.infoLink} style={{display: 'inline', marginTop: '0', color: '#1f01c8'}}>1 (450) 762-9240</a></span>
+                    <span className={styles.infoText}>Ligne prioritaire : <a href={phoneLink} className={styles.infoLink} style={{display: 'inline', marginTop: '0', color: '#1f01c8'}}>{phone}</a></span>
                   </div>
                 </li>
               </ul>
 
               <div className={styles.actionButtons}>
-                <Button type="primary" className={`${styles.primaryButton} ${styles.mobileOnly}`} size="large" href="tel:+14507629240">
-                  <PhoneOutlined className={styles.phoneIcon} /> Appeler maintenant: 1 (450) 762-9240
+                <Button type="primary" className={`${styles.primaryButton} ${styles.mobileOnly}`} size="large" href={phoneLink}>
+                  <PhoneOutlined className={styles.phoneIcon} /> Appeler maintenant: {phone}
                 </Button>
                 
-                <Button className={styles.secondaryOutlineButton} size="large" onClick={() => navigate('/schedule-call')}>
+                <Button className={styles.secondaryOutlineButton} size="large" onClick={() => navigate(`/schedule-call/${urlUserProductId || ''}`)}>
                   <CalendarOutlined /> Planifier l'appel plus tard
                 </Button>
               </div>

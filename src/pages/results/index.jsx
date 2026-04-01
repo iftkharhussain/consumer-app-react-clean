@@ -436,12 +436,58 @@ const Results = () => {
   };
 
   const handleSelectInsurer = (insurer) => {
+    // Transform coverages to the format expected by backend
+    const transformedCoverages = (insurer.coverages || []).map(coverage => {
+      // Extract numeric limit from string like "$2,000,000/-$1"
+      let limit1 = 0;
+      if (coverage.limit) {
+        const limitStr = coverage.limit.toString().replace(/[$,\s-]/g, '');
+        const limitMatch = limitStr.match(/^(\d+)/);
+        if (limitMatch) {
+          limit1 = parseInt(limitMatch[1], 10);
+        }
+      }
+      
+      // Get code (might be string or number)
+      const rawCode = (coverage.code || coverage.id || coverage.csioCode || '').toString();
+      
+      // Map code to CSIO code
+      const codeMap = {
+        'TP': '20',      // Responsabilité civile (Civil Liability)
+        '20': '20',
+        '21': '21',      // Collision
+        '22': '22',      // Tous risques (Comprehensive)
+        '34': '34',      // Avenant 34
+        '43': '43',      // Avenant 43 - Remplacement automobile
+        '27': '27'       // Avenant 27 - Indemnité de remplacement
+      };
+      
+      const csioCode = codeMap[rawCode] || rawCode;
+      
+      // Return both formats for compatibility
+      return {
+        // New format for backend/display
+        id: rawCode,
+        csioCode: csioCode,
+        limit1: limit1,
+        deductible: coverage.deductible !== undefined ? coverage.deductible : -1,
+        pack: coverage.pack || 'standard',
+        // Keep original format for existing UI components
+        code: rawCode,
+        limit: coverage.limit || (limit1 > 0 ? `$${limit1.toLocaleString('en-US')}/-$1` : ''),
+        description: coverage.description || ''
+      };
+    });
+    
+    console.log('[Results] Transformed coverages:', transformedCoverages);
+    
     setSelectedInsurer({
       insurerName: insurer.name,
       carrierCode: insurer.carrierCode,
       logo: insurer.logo,
       monthlyPrice: insurer.price,
-      yearlyPrice: insurer.yearlyPrice
+      yearlyPrice: insurer.yearlyPrice,
+      coverages: transformedCoverages
     });
     setIsCourtikaModalOpen(true);
   };

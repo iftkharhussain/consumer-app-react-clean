@@ -1,14 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PageContent } from 'components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Spin, Button } from 'antd';
 import styles from './ScheduleConfirmation.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { getFormattedTodayHours } from '../../utils/businessHours';
+import { getOrderDetails, checkPendingOrder } from '../../services/api/productOrderService';
 
 const ScheduleConfirmation = () => {
   const navigate = useNavigate();
+  const { userProductId: urlUserProductId } = useParams();
   const initialized = useRef(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [orderData, setOrderData] = useState(null);
 
   useEffect(() => {
     if (!initialized.current) {
@@ -16,6 +22,133 @@ const ScheduleConfirmation = () => {
       initialized.current = true;
     }
   }, []);
+
+  useEffect(() => {
+    const fetchOrderDetails = async () => {
+      try {
+        setLoading(true);
+        
+        let productIdToFetch = urlUserProductId;
+        
+        // If no userProductId in URL, check for pending order
+        if (!productIdToFetch) {
+          console.log('[ScheduleConfirmation] No userProductId in URL, checking for pending order...');
+          const pendingOrderResponse = await checkPendingOrder('car-insurance');
+          
+          if (pendingOrderResponse.success && pendingOrderResponse.hasPendingOrder && pendingOrderResponse.userProductId) {
+            productIdToFetch = pendingOrderResponse.userProductId;
+            console.log('[ScheduleConfirmation] Found pending order:', productIdToFetch);
+          }
+        }
+        
+        // If we have a productId, fetch order details
+        if (productIdToFetch) {
+          const response = await getOrderDetails(productIdToFetch);
+          
+          if (response.success) {
+            setOrderData(response.data);
+          } else {
+            console.warn('[ScheduleConfirmation] Failed to load order:', response.message);
+            setError(response.message || 'Failed to load order details');
+          }
+        } else {
+          // No order found, show page with defaults
+          console.log('[ScheduleConfirmation] No pending order found, showing defaults');
+        }
+      } catch (err) {
+        console.error('[ScheduleConfirmation] Error fetching order details:', err);
+        setError('Failed to load order details');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrderDetails();
+  }, [urlUserProductId]);
+
+  // Loading state
+  if (loading) {
+    return (
+      <PageContent pageType="overview">
+        <div className={styles.fallbackContainer}>
+          <div style={{ textAlign: 'center', padding: '100px 0' }}>
+            <Spin size="large" />
+            <p style={{ marginTop: '20px', fontSize: '16px', color: '#666' }}>Chargement de votre demande...</p>
+          </div>
+        </div>
+      </PageContent>
+    );
+  }
+
+  // Error state
+  if (error && orderData === null) {
+    return (
+      <PageContent pageType="overview">
+        <div className={styles.fallbackContainer}>
+          <div className={styles.actionCard}>
+            <h1 className={styles.mainTitle} style={{ color: '#dc2626' }}>Erreur</h1>
+            <p className={styles.subTitle}>{error}</p>
+            <Button type="primary" onClick={() => navigate('/car-insurance')} style={{ marginTop: '20px' }}>
+              Retour aux résultats
+            </Button>
+          </div>
+        </div>
+      </PageContent>
+    );
+  }
+
+  // Extract data from orderData (or use defaults if no data)
+  const selectedQuote = orderData?.selectedQuote || {};
+  const advisorInfo = orderData?.advisorInfo || {};
+  const insurerName = selectedQuote.insurerName || 'Intact Insurance';
+  const insurerLogo = selectedQuote.logo || '/images/intact-insurance.svg';
+  const monthlyPrice = selectedQuote.monthlyPrice || '90 $';
+  const yearlyPrice = selectedQuote.yearlyPrice || '1 080 $';
+  const isIntactDiscount = selectedQuote.isIntactDiscount || false;
+  
+  // Advisor details
+  const companyName = advisorInfo.companyName || 'Courtika Assurances Inc';
+  const companyLogo = advisorInfo.logo || '/images/courtika-assurances-inc.png';
+  const phone = '1 (450) 762-9240';
+  const phoneDigits = phone.replace(/\D/g, '');
+  const phoneLink = `tel:+${phoneDigits}`;
+  const formattedHours = advisorInfo.formattedHours || getFormattedTodayHours();
+  const callDuration = advisorInfo.callDuration || 15;
+  
+  // Coverages
+  const coverages = orderData?.coverages || [];
+  
+  // Helper function to format coverage names
+  const formatCoverageName = (coverage) => {
+    const csioCode = coverage.csioCode || coverage.code || coverage.id || '';
+    const limit = coverage.limit1 || coverage.limit || '';
+    const deductible = coverage.deductible || '';
+    
+    // CSIO Code mapping to French names
+    const coverageNames = {
+      '20': 'Responsabilité civile',
+      '21': 'Protection accident et collision',
+      '22': 'Protection tous risques',
+      '23': 'Protection contre les risques spécifiés',
+      '24': 'Protection complémentaire',
+      '43': 'Avenant 43 - Remplacement automobile',
+      '27': 'Avenant 27 - Indemnité de remplacement',
+      'CIV': 'Responsabilité civile',
+      'COL': 'Collision',
+      'COMP': 'Tous risques'
+    };
+    
+    const name = coverageNames[csioCode] || `Protection ${csioCode}`;
+    
+    if (limit && deductible && deductible !== -1) {
+      return `${name}: ${Number(limit).toLocaleString('en-US')}$ (franchise: ${Number(deductible).toLocaleString('en-US')}$)`;
+    } else if (limit) {
+      return `${name}: ${Number(limit).toLocaleString('en-US')}$`;
+    } else if (deductible && deductible !== -1) {
+      return `${name}: (franchise: ${Number(deductible).toLocaleString('en-US')}$)`;
+    }
+    return `${name}:`;
+  };
 
   return (
     <PageContent pageType="overview">
@@ -31,7 +164,7 @@ const ScheduleConfirmation = () => {
           <h1 className={styles.mainTitle}>Génial! Votre rendez-vous téléphonique est confirmé.</h1>
           
           <p className={styles.subTitle}>
-            Nous avons envoyé votre demande à un courtier en assurance de dommages chez Courtika. Celui-ci vous appellera au moment prévu pour répondre à vos questions et finaliser les détails.
+            Nous avons envoyé votre demande à un courtier en assurance de dommages chez {companyName}. Celui-ci vous appellera au moment prévu pour répondre à vos questions et finaliser les détails.
           </p>
 
           <div className={styles.cardLayout}>
@@ -42,44 +175,59 @@ const ScheduleConfirmation = () => {
               <div className={styles.insurerRow}>
                 <div className={styles.insurerLeft}>
                   <div className={styles.insurerLogoBox}>
-                    <img src="/images/intact-insurance.svg" alt="Intact" className={styles.insurerLogo} />
+                    <img src={insurerLogo} alt={insurerName} className={styles.insurerLogo} />
                   </div>
-                  <span className={styles.insurerName}>Intact</span>
+                  <span className={styles.insurerName}>{insurerName}</span>
                 </div>
                 <div className={styles.priceContainer}>
-                  <span className={styles.priceMain}>90$/mois</span>
-                  <span className={styles.priceOld}>110$/mois</span>
+                  <span className={styles.priceMain}>{monthlyPrice}/mois</span>
+                  {yearlyPrice && <span className={styles.priceOld}>{yearlyPrice}/an</span>}
                 </div>
               </div>
               
-              <div className={styles.discountBadge}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.discountIcon}>
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                Rabais Courtika appliqué
-              </div>
+              {isIntactDiscount && (
+                <div className={styles.discountBadge}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.discountIcon}>
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Rabais Courtika appliqué
+                </div>
+              )}
 
               <div className={styles.protectionsSection}>
                 <h3 className={styles.protectionsTitle}>Vos protections</h3>
                 <ul className={styles.protectionsList}>
-                  <li>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    <span>Protection dommage matériel 2 000 000$</span>
-                  </li>
-                  <li>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    <span>Protection accident et collision 500$</span>
-                  </li>
-                  <li>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    <span>Protection dommage matériel 250$</span>
-                  </li>
+                  {coverages.length > 0 ? (
+                    coverages.map((coverage, index) => (
+                      <li key={index}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>{formatCoverageName(coverage)}</span>
+                      </li>
+                    ))
+                  ) : (
+                    <>
+                      <li>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Protection responsabilité civile 2 000 000$</span>
+                      </li>
+                      <li>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Protection collision 500$</span>
+                      </li>
+                      <li>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>Protection tous risques 250$</span>
+                      </li>
+                    </>
+                  )}
                 </ul>
               </div>
             </div>

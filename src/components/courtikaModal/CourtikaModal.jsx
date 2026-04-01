@@ -53,15 +53,18 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
                 setRequestStatus('success');
                 message.success('Votre demande a été envoyée avec succès!');
                 
-                // Trigger the phone call dialer
-                window.location.href = 'tel:18552451906';
+                // Trigger the phone call dialer on mobile only
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                if (isMobile) {
+                    window.location.href = 'tel:18552451906';
+                }
                 
                 // Get userProductId from response if not already available
                 const productId = result.data?.userProductId || userProductId;
                 
-                // Redirect to call confirmation page
+                // Redirect to call confirmation page with userProductId
                 timerRef.current = setTimeout(() => {
-                    navigate('/call-confirmation');
+                    navigate(`/call-confirmation/${productId}`);
                 }, 2000);
             } else {
                 console.warn('Fortus request failed:', result);
