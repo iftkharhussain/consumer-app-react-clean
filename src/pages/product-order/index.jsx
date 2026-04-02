@@ -68,6 +68,10 @@ const OrderProduct = () => {
 
     const selectedQuote = orderData.selectedQuote || {};
     const advisorInfo = orderData.advisorInfo || {};
+    
+    // Check if we have actual quote data (not just fallback)
+    const hasQuoteData = orderData && orderData.selectedQuote && orderData.selectedQuote.insurerName;
+    
     const insurerName = selectedQuote.insurerName || 'Intact Insurance';
     const insurerLogo = selectedQuote.logo || '/images/intact-insurance.svg';
     const monthlyPrice = selectedQuote.monthlyPrice || 90;
@@ -75,7 +79,7 @@ const OrderProduct = () => {
     const isIntact = selectedQuote.isIntactDiscount || false;
 
     // Advisor details
-    const companyName = advisorInfo.companyName || 'Courtika Assurances Inc';
+    const companyName = 'Courtika'; // Hardcoded
     const companyLogo = advisorInfo.logo || '/images/courtika-assurances-inc.png';
     const phone = '1 (450) 762-9240';
     const isOpen = advisorInfo.isOpen !== undefined ? advisorInfo.isOpen : isOpenNow();
@@ -133,7 +137,8 @@ const OrderProduct = () => {
             </p>
 
             <div className={styles.contentContainer}>
-                {/* Left Column - Insurance Provider */}
+                {/* Left Column - Insurance Provider - Only show if we have actual quote data */}
+                {hasQuoteData && (
                 <div className={styles.leftColumn}>
                     <h2 className={styles.columnTitle}>L'assureur choisit:</h2>
                     
@@ -156,6 +161,7 @@ const OrderProduct = () => {
                         </div>
                     )}
                     
+                    <div style={{display: 'none'}}>
                     <h3 className={styles.protectionsTitle}>Vos protections</h3>
                     
                     {coverages.length > 0 ? (
@@ -198,7 +204,9 @@ const OrderProduct = () => {
                         </div>
                       </>
                     )}
+                    </div>
                 </div>
+                )}
 
                 {/* Right Column - Broker Details */}
                 <div className={styles.rightColumn}>
@@ -223,7 +231,7 @@ const OrderProduct = () => {
                     
                     <div className={styles.infoRow}>
                         <img src="/images/clock.svg" alt="clock" className={styles.infoIcon} />
-                        <span className={styles.infoText}>Durée de l'appel: {callDuration} min</span>
+                        <span className={styles.infoText}>Durée de l'appel:{callDuration} min</span>
                     </div>
                     
                     <div className={styles.infoRow}>

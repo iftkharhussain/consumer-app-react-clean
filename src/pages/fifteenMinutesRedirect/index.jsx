@@ -111,7 +111,7 @@ const FifteenMinutesRedirect = () => {
 
   // Extract data from orderData (or use defaults if no data)
   const advisorInfo = orderData?.advisorInfo || {};
-  const companyName = advisorInfo.companyName || 'Courtika Assurances Inc';
+  const companyName = 'Courtika'; // Hardcoded
   const companyLogo = advisorInfo.logo || '/images/courtika-assurances-inc.png';
   const phone = '1 (450) 762-9240';
   const phoneDigits = phone.replace(/\D/g, '');
@@ -231,7 +231,7 @@ const FifteenMinutesRedirect = () => {
                 </li>
                 <li>
                   <ClockCircleOutlined className={styles.infoIcon} />
-                  <span className={styles.infoText}>Durée de l’appel: environ {callDuration} min</span>
+                  <span className={styles.infoText}>Durée de l'appel:environ {callDuration} min</span>
                 </li>
                 <li>
                   <InfoCircleOutlined className={styles.infoIcon} />

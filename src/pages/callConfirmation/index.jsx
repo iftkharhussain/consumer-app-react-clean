@@ -90,6 +90,10 @@ const CallConfirmation = () => {
   // Extract data from orderData (or use defaults if no data)
   const selectedQuote = orderData?.selectedQuote || {};
   const advisorInfo = orderData?.advisorInfo || {};
+  
+  // Check if we have actual quote data (not just fallback)
+  const hasQuoteData = orderData && orderData.selectedQuote && orderData.selectedQuote.insurerName;
+  
   const insurerName = selectedQuote.insurerName || 'Intact Insurance';
   const insurerLogo = selectedQuote.logo || '/images/intact-insurance.svg';
   const monthlyPrice = selectedQuote.monthlyPrice || '90 $';
@@ -97,7 +101,7 @@ const CallConfirmation = () => {
   const isIntactDiscount = selectedQuote.isIntactDiscount || false;
   
   // Advisor details
-  const companyName = advisorInfo.companyName || 'Courtika Assurances Inc';
+  const companyName = 'Courtika'; // Hardcoded
   const companyLogo = advisorInfo.logo || '/images/courtika-assurances-inc.png';
   const phone = '1 (450) 762-9240';
   const phoneDigits = phone.replace(/\D/g, '');
@@ -158,7 +162,8 @@ const CallConfirmation = () => {
           </p>
 
           <div className={styles.cardLayout}>
-            {/* Left Card: Votre sélection */}
+            {/* Left Card: Votre sélection - Only show if we have actual quote data */}
+            {hasQuoteData && (
             <div className={styles.selectionCard}>
               <h2 className={styles.cardHeading}>Votre sélection</h2>
               
@@ -184,7 +189,7 @@ const CallConfirmation = () => {
                 </div>
               )}
 
-              <div className={styles.protectionsSection}>
+              <div className={styles.protectionsSection} style={{display: 'none'}}>
                 <h3 className={styles.protectionsTitle}>Vos protections</h3>
                 <ul className={styles.protectionsList}>
                   {coverages.length > 0 ? (
@@ -221,6 +226,7 @@ const CallConfirmation = () => {
                 </ul>
               </div>
             </div>
+            )}
 
             {/* Right Card: Broker Information */}
             <div className={styles.brokerCard}>
@@ -256,7 +262,7 @@ const CallConfirmation = () => {
                     <circle cx="12" cy="12" r="10"></circle>
                     <polyline points="12 6 12 12 16 14"></polyline>
                   </svg>
-                  <span className={styles.infoText}>Durée de l’appel: environ {callDuration} min</span>
+                  <span className={styles.infoText}>Durée de l'appel:environ {callDuration} min</span>
                 </li>
                 <li>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.infoIcon}>

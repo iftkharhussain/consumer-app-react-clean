@@ -100,6 +100,10 @@ const ScheduleConfirmation = () => {
   // Extract data from orderData (or use defaults if no data)
   const selectedQuote = orderData?.selectedQuote || {};
   const advisorInfo = orderData?.advisorInfo || {};
+  
+  // Check if we have actual quote data (not just fallback)
+  const hasQuoteData = orderData && orderData.selectedQuote && orderData.selectedQuote.insurerName;
+  
   const insurerName = selectedQuote.insurerName || 'Intact Insurance';
   const insurerLogo = selectedQuote.logo || '/images/intact-insurance.svg';
   const monthlyPrice = selectedQuote.monthlyPrice || '90 $';
@@ -107,7 +111,7 @@ const ScheduleConfirmation = () => {
   const isIntactDiscount = selectedQuote.isIntactDiscount || false;
   
   // Advisor details
-  const companyName = advisorInfo.companyName || 'Courtika Assurances Inc';
+  const companyName = 'Courtika'; // Hardcoded
   const companyLogo = advisorInfo.logo || '/images/courtika-assurances-inc.png';
   const phone = '1 (450) 762-9240';
   const phoneDigits = phone.replace(/\D/g, '');
@@ -168,7 +172,8 @@ const ScheduleConfirmation = () => {
           </p>
 
           <div className={styles.cardLayout}>
-            {/* Left Card: Votre sélection */}
+            {/* Left Card: Votre sélection - Only show if we have actual quote data */}
+            {hasQuoteData && (
             <div className={styles.selectionCard}>
               <h2 className={styles.cardHeading}>Votre sélection</h2>
               
@@ -194,7 +199,7 @@ const ScheduleConfirmation = () => {
                 </div>
               )}
 
-              <div className={styles.protectionsSection}>
+              <div className={styles.protectionsSection} style={{display: 'none'}}>
                 <h3 className={styles.protectionsTitle}>Vos protections</h3>
                 <ul className={styles.protectionsList}>
                   {coverages.length > 0 ? (
@@ -231,6 +236,7 @@ const ScheduleConfirmation = () => {
                 </ul>
               </div>
             </div>
+            )}
 
             {/* Right Card: Broker Information */}
             <div className={styles.brokerCard}>
