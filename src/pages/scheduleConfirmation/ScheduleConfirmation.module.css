@@ -488,19 +488,11 @@
   }
 
   .insurerName {
-    font-size: 16px;
-  }
-
-  .priceMain {
-    font-size: 18px;
-  }
-
-  .insurerName {
     font-size: 18px;
   }
 
   .priceMain {
-    font-size: 22px;
+    font-size: 18px;
   }
 
   .brokerBox {

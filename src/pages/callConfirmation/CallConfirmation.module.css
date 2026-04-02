@@ -40,6 +40,8 @@
 
 .phoneNumberHighlight {
   color: #1f01c8;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .subTitle {
@@ -493,6 +495,12 @@
     font-size: 22px;
   }
 
+  .phoneNumberHighlight {
+    display: block;
+    margin-top: 4px;
+    font-size: 24px;
+  }
+
   .subTitle {
     font-size: 14px;
     margin-bottom: 24px;
@@ -511,6 +519,14 @@
 
   .priceContainer {
     align-items: flex-end;
+  }
+
+  .priceMain {
+    font-size: 18px;
+  }
+
+  .insurerName {
+    font-size: 18px;
   }
 
   .statusSectionLeft {

@@ -803,6 +803,11 @@
     align-items: flex-start;
   }
 
+  .insurerName {
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
   .insurerLogoWrapper {
     width: 120px;
     height: 60px;

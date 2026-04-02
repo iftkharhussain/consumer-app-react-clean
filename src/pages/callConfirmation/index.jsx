@@ -155,7 +155,7 @@ const CallConfirmation = () => {
             <CheckOutlined className={styles.successIcon} />
           </div>
           
-          <h1 className={styles.mainTitle}>Génial! Appelez {companyName} au <span className={styles.phoneNumberHighlight}>{phone}</span></h1>
+          <h1 className={styles.mainTitle}>Génial! Appelez {companyName} au <a href={phoneLink} className={styles.phoneNumberHighlight}>{phone}</a></h1>
           
           <p className={styles.subTitle}>
           Appelez {companyName} dès que possible. Nous leur avons transmis votre demande afin qu’un courtier en assurance de dommages puisse répondre à vos questions et finaliser les détails avec vous.
@@ -230,7 +230,7 @@ const CallConfirmation = () => {
 
             {/* Right Card: Broker Information */}
             <div className={styles.brokerCard}>
-              <h2 className={styles.cardHeading}>Votre courtier en assurance de dommages:</h2>
+              <h2 className={styles.cardHeading}>Votre cabinet en assurance de dommages:</h2>
               
               <div className={styles.statusSectionLeft}>
                 <div className={styles.courtikaLogo}>
@@ -262,7 +262,7 @@ const CallConfirmation = () => {
                     <circle cx="12" cy="12" r="10"></circle>
                     <polyline points="12 6 12 12 16 14"></polyline>
                   </svg>
-                  <span className={styles.infoText}>Durée de l'appel:environ {callDuration} min</span>
+                  <span className={styles.infoText}>Durée de l'appel : environ {callDuration} min</span>
                 </li>
                 <li>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.infoIcon}>

@@ -231,7 +231,7 @@ const FifteenMinutesRedirect = () => {
                 </li>
                 <li>
                   <ClockCircleOutlined className={styles.infoIcon} />
-                  <span className={styles.infoText}>Durée de l'appel:environ {callDuration} min</span>
+                  <span className={styles.infoText}>Durée de l'appel : environ {callDuration} min</span>
                 </li>
                 <li>
                   <InfoCircleOutlined className={styles.infoIcon} />

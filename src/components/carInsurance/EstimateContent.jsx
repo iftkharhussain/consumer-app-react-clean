@@ -51,7 +51,7 @@ const EstimateContent = () => {
 
                     <div className={styles.detailItem}>
                         <img src="/images/clock.svg" alt="Clock" className={styles.detailIcon} />
-                        <span className={styles.detailText}>Durée de l'appelle: 10 min</span>
+                        <span className={styles.detailText}>Durée de l'appelle : 15 min</span>
                     </div>
 
                     <div className={styles.detailItem}>

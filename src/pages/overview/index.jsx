@@ -90,7 +90,7 @@ const Overview = () => {
             </div>
             <div className={styles.detailItem}>
               <BellOutlined className={styles.detailIcon} />
-              <span className={styles.detailText}>10 min before</span>
+              <span className={styles.detailText}>15 min before</span>
             </div>
           </div>
         </div>

@@ -145,7 +145,7 @@ const FallbackNoQuotes = () => {
                 </li>
                 <li>
                   <ClockCircleOutlined className={styles.infoIcon} />
-                  <span className={styles.infoText}>Durée de l'appel:environ 15 min</span>
+                  <span className={styles.infoText}>Durée de l'appel : environ 15 min</span>
                 </li>
                 <li>
                   <InfoCircleOutlined className={styles.infoIcon} />

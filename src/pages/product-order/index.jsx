@@ -210,7 +210,7 @@ const OrderProduct = () => {
 
                 {/* Right Column - Broker Details */}
                 <div className={styles.rightColumn}>
-                    <h2 className={styles.brokerTitle}>Votre courtier en assurance de dommages:</h2>
+                    <h2 className={styles.brokerTitle}>Votre cabinet en assurance de dommages:</h2>
                     
                     <img 
                         src={companyLogo} 
@@ -231,7 +231,7 @@ const OrderProduct = () => {
                     
                     <div className={styles.infoRow}>
                         <img src="/images/clock.svg" alt="clock" className={styles.infoIcon} />
-                        <span className={styles.infoText}>Durée de l'appel:{callDuration} min</span>
+                        <span className={styles.infoText}>Durée de l'appel :{callDuration} min</span>
                     </div>
                     
                     <div className={styles.infoRow}>
