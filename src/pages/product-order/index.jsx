@@ -82,9 +82,9 @@ const OrderProduct = () => {
     const companyName = 'Courtika'; // Hardcoded
     const companyLogo = advisorInfo.logo || '/images/courtika-assurances-inc.png';
     const phone = '1 (450) 762-9240';
-    const isOpen = advisorInfo.isOpen !== undefined ? advisorInfo.isOpen : isOpenNow();
-    const openStatus = advisorInfo.openStatus || (isOpen ? 'Ouvert' : 'Fermé');
-    const formattedHours = advisorInfo.formattedHours || getFormattedTodayHours();
+    const isOpen = isOpenNow();
+    const openStatus = isOpen ? 'Ouvert' : 'Fermé';
+    const formattedHours = getFormattedTodayHours();
     const callDuration = advisorInfo.callDuration || 10;
     const maxRetries = advisorInfo.maxRetries || 2;
     

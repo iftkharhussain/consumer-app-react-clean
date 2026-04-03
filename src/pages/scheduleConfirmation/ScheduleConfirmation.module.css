@@ -1,7 +1,7 @@
 .fallbackContainer {
   max-width: 1000px;
   padding: 40px 20px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: var(--font-body, "Inter", sans-serif);
   color: #333;
 }
 
@@ -39,7 +39,7 @@
 }
 
 .subTitle {
-  font-size: 16px;
+  font-size: 15px;
   color: #6b7280;
   line-height: 1.5;
   margin: 0 auto 40px;
@@ -114,7 +114,7 @@
 }
 
 .insurerName {
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 700;
   color: #111827;
 }
@@ -134,7 +134,7 @@
 }
 
 .priceOld {
-  font-size: 14px;
+  font-size: 12px;
   color: #9ca3af;
 }
 
@@ -243,7 +243,7 @@
 }
 
 .infoText {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   color: #111827;
 }
@@ -488,7 +488,7 @@
   }
 
   .insurerName {
-    font-size: 18px;
+    font-size: 15px;
   }
 
   .priceMain {

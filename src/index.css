@@ -12,6 +12,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Enforce Inter font globally on all elements */
+*,
+*::before,
+*::after {
+  font-family: inherit;
+}
+
+input,
+button,
+select,
+textarea,
+optgroup {
+  font-family: var(--font-body);
+}
+
 code {
   font-family: var(--font-mono);
 }

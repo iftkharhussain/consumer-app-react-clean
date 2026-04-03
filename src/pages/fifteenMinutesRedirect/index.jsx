@@ -116,9 +116,9 @@ const FifteenMinutesRedirect = () => {
   const phone = '1 (450) 762-9240';
   const phoneDigits = phone.replace(/\D/g, '');
   const phoneLink = `tel:+${phoneDigits}`;
-  const isOpen = advisorInfo.isOpen !== undefined ? advisorInfo.isOpen : isOpenNow();
-  const openStatus = advisorInfo.openStatus || (isOpen ? 'Disponible maintenant' : 'Fermé maintenant');
-  const formattedHours = advisorInfo.formattedHours || getFormattedTodayHours();
+  const isOpen = isOpenNow();
+  const openStatus = isOpen ? 'Disponible maintenant' : 'Fermé maintenant';
+  const formattedHours = getFormattedTodayHours();
   const callDuration = advisorInfo.callDuration || 15;
 
   return (

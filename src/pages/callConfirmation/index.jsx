@@ -95,9 +95,13 @@ const CallConfirmation = () => {
   const hasQuoteData = orderData && orderData.selectedQuote && orderData.selectedQuote.insurerName;
   
   const insurerName = selectedQuote.insurerName || 'Intact Insurance';
+  const isCourtikaSearch = selectedQuote.isCourtikaSearch || (insurerName && insurerName.toLowerCase().includes('courtika') && insurerName.toLowerCase().includes('magasiner'));
   const insurerLogo = selectedQuote.logo || '/images/intact-insurance.svg';
-  const monthlyPrice = selectedQuote.monthlyPrice || '90 $';
-  const yearlyPrice = selectedQuote.yearlyPrice || '1 080 $';
+  
+  // Only show price if it's not a general Courtika search (quote comparison)
+  // Removed the hardcoded '90' default to avoid showing fake prices when data is missing
+  const monthlyPrice = !isCourtikaSearch ? (selectedQuote.monthlyPrice || null) : null;
+  const yearlyPrice = !isCourtikaSearch ? (selectedQuote.yearlyPrice || null) : null;
   const isIntactDiscount = selectedQuote.isIntactDiscount || false;
   
   // Advisor details
@@ -106,9 +110,9 @@ const CallConfirmation = () => {
   const phone = '1 (450) 762-9240';
   const phoneDigits = phone.replace(/\D/g, '');
   const phoneLink = `tel:+${phoneDigits}`;
-  const isOpen = advisorInfo.isOpen !== undefined ? advisorInfo.isOpen : isOpenNow();
-  const openStatus = advisorInfo.openStatus || (isOpen ? 'Ouvert' : 'Fermé');
-  const formattedHours = advisorInfo.formattedHours || getFormattedTodayHours();
+  const isOpen = isOpenNow();
+  const openStatus = isOpen ? 'Ouvert' : 'Fermé';
+  const formattedHours = getFormattedTodayHours();
   const callDuration = advisorInfo.callDuration || 15;
   
   // Coverages
@@ -174,10 +178,12 @@ const CallConfirmation = () => {
                   </div>
                   <span className={styles.insurerName}>{insurerName}</span>
                 </div>
-                <div className={styles.priceContainer}>
-                  <span className={styles.priceMain}>{monthlyPrice}/mois</span>
-                  {yearlyPrice && <span className={styles.priceOld}>{yearlyPrice}/an</span>}
-                </div>
+                {monthlyPrice && (
+                  <div className={styles.priceContainer}>
+                    <span className={styles.priceMain}>{monthlyPrice}$/mois</span>
+                    {yearlyPrice && <span className={styles.priceOld}>{yearlyPrice}$/an</span>}
+                  </div>
+                )}
               </div>
               
               {isIntactDiscount && (

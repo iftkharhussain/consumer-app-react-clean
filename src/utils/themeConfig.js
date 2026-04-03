@@ -133,7 +133,7 @@ export const globalToken = {
   colorInfoBorder: colors.primary[200],
   
   // Typography
-  fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  fontFamily: '"Inter", sans-serif',
   fontSize: 14,
   fontSizeSM: 12,
   fontSizeLG: 16,
