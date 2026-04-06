@@ -305,6 +305,9 @@ const Results = () => {
       if (isPakCode) {
         title = 'Protections bonifiées';
         description = 'Ce regroupement inclut des protections supplémentaires qui viennent bonifier votre assurance automobile. Elles offrent une protection plus complète dans plusieurs situations du quotidien, comme lors de l\'utilisation d\'un véhicule loué ou emprunté, ou lorsque votre véhicule est temporairement inutilisable.';
+        // For PAK, show "Inclus" as the coverage value
+        type = 'couverture';
+        coverageValue = coverage.limit === 'Inclus' || coverage.limit === 'Included' ? 'Inclus' : (coverage.limit || 'Inclus');
       } else if (coverageInfo[code]) {
         title = coverageInfo[code].title;
         description = coverageInfo[code].description;
@@ -318,33 +321,36 @@ const Results = () => {
       };
 
       // Determine coverage value and type based on coverage code
-      if (code === 'TP' || code === 'TPL') {
-        // For TP/TPL, show limit (Couverture)
-        type = 'couverture';
-        const rawValue = extractLimitValue(coverage.limit);
-        coverageValue = formatFrenchCurrency(rawValue);
-      } else if (code === 'CMP' || code === 'COMP' || code === 'COL' || code === 'COLL') {
-        // For CMP/COMP/COL/COLL, show deductible (Franchise)
-        if (coverage.deductible && coverage.deductible !== -1) {
-          type = 'franchise';
-          coverageValue = formatFrenchCurrency(coverage.deductible);
-        }
-      } else if (code === '34' || code === '33' || code === '20' || code === '27') {
-        // For FAQ codes, show limit (Couverture)
-        if (coverage.limit) {
+      // Skip this section if we already handled PAK above
+      if (!isPakCode) {
+        if (code === 'TP' || code === 'TPL') {
+          // For TP/TPL, show limit (Couverture)
           type = 'couverture';
           const rawValue = extractLimitValue(coverage.limit);
           coverageValue = formatFrenchCurrency(rawValue);
-        }
-      } else {
-        // Default behavior for other coverage codes
-        if (coverage.limit && coverage.limit !== '-$1/-$1') {
-          type = 'couverture';
-          const rawValue = extractLimitValue(coverage.limit);
-          coverageValue = formatFrenchCurrency(rawValue);
-        } else if (coverage.deductible && coverage.deductible !== -1) {
-          type = 'franchise';
-          coverageValue = formatFrenchCurrency(coverage.deductible);
+        } else if (code === 'CMP' || code === 'COMP' || code === 'COL' || code === 'COLL') {
+          // For CMP/COMP/COL/COLL, show deductible (Franchise)
+          if (coverage.deductible && coverage.deductible !== -1) {
+            type = 'franchise';
+            coverageValue = formatFrenchCurrency(coverage.deductible);
+          }
+        } else if (code === '34' || code === '33' || code === '20' || code === '27') {
+          // For FAQ codes, show limit (Couverture)
+          if (coverage.limit) {
+            type = 'couverture';
+            const rawValue = extractLimitValue(coverage.limit);
+            coverageValue = formatFrenchCurrency(rawValue);
+          }
+        } else {
+          // Default behavior for other coverage codes
+          if (coverage.limit && coverage.limit !== '-$1/-$1') {
+            type = 'couverture';
+            const rawValue = extractLimitValue(coverage.limit);
+            coverageValue = formatFrenchCurrency(rawValue);
+          } else if (coverage.deductible && coverage.deductible !== -1) {
+            type = 'franchise';
+            coverageValue = formatFrenchCurrency(coverage.deductible);
+          }
         }
       }
 
