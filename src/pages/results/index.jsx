@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Button, Card, Collapse, Divider, Spin } from 'antd';
+import { Button, Card, Collapse, Divider, Spin, Modal } from 'antd';
 import { CheckOutlined, ClockCircleOutlined, DownOutlined, UpOutlined, LoadingOutlined, StarFilled } from '@ant-design/icons';
 import CustomizeProtections from '../../components/carInsurance/CustomizeProtections';
 import LoadingModal from '../../components/loadingModal';
@@ -13,6 +13,7 @@ import useQuote from '../../hooks/useQuote';
 import { checkPendingOrder } from '../../services/api/productOrderService';
 import { recalculateQuote } from '../../services/api/quoteService';
 import { getCarrierLogo, getCarrierName, isIntactCarrier } from '../../utils/carrierUtils';
+import recalculationService from '../../services/recalculationService';
 import styles from './Results.module.css';
 
 const { Panel } = Collapse;
@@ -36,6 +37,8 @@ const Results = () => {
   const [selectedInsurer, setSelectedInsurer] = useState(null);
   const [insurers, setInsurers] = useState([]);
   const [recommendedInsurer, setRecommendedInsurer] = useState(null);
+  const [recalculateCount, setRecalculateCount] = useState(0);
+  const [showRecalculateLimitModal, setShowRecalculateLimitModal] = useState(false);
 
   // Get user profile from Redux state
   const userProfile = useSelector(state => state.app?.user_profile);
@@ -403,6 +406,8 @@ const Results = () => {
     setShowCustomize(false);
     setHasProtectionChanges(false);
     setProtectionsData(null);
+    // Reset recalculation counter when going back to results
+    setRecalculateCount(0);
   };
 
   const handleProtectionsChange = useCallback((hasChanges, protections) => {
@@ -411,7 +416,27 @@ const Results = () => {
   }, []);
 
   const handleRecalculateQuote = async () => {
-    if (!protectionsData || !userProductId) return;
+    // Validate prerequisites
+    const prerequisiteValidation = recalculationService.validateRecalculationPrerequisites({
+      userProductId,
+      protectionsData,
+      recalculateCount
+    });
+
+    if (!prerequisiteValidation.valid) {
+      console.warn('[Results] Recalculation prerequisites not met:', prerequisiteValidation.errors);
+      if (recalculateCount >= recalculationService.RECALCULATION_LIMIT) {
+        setShowRecalculateLimitModal(true);
+      }
+      return;
+    }
+
+    // Validate recalculation limit
+    const validation = recalculationService.validateRecalculationRequest(recalculateCount);
+    if (!validation.allowed) {
+      setShowRecalculateLimitModal(true);
+      return;
+    }
 
     setIsRecalculating(true);
     setRecalculateError(null);
@@ -427,12 +452,37 @@ const Results = () => {
           protections: protectionsData,
           isTemporary: true
         });
+        // Increment recalculation counter after successful recalculation
+        setRecalculateCount(prev => prev + 1);
+        
+        // Log successful recalculation
+        recalculationService.logRecalculationAttempt({
+          userProductId,
+          count: recalculateCount,
+          success: true
+        });
       } else {
         setRecalculateError(result.message || 'Failed to recalculate quote');
+        
+        // Log failed recalculation
+        recalculationService.logRecalculationAttempt({
+          userProductId,
+          count: recalculateCount,
+          success: false,
+          error: result.message
+        });
       }
     } catch (err) {
       console.error('[Results] Recalculate error:', err);
       setRecalculateError(err.message || 'An error occurred');
+      
+      // Log error
+      recalculationService.logRecalculationAttempt({
+        userProductId,
+        count: recalculateCount,
+        success: false,
+        error: err.message
+      });
     } finally {
       setIsRecalculating(false);
       setShowLoadingModal(false);
@@ -644,9 +694,9 @@ const Results = () => {
                       <Card className={styles.protectionsCard}>
                         <div className={styles.protectionsHeader}>
                           <h2 className={styles.sectionTitle}>Vos protections</h2>
-                          {/* <Button type="link" className={styles.customizeButton} onClick={handleCustomize}>
+                          <Button type="link" className={styles.customizeButton} onClick={handleCustomize}>
                             Personnaliser
-                          </Button> */}
+                          </Button>
                         </div>
                         <div className={styles.protectionsList}>
                           {protections.map((protection, index) => (
@@ -868,6 +918,94 @@ const Results = () => {
         recalculatedQuote={recalculatedQuote}
       />
 
+      {/* Recalculation Limit Modal */}
+      {(() => {
+        const modalConfig = recalculationService.getRecalculationLimitModalConfig();
+        return (
+          <Modal
+            open={showRecalculateLimitModal}
+            onCancel={() => setShowRecalculateLimitModal(false)}
+            footer={null}
+            centered
+            width={500}
+          >
+            <div style={{ textAlign: 'center', padding: '20px 0' }}>
+              <div style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '50%',
+                backgroundColor: '#fff4e5',
+                border: '1px solid #ffdebc',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 24px'
+              }}>
+                <span style={{ fontSize: '28px', color: '#ed6c02' }}>⚠️</span>
+              </div>
+              
+              <h2 style={{ fontSize: '24px', fontWeight: '700', marginBottom: '16px', color: '#1a1a1a' }}>
+                {modalConfig.title}
+              </h2>
+              
+              <p style={{ fontSize: '16px', color: '#666', lineHeight: '1.6', marginBottom: '24px' }}>
+                {modalConfig.message}
+              </p>
+              
+              <div style={{
+                backgroundColor: '#f9fafb',
+                border: '1px solid #e5e7eb',
+                borderRadius: '8px',
+                padding: '20px',
+                marginBottom: '24px'
+              }}>
+                <p style={{ fontSize: '14px', color: '#666', margin: '0 0 8px 0' }}>Contactez-nous :</p>
+                <a 
+                  href={modalConfig.brokerPhoneLink}
+                  style={{
+                    fontSize: '24px',
+                    fontWeight: '700',
+                    color: '#1f01c8',
+                    textDecoration: 'none',
+                    display: 'block'
+                  }}
+                >
+                  {modalConfig.brokerPhone}
+                </a>
+              </div>
+              
+              <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+                <Button
+                  type="primary"
+                  size="large"
+                  href={modalConfig.brokerPhoneLink}
+                  style={{
+                    backgroundColor: '#1f01c8',
+                    borderColor: '#1f01c8',
+                    height: '48px',
+                    padding: '0 32px',
+                    fontSize: '16px'
+                  }}
+                >
+                  {modalConfig.callButtonText}
+                </Button>
+                <Button
+                  size="large"
+                  onClick={() => setShowRecalculateLimitModal(false)}
+                  style={{
+                    height: '48px',
+                    padding: '0 32px',
+                    fontSize: '16px'
+                  }}
+                >
+                  {modalConfig.closeButtonText}
+                </Button>
+              </div>
+            </div>
+          </Modal>
+        );
+      })()}
+
       {/* Fixed Bottom Bar - Shows only on customize page */}
       {!showLoadingModal && showCustomize && (
         <div style={{
@@ -880,20 +1018,48 @@ const Results = () => {
           boxShadow: '0 -2px 8px rgba(0,0,0,0.1)',
           zIndex: 1000,
           display: 'flex',
+          flexDirection: 'column',
           gap: '10px',
-          justifyContent: 'center'
+          alignItems: 'center'
         }}>
-          <Button
-            type="primary"
-            size="large"
-            disabled={!hasProtectionChanges || isRecalculating}
-            onClick={handleRecalculateQuote}
-          >
-            {isRecalculating ? 'Chargement...' : 'Recalculer mon prix'}
-          </Button>
-          <Button size="large" onClick={handleBackToMain}>
-            Retour
-          </Button>
+          {recalculateCount >= 2 && (
+            <div style={{
+              fontSize: '13px',
+              color: '#ed6c02',
+              textAlign: 'center',
+              padding: '8px 16px',
+              backgroundColor: '#fff4e5',
+              borderRadius: '8px',
+              border: '1px solid #ffdebc'
+            }}>
+              {(() => {
+                const warning = recalculationService.getRecalculationLimitWarning();
+                return (
+                  <>
+                    {warning.message.split(warning.phone)[0]}
+                    <strong>{warning.phone}</strong>
+                  </>
+                );
+              })()}
+            </div>
+          )}
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <Button
+              type="primary"
+              size="large"
+              disabled={recalculationService.shouldDisableRecalculateButton(
+                hasProtectionChanges,
+                isRecalculating,
+                recalculateCount
+              )}
+              onClick={handleRecalculateQuote}
+            >
+              {recalculationService.getRecalculateButtonText(recalculateCount, isRecalculating)}
+            </Button>
+            <Button size="large" onClick={handleBackToMain}>
+              Retour
+            </Button>
+          </div>
         </div>
       )}
     </>
