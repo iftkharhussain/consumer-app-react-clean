@@ -125,38 +125,107 @@ const ScheduleConfirmation = () => {
   
   // Coverages
   const coverages = orderData?.coverages || [];
-  
-  // Helper function to format coverage names
-  const formatCoverageName = (coverage) => {
-    const csioCode = coverage.csioCode || coverage.code || coverage.id || '';
-    const limit = coverage.limit1 || coverage.limit || '';
-    const deductible = coverage.deductible || '';
-    
-    // CSIO Code mapping to French names
-    const coverageNames = {
-      '20': 'Responsabilité civile',
-      '21': 'Protection accident et collision',
-      '22': 'Protection tous risques',
-      '23': 'Protection contre les risques spécifiés',
-      '24': 'Protection complémentaire',
-      '43': 'Avenant 43 - Remplacement automobile',
-      '27': 'Avenant 27 - Indemnité de remplacement',
-      'CIV': 'Responsabilité civile',
-      'COL': 'Collision',
-      'COMP': 'Tous risques'
-    };
-    
-    const name = coverageNames[csioCode] || `Protection ${csioCode}`;
-    
-    if (limit && deductible && deductible !== -1) {
-      return `${name}: ${Number(limit).toLocaleString('en-US')}$ (franchise: ${Number(deductible).toLocaleString('en-US')}$)`;
-    } else if (limit) {
-      return `${name}: ${Number(limit).toLocaleString('en-US')}$`;
-    } else if (deductible && deductible !== -1) {
-      return `${name}: (franchise: ${Number(deductible).toLocaleString('en-US')}$)`;
-    }
-    return `${name}:`;
+
+  // Format currency in French format (10 000$ instead of $10,000)
+  const formatFrenchCurrency = (value) => {
+    if (!value) return null;
+    let numStr = String(value).replace(/[$,\s]/g, '');
+    const num = parseFloat(numStr);
+    if (isNaN(num)) return value;
+    const formatted = num.toLocaleString('fr-CA', {
+      useGrouping: true,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).replace(/,/g, ' ');
+    return `${formatted}$`;
   };
+
+  // Extract limit value from string like "$2,000,000/-$1"
+  const extractLimitValue = (limit) => {
+    if (!limit) return null;
+    const parts = limit.split('/-');
+    return parts[0].trim();
+  };
+
+  // Process coverages into display protections (same logic as results page)
+  const protections = coverages.map(coverage => {
+    // Handle both formats: order API uses 'id', quote API uses 'code'
+    const code = String(coverage.id || coverage.code || '').toUpperCase();
+    let title = code;
+    let type = null;
+    let coverageValue = null;
+
+    // Coverage code mapping to French names
+    const coverageInfo = {
+      'TP': 'Responsabilité civile',
+      'TPL': 'Responsabilité civile',
+      'COL': 'Collision et renversement (B2)',
+      'COLL': 'Collision et renversement (B2)',
+      'CMP': 'Accidents sans collision ni renversement (B3)',
+      'COMP': 'Accidents sans collision ni renversement (B3)',
+      '34': 'Protection supplémentaire (FAQ 34)',
+      '33': 'Assistance routière (FAQ 33)',
+      '20': 'Assistance routière (FAQ 20)',
+      '27': 'Assurance des personnes (FAQ 27)',
+      'AB': 'Indemnités d\'accident',
+      'DCPD': 'Indemnisation directe',
+      'UA': 'Automobile non assurée',
+      'SEF44': 'Protection de la famille',
+    };
+
+    // Check for PAK codes (pak12, pak7, etc.)
+    const isPakCode = code.includes('PAK') || /PAK\d+/i.test(code);
+
+    if (isPakCode) {
+      title = 'Protections bonifiées';
+      type = 'couverture';
+      coverageValue = 'Inclus';
+    } else if (coverageInfo[code]) {
+      title = coverageInfo[code];
+    }
+
+    // Extract limit value — handle both formats:
+    // Order API: limit1 = 2000000 (numeric)
+    // Quote API: limit = "$2,000,000/-$1" (string)
+    const getLimitValue = () => {
+      if (coverage.limit1 && coverage.limit1 > 1) {
+        return formatFrenchCurrency(coverage.limit1);
+      }
+      if (coverage.limit && coverage.limit !== '-$1/-$1') {
+        const rawValue = extractLimitValue(coverage.limit);
+        return formatFrenchCurrency(rawValue);
+      }
+      return null;
+    };
+
+    // Determine coverage value and type
+    if (!isPakCode) {
+      if (code === 'TP' || code === 'TPL') {
+        type = 'couverture';
+        coverageValue = getLimitValue();
+      } else if (['CMP', 'COMP', 'COL', 'COLL'].includes(code)) {
+        if (coverage.deductible && coverage.deductible !== -1) {
+          type = 'franchise';
+          coverageValue = formatFrenchCurrency(coverage.deductible);
+        }
+      } else if (['34', '33', '20', '27'].includes(code)) {
+        type = 'couverture';
+        coverageValue = getLimitValue();
+      } else {
+        // Default: try limit first, then deductible
+        const limitVal = getLimitValue();
+        if (limitVal) {
+          type = 'couverture';
+          coverageValue = limitVal;
+        } else if (coverage.deductible && coverage.deductible !== -1) {
+          type = 'franchise';
+          coverageValue = formatFrenchCurrency(coverage.deductible);
+        }
+      }
+    }
+
+    return { title, type, coverageValue };
+  }).filter(p => p.coverageValue); // Only show protections that have a value
 
   return (
     <PageContent pageType="overview">
@@ -205,42 +274,29 @@ const ScheduleConfirmation = () => {
                 </div>
               )}
 
-              <div className={styles.protectionsSection} style={{display: 'none'}}>
-                <h3 className={styles.protectionsTitle}>Vos protections</h3>
-                <ul className={styles.protectionsList}>
-                  {coverages.length > 0 ? (
-                    coverages.map((coverage, index) => (
+              {protections.length > 0 && (
+                <div className={styles.protectionsSection}>
+                  <h3 className={styles.protectionsTitle}>Vos protections</h3>
+                  <ul className={styles.protectionsList}>
+                    {protections.map((protection, index) => (
                       <li key={index}>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
-                        <span>{formatCoverageName(coverage)}</span>
+                        <div>
+                          <span>{protection.title}</span>
+                          {protection.coverageValue && (
+                            <div className={styles.coverageDetail}>
+                              {protection.type === 'franchise' ? 'Franchise' : 'Couverture'}:{'  '}
+                              <strong>{protection.coverageValue}</strong>
+                            </div>
+                          )}
+                        </div>
                       </li>
-                    ))
-                  ) : (
-                    <>
-                      <li>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        <span>Protection responsabilité civile 2 000 000$</span>
-                      </li>
-                      <li>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        <span>Protection collision 500$</span>
-                      </li>
-                      <li>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        <span>Protection tous risques 250$</span>
-                      </li>
-                    </>
-                  )}
-                </ul>
-              </div>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
             )}
 
