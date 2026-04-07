@@ -83,14 +83,25 @@ const FifteenMinutesRedirect = () => {
       
       if (result.success) {
         message.success('Votre demande a été envoyée avec succès!');
-        setIsSubmitted(true);
+        
+        // On mobile, trigger phone dialer
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+          window.location.href = 'tel:+14507629240';
+        }
+        
+        // Show success message
+        setTimeout(() => {
+          setIsLoading(false);
+          setIsSubmitted(true);
+        }, 2000);
       } else {
         message.error(result.message || 'Une erreur est survenue. Veuillez réessayer.');
+        setIsLoading(false);
       }
     } catch (error) {
       console.error('Error sending request:', error);
       message.error('Une erreur est survenue. Veuillez réessayer.');
-    } finally {
       setIsLoading(false);
     }
   };
@@ -319,6 +330,21 @@ const FifteenMinutesRedirect = () => {
         </div>
         
       </div>
+      
+      {/* Loading Modal Overlay */}
+      {isLoading && (
+        <div className={styles.loadingOverlay} style={{ background: '#ffffff' }}>
+          <div className={styles.loadingContent} style={{ background: '#ffffff' }}>
+            <h3 className={styles.loadingText}>Nous vous connectons à un courtier..</h3>
+            <img 
+              src="/images/39259805852ef0453b2b0f98eee91406934e42f6.gif" 
+              alt="Loading" 
+              className={styles.loadingGif}
+            />
+          </div>
+        </div>
+      )}
+      
       <ScheduleModal isOpen={isScheduleOpen} onClose={() => setIsScheduleOpen(false)} />
     </PageContent>
   );

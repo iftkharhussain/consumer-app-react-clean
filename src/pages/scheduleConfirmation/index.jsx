@@ -1,18 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PageContent } from 'components';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Spin, Button } from 'antd';
+import { Spin, Button, message } from 'antd';
 import styles from './ScheduleConfirmation.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { getFormattedTodayHours } from '../../utils/businessHours';
 import { getOrderDetails, checkPendingOrder } from '../../services/api/productOrderService';
+import fortusService from '../../services/api/fortusService';
 
 const ScheduleConfirmation = () => {
   const navigate = useNavigate();
   const { userProductId: urlUserProductId } = useParams();
   const initialized = useRef(false);
+  const ezLeadSent = useRef(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [orderData, setOrderData] = useState(null);
 
@@ -65,6 +68,51 @@ const ScheduleConfirmation = () => {
 
     fetchOrderDetails();
   }, [urlUserProductId]);
+
+  // Auto-send ezLead on mount (after Calendly booking)
+  useEffect(() => {
+    const sendEzLead = async () => {
+      // Prevent duplicate sends
+      if (ezLeadSent.current) return;
+      
+      // Wait for orderData to be loaded
+      if (loading || !orderData) return;
+      
+      const userProductId = urlUserProductId || orderData?.userProductId;
+      if (!userProductId) {
+        console.warn('[ScheduleConfirmation] No userProductId available to send ezLead');
+        return;
+      }
+      
+      try {
+        ezLeadSent.current = true; // Mark as sent to prevent duplicates
+        setIsLoading(true);
+        
+        console.log('[ScheduleConfirmation] Auto-sending ezLead for userProductId:', userProductId);
+        
+        const result = await fortusService.requestCall({
+          userProductId,
+          productSlug: 'car-insurance'
+        });
+        
+        if (result.success) {
+          console.log('[ScheduleConfirmation] ezLead sent successfully');
+          message.success('Vos informations ont été transmises au courtier!');
+        } else {
+          console.error('[ScheduleConfirmation] Failed to send ezLead:', result.message);
+        }
+      } catch (error) {
+        console.error('[ScheduleConfirmation] Error sending ezLead:', error);
+      } finally {
+        // Hide loading modal after 2 seconds
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 2000);
+      }
+    };
+    
+    sendEzLead();
+  }, [loading, orderData, urlUserProductId]);
 
   // Loading state
   if (loading) {
@@ -442,6 +490,21 @@ const ScheduleConfirmation = () => {
           </div>
         </div>
       </div>
+      
+      {/* Loading Modal Overlay */}
+      {isLoading && (
+        <div className={styles.loadingOverlay} style={{ background: '#ffffff' }}>
+          <div className={styles.loadingContent} style={{ background: '#ffffff' }}>
+            <h3 className={styles.loadingText}>Nous transmettons vos informations au courtier..</h3>
+            <img 
+              src="/images/39259805852ef0453b2b0f98eee91406934e42f6.gif" 
+              alt="Loading" 
+              className={styles.loadingGif}
+            />
+          </div>
+        </div>
+      )}
+      
       <ScheduleModal isOpen={isScheduleOpen} onClose={() => setIsScheduleOpen(false)} />
     </PageContent>
   );

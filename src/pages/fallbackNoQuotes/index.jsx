@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PageContent } from 'components';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import { 
   WarningOutlined, 
   CheckOutlined,
@@ -13,13 +13,17 @@ import { useNavigate } from 'react-router-dom';
 import styles from './FallbackNoQuotes.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
+import fortusService from '../../services/api/fortusService';
+import { checkPendingOrder } from '../../services/api/productOrderService';
 
 const FallbackNoQuotes = () => {
   const navigate = useNavigate();
   const initialized = useRef(false);
+ const timerRef = useRef(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+  const [userProductId, setUserProductId] = useState(null);
 
   useEffect(() => {
     if (!initialized.current) {
@@ -28,17 +32,87 @@ const FallbackNoQuotes = () => {
     }
   }, []);
 
-  const handleSubmit = () => {
+  // Fetch userProductId on mount
+  useEffect(() => {
+    const fetchUserProductId = async () => {
+      try {
+        const response = await checkPendingOrder('car-insurance');
+        if (response.success && response.userProductId) {
+          setUserProductId(response.userProductId);
+        }
+      } catch (error) {
+        console.error('[FallbackNoQuotes] Error fetching userProductId:', error);
+      }
+    };
+    fetchUserProductId();
+  }, []);
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
+
+  const handleSubmit = async () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
     setIsLoading(true);
-    setTimeout(() => {
+
+    try {
+      // Call Fortus API to send the lead and email
+      const result = await fortusService.requestCall({
+        userProductId,
+        productSlug: 'car-insurance'
+      });
+
+      if (result.success) {
+        console.log('[FallbackNoQuotes] Fortus request successful:', result);
+        message.success('Votre demande a été envoyée avec succès!');
+        
+        // Trigger the phone call dialer on mobile only
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) {
+          window.location.href = 'tel:+14507629240';
+        }
+
+        // Show success state after 2 seconds
+        timerRef.current = setTimeout(() => {
+          setIsLoading(false);
+          setIsSubmitted(true);
+        }, 2000);
+      } else {
+        console.warn('[FallbackNoQuotes] Fortus request failed:', result);
+        message.error(result.message || 'Une erreur est survenue. Veuillez réessayer.');
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error('[FallbackNoQuotes] Error:', error);
+      message.error('Une erreur est survenue. Veuillez réessayer.');
       setIsLoading(false);
-      setIsSubmitted(true);
-    }, 1500);
+    }
   };
 
   return (
     <PageContent pageType="overview">
       <div className={styles.fallbackContainer}>
+      
+        {/* Loading Modal Overlay */}
+        {isLoading && (
+          <div className={styles.loadingOverlay}>
+            <div className={styles.loadingContent}>
+              <h3 className={styles.loadingText}>Nous vous connectons à un courtier..</h3>
+              <img
+                src="/images/39259805852ef0453b2b0f98eee91406934e42f6.gif"
+                alt="Chargement"
+                className={styles.loadingGif}
+              />
+            </div>
+          </div>
+        )}
       
         {!isSubmitted && (
           <div className={styles.headerSection}>

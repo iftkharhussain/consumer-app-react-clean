@@ -16,17 +16,6 @@ const DAYS_FR = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 
 // };
 
 // PRODUCTION HOURS (uncomment when testing is complete):
-// const BUSINESS_HOURS = {
-//   'Lundi': { start: '10:30', end: '18:00', label: '10:30 - 18:00' },
-//   'Mardi': { start: '08:30', end: '18:00', label: '8:30 - 18:00' },
-//   'Mercredi': { start: '08:30', end: '18:00', label: '8:30 - 18:00' },
-//   'Jeudi': { start: '08:30', end: '18:00', label: '8:30 - 18:00' },
-//   'Vendredi': { start: '08:30', end: '16:30', label: '8:30 - 16:30' },
-//   'Samedi': null,
-//   'Dimanche': null,
-// };
-
-
 const BUSINESS_HOURS = {
   'Lundi': { start: '10:30', end: '18:00', label: '10:30 - 18:00' },
   'Mardi': { start: '08:30', end: '18:00', label: '8:30 - 18:00' },
@@ -36,6 +25,7 @@ const BUSINESS_HOURS = {
   'Samedi': null,
   'Dimanche': null,
 };
+
 /**
  * Gets the current date/time in Montreal timezone
  */
