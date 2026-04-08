@@ -1,6 +1,7 @@
 .carInsurancePage {
   padding: 0 0 100px 0;
   max-width: 826px;
+  margin: 0 auto; /* Center the page UI */
   position: relative;
 }
 

@@ -1,5 +1,6 @@
 .fallbackContainer {
   max-width: 1000px;
+  margin: 0 auto; /* Center the confirmation UI */
   padding: 40px 20px;
   font-family: var(--font-body, "Inter", sans-serif);
   color: #333;

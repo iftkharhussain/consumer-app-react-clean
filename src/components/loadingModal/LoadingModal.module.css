@@ -1,143 +1,40 @@
-.modalOverlay {
+.infiniteOverlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.6); /* Semi-transparent white without blur */
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
+  pointer-events: none;
 }
 
-.modalContent {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 48px;
-  max-width: 600px;
-  width: 100%;
+/* Isolate from Sidebar on Desktop */
+@media (min-width: 992px) {
+  .infiniteOverlay {
+    left: 280px; /* Sidebar width should stay clear */
+  }
 }
 
-/* Icon and Progress Ring */
-.iconContainer {
-  position: relative;
-  width: 99px;
-  height: 99px;
-  margin-bottom: 36px;
+.spinnerWrapper {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.progressRing {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.progressRingCircle {
-  transition: stroke-dashoffset 0.3s ease;
-}
-
-.carIcon {
+.infiniteSpinner {
   width: 50px;
-  max-height: 50px;
-  position: relative;
-  z-index: 1;
+  height: 50px;
+  border: 4px solid rgba(0, 0, 0, 0.05); /* Grey track */
+  border-top: 4px solid #1A1ABA; /* Dark blue arc */
+  border-radius: 50%;
+  animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
-/* Heading */
-.heading {
-  color: #000;
-  text-align: center;
-  leading-trim: both;
-  text-edge: cap;
-  font-family: Inter;
-  font-size: var(--Font-size-text-lg, 18px);
-  font-style: normal;
-  font-weight: 600;
-  line-height: var(--Line-height-text-lg, 28px);
-  margin: 0 0 32px 0;
-}
-
-/* Steps List */
-.stepsList {
-  border-collapse: separate;
-  border-spacing: 0;
-  margin: 0 auto;
-}
-
-.stepItem {
-  /* margin doesn't work on tr */
-}
-
-.stepIconCell {
-  padding: 0 8px 6px 0;
-  vertical-align: middle;
-}
-
-.stepTextCell {
-  padding: 0 0 6px 0;
-  vertical-align: middle;
-}
-
-.stepItem:last-child .stepIconCell,
-.stepItem:last-child .stepTextCell {
-  padding-bottom: 0;
-}
-
-.stepIcon {
-  display: flex;
-  width: 18px;
-  height: 18px;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.stepText {
-  color: #989898;
-  font-family: var(--Font-family-font-family-body, Inter);
-  font-size: var(--Font-size-text-sm, 14px);
-  font-style: normal;
-  font-weight: 400;
-  line-height: var(--Line-height-text-sm, 20px);
-  transition: color 0.3s ease;
-}
-
-.stepTextActive {
-  color: #181D27;
-  font-family: var(--Font-family-font-family-body, Inter);
-  font-size: var(--Font-size-text-sm, 14px);
-  font-style: normal;
-  font-weight: 400;
-  line-height: var(--Line-height-text-sm, 20px);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .modalContent {
-    padding: 32px 24px;
-  }
-
-  .iconContainer {
-    width: 120px;
-    height: 120px;
-  }
-
-  .carIcon {
-    width: 80px;
-    height: 80px;
-  }
-
-  .heading {
-    font-size: 16px;
-    line-height: 24px;
-  }
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

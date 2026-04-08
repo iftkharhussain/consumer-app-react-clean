@@ -8,22 +8,16 @@ import EstimateContent from '../../components/carInsurance/EstimateContent';
 import CustomizeProtections from '../../components/carInsurance/CustomizeProtections';
 import LoadingModal from '../../components/loadingModal';
 import ResubmitAlert from '../../components/ResubmitAlert';
+import { ConfirmationSkeleton } from '../../components/carInsurance/QuoteSkeletons';
 import useQuote from '../../hooks/useQuote';
 import { checkPendingOrder } from '../../services/api/productOrderService';
 import { recalculateQuote } from '../../services/api/quoteService';
 import styles from './CarInsurance.module.css';
 
-/**
- * CarInsurance Page
- * 
- * This page handles the car insurance quote flow:
- * 1. Shows initial loading modal while quote fetch is in progress
- * 2. Modal closes automatically when quote data is loaded or fails
- * 3. InitialContent shows skeletons on insurer cards while quote is loading
- */
 const CarInsurance = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showEstimate, setShowEstimate] = useState(false);
   const [showCustomize, setShowCustomize] = useState(false);
@@ -35,52 +29,31 @@ const CarInsurance = () => {
   const [recalculatedQuote, setRecalculatedQuote] = useState(null);
   const [recalculateError, setRecalculateError] = useState(null);
 
-  // Get user profile from Redux state
   const userProfile = useSelector(state => state.app?.user_profile);
   const authUser = useSelector(state => state.app?.auth);
 
-  // Check for resubmit alert flag on mount
   useEffect(() => {
     const alertFlag = localStorage.getItem('showResubmitAlert');
     if (alertFlag === 'true') {
       setShowResubmitAlert(true);
-      // Clear the flag after showing
       localStorage.removeItem('showResubmitAlert');
     }
   }, []);
 
-  // Check for pending order on mount - redirect to call-confirmation if user has already chosen insurer
   useEffect(() => {
     const checkForPendingOrder = async () => {
       try {
         const result = await checkPendingOrder('car-insurance');
         if (result.success && result.hasPendingOrder && result.userProductId) {
-          // Redirect to call confirmation page (user has already selected insurer)
-          console.log('[CarInsurance] Pending order found, redirecting to call-confirmation:', result.userProductId);
           navigate(`/call-confirmation/${result.userProductId}`);
         }
       } catch (error) {
-        // Silently fail - don't block page load if check fails
         console.error('Failed to check pending order:', error);
       }
     };
-
     checkForPendingOrder();
   }, [navigate]);
 
-  // Close loading modal when quote data is loaded
-  useEffect(() => {
-    if (!quoteLoading && (hasQuote || hasFailed)) {
-      setShowLoadingModal(false);
-    }
-  }, [quoteLoading, hasQuote, hasFailed]);
-
-  const handleCloseResubmitAlert = () => {
-    setShowResubmitAlert(false);
-  };
-
-  // Fetch quote on page load - autoFetch is true by default
-  // Hook will poll every 3 seconds when status is 'fetching'
   const {
     loading: quoteLoading,
     quoteData,
@@ -94,114 +67,42 @@ const CarInsurance = () => {
     refresh: refreshQuote
   } = useQuote('car-insurance');
 
-  // Get user's first name from Redux (user_profile or auth), fallback to 'User'
-  const userName = userProfile?.firstName || authUser?.firstName || 
-                   userProfile?.fullName?.split(' ')[0] || authUser?.fullName?.split(' ')[0] || 
-                   t('user') || 'User';
+  useEffect(() => {
+    if (!quoteLoading && (hasQuote || hasFailed)) {
+      setHasLoadedOnce(true);
+      setShowLoadingModal(false);
+    }
+  }, [quoteLoading, hasQuote, hasFailed]);
 
-  // Memoize loading steps to prevent re-creating array on every render
-  // This prevents the LoadingModal from resetting when polling causes re-renders
-  const loadingSteps = useMemo(() => [
-    t('carInsurance.loadingSteps.creatingAccount') || 'Création du compte Norga',
-    t('carInsurance.loadingSteps.analyzingResponses') || 'Analyse de vos réponses',
-    t('carInsurance.loadingSteps.connectingInsurers') || 'Connexion aux assureurs',
-    t('carInsurance.loadingSteps.applyingDiscounts') || 'Application des rabais'
-  ], [t]);
+  const userName = userProfile?.firstName || authUser?.firstName || 'User';
 
-  // Memoize callback to prevent re-creating on every render
   const handleLoadingModalClose = useCallback(() => {
     setShowLoadingModal(false);
   }, []);
 
-  const handleInterestedClick = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleAccept = () => {
-    setShowEstimate(true);
-  };
-
-  const handleBackToMain = () => {
-    setShowCustomize(false);
-    setHasProtectionChanges(false); // Reset when leaving customize page
-    setProtectionsData(null);
-  };
-
-  const handleProtectionsChange = useCallback((hasChanges, protections) => {
-    setHasProtectionChanges(hasChanges);
-    setProtectionsData(protections);
-  }, []);
-
-  // Handle recalculate quote with modified protections
-  const handleRecalculateQuote = async () => {
-    if (!protectionsData || !userProductId) return;
-    
-    setIsRecalculating(true);
-    setRecalculateError(null);
-    setShowCustomize(false);  // Navigate back to main view
-    setShowLoadingModal(true); // Show loading
-    
-    try {
-      const result = await recalculateQuote(userProductId, protectionsData);
-      
-      if (result.success) {
-        // Set temporary recalculated quote data
-        setRecalculatedQuote({
-          ...result.quote,
-          protections: protectionsData, // Keep track of the protections used
-          isTemporary: true
-        });
-      } else {
-        setRecalculateError(result.message || 'Failed to recalculate quote');
-      }
-    } catch (err) {
-      console.error('[CarInsurance] Recalculate error:', err);
-      setRecalculateError(err.message || 'An error occurred');
-    } finally {
-      setIsRecalculating(false);
-      setShowLoadingModal(false);
-    }
-  };
-
-  // Reset recalculated quote when going back to customize
-  const handleCustomize = () => {
-    setShowCustomize(true);
-    // Don't reset recalculatedQuote - user might want to compare
-  };
+  const isLoading = quoteLoading || isRecalculating || showLoadingModal;
+  const isInitialLoad = isLoading && !hasLoadedOnce;
 
   return (
     <>
       <div className={styles.carInsurancePage}>
-        {/* Resubmit Alert - Shows if user resubmitted form with different info */}
-        {showResubmitAlert && (
-          <ResubmitAlert onClose={handleCloseResubmitAlert} />
-        )}
+        {showResubmitAlert && <ResubmitAlert onClose={() => setShowResubmitAlert(false)} />}
+        
+        {/* Infinite Spinner Overlay - Always shows during any loading state */}
+        {isLoading && <LoadingModal isOpen={true} />}
 
-        {/* Initial Loading Modal - Shows while quote data is loading */}
-        <LoadingModal
-          isOpen={showLoadingModal}
-          onClose={handleLoadingModalClose}
-          userName={userName}
-          steps={loadingSteps}
-          totalDuration={5000}
-          autoClose={false}
-        />
+        {isInitialLoad && <ConfirmationSkeleton />}
 
-        {/* Main Content - Shows after loading modal closes */}
-        {!showLoadingModal && (
+        {!isInitialLoad && (
           <>
             {showCustomize ? (
-              <CustomizeProtections 
-                onBack={handleBackToMain} 
-                userProductId={userProductId}
-                onProtectionsChange={handleProtectionsChange}
-              />
+              <CustomizeProtections onBack={() => setShowCustomize(false)} userProductId={userProductId} onProtectionsChange={(hc, p) => { setHasProtectionChanges(hc); setProtectionsData(p); }} />
             ) : !showEstimate ? (
               <InitialContent
-                onInterestedClick={handleInterestedClick}
-                onCustomize={handleCustomize}
+                onInterestedClick={() => setIsModalOpen(true)}
+                onCustomize={() => setShowCustomize(true)}
                 quoteData={recalculatedQuote || quoteData}
-                quoteLoading={quoteLoading || isRecalculating}
+                quoteLoading={isLoading}
                 quoteStatus={quoteStatus}
                 hasQuote={hasQuote || !!recalculatedQuote}
                 hasFailed={hasFailed}
@@ -217,31 +118,10 @@ const CarInsurance = () => {
               <EstimateContent quoteData={quoteData} />
             )}
 
-            {/* Interested Modal */}
-            <InterestedModal
-              isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
-              onAccept={handleAccept}
-            />
+            <InterestedModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onAccept={() => setShowEstimate(true)} />
           </>
         )}
       </div>
-
-      {/* Fixed Bottom Bar - Shows only on customize page - Outside carInsurancePage */}
-      {!showLoadingModal && showCustomize && (
-        <div className={styles.fixedBottomContainer}>
-          <button 
-            className={styles.primaryButton}
-            disabled={!hasProtectionChanges || isRecalculating}
-            onClick={handleRecalculateQuote}
-          >
-            {isRecalculating ? 'Chargement...' : 'Recalculer mon prix'}
-          </button>
-          <button className={styles.secondaryButton} onClick={handleBackToMain}>
-            Retour
-          </button>
-        </div>
-      )}
     </>
   );
 };

@@ -1,0 +1,178 @@
+/* Shimmer Animation (LinkedIn/Facebook Style) */
+@keyframes shimmer {
+  0% { background-position: -468px 0; }
+  100% { background-position: 468px 0; }
+}
+
+.shimmerBase {
+  background: #f6f7f8;
+  background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+  background-repeat: no-repeat;
+  background-size: 800px 104px;
+  display: inline-block;
+  position: relative;
+  animation: shimmer 1.5s linear infinite forwards;
+}
+
+/* Shapes */
+.rect { 
+  background: #e5e7eb;
+  background-image: linear-gradient(to right, #e5e7eb 0%, #d1d5db 20%, #e5e7eb 40%, #e5e7eb 100%);
+  background-repeat: no-repeat;
+  background-size: 800px 104px;
+  display: inline-block;
+  position: relative;
+  animation: shimmer 1.5s linear infinite forwards;
+  border-radius: 4px; 
+}
+
+.circle { 
+  background: #e5e7eb;
+  background-image: linear-gradient(to right, #e5e7eb 0%, #d1d5db 20%, #e5e7eb 40%, #e5e7eb 100%);
+  background-repeat: no-repeat;
+  background-size: 800px 104px;
+  display: inline-block;
+  position: relative;
+  animation: shimmer 1.5s linear infinite forwards;
+  border-radius: 50%; 
+}
+
+/* Layout Containers */
+.skeletonWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0;
+  background-color: transparent; /* Inherit global background for perfect blend */
+  min-height: 120vh;
+  overflow-y: auto;
+}
+
+/* Image 1 mapping: General/Confirmation (Wider layout) */
+.resultsContainer {
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+/* Image 2 mapping: Results List (Narrower layout) */
+.confirmContainer {
+  width: 100%;
+  max-width: 826px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sideBySide {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+}
+
+@media (max-width: 991px) {
+  .sideBySide {
+    flex-direction: column;
+  }
+}
+
+.sideBox {
+  flex: 1;
+  background: white;
+  padding: 32px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.largeBottom {
+  width: 100%;
+  background: white;
+  padding: 32px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 767px) {
+  .sideBox, .largeBottom {
+    padding: 24px;
+  }
+}
+
+.featuredCard {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 991px) {
+  .featuredCard {
+    flex-direction: column;
+    align-items: center; /* Center everything on mobile */
+    text-align: center;
+  }
+}
+
+.featuredCardLeft {
+  flex: 1.1;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (max-width: 991px) {
+  .featuredCardLeft {
+    align-items: center;
+    width: 100%;
+  }
+}
+
+.featuredCardRight {
+  flex: 1.9;
+  background-color: #f2f4ff;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+
+@media (max-width: 991px) {
+  .featuredCardRight {
+    width: 100%;
+    align-items: center;
+  }
+}
+
+
+.listRow {
+  background: white;
+  padding: 24px 32px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 991px) {
+  .listRow {
+    flex-direction: column;
+    gap: 24px;
+    align-items: flex-start;
+  }
+  
+  .listRow > div {
+    width: 100%;
+  }
+}
+

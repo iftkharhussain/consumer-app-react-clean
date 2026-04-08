@@ -4,8 +4,7 @@
   padding: 0 32px 32px 32px;
   display: flex;
   flex-direction: column;
-  margin-left: 0;
-  margin-right: auto;
+  margin: 0 auto; /* Center the scheduling interface */
 }
 
 .backButton {

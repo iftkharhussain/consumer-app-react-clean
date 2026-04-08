@@ -1,5 +1,6 @@
 .fallbackContainer {
   max-width: 800px;
+  margin: 0 auto; /* Center the page content */
   padding: 0;
   font-family: "Inter", sans-serif;
   color: #333;
