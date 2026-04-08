@@ -13,7 +13,7 @@ import apiClient from './client';
  * 
  * Called when consumer clicks "Demander un appel" button.
  * 
- * @param {Object} params - { productSlug: string } or { userProductId: string }
+ * @param {Object} params - { productSlug: string, userProductId?: string, carrierCode?: string }
  * @returns {Promise<Object>} { success, message, data: { fortusLeadId, status } }
  */
 export const requestCall = async (params) => {
