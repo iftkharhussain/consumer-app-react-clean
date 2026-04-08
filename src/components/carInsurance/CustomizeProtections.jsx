@@ -273,7 +273,9 @@ const CustomizeProtections = ({ onBack, userProductId, onProtectionsChange }) =>
                     onAmountChange={(delta) => handleAmountChange('accidents', delta)}
                     vehicles={vehicles}
                     vehicleToggles={protections.accidents.vehicleToggles}
-                    alwaysIncluded={true}
+                    onVehicleToggle={(vehicleIndex, value) => handleVehicleToggle('accidents', vehicleIndex, value)}
+                    included={protections.accidents.included}
+                    onToggle={(value) => handleToggle('accidents', value)}
                     imageWidth={95}
                 />
             </div>

@@ -8,6 +8,7 @@ import styles from './FifteenMinutesRedirect.module.css';
 import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
 import { getOrderDetails, checkPendingOrder } from '../../services/api/productOrderService';
 import fortusService from '../../services/api/fortusService';
+import { getQuoteDetails } from '../../services/api/quoteService';
 
 const FifteenMinutesRedirect = () => {
   const initialized = useRef(false);
@@ -75,10 +76,37 @@ const FifteenMinutesRedirect = () => {
     try {
       setIsLoading(true);
       
+      const productId = urlUserProductId || orderData?.userProductId;
+      
+      // Fetch quote details to find lowest price carrier
+      let carrierCode = null;
+      if (productId) {
+        try {
+          const quoteResponse = await getQuoteDetails(productId);
+          if (quoteResponse.success && quoteResponse.quote?.carriers) {
+            // Find carrier with lowest annual premium
+            const availableCarriers = quoteResponse.quote.carriers.filter(c => c.available !== false);
+            if (availableCarriers.length > 0) {
+              const lowestPriceCarrier = availableCarriers.reduce((lowest, current) => {
+                const lowestPrice = lowest.annualPremium || lowest.premium || 999999;
+                const currentPrice = current.annualPremium || current.premium || 999999;
+                return currentPrice < lowestPrice ? current : lowest;
+              });
+              carrierCode = lowestPriceCarrier.carrierCode;
+              console.log('[FifteenMinutesRedirect] Selected lowest price carrier:', carrierCode, 'with premium:', lowestPriceCarrier.annualPremium || lowestPriceCarrier.premium);
+            }
+          }
+        } catch (quoteError) {
+          console.warn('[FifteenMinutesRedirect] Could not fetch quote details:', quoteError);
+          // Continue without carrierCode - backend will use default
+        }
+      }
+      
       // Send ezLead request
       const result = await fortusService.requestCall({
-        userProductId: urlUserProductId || orderData?.userProductId,
-        productSlug: 'car-insurance'
+        userProductId: productId,
+        productSlug: 'car-insurance',
+        carrierCode // Pass the lowest price carrier
       });
       
       if (result.success) {

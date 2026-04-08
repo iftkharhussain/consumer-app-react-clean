@@ -15,6 +15,7 @@ import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
 import fortusService from '../../services/api/fortusService';
 import { checkPendingOrder } from '../../services/api/productOrderService';
+import { getQuoteDetails } from '../../services/api/quoteService';
 import LoadingModal from '../../components/loadingModal';
 import { FallbackSkeleton } from '../../components/carInsurance/QuoteSkeletons';
 
@@ -70,10 +71,35 @@ const FallbackNoQuotes = () => {
     setIsLoading(true);
 
     try {
+      // Fetch quote details to find lowest price carrier
+      let carrierCode = null;
+      if (userProductId) {
+        try {
+          const quoteResponse = await getQuoteDetails(userProductId);
+          if (quoteResponse.success && quoteResponse.quote?.carriers) {
+            // Find carrier with lowest annual premium
+            const availableCarriers = quoteResponse.quote.carriers.filter(c => c.available !== false);
+            if (availableCarriers.length > 0) {
+              const lowestPriceCarrier = availableCarriers.reduce((lowest, current) => {
+                const lowestPrice = lowest.annualPremium || lowest.premium || 999999;
+                const currentPrice = current.annualPremium || current.premium || 999999;
+                return currentPrice < lowestPrice ? current : lowest;
+              });
+              carrierCode = lowestPriceCarrier.carrierCode;
+              console.log('[FallbackNoQuotes] Selected lowest price carrier:', carrierCode, 'with premium:', lowestPriceCarrier.annualPremium || lowestPriceCarrier.premium);
+            }
+          }
+        } catch (quoteError) {
+          console.warn('[FallbackNoQuotes] Could not fetch quote details:', quoteError);
+          // Continue without carrierCode - backend will use default
+        }
+      }
+
       // Call Fortus API to send the lead and email
       const result = await fortusService.requestCall({
         userProductId,
-        productSlug: 'car-insurance'
+        productSlug: 'car-insurance',
+        carrierCode // Pass the lowest price carrier
       });
 
       if (result.success) {
