@@ -567,26 +567,27 @@ const Results = () => {
       {/* Infinite Spinner Overlay - Always shows during any loading state */}
       {isLoading && <LoadingModal isOpen={true} />}
 
-      {/* Show Once Logic: First load uses Skeleton behind the spinner */}
-      {isInitialLoad && <ResultsSkeleton />}
-
-      {!isInitialLoad && (
-        <>
-          {showCustomize ? (
-            <CustomizeProtections
-              onBack={handleBackToMain}
-              userProductId={userProductId}
-              onProtectionsChange={handleProtectionsChange}
-            />
+      <div className={styles.resultsContainer}>
+        <div className={styles.resultsContent}>
+          {/* Show Once Logic: First load uses Skeleton behind the spinner */}
+          {isInitialLoad ? (
+            <ResultsSkeleton />
           ) : (
-            <div className={styles.resultsContainer}>
-              <div className={styles.resultsContent}>
-                {/* Show error state */}
-                {hasFailed && (
-                  <FallbackNoQuotes />
-                )}
+            <>
+              {showCustomize ? (
+                <CustomizeProtections
+                  onBack={handleBackToMain}
+                  userProductId={userProductId}
+                  onProtectionsChange={handleProtectionsChange}
+                />
+              ) : (
+                <>
+                  {/* Show error state */}
+                  {hasFailed && (
+                    <FallbackNoQuotes />
+                  )}
 
-                {/* Show results when data is available */}
+                  {/* Show results when data is available */}
                 {hasQuote && recommendedInsurer && (
                   <>
                     {/* Timer */}
@@ -896,11 +897,12 @@ const Results = () => {
                     </Card>
                   </>
                 )}
-              </div>
-            </div>
-          )}
-        </>
-      )}
+              </>
+            )}
+          </>
+        )}
+      </div>
+    </div>
 
       {/* Courtika Modal */}
       <CourtikaModal

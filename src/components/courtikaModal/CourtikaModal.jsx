@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Modal, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import styles from './CourtikaModal.module.css';
 import { fortusService } from '../../services/api/fortusService';
 import { isOpenNow } from '../../utils/businessHours';
@@ -25,6 +26,18 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
     const [showFAQ, setShowFAQ] = useState(false);
     const timerRef = useRef(null);
     const navigate = useNavigate();
+    
+    // Get user info from Redux to pass in URL
+    const userProfile = useSelector(state => state.app?.user_profile);
+    const authUser = useSelector(state => state.app?.auth);
+
+    const userEmail = userProfile?.email || authUser?.email || '';
+    const userName = userProfile?.firstName 
+        ? `${userProfile.firstName} ${userProfile.lastName || ''}`.trim()
+        : authUser?.firstName 
+        ? `${authUser.firstName} ${authUser.lastName || ''}`.trim()
+        : (userProfile?.fullName || authUser?.fullName || '');
+    const userPhone = userProfile?.phone || authUser?.phone || '';
 
     const handleDemanderAppel = async () => {
         if (timerRef.current) {
@@ -107,7 +120,12 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
                     
                     setIsLoading(false);
                     onClose();
-                    navigate('/schedule-call', { state: { userProductId: productId, selectedQuote, recalculatedQuote } });
+                    const params = new URLSearchParams();
+                    if (userName) params.append('name', userName);
+                    if (userEmail) params.append('email', userEmail);
+                    if (userPhone) params.append('phone', userPhone);
+                    
+                    navigate(`/schedule-call?${params.toString()}`, { state: { userProductId: productId, selectedQuote, recalculatedQuote } });
                 } else {
                     console.warn('Failed to save order:', result);
                     setIsLoading(false);

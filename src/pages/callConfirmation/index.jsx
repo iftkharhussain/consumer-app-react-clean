@@ -77,10 +77,12 @@ const CallConfirmation = () => {
   if (loading) {
     return (
       <PageContent pageType="overview">
-        <div className={styles.fallbackContainer}>
-          <div style={{ textAlign: 'center', padding: '100px 0' }}>
-            <Spin size="large" />
-            <p style={{ marginTop: '20px', fontSize: '16px', color: '#666' }}>Chargement de votre demande...</p>
+        <div className={styles.resultsContainer}>
+          <div className={styles.fallbackContainer}>
+            <div style={{ textAlign: 'center', padding: '100px 0' }}>
+              <Spin size="large" />
+              <p style={{ marginTop: '20px', fontSize: '16px', color: '#666' }}>Chargement de votre demande...</p>
+            </div>
           </div>
         </div>
       </PageContent>
@@ -114,7 +116,8 @@ const CallConfirmation = () => {
   const openStatus = isOpen ? 'Ouvert' : 'Fermé';
   const formattedHours = getFormattedTodayHours();
   const callDuration = advisorInfo.callDuration || 15;
-    // Coverages
+  
+  // Coverages
   const coverages = orderData?.coverages || [];
 
   // Format currency in French format (10 000$ instead of $10,000)
@@ -220,7 +223,8 @@ const CallConfirmation = () => {
 
   return (
     <PageContent pageType="overview">
-      <div className={styles.fallbackContainer}>
+      <div className={styles.resultsContainer}>
+        <div className={styles.fallbackContainer}>
         {/* Action Card */}
         <div className={styles.actionCard}>
           <div className={styles.successBanner}>
@@ -437,6 +441,7 @@ const CallConfirmation = () => {
               <p className={styles.certSubtitle}>Autorité des marchés financiers du Québec</p>
             </div>
           </div>
+        </div>
         </div>
       </div>
       <ScheduleModal isOpen={isScheduleOpen} onClose={() => setIsScheduleOpen(false)} />

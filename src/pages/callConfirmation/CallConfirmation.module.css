@@ -1,5 +1,15 @@
+.resultsContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background-color: #f8fafc;
+  min-height: calc(100vh - 80px);
+}
+
 .fallbackContainer {
   max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
   padding: 40px 20px;
   font-family: "Inter", sans-serif;
   color: #333;

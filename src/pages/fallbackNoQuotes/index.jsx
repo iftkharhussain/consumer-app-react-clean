@@ -10,6 +10,7 @@ import {
   PhoneOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import styles from './FallbackNoQuotes.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
@@ -29,6 +30,18 @@ const FallbackNoQuotes = () => {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [userProductId, setUserProductId] = useState(null);
+
+  // Get user info from Redux to pass in URL
+  const userProfile = useSelector(state => state.app?.user_profile);
+  const authUser = useSelector(state => state.app?.auth);
+
+  const userEmail = userProfile?.email || authUser?.email || '';
+  const userName = userProfile?.firstName 
+    ? `${userProfile.firstName} ${userProfile.lastName || ''}`.trim()
+    : authUser?.firstName 
+    ? `${authUser.firstName} ${authUser.lastName || ''}`.trim()
+    : (userProfile?.fullName || authUser?.fullName || '');
+  const userPhone = userProfile?.phone || authUser?.phone || '';
 
   useEffect(() => {
     if (!initialized.current) {
@@ -265,7 +278,14 @@ const FallbackNoQuotes = () => {
                       <PhoneOutlined className={styles.phoneIcon} /> Appeler maintenant: 1 (450) 762-9240
                     </Button>
                     
-                    <Button className={styles.secondaryOutlineButton} size="large" onClick={() => navigate('/schedule-call')}>
+                    <Button className={styles.secondaryOutlineButton} size="large" onClick={() => {
+                        const params = new URLSearchParams();
+                        if (userName) params.append('name', userName);
+                        if (userEmail) params.append('email', userEmail);
+                        if (userPhone) params.append('phone', userPhone);
+                        
+                        navigate(`/schedule-call?${params.toString()}`, { state: { userProductId } });
+                    }}>
                       <CalendarOutlined /> Planifier l'appel plus tard
                     </Button>
                   </div>

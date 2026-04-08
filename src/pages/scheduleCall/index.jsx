@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { PageContent } from 'components';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import styles from './ScheduleCall.module.css';
 
@@ -12,6 +13,23 @@ const ScheduleCall = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { userProductId } = location.state || {};
+  // Support pre-filling from URL parameters or Redux
+  const [searchParams] = useSearchParams();
+  const urlName = searchParams.get('name');
+  const urlEmail = searchParams.get('email');
+  const urlPhone = searchParams.get('phone');
+
+  // Get user info from Redux for pre-filling (fallback)
+  const userProfile = useSelector(state => state.app?.user_profile);
+  const authUser = useSelector(state => state.app?.auth);
+
+  const userEmail = urlEmail || userProfile?.email || authUser?.email || '';
+  const userName = urlName || (userProfile?.firstName 
+    ? `${userProfile.firstName} ${userProfile.lastName || ''}`.trim()
+    : authUser?.firstName 
+    ? `${authUser.firstName} ${authUser.lastName || ''}`.trim()
+    : (userProfile?.fullName || authUser?.fullName || ''));
+  const userPhone = urlPhone || userProfile?.phone || authUser?.phone || '';
 
   useEffect(() => {
     if (!initialized.current) {
@@ -28,12 +46,17 @@ const ScheduleCall = () => {
       script.async = true;
       
       script.onload = () => {
-        // Initialize Calendly widget using JavaScript API for better event handling
+        // Initialize Calendly widget with pre-filled user data
         if (window.Calendly && widgetContainerRef.current) {
           window.Calendly.initInlineWidget({
             url: 'https://calendly.com/courtika/appel?hide_gdpr_banner=1&primary_color=1a1aba',
             parentElement: widgetContainerRef.current,
-            prefill: {},
+            prefill: {
+              name: userName,
+              email: userEmail,
+              phoneNumber: userPhone,
+              smsReminderNumber: userPhone
+            },
             utm: {}
           });
         }
