@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PageContent } from 'components';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Spin, Button, message } from 'antd';
 import styles from './ScheduleConfirmation.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
@@ -19,7 +19,24 @@ const ScheduleConfirmation = () => {
   const [error, setError] = useState(null);
   const [orderData, setOrderData] = useState(null);
 
+  const [searchParams] = useSearchParams();
+  
+  // Extract Calendly details from URL
+  const eventStartTime = searchParams.get('event_start_time');
+  const eventEndTime = searchParams.get('event_end_time');
+  const eventType = searchParams.get('event_type_name');
+
   useEffect(() => {
+    // If the page is loaded inside an iframe (e.g. within Calendly widget),
+    // redirect the parent window to this URL to escape the iframe.
+    if (window.self !== window.top) {
+      try {
+        window.parent.location.href = window.location.href;
+      } catch (e) {
+        console.error('Failed to redirect parent window:', e);
+      }
+    }
+
     if (!initialized.current) {
       document.title = 'Rendez-vous Confirmé - Consumer App';
       initialized.current = true;
@@ -33,14 +50,22 @@ const ScheduleConfirmation = () => {
         
         let productIdToFetch = urlUserProductId;
         
-        // If no userProductId in URL, check for pending order
+        // Check localStorage first as a fallback
         if (!productIdToFetch) {
-          console.log('[ScheduleConfirmation] No userProductId in URL, checking for pending order...');
+          productIdToFetch = localStorage.getItem('pending_user_product_id');
+          if (productIdToFetch) {
+            console.log('[ScheduleConfirmation] Found productId in localStorage:', productIdToFetch);
+          }
+        }
+        
+        // If still no userProductId, check for pending order via API
+        if (!productIdToFetch) {
+          console.log('[ScheduleConfirmation] No ID found, checking for pending order API...');
           const pendingOrderResponse = await checkPendingOrder('car-insurance');
           
           if (pendingOrderResponse.success && pendingOrderResponse.hasPendingOrder && pendingOrderResponse.userProductId) {
             productIdToFetch = pendingOrderResponse.userProductId;
-            console.log('[ScheduleConfirmation] Found pending order:', productIdToFetch);
+            console.log('[ScheduleConfirmation] Found pending order from API:', productIdToFetch);
           }
         }
         
@@ -50,6 +75,7 @@ const ScheduleConfirmation = () => {
           
           if (response.success) {
             setOrderData(response.data);
+            localStorage.removeItem('pending_user_product_id');
           } else {
             console.warn('[ScheduleConfirmation] Failed to load order:', response.message);
             setError(response.message || 'Failed to load order details');
@@ -169,7 +195,7 @@ const ScheduleConfirmation = () => {
   const phoneDigits = phone.replace(/\D/g, '');
   const phoneLink = `tel:+${phoneDigits}`;
   const formattedHours = getFormattedTodayHours();
-  const callDuration = advisorInfo.callDuration || 15;
+  const callDuration = 15; // Set to 15 as requested
   
   // Coverages
   const coverages = orderData?.coverages || [];
@@ -275,6 +301,37 @@ const ScheduleConfirmation = () => {
     return { title, type, coverageValue };
   }).filter(p => p.coverageValue); // Only show protections that have a value
 
+  // Function to format meeting details from Calendly params
+  const formatMeetingDetails = () => {
+    if (!eventStartTime) return "Le courtier vous appellera à l'heure sélectionnée";
+
+    try {
+      const date = new Date(eventStartTime);
+      
+      // Calculate duration if end time is available
+      let displayDuration = callDuration;
+      if (eventEndTime) {
+        const endDate = new Date(eventEndTime);
+        const diffMs = endDate - date;
+        const diffMins = Math.round(diffMs / 60000);
+        if (diffMins > 0) displayDuration = diffMins;
+      }
+      
+      // French format: "23 mars"
+      const dateFormatter = new Intl.DateTimeFormat('fr-CA', { day: 'numeric', month: 'long' });
+      const datePart = dateFormatter.format(date);
+      
+      // Time format: "9:00 AM" (using en-US for AM/PM style but could be fr-CA for "09:00")
+      const timeFormatter = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+      const timePart = timeFormatter.format(date);
+      
+      return `${datePart} • ${timePart} • ${displayDuration} min`;
+    } catch (e) {
+      console.error('Error formatting meeting date:', e);
+      return "Détails à confirmer";
+    }
+  };
+
   return (
     <PageContent pageType="overview">
       <div className={styles.fallbackContainer}>
@@ -371,7 +428,7 @@ const ScheduleConfirmation = () => {
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                   </svg>
                   <div>
-                    <span className={styles.infoText}>23 mars • 9:00 AM • 15 min</span>
+                    <span className={styles.infoText}>{formatMeetingDetails()}</span>
                     <div className={styles.infoSubtext}>Le courtier vous appellera à ce moment</div>
                   </div>
                 </li>

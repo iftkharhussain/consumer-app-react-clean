@@ -34,9 +34,17 @@ const ScheduleCall = () => {
   useEffect(() => {
     if (!initialized.current) {
       document.title = 'Planifier un appel - Consumer App';
+      
+      // Save userProductId to localStorage so the confirmation page can find it
+      // even if Calendly redirects without it.
+      if (userProductId) {
+        localStorage.setItem('pending_user_product_id', userProductId);
+        console.log('[ScheduleCall] Saved userProductId to localStorage:', userProductId);
+      }
+      
       initialized.current = true;
     }
-  }, []);
+  }, [userProductId]);
 
   useEffect(() => {
     // Load Calendly script dynamically (only once)
@@ -70,16 +78,13 @@ const ScheduleCall = () => {
     const handleCalendlyEvent = (e) => {
       // Check if message is from Calendly
       if (e.origin === 'https://calendly.com' && e.data && e.data.event === 'calendly.event_scheduled') {
-        // Redirect to confirmation page with userProductId
+        console.log('[ScheduleCall] Event scheduled detected from Calendly postMessage');
+        // We set redirected to true to avoid duplicate logic
         if (!redirected.current) {
           redirected.current = true;
-          setTimeout(() => {
-            if (userProductId) {
-              navigate(`/schedule-confirmation/${userProductId}`);
-            } else {
-              navigate('/schedule-confirmation');
-            }
-          }, 300);
+          // Note: We are NOT manually navigating here anymore.
+          // This allows Calendly to handle its own redirect (as per client instructions),
+          // which will pass event details (Date/Time) to the confirmation page.
         }
       }
     };
