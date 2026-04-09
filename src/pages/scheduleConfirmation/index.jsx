@@ -186,8 +186,10 @@ const ScheduleConfirmation = () => {
   // Removed the hardcoded '90' default to avoid showing fake prices when data is missing
   const monthlyPrice = !isCourtikaSearch ? (selectedQuote.monthlyPrice || null) : null;
   const yearlyPrice = !isCourtikaSearch ? (selectedQuote.yearlyPrice || null) : null;
-  const isIntactDiscount = selectedQuote.isIntactDiscount || false;
-  
+  const oldMonthlyPrice = !isCourtikaSearch ? (selectedQuote.oldMonthlyPrice || null) : null;
+  const hasDiscount = selectedQuote.discount || false;
+  const discountLabel = selectedQuote.discountLabel || 'Rabais appliqué';
+  const discountBonus = selectedQuote.discountBonus || null;
   // Advisor details
   const companyName = 'Courtika'; // Hardcoded
   const companyLogo = advisorInfo.logo || '/images/courtika-assurances-inc.png';
@@ -364,19 +366,29 @@ const ScheduleConfirmation = () => {
                 </div>
                 {monthlyPrice && (
                   <div className={styles.priceContainer}>
+                    {hasDiscount && oldMonthlyPrice && (
+                      <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: '16px', fontWeight: 600, marginRight: '4px' }}>
+                        {oldMonthlyPrice}$/mois
+                      </span>
+                    )}
                     <span className={styles.priceMain}>{monthlyPrice}$/mois</span>
                     {yearlyPrice && <span className={styles.priceOld}>{yearlyPrice}$/an</span>}
                   </div>
                 )}
               </div>
               
-              {isIntactDiscount && (
-                <div className={styles.discountBadge}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.discountIcon}>
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                  Rabais Courtika appliqué
-                </div>
+              {hasDiscount && (
+                <>
+                  <div className={styles.discountBadge}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.discountIcon}>
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    {discountLabel}
+                  </div>
+                  {discountBonus && (
+                    <p style={{ fontSize: '12px', color: '#697586', marginTop: '6px', lineHeight: 1.5 }}>{discountBonus}</p>
+                  )}
+                </>
               )}
 
               {protections.length > 0 && (

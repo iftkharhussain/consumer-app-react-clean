@@ -138,16 +138,45 @@ const Results = () => {
             
           const displayName = rawName.replace(/\s+(Assurances?|Insurance)$/i, '').trim();
 
-          return {
+          const isLUnique = carrier.carrierCode === 'UNI' || displayName.toLowerCase().includes('l\'unique');
+
+          // Base prices from API
+          let finalPrice = monthly;
+          let finalYearlyPrice = annual;
+          let oldPrice = carrier.oldPrice || null;
+          let oldYearlyPrice = carrier.oldYearlyPrice || null;
+          let discountBonus = isLUnique ? "L’Unique vous offre 1 mois gratuit. Le prix affiché inclut cette promotion." : null;
+
+          if (isLUnique) {
+            // Apply "1 month free" discount: (Annual - (Annual / 12))
+            const oneMonthValue = annual / 12;
+            oldYearlyPrice = Math.round(annual);
+            oldPrice = Math.round(annual / 12);
+            
+            finalYearlyPrice = Math.round(annual - oneMonthValue);
+            // Use floor to match user's example (2339/12 = 194.9 => 194)
+            finalPrice = Math.floor(finalYearlyPrice / 12);
+          }
+
+          // Build insurer object
+          const insurerData = {
             id: carrier.carrierCode || `carrier-${index}`,
             name: displayName,
             carrierCode: carrier.carrierCode,
             logo: getCarrierLogo(carrier.carrierCode || carrier.name),
-            price: monthly,
-            yearlyPrice: annual,
+            price: finalPrice,
+            yearlyPrice: finalYearlyPrice,
             coverages: carrier.coverages || [],
-            quoteDetails: carrier.quoteDetails || {}
+            quoteDetails: carrier.quoteDetails || {},
+            // Use values from carrier if available, otherwise apply L'Unique specific logic
+            discount: carrier.discount || (isLUnique ? true : false),
+            discountLabel: carrier.discountLabel || (isLUnique ? 'Rabais appliqué' : null),
+            discountBonus: discountBonus,
+            oldPrice: oldPrice,
+            oldYearlyPrice: oldYearlyPrice
           };
+
+          return insurerData;
         });
 
         // Sort insurers by price (cheapest first)
@@ -548,6 +577,11 @@ const Results = () => {
       logo: insurer.logo,
       monthlyPrice: insurer.price,
       yearlyPrice: insurer.yearlyPrice,
+      oldMonthlyPrice: insurer.oldPrice || null,
+      oldYearlyPrice: insurer.oldYearlyPrice || null,
+      discount: insurer.discount || false,
+      discountLabel: insurer.discountLabel || null,
+      discountBonus: insurer.discountBonus || null,
       coverages: transformedCoverages
     });
     setIsCourtikaModalOpen(true);
@@ -625,7 +659,7 @@ const Results = () => {
                               
                               {recommendedInsurer.oldPrice && (
                                 <span className={styles.oldPrice}>
-                                  {billingPeriod === 'monthly' ? recommendedInsurer.oldPrice : recommendedInsurer.oldYearlyPrice}
+                                  {billingPeriod === 'monthly' ? recommendedInsurer.oldPrice : recommendedInsurer.oldYearlyPrice}$
                                 </span>
                               )}
 
@@ -636,10 +670,15 @@ const Results = () => {
                             </div>
 
                             {recommendedInsurer.discount && (
-                              <div className={styles.discountBadge}>
-                                <StarFilled className={styles.discountIcon} />
-                                <span>{recommendedInsurer.discountLabel || 'Rabais appliqué'}</span>
-                              </div>
+                              <>
+                                <div className={styles.discountBadge}>
+                                  <CheckOutlined className={styles.discountIcon} />
+                                  <span>{recommendedInsurer.name === "L'Unique" ? 'Rabais Courtika appliqué' : (recommendedInsurer.discountLabel || 'Rabais appliqué')}</span>
+                                </div>
+                                {recommendedInsurer.discountBonus && (
+                                  <p className={styles.savingsText}>{recommendedInsurer.discountBonus}</p>
+                                )}
+                              </>
                             )}
                           </div>
 
@@ -740,6 +779,11 @@ const Results = () => {
                                   <div className={styles.insurerDetails}>
                                     <h3 className={styles.insurerName}>{insurer.name}</h3>
                                     <div className={styles.insurerPrice}>
+                                      {insurer.oldPrice && (
+                                        <span className={styles.insurerOldPrice}>
+                                          {billingPeriod === 'monthly' ? insurer.oldPrice : insurer.oldYearlyPrice}$
+                                        </span>
+                                      )}
                                       <span className={styles.insurerMainPrice}>
                                         {billingPeriod === 'monthly' ? insurer.price : insurer.yearlyPrice}
                                       </span>
@@ -752,6 +796,12 @@ const Results = () => {
                                           : `ou ${insurer.price}$ par mois`}
                                       </span>
                                     </div>
+                                    {insurer.discount && (
+                                      <div className={styles.insurerDiscount}>
+                                        <CheckOutlined className={styles.insurerDiscountIcon} />
+                                        <span>{insurer.discountLabel || 'Rabais appliqué'}</span>
+                                      </div>
+                                    )}
                                   </div>
                                 </div>
                                 <div className={styles.insurerActions}>
