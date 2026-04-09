@@ -10,26 +10,25 @@
 .backButton {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   background: none;
   border: none;
-  color: #6b7280;
-  font-size: 14px;
-  font-weight: 500;
+  color: #1f01c8; /* Brand blue color from screenshot */
+  font-size: 20px;
+  font-weight: 700; /* Bold as per screenshot */
   cursor: pointer;
   padding: 0;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
   align-self: flex-start;
-  transition: color 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
 .backButton:hover {
-  color: #111827;
+  opacity: 0.8;
 }
 
 .backIcon {
-  font-size: 14px;
-  margin-right: 4px;
+  font-size: 18px;
 }
 
 .card {
