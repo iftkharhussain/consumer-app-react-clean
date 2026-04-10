@@ -611,6 +611,7 @@ const Results = () => {
               {showCustomize ? (
                 <CustomizeProtections
                   onBack={handleBackToMain}
+                  onRecalculate={handleRecalculateQuote}
                   userProductId={userProductId}
                   onProtectionsChange={handleProtectionsChange}
                 />
@@ -727,9 +728,9 @@ const Results = () => {
                       <Card className={styles.protectionsCard}>
                         <div className={styles.protectionsHeader}>
                           <h2 className={styles.sectionTitle}>Vos protections</h2>
-                          {/* <Button type="link" className={styles.customizeButton} onClick={handleCustomize}>
+                          <Button type="link" className={styles.customizeButton} onClick={handleCustomize}>
                             Personnaliser
-                          </Button> */}
+                          </Button>
                         </div>
                         <div className={styles.protectionsList}>
                           {protections.map((protection, index) => (

@@ -5,10 +5,10 @@ import ProtectionCard from './ProtectionCard';
 import { getUserVehicles } from '../../services/api/vehicleService';
 import styles from './CustomizeProtections.module.css';
 
-const CustomizeProtections = ({ onBack, userProductId, onProtectionsChange }) => {
+const CustomizeProtections = ({ onBack, onRecalculate, userProductId, onProtectionsChange }) => {
     const [protections, setProtections] = useState({
         responsabilite: { included: false, amount: 2000000, vehicleToggles: [] },
-        collision: { included: false, amount: 250, vehicleToggles: [] },
+        collision: { included: false, amount: 500, vehicleToggles: [] },
         accidents: { included: false, amount: 250, vehicleToggles: [] },
         bonifiee: { included: false, vehicleToggles: [] },
         assistance: { included: false, vehicleToggles: [] }
@@ -35,7 +35,7 @@ const CustomizeProtections = ({ onBack, userProductId, onProtectionsChange }) =>
                     // Parse coverages to determine which protections are included
                     let initialProtections = {
                         responsabilite: { included: false, amount: 2000000, vehicleToggles: [...vehicleToggles] },
-                        collision: { included: false, amount: 250, vehicleToggles: [...vehicleToggles] },
+                        collision: { included: false, amount: 500, vehicleToggles: [...vehicleToggles] },
                         accidents: { included: false, amount: 250, vehicleToggles: [...vehicleToggles] },
                         bonifiee: { included: false, vehicleToggles: [...vehicleToggles] },
                         assistance: { included: false, vehicleToggles: [...vehicleToggles] }
@@ -76,10 +76,10 @@ const CustomizeProtections = ({ onBack, userProductId, onProtectionsChange }) =>
                                     
                                 case 'B2':
                                 case 'Collision':
-                                    // Collision - deductible can be 250 or 500
+                                    // Collision - deductible can be 500 or 1000
                                     if (deductible && deductible !== -1) {
                                         const ded = parseInt(deductible);
-                                        initialProtections.collision.amount = [250, 500].includes(ded) ? ded : 250;
+                                        initialProtections.collision.amount = [500, 1000].includes(ded) ? ded : 500;
                                     }
                                     initialProtections.collision.included = true;
                                     // Enable for all vehicles when coverage exists
@@ -183,8 +183,27 @@ const CustomizeProtections = ({ onBack, userProductId, onProtectionsChange }) =>
 
     const handleAmountChange = (key, delta) => {
         setProtections(prev => {
-            // For collision and accidents: toggle between 250 and 500 only
-            if (key === 'collision' || key === 'accidents') {
+            // For collision: toggle between 500 and 1000
+            if (key === 'collision') {
+                const currentAmount = prev[key].amount;
+                let newAmount;
+                
+                if (delta > 0) {
+                    // Increase: 500 → 1000, 1000 → 1000
+                    newAmount = currentAmount === 500 ? 1000 : 1000;
+                } else {
+                    // Decrease: 1000 → 500, 500 → 500
+                    newAmount = currentAmount === 1000 ? 500 : 500;
+                }
+                
+                return {
+                    ...prev,
+                    [key]: { ...prev[key], amount: newAmount }
+                };
+            }
+            
+            // For accidents: toggle between 250 and 500
+            if (key === 'accidents') {
                 const currentAmount = prev[key].amount;
                 let newAmount;
                 
@@ -314,6 +333,16 @@ const CustomizeProtections = ({ onBack, userProductId, onProtectionsChange }) =>
                     detailsContent="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor."
                     imageWidth={120}
                 />
+            </div>
+
+            {/* Fixed Bottom Bar */}
+            <div className={styles.fixedBottomContainer}>
+                <button className={styles.primaryButton} onClick={onRecalculate}>
+                    Recalculer mon prix
+                </button>
+                <button className={styles.secondaryButton} onClick={onBack}>
+                    Retour
+                </button>
             </div>
                 </>
             )}
