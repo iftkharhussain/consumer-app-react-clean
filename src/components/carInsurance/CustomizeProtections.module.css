@@ -723,3 +723,16 @@
     padding-bottom: 120px;
   }
 }
+
+/* Small Mobile - Below 500px */
+@media (max-width: 500px) {
+  .primaryButton {
+    width: 100% !important;
+    margin-bottom: 15px !important;
+  }
+
+  .secondaryButton {
+    width: 100% !important;
+    margin-bottom: 15px !important;
+  }
+}
