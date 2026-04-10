@@ -38,15 +38,25 @@ const ProtectionCard = ({
                 <div className={styles.protectionCardHeader}>
                     {vehicles.map((vehicle, index) => (
                         <div key={index} className={styles.vehicleToggleRow}>
-                            <span className={styles.vehicleName}>{vehicle.name}</span>
+                            <div className={styles.vehicleInfo}>
+                                <div className={styles.vehicleMainLine}>
+                                    <span className={styles.vehicleMake}>{vehicle.make}</span>
+                                    <span className={styles.vehicleYear}>, {vehicle.year}</span>
+                                </div>
+                                <div className={styles.vehicleModel}>{vehicle.model}</div>
+                            </div>
                             {alwaysIncluded ? (
                                 <span className={styles.alwaysIncluded}>Toujours inclus</span>
                             ) : (
-                                <Switch 
-                                    checked={vehicleToggles[index] || false} 
-                                    onChange={(checked) => onVehicleToggle && onVehicleToggle(index, checked)}
-                                    size="small"
-                                />
+                                <div className={styles.toggleContainer}>
+                                    <Switch 
+                                        checked={vehicleToggles[index] || false} 
+                                        onChange={(checked) => onVehicleToggle && onVehicleToggle(index, checked)}
+                                    />
+                                    <span className={vehicleToggles[index] ? styles.toggleLabelActive : styles.toggleLabelInactive}>
+                                        {vehicleToggles[index] ? 'couvert' : 'non couvert'}
+                                    </span>
+                                </div>
                             )}
                         </div>
                     ))}
@@ -58,11 +68,15 @@ const ProtectionCard = ({
                 <div className={styles.protectionCardHeader}>
                     <div className={styles.vehicleToggleRow}>
                         <span className={styles.vehicleName}>{title}</span>
-                        <Switch 
-                            checked={included} 
-                            onChange={(checked) => onToggle(checked)}
-                            size="small"
-                        />
+                        <div className={styles.toggleContainer}>
+                            <Switch 
+                                checked={included} 
+                                onChange={(checked) => onToggle(checked)}
+                            />
+                            <span className={included ? styles.toggleLabelActive : styles.toggleLabelInactive}>
+                                {included ? 'couvert' : 'non couvert'}
+                            </span>
+                        </div>
                     </div>
                 </div>
             )}
