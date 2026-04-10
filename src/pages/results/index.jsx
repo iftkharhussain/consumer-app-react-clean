@@ -95,9 +95,9 @@ const Results = () => {
     const checkForPendingOrder = async () => {
       try {
         const result = await checkPendingOrder('car-insurance');
-        if (result.success && result.hasPendingOrder && result.userProductId) {
-          // Redirect to call confirmation page (user has already selected insurer)
-          console.log('[Results] Pending order found, redirecting to call-confirmation:', result.userProductId);
+        if (result.success && result.hasPendingOrder && result.userProductId && result.fortusDeliveryId) {
+          // Redirect to call confirmation page (user has already selected insurer AND lead was sent)
+          console.log('[Results] Sent order found, redirecting to call-confirmation:', result.userProductId);
           navigate(`/call-confirmation/${result.userProductId}`);
         }
       } catch (error) {
