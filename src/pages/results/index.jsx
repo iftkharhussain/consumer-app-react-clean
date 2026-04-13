@@ -654,9 +654,11 @@ const Results = () => {
                           {/* Price Section */}
                           <div className={styles.priceSection}>
                             <div className={styles.priceDisplay}>
-                              <span className={styles.priceSuffixBalanced} aria-hidden="true">
-                                 $/{billingPeriod === 'monthly' ? 'mois' : 'année'}
-                              </span>
+                              {recommendedInsurer.oldPrice && (
+                                <span className={styles.priceSuffixBalanced} aria-hidden="true">
+                                   $/{billingPeriod === 'monthly' ? 'mois' : 'année'}
+                                </span>
+                              )}
                               
                               {recommendedInsurer.oldPrice && (
                                 <span className={styles.oldPrice}>
@@ -674,7 +676,7 @@ const Results = () => {
                               <>
                                 <div className={styles.discountBadge}>
                                   <CheckOutlined className={styles.discountIcon} />
-                                  <span>{recommendedInsurer.name === "L'Unique" ? 'Rabais Courtika appliqué' : (recommendedInsurer.discountLabel || 'Rabais appliqué')}</span>
+                                  <span>{recommendedInsurer.name === "L'Unique" ? 'Rabais  appliqué' : (recommendedInsurer.discountLabel || 'Rabais appliqué')}</span>
                                 </div>
                                 {recommendedInsurer.discountBonus && (
                                   <p className={styles.savingsText}>{recommendedInsurer.discountBonus}</p>

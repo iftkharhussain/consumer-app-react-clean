@@ -366,11 +366,11 @@ const ScheduleConfirmation = () => {
                 </div>
                 {monthlyPrice && (
                   <div className={styles.priceContainer}>
-                    {hasDiscount && oldMonthlyPrice && (
+                    {/* {hasDiscount && oldMonthlyPrice && (
                       <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: '16px', fontWeight: 600, marginRight: '4px' }}>
                         {oldMonthlyPrice}$/mois
                       </span>
-                    )}
+                    )} */}
                     <span className={styles.priceMain}>{monthlyPrice}$/mois</span>
                     {yearlyPrice && <span className={styles.priceOld}>{yearlyPrice}$/an</span>}
                   </div>

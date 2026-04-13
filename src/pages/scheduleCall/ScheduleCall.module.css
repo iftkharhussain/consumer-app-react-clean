@@ -10,11 +10,11 @@
 .backButton {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   background: none;
   border: none;
-  color: #1f01c8; /* Brand blue color from screenshot */
-  font-size: 20px;
+  color: #1A1ABA; /* Brand blue color from screenshot */
+  font-size: 14px;
   font-weight: 700; /* Bold as per screenshot */
   cursor: pointer;
   padding: 0;
@@ -28,7 +28,7 @@
 }
 
 .backIcon {
-  font-size: 18px;
+  font-size: 12px;
 }
 
 .card {
