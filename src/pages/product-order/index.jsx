@@ -85,7 +85,7 @@ const OrderProduct = () => {
     const isOpen = isOpenNow();
     const openStatus = isOpen ? 'Ouvert' : 'Fermé';
     const formattedHours = getFormattedTodayHours();
-    const callDuration = advisorInfo.callDuration || 10;
+    const callDuration = advisorInfo.callDuration || 15;
     const maxRetries = advisorInfo.maxRetries || 2;
     
     // Coverages

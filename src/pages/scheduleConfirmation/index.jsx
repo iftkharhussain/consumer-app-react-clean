@@ -254,8 +254,8 @@ const ScheduleConfirmation = () => {
 
     if (isPakCode) {
       title = 'Protections bonifiées';
-      type = 'couverture';
-      coverageValue = 'Inclus';
+      type = null;
+      coverageValue = null;
     } else if (coverageInfo[code]) {
       title = coverageInfo[code];
     }
@@ -300,8 +300,33 @@ const ScheduleConfirmation = () => {
       }
     }
 
-    return { title, type, coverageValue };
-  }).filter(p => p.coverageValue); // Only show protections that have a value
+    return { title, type, coverageValue, code, isPak: isPakCode };
+  }).filter(p => p.coverageValue || p.isPak).sort((a, b) => {
+    // Sort order: TP, COL, CMP, other coverages, PAK at the end
+    const sortOrder = ['TP', 'TPL', 'COL', 'COLL', 'CMP', 'COMP'];
+    
+    // PAK always goes to the end
+    if (a.isPak && !b.isPak) return 1;
+    if (!a.isPak && b.isPak) return -1;
+    
+    // Both are PAK or both are not PAK
+    const aIndex = sortOrder.indexOf(a.code);
+    const bIndex = sortOrder.indexOf(b.code);
+    
+    // If both are in sortOrder, use that order
+    if (aIndex !== -1 && bIndex !== -1) {
+      return aIndex - bIndex;
+    }
+    
+    // If only a is in sortOrder, it comes first
+    if (aIndex !== -1) return -1;
+    
+    // If only b is in sortOrder, it comes first
+    if (bIndex !== -1) return 1;
+    
+    // Neither in sortOrder, maintain original order
+    return 0;
+  });
 
   // Function to format meeting details from Calendly params
   const formatMeetingDetails = () => {

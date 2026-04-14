@@ -251,14 +251,18 @@ const Results = () => {
   const coverageLabels = {
     'TP': 'Responsabilité civile',
     'TPL': 'Responsabilité civile',
-    'COMP': 'Accident sans collision ni versement',
-    'CMP': 'Accident sans collision ni versement',
-    '34': 'Protection supplémentaire',
-    '33': 'Assistance routière',
-    '20': 'Assistance routière',
-    '27': 'Assurance des personnes',
-    'COL': 'Collision ou versement',
-    'COLL': 'Collision ou versement'
+    'COMP': 'Accident sans collision ni versement (B3)',
+    'CMP': 'Accident sans collision ni versement (B3)',
+    '34': 'Protection supplémentaire (FAQ 34)',
+    '33': 'Assistance routière (FAQ 33)',
+    '20': 'Assistance routière (FAQ 20)',
+    '27': 'Assurance des personnes (FAQ 27)',
+    'COL': 'Collision ou versement (B2)',
+    'COLL': 'Collision ou versement (B2)',
+    'PAK': 'Protections bonifiées',
+    'PAK7': 'Protections bonifiées',
+    'PAK12': 'Protections bonifiées',
+    'PAK13': 'Protections bonifiées'
   };
 
   // Extract protections from quote data
@@ -267,7 +271,7 @@ const Results = () => {
       return [];
     }
 
-    return recommendedInsurer.coverages.map(coverage => {
+    const protectionsList = recommendedInsurer.coverages.map(coverage => {
       const code = String(coverage.code || '').toUpperCase();
       let title = coverage.name || code;
       let description = '';
@@ -340,9 +344,9 @@ const Results = () => {
       if (isPakCode) {
         title = 'Protections bonifiées';
         description = 'Ce regroupement inclut des protections supplémentaires qui viennent bonifier votre assurance automobile. Elles offrent une protection plus complète dans plusieurs situations du quotidien, comme lors de l\'utilisation d\'un véhicule loué ou emprunté, ou lorsque votre véhicule est temporairement inutilisable.';
-        // For PAK, show "Inclus" as the coverage value
-        type = 'couverture';
-        coverageValue = coverage.limit === 'Inclus' || coverage.limit === 'Included' ? 'Inclus' : (coverage.limit || 'Inclus');
+        // For PAK, don't show any coverage value
+        type = null;
+        coverageValue = null;
       } else if (coverageInfo[code]) {
         title = coverageInfo[code].title;
         description = coverageInfo[code].description;
@@ -393,8 +397,42 @@ const Results = () => {
         title,
         description: description || coverage.description || '',
         coverage: coverageValue,
-        type
+        type,
+        code,
+        isPak: isPakCode
       };
+    });
+
+    // Sort protections in desired order:
+    // 1. TP (Responsabilité civile)
+    // 2. COL (Collision)
+    // 3. CMP (Comprehensive)
+    // 4. Other coverages (FAQ 34, etc.)
+    // 5. PAK (Protections bonifiées) at the end
+    const sortOrder = ['TP', 'TPL', 'COL', 'COLL', 'CMP', 'COMP'];
+    
+    return protectionsList.sort((a, b) => {
+      // PAK always goes to the end
+      if (a.isPak && !b.isPak) return 1;
+      if (!a.isPak && b.isPak) return -1;
+      
+      // Both are PAK or both are not PAK
+      const aIndex = sortOrder.indexOf(a.code);
+      const bIndex = sortOrder.indexOf(b.code);
+      
+      // If both are in sortOrder, use that order
+      if (aIndex !== -1 && bIndex !== -1) {
+        return aIndex - bIndex;
+      }
+      
+      // If only a is in sortOrder, it comes first
+      if (aIndex !== -1) return -1;
+      
+      // If only b is in sortOrder, it comes first
+      if (bIndex !== -1) return 1;
+      
+      // Neither in sortOrder, maintain original order
+      return 0;
     });
   }, [recommendedInsurer, formatFrenchCurrency]);
 
@@ -763,11 +801,11 @@ const Results = () => {
                     )}
 
                     {/* Other Insurers */}
-                    {otherInsurers.length > 0 && (
+                    {insurers.length > 0 && (
                       <div className={styles.otherInsurersSection}>
                         <h2 className={styles.sectionTitle}>Autres options d'assureurs reconnus</h2>
                         <div className={styles.insurersList}>
-                          {otherInsurers.map((insurer) => (
+                          {insurers.map((insurer) => (
                             <Card key={insurer.id} className={styles.insurerCard}>
                               <div className={styles.insurerContent}>
                                 <div className={styles.insurerMain}>
@@ -840,44 +878,84 @@ const Results = () => {
                                   <div className={styles.expandedProtections}>
                                     <h4 className={styles.expandedTitle}>Protections incluses</h4>
                                     <div className={styles.expandedProtectionsList}>
-                                      {insurer.coverages.slice(0, 3).map((coverage, index) => {
-                                        const upperCode = String(coverage.code || '').toUpperCase();
-                                        const displayTitle = coverage.name && !/^[A-Z0-9]+$/.test(coverage.name) 
-                                          ? coverage.name 
-                                          : (coverageLabels[upperCode] || coverage.name || coverage.code);
+                                      {(() => {
+                                        // Sort coverages before displaying (same order as main protections section)
+                                        const sortedCoverages = (insurer.coverages || []).slice().sort((a, b) => {
+                                          const sortOrder = ['TP', 'TPL', 'COL', 'COLL', 'CMP', 'COMP'];
+                                          const codeA = String(a.code || '').toUpperCase();
+                                          const codeB = String(b.code || '').toUpperCase();
+                                          const isPakA = codeA.includes('PAK');
+                                          const isPakB = codeB.includes('PAK');
+                                          
+                                          // PAK always goes to the end
+                                          if (isPakA && !isPakB) return 1;
+                                          if (!isPakA && isPakB) return -1;
+                                          
+                                          // Both are PAK or both are not PAK
+                                          const aIndex = sortOrder.indexOf(codeA);
+                                          const bIndex = sortOrder.indexOf(codeB);
+                                          
+                                          if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+                                          if (aIndex !== -1) return -1;
+                                          if (bIndex !== -1) return 1;
+                                          
+                                          return 0;
+                                        });
 
-                                        // Determine label and value
-                                        let label = 'Couverture';
-                                        let value = coverage.limit && coverage.limit !== '-$1/-$1' ? coverage.limit : null;
-                                        
-                                        if (['CMP', 'COMP', 'COL', 'COLL'].includes(upperCode)) {
-                                          if (coverage.deductible && coverage.deductible !== -1 && coverage.deductible !== '-1') {
-                                            label = 'Franchise';
-                                            value = coverage.deductible;
+                                        return sortedCoverages.map((coverage, index) => {
+                                          const upperCode = String(coverage.code || '').toUpperCase();
+                                          const isPak = upperCode.includes('PAK');
+                                          
+                                          // Determine display title
+                                          let displayTitle;
+                                          if (isPak) {
+                                            displayTitle = 'Protections bonifiées';
+                                          } else if (coverage.name && !/^[A-Z0-9]+$/.test(coverage.name)) {
+                                            displayTitle = coverage.name;
                                           } else {
-                                            value = null; // Don't show if no deductible for these specific types
+                                            displayTitle = coverageLabels[upperCode] || coverage.name || coverage.code;
                                           }
-                                        } else if (value && typeof value === 'string' && value.includes('/-')) {
-                                          value = value.split('/-')[0].trim();
-                                        }
 
-                                        if (!value || value === '-1' || value === -1 || value === '-1$') return null;
+                                          // Determine label and value
+                                          let label = 'Couverture';
+                                          let value = coverage.limit && coverage.limit !== '-$1/-$1' ? coverage.limit : null;
+                                          
+                                          // PAK should not show coverage value
+                                          if (isPak) {
+                                            label = null;
+                                            value = null;
+                                          } else if (['CMP', 'COMP', 'COL', 'COLL'].includes(upperCode)) {
+                                            if (coverage.deductible && coverage.deductible !== -1 && coverage.deductible !== '-1') {
+                                              label = 'Franchise';
+                                              value = coverage.deductible;
+                                            } else {
+                                              value = null; // Don't show if no deductible for these specific types
+                                            }
+                                          } else if (value && typeof value === 'string' && value.includes('/-')) {
+                                            value = value.split('/-')[0].trim();
+                                          }
 
-                                        return (
-                                          <div key={index} className={styles.expandedProtectionItem}>
-                                            <CheckOutlined className={styles.expandedProtectionIcon} />
-                                            <div className={styles.expandedProtectionContent}>
-                                              <span className={styles.expandedProtectionTitle}>
-                                                {displayTitle}
-                                              </span>
-                                              <span className={styles.expandedCoverage}>
-                                                <span className={styles.expandedCoverageLabel}>{label} : </span>
-                                                <span className={styles.expandedCoverageValue}>{formatFrenchCurrency(value)}</span>
-                                              </span>
+                                          // For PAK, always show (even without value), for others skip if no value
+                                          if (!isPak && (!value || value === '-1' || value === -1 || value === '-1$')) return null;
+
+                                          return (
+                                            <div key={index} className={styles.expandedProtectionItem}>
+                                              <CheckOutlined className={styles.expandedProtectionIcon} />
+                                              <div className={styles.expandedProtectionContent}>
+                                                <span className={styles.expandedProtectionTitle}>
+                                                  {displayTitle}
+                                                </span>
+                                                {label && value && (
+                                                  <span className={styles.expandedCoverage}>
+                                                    <span className={styles.expandedCoverageLabel}>{label} : </span>
+                                                    <span className={styles.expandedCoverageValue}>{formatFrenchCurrency(value)}</span>
+                                                  </span>
+                                                )}
+                                              </div>
                                             </div>
-                                          </div>
-                                        );
-                                      })}
+                                          );
+                                        });
+                                      })()}
                                     </div>
                                   </div>
                                 </div>
