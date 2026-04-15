@@ -285,11 +285,6 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
                                 </div>
                                 {!selectedQuote.isCourtikaSearch && (
                             <div className={styles.summaryRight}>
-                                {selectedQuote.discount && selectedQuote.oldMonthlyPrice && (
-                                    <p className={styles.summaryOldPrice} style={{ textDecoration: 'line-through', color: '#94a3b8', margin: 0, fontSize: '14px', fontWeight: 600 }}>
-                                        {selectedQuote.oldMonthlyPrice}$/mois
-                                    </p>
-                                )}
                                 <p className={styles.summaryPrice}>{selectedQuote.monthlyPrice}$/mois</p>
                                 {selectedQuote.yearlyPrice && !selectedQuote.discount && (
                                     <p className={styles.summaryOldPrice}>{selectedQuote.yearlyPrice}$/an</p>
@@ -300,34 +295,6 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
                             </div>
                         )}
                     </div>
-                )}
-
-                {/* L'Unique discount badge below the selection summary */}
-                {selectedQuote && selectedQuote.discount && (
-                    <div style={{
-                        backgroundColor: '#eeefff',
-                        color: '#1a1aba',
-                        padding: '10px 16px',
-                        borderRadius: '100px',
-                        border: '1.5px solid #c8ccff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '8px',
-                        fontSize: '14px',
-                        fontWeight: 700,
-                        marginBottom: selectedQuote.discountBonus ? '8px' : '16px'
-                    }}>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        <span>{selectedQuote.discountLabel || 'Rabais appliqué'}</span>
-                    </div>
-                )}
-                {selectedQuote && selectedQuote.discountBonus && (
-                    <p style={{ fontSize: '13px', color: '#697586', textAlign: 'center', marginBottom: '16px', lineHeight: 1.5 }}>
-                        {selectedQuote.discountBonus}
-                    </p>
                 )}
 
                         {/* Question */}

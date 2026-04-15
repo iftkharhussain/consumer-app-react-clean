@@ -515,7 +515,7 @@ const ScheduleConfirmation = () => {
         <div className={styles.aboutCard}>
           <h2 className={styles.aboutTitle}>Pourquoi nos clients choisissent Courtika</h2>
           <p className={styles.aboutText}>
-            Un cabinet de courtage en assurance de dommages avec plus de 50 ans d'expérience et 90+ courtiers qui comparent pour vous auprès de 30+ assureurs.
+            Un cabinet de courtage en assurance de dommages avec plus de 50 ans d'expérience et 90+ courtiers qui comparent pour vous auprès de 10+ assureurs.
           </p>
           
           <a href="https://www.courtika.com" target="_blank" rel="noopener noreferrer" className={styles.websiteLink}>
@@ -553,7 +553,7 @@ const ScheduleConfirmation = () => {
                    <path d="M8 10h.01"></path>
                    <path d="M8 14h.01"></path>
                  </svg>
-                 <span><strong>Accès à 30+ assureurs</strong> : incluant des marchés spécialisés difficiles à trouver</span>
+                 <span><strong>Accès à 10+ assureurs</strong> : incluant des marchés spécialisés difficiles à trouver</span>
               </li>
               <li>
                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F57C00" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.benefitsBoxIcon}>

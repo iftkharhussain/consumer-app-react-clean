@@ -26,7 +26,7 @@ const Results = () => {
   const [expandedFAQ, setExpandedFAQ] = useState([0]);
   const [expandedInsurer, setExpandedInsurer] = useState(null);
   const [billingPeriod, setBillingPeriod] = useState('monthly'); // 'monthly' or 'yearly'
-  const [timeLeft, setTimeLeft] = useState(900); // 15 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(4); // 15 minutes in seconds
   const [showLoadingModal, setShowLoadingModal] = useState(true);
   const [showResubmitAlert, setShowResubmitAlert] = useState(false);
   const [showCustomize, setShowCustomize] = useState(false);
@@ -874,7 +874,12 @@ const Results = () => {
                               {/* Expanded Details */}
                               {expandedInsurer === insurer.id && insurer.coverages?.length > 0 && (
                                 <div className={styles.expandedDetails}>
-                                  <Divider />
+                                  {insurer.name?.toLowerCase().includes('unique') && (
+                                    <div className={styles.uniquePromoText}>
+                                      L'Unique vous offre 1 mois gratuit. Le prix affiché inclut cette promotion.
+                                    </div>
+                                  )}
+                                  <Divider className={styles.expandedDivider} />
                                   <div className={styles.expandedProtections}>
                                     <h4 className={styles.expandedTitle}>Protections incluses</h4>
                                     <div className={styles.expandedProtectionsList}>
@@ -969,7 +974,7 @@ const Results = () => {
                               <div className={styles.moreInsurersMain}>
                                 <div className={styles.moreInsurersIconWrapper}>
                                   <div className={styles.moreInsurersIcon}>
-                                    <span className={styles.moreInsurersNumber}>30+</span>
+                                    <span className={styles.moreInsurersNumber}>10+</span>
                                     <p className={styles.moreInsurersLabel}>Assureurs</p>
                                   </div>
                                 </div>
@@ -978,7 +983,7 @@ const Results = () => {
                                     Vous n'avez pas trouvé votre assureur idéal ?
                                   </h3>
                                   <p className={styles.moreInsurersDescription}>
-                                    Courtika a accès à <span className={styles.boldText}>plus de 30 assureurs partenaires</span>. Un courtier certifié peut comparer encore plus d'options pour vous.
+                                    Courtika a accès à <span className={styles.boldText}>plus de 10 assureurs partenaires</span>. Un courtier certifié peut comparer encore plus d'options pour vous.
                                   </p>
                                 </div>
                               </div>

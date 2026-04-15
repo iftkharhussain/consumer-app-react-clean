@@ -178,7 +178,7 @@ const FifteenMinutesRedirect = () => {
             </p>
 
             <div className={styles.infoButton}>
-              <SearchOutlined /> {companyName} a accès à 30+ assureurs et pourrait peut-être vous trouver un meilleur prix
+              <SearchOutlined /> {companyName} a accès à 10+ assureurs et pourrait peut-être vous trouver un meilleur prix
             </div>
           </>
         )}
@@ -301,7 +301,7 @@ const FifteenMinutesRedirect = () => {
         <div className={styles.aboutCard}>
           <h2 className={styles.aboutTitle}>Pourquoi continuer à magasiner avec Courtika</h2>
           <p className={styles.aboutText}>
-            Un cabinet de courtage en assurance de dommages avec plus de 50 ans d'expérience et 90+ courtiers qui comparent pour vous auprès de 30+ assureurs.
+            Un cabinet de courtage en assurance de dommages avec plus de 50 ans d'expérience et 90+ courtiers qui comparent pour vous auprès de 10+ assureurs.
           </p>
 
           <div className={styles.benefitsBox}>
@@ -325,7 +325,7 @@ const FifteenMinutesRedirect = () => {
                    <path d="M8 10h.01"></path>
                    <path d="M8 14h.01"></path>
                  </svg>
-                 <span><strong>Accès à 30+ assureurs</strong> : incluant des marchés spécialisés difficiles à trouver</span>
+                 <span><strong>Accès à 10+ assureurs</strong> : incluant des marchés spécialisés difficiles à trouver</span>
               </li>
               <li>
                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.benefitsBoxIcon}>

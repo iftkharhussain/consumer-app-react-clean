@@ -205,7 +205,7 @@ const FallbackNoQuotes = () => {
                       </li>
                       <li>
                         <CheckOutlined className={styles.checkIcon} />
-                        <span><strong>Accès à 30+ assureurs</strong> - Bien plus que ce que vous pourriez trouver seul</span>
+                        <span><strong>Accès à 10+ assureurs</strong> - Bien plus que ce que vous pourriez trouver seul</span>
                       </li>
                       <li>
                         <CheckOutlined className={styles.checkIcon} />
@@ -297,7 +297,7 @@ const FallbackNoQuotes = () => {
             <div className={styles.aboutCard}>
               <h2 className={styles.aboutTitle}>À propos de Courtika</h2>
               <p className={styles.aboutText}>
-                Un cabinet de courtage en assurance de dommages avec plus de 50 ans d'expérience et 90+ courtiers qui comparent pour vous auprès de 30+ assureurs.
+                Un cabinet de courtage en assurance de dommages avec plus de 50 ans d'expérience et 90+ courtiers qui comparent pour vous auprès de 10+ assureurs.
               </p>
               
               <div className={styles.certificationSection}>

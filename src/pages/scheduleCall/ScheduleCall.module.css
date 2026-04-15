@@ -8,27 +8,38 @@
 }
 
 .backButton {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: none;
-  border: none;
-  color: #1A1ABA; /* Brand blue color from screenshot */
+  gap: 6px;
+  color: #1A1ABA !important;
   font-size: 14px;
-  font-weight: 700; /* Bold as per screenshot */
+  font-weight: 600 !important;
+  line-height: 18px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
-  padding: 0;
+  padding: 6px 10px;
   margin-bottom: 32px;
   align-self: flex-start;
-  transition: opacity 0.2s ease;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  height: auto;
 }
 
 .backButton:hover {
-  opacity: 0.8;
+  color: #1A1ABA !important;
+  background: #F0F4FF !important;
+  text-decoration: none;
+}
+
+.backButton:hover .backIcon {
+  transform: translateX(-3px);
 }
 
 .backIcon {
-  font-size: 12px;
+  font-size: 11px;
+  transition: transform 0.2s ease;
 }
 
 .card {
