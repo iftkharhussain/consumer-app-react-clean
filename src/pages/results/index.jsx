@@ -170,7 +170,7 @@ const Results = () => {
             quoteDetails: carrier.quoteDetails || {},
             // Use values from carrier if available, otherwise apply L'Unique specific logic
             discount: carrier.discount || (isLUnique ? true : false),
-            discountLabel: carrier.discountLabel || (isLUnique ? 'Rabais appliqué' : null),
+            discountLabel: carrier.discountLabel || (isLUnique ? 'Rabais 1 mois gratuit' : null),
             discountBonus: discountBonus,
             oldPrice: oldPrice,
             oldYearlyPrice: oldYearlyPrice
@@ -714,7 +714,7 @@ const Results = () => {
                               <>
                                 <div className={styles.discountBadge}>
                                   <CheckOutlined className={styles.discountIcon} />
-                                  <span>{recommendedInsurer.name === "L'Unique" ? 'Rabais  appliqué' : (recommendedInsurer.discountLabel || 'Rabais appliqué')}</span>
+                                  <span>{recommendedInsurer.name === "L'Unique" ? 'Rabais 1 mois gratuit' : (recommendedInsurer.discountLabel || 'Rabais 1 mois gratuit')}</span>
                                 </div>
                                 {recommendedInsurer.discountBonus && (
                                   <p className={styles.savingsText}>{recommendedInsurer.discountBonus}</p>
@@ -840,7 +840,7 @@ const Results = () => {
                                     {insurer.discount && (
                                       <div className={styles.insurerDiscount}>
                                         <CheckOutlined className={styles.insurerDiscountIcon} />
-                                        <span>{insurer.discountLabel || 'Rabais appliqué'}</span>
+                                        <span>{insurer.discountLabel || 'Rabais 1 mois gratuit'}</span>
                                       </div>
                                     )}
                                   </div>

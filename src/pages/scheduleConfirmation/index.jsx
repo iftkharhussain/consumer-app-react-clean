@@ -188,7 +188,7 @@ const ScheduleConfirmation = () => {
   const yearlyPrice = !isCourtikaSearch ? (selectedQuote.yearlyPrice || null) : null;
   const oldMonthlyPrice = !isCourtikaSearch ? (selectedQuote.oldMonthlyPrice || null) : null;
   const hasDiscount = selectedQuote.discount || false;
-  const discountLabel = selectedQuote.discountLabel || 'Rabais appliqué';
+  const discountLabel = selectedQuote.discountLabel || 'Rabais 1 mois gratuit';
   const discountBonus = selectedQuote.discountBonus || null;
   // Advisor details
   const companyName = 'Courtika'; // Hardcoded

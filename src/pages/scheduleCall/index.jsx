@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { PageContent } from 'components';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
-import { LeftOutlined } from '@ant-design/icons';
 import styles from './ScheduleCall.module.css';
 
 const ScheduleCall = () => {
@@ -100,7 +99,7 @@ const ScheduleCall = () => {
     <PageContent pageType="overview">
       <div className={styles.container}>
         <button className={styles.backButton} onClick={() => navigate(-1)}>
-          <LeftOutlined className={styles.backIcon} /> Retour
+          <img src="/images/left-arrow.svg" alt="Back" className={styles.backIcon} /> Retour
         </button>
 
         <div className={styles.card}>

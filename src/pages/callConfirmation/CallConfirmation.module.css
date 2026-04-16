@@ -153,7 +153,7 @@
 .priceOld {
   font-size: 13px;
   color: #94a3b8;
-  text-decoration: line-through;
+  text-decoration: none;
   font-weight: 500;
   margin-top: 2px;
 }

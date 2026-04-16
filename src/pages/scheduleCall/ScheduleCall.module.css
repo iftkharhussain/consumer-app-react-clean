@@ -38,7 +38,8 @@
 }
 
 .backIcon {
-  font-size: 11px;
+  height: 11px;
+  width: auto;
   transition: transform 0.2s ease;
 }
 

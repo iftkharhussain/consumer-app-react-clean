@@ -144,7 +144,15 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 		const menuItemsAdvisor = [
 			{
 				key: 'home',
-				selectPaths: ['/car-insurance'],
+				selectPaths: [
+					'/car-insurance', 
+					'/', 
+					'/car-insurance/product-order/*', 
+					'/call-confirmation/*', 
+					'/fifteen-minutes-redirect/*', 
+					'/schedule-call/*', 
+					'/schedule-confirmation/*'
+				],
 				icon: (
 					<Link to='/car-insurance'>
 						<Car01 />
