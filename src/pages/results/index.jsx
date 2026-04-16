@@ -26,7 +26,7 @@ const Results = () => {
   const [expandedFAQ, setExpandedFAQ] = useState([0]);
   const [expandedInsurer, setExpandedInsurer] = useState(null);
   const [billingPeriod, setBillingPeriod] = useState('monthly'); // 'monthly' or 'yearly'
-  const [timeLeft, setTimeLeft] = useState(4); // 15 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(900); // 15 minutes in seconds (15 * 60 = 900)
   const [showLoadingModal, setShowLoadingModal] = useState(true);
   const [showResubmitAlert, setShowResubmitAlert] = useState(false);
   const [showCustomize, setShowCustomize] = useState(false);
