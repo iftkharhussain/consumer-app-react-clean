@@ -7,6 +7,7 @@ import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { getFormattedTodayHours } from '../../utils/businessHours';
 import { getOrderDetails, checkPendingOrder } from '../../services/api/productOrderService';
 import fortusService from '../../services/api/fortusService';
+import { trackPixelEvent } from '../../utils/pixel';
 
 const ScheduleConfirmation = () => {
   const navigate = useNavigate();
@@ -124,6 +125,14 @@ const ScheduleConfirmation = () => {
         if (result.success) {
           console.log('[ScheduleConfirmation] ezLead sent successfully');
           message.success('Vos informations ont été transmises au courtier!');
+          
+          // Track successful conversion using standard 'Schedule' event
+          trackPixelEvent('Schedule', {
+            insurer: orderData?.selectedQuote?.insurerName,
+            carrierCode: orderData?.selectedQuote?.carrierCode,
+            eventType: eventType,
+            userProductId: userProductId
+          });
         } else {
           console.error('[ScheduleConfirmation] Failed to send ezLead:', result.message);
         }

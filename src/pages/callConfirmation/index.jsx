@@ -13,6 +13,7 @@ import styles from './CallConfirmation.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
 import { getOrderDetails, checkPendingOrder } from '../../services/api/productOrderService';
+import { trackPixelEvent } from '../../utils/pixel';
 
 const CallConfirmation = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const CallConfirmation = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [orderData, setOrderData] = useState(null);
+  const pixelTracked = useRef(false);
 
   useEffect(() => {
     if (!initialized.current) {
@@ -72,6 +74,17 @@ const CallConfirmation = () => {
 
     fetchOrderDetails();
   }, [urlUserProductId]);
+
+  // Track conversion on land
+  useEffect(() => {
+    if (!loading && orderData && !pixelTracked.current) {
+        trackPixelEvent('Schedule', {
+            insurer: orderData?.selectedQuote?.insurerName,
+            userProductId: urlUserProductId || orderData?.userProductId
+        });
+        pixelTracked.current = true;
+    }
+  }, [loading, orderData, urlUserProductId]);
 
   // Loading state
   if (loading) {

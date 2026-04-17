@@ -1,7 +1,8 @@
 import toast from 'react-hot-toast';
 import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { ConfigProvider, theme } from "antd";
-import { BrowserRouter as Router, Route, Routes, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Outlet, useLocation } from 'react-router-dom';
+import { trackPixelEvent } from './utils/pixel';
 import { PageNotFound } from './components/index';
 import { useSelector, useDispatch } from 'react-redux';
 import Layout from './pages/layout/index';
@@ -49,6 +50,23 @@ const PrivateWrapper = ({ auth: { isAuthenticated }, heading, _style }) => {
 };
 
 const defaultAppPage = '/';
+
+const PixelTracker = () => {
+	const location = useLocation();
+
+	useEffect(() => {
+		trackPixelEvent('PageView');
+
+		// Track Lead event once per session when the user first lands
+		const hasTrackedLead = sessionStorage.getItem('pixel_lead_tracked');
+		if (!hasTrackedLead) {
+			trackPixelEvent('Lead');
+			sessionStorage.setItem('pixel_lead_tracked', 'true');
+		}
+	}, [location]);
+
+	return null;
+};
 
 function App(props) {
 	const { t } = useTranslation();
@@ -110,6 +128,7 @@ function App(props) {
 		return (
 			<ConfigProvider theme={themeConfig}>
 				<Router>
+					<PixelTracker />
 					<Routes>
 						<Route element={<PrivateWrapper auth={{ isAuthenticated: isAuth }} _style={layoutStyles} />}>
 							<Route path="/" element={<Suspense fallback={<div></div>}><Results /></Suspense>} />

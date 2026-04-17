@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import styles from './CourtikaModal.module.css';
 import { fortusService } from '../../services/api/fortusService';
 import { isOpenNow } from '../../utils/businessHours';
+import { trackPixelEvent } from '../../utils/pixel';
 
 /**
  * CourtikaModal - Call request modal for Fortus Leads
@@ -65,7 +66,7 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
                 console.log('Fortus request successful:', result);
                 setRequestStatus('success');
                 message.success('Votre demande a été envoyée avec succès!');
-                
+
                 // Trigger the phone call dialer on mobile only
                 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
                 if (isMobile) {

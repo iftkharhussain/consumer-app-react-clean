@@ -16,6 +16,7 @@ import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
 import fortusService from '../../services/api/fortusService';
 import { checkPendingOrder } from '../../services/api/productOrderService';
+import { trackPixelEvent } from '../../utils/pixel';
 import { getQuoteDetails } from '../../services/api/quoteService';
 import LoadingModal from '../../components/loadingModal';
 import { FallbackSkeleton } from '../../components/carInsurance/QuoteSkeletons';
@@ -119,6 +120,12 @@ const FallbackNoQuotes = () => {
         console.log('[FallbackNoQuotes] Fortus request successful:', result);
         message.success('Votre demande a été envoyée avec succès!');
         
+        // Track successful conversion using standard 'Schedule' event
+        trackPixelEvent('Schedule', {
+          userProductId,
+          source: 'fallback_no_quotes'
+        });
+
         // Trigger the phone call dialer on mobile only
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (isMobile) {
