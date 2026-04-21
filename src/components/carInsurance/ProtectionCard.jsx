@@ -50,6 +50,7 @@ const ProtectionCard = ({
                             ) : (
                                 <div className={styles.toggleContainer}>
                                     <Switch 
+                                        size="small"
                                         checked={vehicleToggles[index] || false} 
                                         onChange={(checked) => onVehicleToggle && onVehicleToggle(index, checked)}
                                     />
@@ -70,6 +71,7 @@ const ProtectionCard = ({
                         <span className={styles.vehicleName}>{title}</span>
                         <div className={styles.toggleContainer}>
                             <Switch 
+                                size="small"
                                 checked={included} 
                                 onChange={(checked) => onToggle(checked)}
                             />

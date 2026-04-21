@@ -1049,7 +1049,34 @@ const Results = () => {
         recalculatedQuote={recalculatedQuote}
       />
 
-      {/* Recalculation Limit Modal... */}
+      {/* Recalculation Limit Modal */}
+      <Modal
+        open={showRecalculateLimitModal}
+        onCancel={() => setShowRecalculateLimitModal(false)}
+        footer={[
+          <Button 
+            key="call" 
+            type="primary" 
+            href={`tel:${recalculationService.getRecalculationLimitModalConfig().brokerPhoneLink}`}
+          >
+            {recalculationService.getRecalculationLimitModalConfig().callButtonText}
+          </Button>,
+          <Button 
+            key="close" 
+            onClick={() => setShowRecalculateLimitModal(false)}
+          >
+            {recalculationService.getRecalculationLimitModalConfig().closeButtonText}
+          </Button>
+        ]}
+        centered
+      >
+        <h3>{recalculationService.getRecalculationLimitModalConfig().title}</h3>
+        <p>{recalculationService.getRecalculationLimitModalConfig().message}</p>
+        <p style={{ marginTop: '16px' }}>
+          <strong>Téléphone: {recalculationService.getRecalculationLimitModalConfig().brokerPhone}</strong>
+        </p>
+      </Modal>
+
       {/* (Rest of the modals and bottom bar remains identical, just wrapped in the logic) */}
     </>
   );

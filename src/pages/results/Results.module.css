@@ -309,7 +309,7 @@ justify-content: center;
 }
 
 .customizeButton {
-  display: none;
+  display: inline-flex;
   font-size: 13px;
   color: #1a1aba;
   font-weight: 500;
