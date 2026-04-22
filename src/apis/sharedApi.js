@@ -29,9 +29,9 @@ export const verifyTokenUrl = `${baseUrl}/api/auth/verify-token`;
 export const updateProfileUrl = `${baseUrl}/api/profile/update`;
 export const uploadAvatarUrl = `${baseUrl}/api/profile/upload-avatar`;
 
-// Phone/2FA Management
-export const addPhoneOTPUrl = `${baseUrl}/api/phone/send-otp`;
-export const verifyPhoneOTPUrl = `${baseUrl}/api/phone/verify-otp`;
+// Phone/2FA Management (using main backend OTP endpoints)
+export const addPhoneOTPUrl = `${baseUrl}/api/v1/phone/funnel/send-otp`;
+export const verifyPhoneOTPUrl = `${baseUrl}/api/v1/phone/funnel/verify-otp`;
 export const manageTwoStepAuthUrl = `${baseUrl}/api/auth/two-step`;
 
 // Search

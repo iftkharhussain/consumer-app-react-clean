@@ -310,6 +310,10 @@ const Results = () => {
           title: 'Protection supplémentaire (FAQ 34)',
           description: 'Suite à un accident d\'auto, vous serez couvert pour les frais médicaux non couverts par la SAAQ pour les dommages corporels. Vous pourriez aussi recevoir une indemnité pour décès et mutilation. Cet avenant inclut aussi votre conjoint (e) et enfants à votre charge.'
         },
+        '41': {
+          title: 'Protection supplémentaire (FAQ 34)',
+          description: 'Suite à un accident d\'auto, vous serez couvert pour les frais médicaux non couverts par la SAAQ pour les dommages corporels. Vous pourriez aussi recevoir une indemnité pour décès et mutilation. Cet avenant inclut aussi votre conjoint (e) et enfants à votre charge.'
+        },
         '33': {
           title: 'Assistance routière (FAQ 33)',
           description: 'Aide et remorquage en cas de panne ou d\'imprévu sur la route.'
@@ -375,8 +379,8 @@ const Results = () => {
             type = 'franchise';
             coverageValue = formatFrenchCurrency(coverage.deductible);
           }
-        } else if (code === '34' || code === '33' || code === '20' || code === '27') {
-          // For FAQ codes, show limit (Couverture)
+        } else if (code === '34' || code === '41' || code === '33' || code === '20' || code === '27') {
+          // For FAQ codes (including 41 which displays as 34), show limit (Couverture)
           if (coverage.limit) {
             type = 'couverture';
             const rawValue = extractLimitValue(coverage.limit);
@@ -403,9 +407,18 @@ const Results = () => {
         code,
         isPak: isPakCode
       };
-    })
-    // Filter out coverage code '41'
-    .filter(protection => protection.code !== '41');
+    });
+
+    // Check if coverage '34' exists
+    const has34 = protectionsList.some(p => p.code === '34');
+    
+    // Filter out coverage code '41' only if coverage '34' exists
+    const filteredProtections = protectionsList.filter(protection => {
+      if (protection.code === '41') {
+        return !has34; // Hide '41' only if '34' exists
+      }
+      return true; // Keep all other coverages
+    });
 
     // Sort protections in desired order:
     // 1. TP (Responsabilité civile)
@@ -415,7 +428,7 @@ const Results = () => {
     // 5. PAK (Protections bonifiées) at the end
     const sortOrder = ['TP', 'TPL', 'COL', 'COLL', 'CMP', 'COMP'];
     
-    return protectionsList.sort((a, b) => {
+    return filteredProtections.sort((a, b) => {
       // PAK always goes to the end
       if (a.isPak && !b.isPak) return 1;
       if (!a.isPak && b.isPak) return -1;

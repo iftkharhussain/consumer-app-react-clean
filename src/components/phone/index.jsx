@@ -69,7 +69,7 @@ const Phone = ({ value, onChange }) => {
   }
 
   return (
-    <Space.Compact>
+    <Space.Compact style={{ width: '100%' }}>
       <Select 
         style={{width: 120}} 
         placeholder="Country" 
@@ -87,11 +87,13 @@ const Phone = ({ value, onChange }) => {
         value={phoneValue}
         onChange={handlePhoneChange}
         maskChar="_"
+        style={{ flex: 1 }}
       >
         {(inputProps) => (
           <Input 
             {...inputProps}
             placeholder={`Ex: ${getMask(selectedCountry)}`}
+            style={{ flex: 1 }}
           />
         )}
       </InputMask>
