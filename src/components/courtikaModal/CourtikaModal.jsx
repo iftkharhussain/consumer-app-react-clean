@@ -20,7 +20,7 @@ import { trackPixelEvent } from '../../utils/pixel';
  * 
  * Prefer passing userProductId as it's more reliable than productSlug matching
  */
-const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insurance', selectedQuote, recalculatedQuote = null }) => {
+const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insurance', selectedQuote, recommendedInsurer = null, recalculatedQuote = null }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [requestStatus, setRequestStatus] = useState(null); // 'success', 'error', null
     const [selectedOption, setSelectedOption] = useState(isOpenNow() ? 'now' : 'later'); // 'now' or 'later'
@@ -40,6 +40,24 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
         : (userProfile?.fullName || authUser?.fullName || '');
     const userPhone = userProfile?.phone || authUser?.phone || '';
 
+    // If user clicked "Parler à Courtika", show Courtika in UI but submit with recommendedInsurer
+    // If user clicked "Choisir" on an insurer card, use that insurer for both display and submission
+    const isFromCourtikaButton = selectedQuote?.isCourtikaSearch === true;
+    
+    const displayQuote = selectedQuote;
+    const submissionQuote = isFromCourtikaButton && recommendedInsurer
+        ? {
+            insurerName: recommendedInsurer.name,
+            carrierCode: recommendedInsurer.carrierCode,
+            logo: recommendedInsurer.logo,
+            monthlyPrice: recommendedInsurer.price,
+            yearlyPrice: recommendedInsurer.yearlyPrice,
+            coverages: recommendedInsurer.coverages,
+            isCourtikaSearch: true,
+            discount: selectedQuote?.discount || false
+        }
+        : selectedQuote; // Use the clicked insurer for both display and submission
+
     const handleDemanderAppel = async () => {
         if (timerRef.current) {
             clearTimeout(timerRef.current);
@@ -49,13 +67,13 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
         console.log('Demander un appel clicked - calling Fortus API');
 
         try {
-            // Extract carrier code from selected quote
-            const carrierCode = selectedQuote?.carrierCode;
+            // Use cheapest insurer (recommendedInsurer) for the call, not the displayed one
+            const carrierCode = submissionQuote?.carrierCode;
             
             // Prefer userProductId over productSlug for more reliable matching
             const params = userProductId 
-                ? { userProductId, selectedQuote, recalculatedQuote, carrierCode } 
-                : { productSlug, selectedQuote, recalculatedQuote, carrierCode };
+                ? { userProductId, selectedQuote: submissionQuote, recalculatedQuote, carrierCode } 
+                : { productSlug, selectedQuote: submissionQuote, recalculatedQuote, carrierCode };
             
             console.log('[CourtikaModal] Request params:', params);
             
@@ -103,12 +121,12 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
             setIsLoading(true);
             try {
                 // Extract carrier code from selected quote
-                const carrierCode = selectedQuote?.carrierCode;
+                const carrierCode = submissionQuote?.carrierCode;
                 
                 // Prefer userProductId over productSlug for more reliable matching
                 const params = userProductId 
-                    ? { userProductId, selectedQuote, recalculatedQuote, carrierCode, scheduleLater: true } 
-                    : { productSlug, selectedQuote, recalculatedQuote, carrierCode, scheduleLater: true };
+                    ? { userProductId, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, scheduleLater: true } 
+                    : { productSlug, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, scheduleLater: true };
                 
                 console.log('[CourtikaModal] Saving order for schedule later:', params);
                 
@@ -126,7 +144,7 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
                     if (userEmail) params.append('email', userEmail);
                     if (userPhone) params.append('phone', userPhone);
                     
-                    navigate(`/schedule-call?${params.toString()}`, { state: { userProductId: productId, selectedQuote, recalculatedQuote } });
+                    navigate(`/schedule-call?${params.toString()}`, { state: { userProductId: productId, selectedQuote: submissionQuote, recalculatedQuote } });
                 } else {
                     console.warn('Failed to save order:', result);
                     setIsLoading(false);
@@ -269,29 +287,29 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
                     {/* Content */}
                     <div className={styles.cardContent}>
                         {/* Selection Summary */}
-                        {selectedQuote && (
+                        {displayQuote && (
                             <div className={styles.selectionSummary}>
                                 <div className={styles.summaryLeft}>
                                     <div className={styles.insurerLogoBox}>
                                         <img 
-                                            src={selectedQuote.logo} 
-                                            alt={selectedQuote.insurerName}
+                                            src={displayQuote.logo} 
+                                            alt={displayQuote.insurerName}
                                             className={styles.insurerLogo}
                                         />
                                     </div>
                                     <div>
                                         <p className={styles.summaryLabel}>Votre sélection</p>
-                                        <p className={styles.summaryInsurer}>{selectedQuote.insurerName}</p>
+                                        <p className={styles.summaryInsurer}>{displayQuote.insurerName}</p>
                                     </div>
                                 </div>
-                                {!selectedQuote.isCourtikaSearch && (
+                                {!displayQuote.isCourtikaSearch && (
                             <div className={styles.summaryRight}>
-                                <p className={styles.summaryPrice}>{selectedQuote.monthlyPrice}$/mois</p>
-                                {selectedQuote.yearlyPrice && !selectedQuote.discount && (
-                                    <p className={styles.summaryOldPrice}>{selectedQuote.yearlyPrice}$/an</p>
+                                <p className={styles.summaryPrice}>{displayQuote.monthlyPrice}$/mois</p>
+                                {displayQuote.yearlyPrice && !displayQuote.discount && (
+                                    <p className={styles.summaryOldPrice}>{displayQuote.yearlyPrice}$/an</p>
                                 )}
-                                {selectedQuote.discount && selectedQuote.yearlyPrice && (
-                                    <p className={styles.summaryOldPrice} style={{ color: '#64748b', fontSize: '11px' }}>{selectedQuote.yearlyPrice}$/an</p>
+                                {displayQuote.discount && displayQuote.yearlyPrice && (
+                                    <p className={styles.summaryOldPrice} style={{ color: '#64748b', fontSize: '11px' }}>{displayQuote.yearlyPrice}$/an</p>
                                 )}
                             </div>
                         )}

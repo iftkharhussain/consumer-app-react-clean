@@ -20,7 +20,7 @@ import { trackPixelEvent } from '../../utils/pixel';
  * 
  * Prefer passing userProductId as it's more reliable than productSlug matching
  */
-const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insurance', selectedQuote, recalculatedQuote = null }) => {
+const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insurance', selectedQuote, recommendedInsurer = null, recalculatedQuote = null }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [requestStatus, setRequestStatus] = useState(null); // 'success', 'error', null
     const [selectedOption, setSelectedOption] = useState(isOpenNow() ? 'now' : 'later'); // 'now' or 'later'
@@ -40,6 +40,21 @@ const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-i
         : (userProfile?.fullName || authUser?.fullName || '');
     const userPhone = userProfile?.phone || authUser?.phone || '';
 
+    const submissionQuote = recommendedInsurer
+        ? {
+            insurerName: recommendedInsurer.name,
+            carrierCode: recommendedInsurer.carrierCode,
+            logo: recommendedInsurer.logo,
+            monthlyPrice: recommendedInsurer.price,
+            yearlyPrice: recommendedInsurer.yearlyPrice,
+            coverages: recommendedInsurer.coverages,
+            isCourtikaSearch: selectedQuote?.isCourtikaSearch || false,
+            discount: selectedQuote?.discount || false
+        }
+        : selectedQuote;
+
+    const displayQuote = selectedQuote;
+
     const handleDemanderAppel = async () => {
         if (timerRef.current) {
             clearTimeout(timerRef.current);
@@ -49,13 +64,13 @@ const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-i
         console.log('Demander un appel clicked - calling Fortus API');
 
         try {
-            // Extract carrier code from selected quote
-            const carrierCode = selectedQuote?.carrierCode;
+            // Use cheapest insurer (recommendedInsurer) for the call, not the displayed one
+            const carrierCode = submissionQuote?.carrierCode;
             
             // Prefer userProductId over productSlug for more reliable matching
             const params = userProductId 
-                ? { userProductId, selectedQuote, recalculatedQuote, carrierCode, isCustomizeRequest: true } 
-                : { productSlug, selectedQuote, recalculatedQuote, carrierCode, isCustomizeRequest: true };
+                ? { userProductId, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, isCustomizeRequest: true } 
+                : { productSlug, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, isCustomizeRequest: true };
             
             console.log('[CourtikaModal] Request params:', params);
             
@@ -103,12 +118,12 @@ const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-i
             setIsLoading(true);
             try {
                 // Extract carrier code from selected quote
-                const carrierCode = selectedQuote?.carrierCode;
+                const carrierCode = submissionQuote?.carrierCode;
                 
                 // Prefer userProductId over productSlug for more reliable matching
                 const params = userProductId 
-                    ? { userProductId, selectedQuote, recalculatedQuote, carrierCode, scheduleLater: true, isCustomizeRequest: true } 
-                    : { productSlug, selectedQuote, recalculatedQuote, carrierCode, scheduleLater: true, isCustomizeRequest: true };
+                    ? { userProductId, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, scheduleLater: true, isCustomizeRequest: true } 
+                    : { productSlug, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, scheduleLater: true, isCustomizeRequest: true };
                 
                 console.log('[CourtikaModal] Saving order for schedule later:', params);
                 
@@ -126,7 +141,7 @@ const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-i
                     if (userEmail) params.append('email', userEmail);
                     if (userPhone) params.append('phone', userPhone);
                     
-                    navigate(`/schedule-call?${params.toString()}`, { state: { userProductId: productId, selectedQuote, recalculatedQuote } });
+                    navigate(`/schedule-call?${params.toString()}`, { state: { userProductId: productId, selectedQuote: submissionQuote, recalculatedQuote } });
                 } else {
                     console.warn('Failed to save order:', result);
                     setIsLoading(false);
@@ -269,29 +284,29 @@ const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-i
                     {/* Content */}
                     <div className={styles.cardContent}>
                         {/* Selection Summary */}
-                        {selectedQuote && (
+                        {displayQuote && (
                             <div className={styles.selectionSummary}>
                                 <div className={styles.summaryLeft}>
                                     <div className={styles.insurerLogoBox}>
                                         <img 
-                                            src={selectedQuote.logo} 
-                                            alt={selectedQuote.insurerName}
+                                            src={displayQuote.logo} 
+                                            alt={displayQuote.insurerName}
                                             className={styles.insurerLogo}
                                         />
                                     </div>
                                     <div>
                                         <p className={styles.summaryLabel}>Votre sélection</p>
-                                        <p className={styles.summaryInsurer}>{selectedQuote.insurerName}</p>
+                                        <p className={styles.summaryInsurer}>{displayQuote.insurerName}</p>
                                     </div>
                                 </div>
-                                {!selectedQuote.isCourtikaSearch && (
+                                {!displayQuote.isCourtikaSearch && (
                             <div className={styles.summaryRight}>
-                                <p className={styles.summaryPrice}>{selectedQuote.monthlyPrice}$/mois</p>
-                                {selectedQuote.yearlyPrice && !selectedQuote.discount && (
-                                    <p className={styles.summaryOldPrice}>{selectedQuote.yearlyPrice}$/an</p>
+                                <p className={styles.summaryPrice}>{displayQuote.monthlyPrice}$/mois</p>
+                                {displayQuote.yearlyPrice && !displayQuote.discount && (
+                                    <p className={styles.summaryOldPrice}>{displayQuote.yearlyPrice}$/an</p>
                                 )}
-                                {selectedQuote.discount && selectedQuote.yearlyPrice && (
-                                    <p className={styles.summaryOldPrice} style={{ color: '#64748b', fontSize: '11px' }}>{selectedQuote.yearlyPrice}$/an</p>
+                                {displayQuote.discount && displayQuote.yearlyPrice && (
+                                    <p className={styles.summaryOldPrice} style={{ color: '#64748b', fontSize: '11px' }}>{displayQuote.yearlyPrice}$/an</p>
                                 )}
                             </div>
                         )}
@@ -328,7 +343,7 @@ const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-i
                                         <div className={`${styles.onlineIndicator} ${!isOpenNow() ? styles.onlineIndicatorClosed : ''}`}>
                                             <div className={`${styles.pulsingDot} ${!isOpenNow() ? styles.pulsingDotClosed : ''}`}></div>
                                             <span className={`${styles.onlineText} ${!isOpenNow() ? styles.onlineTextClosed : ''}`}>
-                                                5 courtiers en ligne
+                                                {isOpenNow() ? 'Ouvert' : 'Fermé'}
                                             </span>
                                         </div>
                                     </div>

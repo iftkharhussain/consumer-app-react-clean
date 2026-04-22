@@ -403,7 +403,9 @@ const Results = () => {
         code,
         isPak: isPakCode
       };
-    });
+    })
+    // Filter out coverage code '41'
+    .filter(protection => protection.code !== '41');
 
     // Sort protections in desired order:
     // 1. TP (Responsabilité civile)
@@ -920,7 +922,16 @@ const Results = () => {
                                           return 0;
                                         });
 
-                                        return sortedCoverages.map((coverage, index) => {
+                                        // Filter out specific coverages for PAFCO
+                                        const isPafco = insurer.name?.toLowerCase().includes('pafco');
+                                        const filteredCoverages = isPafco 
+                                          ? sortedCoverages.filter(coverage => {
+                                              const code = String(coverage.code || '').toUpperCase();
+                                              return code !== '34' && code !== '27';
+                                            })
+                                          : sortedCoverages;
+
+                                        return filteredCoverages.map((coverage, index) => {
                                           const upperCode = String(coverage.code || '').toUpperCase();
                                           const isPak = upperCode.includes('PAK');
                                           
@@ -1059,6 +1070,7 @@ const Results = () => {
         onClose={() => setIsCourtikaModalOpen(false)}
         userProductId={userProductId}
         selectedQuote={selectedInsurer}
+        recommendedInsurer={recommendedInsurer}
         recalculatedQuote={recalculatedQuote}
       />
 
@@ -1095,13 +1107,12 @@ const Results = () => {
         isOpen={isPersonalizeModalOpen}
         onClose={() => setIsPersonalizeModalOpen(false)}
         userProductId={userProductId}
-        selectedQuote={selectedInsurer || {
-          insurerName: recommendedInsurer?.name,
-          carrierCode: recommendedInsurer?.carrierCode,
-          logo: recommendedInsurer?.logo,
-          monthlyPrice: recommendedInsurer?.price,
-          yearlyPrice: recommendedInsurer?.yearlyPrice
+        selectedQuote={{
+          insurerName: "Magasiner plus d'options avec Courtika",
+          logo: "/images/courtika-assurances-inc.png",
+          isCourtikaSearch: true
         }}
+        recommendedInsurer={recommendedInsurer}
         recalculatedQuote={recalculatedQuote}
       />
     </>
