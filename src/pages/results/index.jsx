@@ -7,6 +7,7 @@ import { CheckOutlined, ClockCircleOutlined, DownOutlined, UpOutlined, LoadingOu
 import CustomizeProtections from '../../components/carInsurance/CustomizeProtections';
 import LoadingModal from '../../components/loadingModal';
 import CourtikaModal from '../../components/courtikaModal';
+import PersonalizeModal from '../../components/personalizeModal/PersonalizeModal';
 import ResubmitAlert from '../../components/ResubmitAlert';
 import FallbackNoQuotes from '../fallbackNoQuotes';
 import { ResultsSkeleton } from '../../components/carInsurance/QuoteSkeletons';
@@ -36,6 +37,7 @@ const Results = () => {
   const [recalculatedQuote, setRecalculatedQuote] = useState(null);
   const [recalculateError, setRecalculateError] = useState(null);
   const [isCourtikaModalOpen, setIsCourtikaModalOpen] = useState(false);
+  const [isPersonalizeModalOpen, setIsPersonalizeModalOpen] = useState(false);
   const [selectedInsurer, setSelectedInsurer] = useState(null);
   const [insurers, setInsurers] = useState([]);
   const [recommendedInsurer, setRecommendedInsurer] = useState(null);
@@ -560,7 +562,18 @@ const Results = () => {
   };
 
   const handleCustomize = () => {
-    setShowCustomize(true);
+    // Set the selected insurer to recommended one if not already set
+    if (!selectedInsurer && recommendedInsurer) {
+      setSelectedInsurer({
+        insurerName: recommendedInsurer.name,
+        carrierCode: recommendedInsurer.carrierCode,
+        logo: recommendedInsurer.logo,
+        monthlyPrice: recommendedInsurer.price,
+        yearlyPrice: recommendedInsurer.yearlyPrice,
+        coverages: recommendedInsurer.coverages
+      });
+    }
+    setIsPersonalizeModalOpen(true);
   };
 
   const handleSelectInsurer = (insurer) => {
@@ -1078,6 +1091,19 @@ const Results = () => {
       </Modal>
 
       {/* (Rest of the modals and bottom bar remains identical, just wrapped in the logic) */}
+      <PersonalizeModal
+        isOpen={isPersonalizeModalOpen}
+        onClose={() => setIsPersonalizeModalOpen(false)}
+        userProductId={userProductId}
+        selectedQuote={selectedInsurer || {
+          insurerName: recommendedInsurer?.name,
+          carrierCode: recommendedInsurer?.carrierCode,
+          logo: recommendedInsurer?.logo,
+          monthlyPrice: recommendedInsurer?.price,
+          yearlyPrice: recommendedInsurer?.yearlyPrice
+        }}
+        recalculatedQuote={recalculatedQuote}
+      />
     </>
   );
 };

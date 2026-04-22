@@ -1,0 +1,590 @@
+.courtikaModal :global(.ant-modal-wrap) {
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.courtikaModal :global(.ant-modal-content) {
+    padding: 0;
+    border-radius: 12px;
+    background: #ffffff !important;
+    overflow: hidden;
+}
+
+.courtikaModal :global(.ant-modal-body) {
+    background: #ffffff !important;
+}
+
+.courtikaModal :global(.ant-modal-close) {
+    top: 16px;
+    right: 16px;
+    color: #697586;
+}
+
+.courtikaModal :global(.modalContainer) {
+    position: relative;
+    background: #ffffff !important;
+    border-radius: 12px;
+    min-height: 320px;
+}
+
+.contentHidden {
+    visibility: hidden;
+    height: 0;
+    overflow: hidden;
+}
+
+/* Loading Overlay */
+.courtikaModal :global(.loadingOverlay) {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff !important;
+    z-index: 1000;
+    pointer-events: all;
+    border-radius: 12px;
+}
+
+.loadingContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #ffffff !important;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.loadingText {
+    color: #1A1ABA;
+    font-family: Inter, sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    margin: 0 0 20px 0;
+    opacity: 1 !important;
+    background: #ffffff;
+    padding: 8px 16px;
+    border-radius: 8px;
+}
+
+.loadingGif {
+    width: 250px;
+    height: auto;
+    display: block;
+    background: #ffffff !important;
+    border-radius: 10px;
+    padding: 16px;
+    opacity: 1 !important;
+}
+
+/* Main Card */
+.mainCard {
+    background: #ffffff;
+    border: 1px solid #e9eaeb;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* Card Header */
+.cardHeader {
+    padding: 32px 32px 24px;
+    border-bottom: 1px solid #e9eaeb;
+    text-align: center;
+}
+
+.logoTransition {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.logoBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e9eaeb;
+    padding: 8px;
+}
+
+.logoBoxHighlight {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 2px solid rgba(26, 26, 186, 0.2);
+    padding: 8px;
+}
+
+.logoImage {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.animatedDots {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #1a1aba;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+.mainTitle {
+    color: #121926;
+    font-family: Inter, sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 0 0 8px 0;
+}
+
+.mainDescription {
+    color: #535862;
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
+    margin: 0;
+    max-width: 580px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Card Content */
+.cardContent {
+    padding: 24px;
+}
+
+/* Selection Summary */
+.selectionSummary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8fafc;
+    border: 1px solid #e9eaeb;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.summaryLeft {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.insurerLogoBox {
+    width: 48px;
+    height: 48px;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e9eaeb;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.insurerLogo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.summaryLabel {
+    color: #697586;
+    font-size: 13px;
+    font-weight: 400;
+    margin: 0 0 2px 0;
+}
+
+.summaryInsurer {
+    color: #121926;
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.summaryRight {
+    text-align: right;
+}
+
+.summaryPrice {
+    color: #121926;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 2px 0;
+}
+
+.summaryOldPrice {
+    color: #697586;
+    font-size: 12px;
+    font-weight: 400;
+    margin: 0;
+}
+
+/* Question */
+.questionTitle {
+    color: #121926;
+    font-family: Inter, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 0 0 16px 0;
+}
+
+/* Options Container */
+.optionsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.optionButton {
+    width: 100%;
+    padding: 16px;
+    border-radius: 8px;
+    border: 2px solid #e9eaeb;
+    background: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.optionButton:hover {
+    border-color: #d5d7da;
+}
+
+.optionSelected {
+    border-color: #1a1aba;
+    background: rgba(26, 26, 186, 0.05);
+}
+
+.optionContent {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.radioButton {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #d5d7da;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.radioSelected {
+    background: #1a1aba;
+    border-color: #1a1aba;
+}
+
+.radioInner {
+    width: 10px;
+    height: 10px;
+    background: #ffffff;
+    border-radius: 50%;
+}
+
+.iconBox {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #697586;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.iconBoxActive {
+    background: #1a1aba;
+    color: #ffffff;
+}
+
+.optionText {
+    flex: 1;
+}
+
+.optionTitle {
+    color: #121926;
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 2px 0;
+}
+
+.optionDescription {
+    color: #535862;
+    font-size: 13px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.onlineIndicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #f0fdf4;
+    padding: 2px 8px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    margin-left: auto;
+}
+
+.onlineIndicatorClosed {
+    background: #fef2f2;
+}
+
+.pulsingDot {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+}
+
+.pulsingDotClosed {
+    background: #ef4444;
+}
+
+.pulsingDot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: pingOpen 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.pulsingDotClosed::after {
+    background: #ef4444;
+    animation: pingClosed 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes pingOpen {
+    75%, 100% {
+        transform: scale(2.5);
+        opacity: 0;
+    }
+}
+
+@keyframes pingClosed {
+    75%, 100% {
+        transform: scale(2.5);
+        opacity: 0;
+    }
+}
+
+.onlineText {
+    color: #16a34a;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.onlineTextClosed {
+    color: #dc2626;
+}
+
+/* CTA Button */
+.ctaButton {
+    width: 100%;
+    background: #1a1aba;
+    color: #ffffff;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-family: Inter, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    margin-bottom: 16px;
+}
+
+.ctaButton:hover {
+    background: #1515a0;
+}
+
+.ctaButton svg {
+    transition: transform 0.2s ease;
+}
+
+.ctaButton:hover svg {
+    transform: translateX(4px);
+}
+
+/* Trust Signals */
+.trustSignals {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e9eaeb;
+}
+
+.trustItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #697586;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.trustItem svg {
+    color: #22c55e;
+}
+
+/* FAQ Section */
+.faqToggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    color: #1a1aba;
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px;
+    transition: color 0.2s ease;
+}
+
+.faqToggle:hover {
+    color: #1515a0;
+}
+
+.faqContent {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.faqItem {
+    font-size: 12px;
+}
+
+.faqQuestion {
+    color: #121926;
+    font-weight: 600;
+    margin: 0 0 2px 0;
+}
+
+.faqAnswer {
+    color: #535862;
+    font-weight: 400;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cardHeader {
+        padding: 24px 16px 20px;
+    }
+
+    .cardContent {
+        padding: 16px;
+    }
+
+    .mainTitle {
+        font-size: 18px;
+    }
+
+    .mainDescription {
+        font-size: 12px;
+    }
+
+    .logoBox,
+    .logoBoxHighlight {
+        width: 56px;
+        height: 56px;
+    }
+
+    .selectionSummary {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .summaryLeft {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .insurerLogoBox {
+        width: 44px;
+        height: 44px;
+        padding: 4px;
+    }
+
+    .summaryInsurer {
+        font-size: 18px;
+    }
+
+    .summaryRight {
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .summaryPrice {
+        font-size: 18px;
+    }
+
+    .trustSignals {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
