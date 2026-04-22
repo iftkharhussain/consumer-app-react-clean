@@ -132,10 +132,10 @@ function App(props) {
 					<Routes>
 						<Route element={<PrivateWrapper auth={{ isAuthenticated: isAuth }} _style={layoutStyles} />}>
 							<Route path="/" element={<Suspense fallback={<div></div>}><Results /></Suspense>} />
-							<Route path="/my-advisors" element={<Suspense fallback={<div>Loading...</div>}><MyAdvisors /></Suspense>} />
-							<Route path="/explore" element={<Suspense fallback={<div>Loading...</div>}><Explore /></Suspense>} />
-							<Route path="/boost-savings" element={<Suspense fallback={<div>Loading...</div>}><BoostSavings /></Suspense>} />
-							<Route path="/question" element={<Suspense fallback={<div>Loading...</div>}><QuestionPage /></Suspense>} />
+					<Route path="/my-advisors" element={<Suspense fallback={<div></div>}><MyAdvisors /></Suspense>} />
+					<Route path="/explore" element={<Suspense fallback={<div></div>}><Explore /></Suspense>} />
+					<Route path="/boost-savings" element={<Suspense fallback={<div></div>}><BoostSavings /></Suspense>} />
+					<Route path="/question" element={<Suspense fallback={<div></div>}><QuestionPage /></Suspense>} />
 							<Route path="/overview" element={<Suspense fallback={<div></div>}><Overview /></Suspense>} />
 							<Route path="/car-insurance" element={<Suspense fallback={<div></div>}><Results /></Suspense>} />
 							<Route path="/car-insurance/product-order/:userProductId?" element={<Suspense fallback={<div></div>}><OrderProduct /></Suspense>} />
@@ -153,7 +153,7 @@ function App(props) {
 							<Route path="/settings" element={<Suspense fallback={<div></div>}><Settings /></Suspense>} />
 						</Route>
 						{/* Public routes - no authentication required */}
-						<Route exact path="/auth/lead-login" element={<Suspense fallback={<div>Loading...</div>}><LeadLogin /></Suspense>} />
+				<Route exact path="/auth/lead-login" element={<Suspense fallback={<div></div>}><LeadLogin /></Suspense>} />
 						<Route exact path="/reset-password/:token" element={isAuth ? <Navigate to={defaultAppPage} /> : <ResetPassword />} />
 						<Route exact path="/forgot-password" element={isAuth ? <Navigate to={defaultAppPage} /> : <ForgotPassword />} />
 						<Route exact path="/login" element={isAuth ? <Navigate to={defaultAppPage} /> : <LoginForm setIsAuth={setIsAuth} {...props} />} />
