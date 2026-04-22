@@ -106,5 +106,10 @@
   "loadingModal": {
     "shoppingInsurers": "{{userName}}, nous magasinons les assureurs pour vous..."
   },
-  "resubmit_alert_message": "Si vous souhaitez ajouter une autre soumission ou obtenir un produit différent, utilisez cette application au lieu de remplir à nouveau le formulaire ou contactez le 00-0000-0000"
+  "resubmit_alert_message": "Si vous souhaitez ajouter une autre soumission ou obtenir un produit différent, utilisez cette application au lieu de remplir à nouveau le formulaire ou contactez le 00-0000-0000",
+  "signInWithPhone": "Se connecter avec le téléphone",
+  "signIn": "Se connecter",
+  "phoneNumberRequired": "Veuillez saisir votre numéro de téléphone!",
+  "phoneLoginFailed": "La connexion par téléphone a échoué",
+  "phoneLoginVerifiedAccountsOnly": "La connexion par téléphone est disponible uniquement pour les comptes vérifiés"
 }

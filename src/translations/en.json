@@ -106,5 +106,10 @@
   "loadingModal": {
     "shoppingInsurers": "{{userName}}, we're shopping insurers for you..."
   },
-  "resubmit_alert_message": "If you want to add another quote or get a different product, use this app instead of filling the form again or contact 00-0000-0000"
+  "resubmit_alert_message": "If you want to add another quote or get a different product, use this app instead of filling the form again or contact 00-0000-0000",
+  "signInWithPhone": "Sign in with Phone",
+  "signIn": "Sign in",
+  "phoneNumberRequired": "Please input your phone number!",
+  "phoneLoginFailed": "Phone login failed",
+  "phoneLoginVerifiedAccountsOnly": "Phone login is available for verified accounts only"
 }
