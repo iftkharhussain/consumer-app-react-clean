@@ -1006,7 +1006,7 @@ const Results = () => {
                                   className={styles.courtikaButton}
                                   onClick={() => {
                                     setSelectedInsurer({
-                                      insurerName: "Magasiner plus d'options directly with Courtika",
+                                      insurerName: "Magasiner plus d'options avec Courtika",
                                       logo: "/images/courtika-assurances-inc.png",
                                       isCourtikaSearch: true
                                     });
