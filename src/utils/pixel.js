@@ -10,9 +10,13 @@ export const PIXEL_ID = '4299620996968520';
  * @param {string} eventName - Name of the event (e.g., 'PageView', 'Lead', 'Schedule')
  * @param {Object} params - Optional parameters for the event
  */
-export const trackPixelEvent = (eventName, params = {}) => {
+export const trackPixelEvent = (eventName, params = {}, eventID = null) => {
   if (window.fbq) {
-    window.fbq('track', eventName, params);
+    if (eventID) {
+      window.fbq('track', eventName, params, { eventID });
+    } else {
+      window.fbq('track', eventName, params);
+    }
   } else {
     console.debug(`[Pixel] Event "${eventName}" not tracked: fbq not initialized.`, params);
   }

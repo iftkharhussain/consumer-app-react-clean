@@ -476,7 +476,7 @@ const Results = () => {
     },
     {
       question: 'Puis-je modifier mes informations après la soumission ?',
-      answer: 'Oui, vous pourrez discuter et modifier vos informations with le courtier lors de votre appel or rendez-vous.',
+      answer: 'Oui, vous pourrez discuter et modifier vos informations avec le courtier lors de votre appel ou rendez-vous.',
     },
   ];
 
