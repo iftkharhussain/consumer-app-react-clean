@@ -277,7 +277,7 @@ const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-i
                            Vous souhaitez personnaliser vos protections?
                         </h1>
                         <p className={styles.mainDescription}>
-                            Courtika, cabinet certifié à l’AMF, peut poursuivre avec vous pour ajuster votre franchise, revoir vos protections et comparer d’autres options, sans engagement. Vos informations seront déjà transmises pour vous faire gagner du temps.
+                            Courtika, cabinet certifié à l’AMF, peut poursuivre avec vous pour ajuster vos franchises, revoir vos protections et comparer d’autres options, sans engagement. Vos informations seront déjà transmises pour vous faire gagner du temps.
                         </p>
                     </div>
 
@@ -301,7 +301,10 @@ const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-i
                                 </div>
                                 {!displayQuote.isCourtikaSearch && (
                             <div className={styles.summaryRight}>
-                                <p className={styles.summaryPrice}>{displayQuote.monthlyPrice}$/mois</p>
+                                <p className={styles.summaryPrice}>
+                                    {displayQuote.monthlyPrice}$/mois 
+                                    <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '400', marginLeft: '4px' }}>(+9% taxes)</span>
+                                </p>
                                 {displayQuote.yearlyPrice && !displayQuote.discount && (
                                     <p className={styles.summaryOldPrice}>{displayQuote.yearlyPrice}$/an</p>
                                 )}

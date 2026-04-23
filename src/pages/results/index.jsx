@@ -147,7 +147,7 @@ const Results = () => {
           let finalYearlyPrice = annual;
           let oldPrice = carrier.oldPrice || null;
           let oldYearlyPrice = carrier.oldYearlyPrice || null;
-          let discountBonus = isLUnique ? "L’Unique vous offre 1 mois gratuit. Le prix affiché inclut cette promotion." : null;
+          let discountBonus = isLUnique ? "L'Unique offre actuellement 1 mois gratuit sur cette assurance." : null;
 
           if (isLUnique) {
             // Apply "1 month free" discount: (Annual - (Annual / 12))
@@ -255,7 +255,7 @@ const Results = () => {
     'TPL': 'Responsabilité civile',
     'COMP': 'Accident sans collision ni versement (B3)',
     'CMP': 'Accident sans collision ni versement (B3)',
-    '34': 'Protection supplémentaire (FAQ 34)',
+    '34': 'Assurance de personnes (FAQ 34)',
     '33': 'Assistance routière (FAQ 33)',
     '20': 'Assistance routière (FAQ 20)',
     '27': 'Assurance des personnes (FAQ 27)',
@@ -307,11 +307,11 @@ const Results = () => {
           description: 'Vous serez couvert pour les dommages à votre véhicule en lien with des situations autre qu\'une collision or un renversement comme par exemple un feu, un vol, un bris de vitre, un vandalisme or une collision with un animal.'
         },
         '34': {
-          title: 'Protection supplémentaire (FAQ 34)',
+          title: 'Assurance de personnes (FAQ 34)',
           description: 'Suite à un accident d\'auto, vous serez couvert pour les frais médicaux non couverts par la SAAQ pour les dommages corporels. Vous pourriez aussi recevoir une indemnité pour décès et mutilation. Cet avenant inclut aussi votre conjoint (e) et enfants à votre charge.'
         },
         '41': {
-          title: 'Protection supplémentaire (FAQ 34)',
+          title: 'Assurance de personnes (FAQ 34)',
           description: 'Suite à un accident d\'auto, vous serez couvert pour les frais médicaux non couverts par la SAAQ pour les dommages corporels. Vous pourriez aussi recevoir une indemnité pour décès et mutilation. Cet avenant inclut aussi votre conjoint (e) et enfants à votre charge.'
         },
         '33': {
@@ -476,7 +476,7 @@ const Results = () => {
     },
     {
       question: 'Puis-je modifier mes informations après la soumission ?',
-      answer: 'Oui, vous pourrez discuter et modifier vos informations with le courtier lors de votre appel or rendez-vous.',
+      answer: 'Oui, vous pourrez discuter et modifier vos informations avec le courtier lors de votre appel ou rendez-vous.',
     },
   ];
 
@@ -736,6 +736,11 @@ const Results = () => {
                                 {billingPeriod === 'monthly' ? recommendedInsurer.price : recommendedInsurer.yearlyPrice}
                               </span>
                               <span className={styles.priceSuffix}>$/{billingPeriod === 'monthly' ? 'mois' : 'année'}</span>
+                              {billingPeriod === 'monthly' && (
+                                <span className={styles.taxLabel} style={{ marginLeft: '4px', color: '#667085', fontSize: '11px', fontWeight: '400' }}>
+                                  (+9% taxes)
+                                </span>
+                              )}
                             </div>
 
                             {recommendedInsurer.discount && (
@@ -859,6 +864,11 @@ const Results = () => {
                                       <span className={styles.insurerPriceSuffix}>
                                          $/{billingPeriod === 'monthly' ? 'mois' : 'année'}
                                       </span>
+                                      {billingPeriod === 'monthly' && (
+                                        <span className={styles.insurerTaxLabel} style={{ marginLeft: '4px', color: '#667085', fontSize: '11px', fontWeight: '400' }}>
+                                          (+9% taxes)
+                                        </span>
+                                      )}
                                       <span className={styles.alternativePrice}>
                                         {billingPeriod === 'monthly'
                                           ? `ou ${insurer.yearlyPrice}$ par année`
@@ -904,7 +914,7 @@ const Results = () => {
                                 <div className={styles.expandedDetails}>
                                   {insurer.name?.toLowerCase().includes('unique') && (
                                     <div className={styles.uniquePromoText}>
-                                      L'Unique vous offre 1 mois gratuit. Le prix affiché inclut cette promotion.
+                                    L'Unique offre actuellement 1 mois gratuit sur cette assurance.
                                     </div>
                                   )}
                                   <Divider className={styles.expandedDivider} />
