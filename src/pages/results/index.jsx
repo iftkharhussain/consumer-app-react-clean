@@ -188,6 +188,19 @@ const Results = () => {
 
         // Set cheapest insurer as recommended (first in sorted list)
         setRecommendedInsurer(sortedInsurers[0]);
+        
+        // 🔍 DEBUG: Log all insurers and the cheapest one
+        console.log('\n🔍 [Results Page DEBUG] ===================');
+        console.log('📊 All Insurers (sorted by price):');
+        sortedInsurers.forEach((ins, index) => {
+          console.log(`  ${index + 1}. ${ins.name} (${ins.carrierCode}) - $${ins.price}/month ${index === 0 ? '⭐ CHEAPEST' : ''}`);
+        });
+        console.log('🏆 Recommended Insurer (will be sent to API):', {
+          name: sortedInsurers[0]?.name,
+          carrierCode: sortedInsurers[0]?.carrierCode,
+          price: sortedInsurers[0]?.price
+        });
+        console.log('=========================================\n');
       }
     }
   }, [quoteData]);
@@ -736,11 +749,9 @@ const Results = () => {
                                 {billingPeriod === 'monthly' ? recommendedInsurer.price : recommendedInsurer.yearlyPrice}
                               </span>
                               <span className={styles.priceSuffix}>$/{billingPeriod === 'monthly' ? 'mois' : 'année'}</span>
-                              {billingPeriod === 'monthly' && (
-                                <span className={styles.taxLabel} style={{ marginLeft: '4px', color: '#667085', fontSize: '11px', fontWeight: '400' }}>
-                                  (+9% taxes)
-                                </span>
-                              )}
+                              <span className={styles.taxLabel} style={{ marginLeft: '4px', color: '#667085', fontSize: '11px', fontWeight: '400' }}>
+                                (+9% taxes)
+                              </span>
                             </div>
 
                             {recommendedInsurer.discount && (
@@ -864,11 +875,9 @@ const Results = () => {
                                       <span className={styles.insurerPriceSuffix}>
                                          $/{billingPeriod === 'monthly' ? 'mois' : 'année'}
                                       </span>
-                                      {billingPeriod === 'monthly' && (
-                                        <span className={styles.insurerTaxLabel} style={{ marginLeft: '4px', color: '#667085', fontSize: '11px', fontWeight: '400' }}>
-                                          (+9% taxes)
-                                        </span>
-                                      )}
+                                      <span className={styles.insurerTaxLabel} style={{ marginLeft: '4px', color: '#667085', fontSize: '11px', fontWeight: '400' }}>
+                                        (+9% taxes)
+                                      </span>
                                       <span className={styles.alternativePrice}>
                                         {billingPeriod === 'monthly'
                                           ? `ou ${insurer.yearlyPrice}$ par année`

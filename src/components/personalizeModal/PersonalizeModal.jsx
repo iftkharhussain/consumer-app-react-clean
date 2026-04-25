@@ -67,6 +67,14 @@ const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-i
             // Use cheapest insurer (recommendedInsurer) for the call, not the displayed one
             const carrierCode = submissionQuote?.carrierCode;
             
+            console.log('\n🚀 [PersonalizeModal] SENDING REQUEST:', {
+                carrierCode: carrierCode,
+                insurerName: submissionQuote?.insurerName,
+                premium: submissionQuote?.monthlyPrice,
+                userProductId: userProductId,
+                isCustomizeRequest: true
+            });
+            
             // Prefer userProductId over productSlug for more reliable matching
             const params = userProductId 
                 ? { userProductId, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, isCustomizeRequest: true } 

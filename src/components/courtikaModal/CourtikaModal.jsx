@@ -58,6 +58,28 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
         }
         : selectedQuote; // Use the clicked insurer for both display and submission
 
+    // 🔍 DEBUG: Log what will be sent (accessible in browser console)
+    React.useEffect(() => {
+        console.log('\n🔍 [CourtikaModal DEBUG] ===================' );
+        console.log('📊 Display Quote (What user sees):', {
+            name: displayQuote?.insurerName,
+            carrierCode: displayQuote?.carrierCode,
+            logo: displayQuote?.logo
+        });
+        console.log('📤 Submission Quote (What will be sent to API):', {
+            name: submissionQuote?.insurerName,
+            carrierCode: submissionQuote?.carrierCode,
+            premium: submissionQuote?.price || submissionQuote?.monthlyPrice
+        });
+        console.log('🏆 Recommended Insurer (Cheapest):', {
+            name: recommendedInsurer?.name,
+            carrierCode: recommendedInsurer?.carrierCode,
+            premium: recommendedInsurer?.price
+        });
+        console.log('🔄 isFromCourtikaButton:', isFromCourtikaButton);
+        console.log('=========================================\n');
+    }, [displayQuote, submissionQuote, recommendedInsurer, isFromCourtikaButton]);
+
     const handleDemanderAppel = async () => {
         if (timerRef.current) {
             clearTimeout(timerRef.current);
@@ -69,6 +91,14 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
         try {
             // Use cheapest insurer (recommendedInsurer) for the call, not the displayed one
             const carrierCode = submissionQuote?.carrierCode;
+            
+            console.log('\n🚀 [CourtikaModal] SENDING REQUEST:', {
+                carrierCode: carrierCode,
+                insurerName: submissionQuote?.insurerName,
+                premium: submissionQuote?.price || submissionQuote?.monthlyPrice,
+                userProductId: userProductId,
+                isFromCourtikaButton: isFromCourtikaButton
+            });
             
             // Prefer userProductId over productSlug for more reliable matching
             const params = userProductId 

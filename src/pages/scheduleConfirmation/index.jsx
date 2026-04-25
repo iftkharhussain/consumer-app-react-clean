@@ -132,13 +132,26 @@ const ScheduleConfirmation = () => {
                 return currentPrice < lowestPrice ? current : lowest;
               });
               carrierCode = lowestPriceCarrier.carrierCode;
-              console.log('[ScheduleConfirmation] Selected lowest price carrier:', carrierCode, 'with premium:', lowestPriceCarrier.annualPremium || lowestPriceCarrier.premium);
+              console.log('\n🔍 [ScheduleConfirmation DEBUG] ===================');
+              console.log('🏆 Selected lowest price carrier:', {
+                carrierCode: carrierCode,
+                name: lowestPriceCarrier.carrierName || lowestPriceCarrier.name,
+                premium: lowestPriceCarrier.annualPremium || lowestPriceCarrier.premium
+              });
+              console.log('📤 This carrier will be sent to ezLeads');
+              console.log('=========================================\n');
             }
           }
         } catch (quoteError) {
           console.warn('[ScheduleConfirmation] Could not fetch quote details:', quoteError);
           // Continue without carrierCode - backend will use default
         }
+        
+        console.log('\n🚀 [ScheduleConfirmation] SENDING REQUEST:', {
+          carrierCode: carrierCode || 'not specified (backend will use cheapest)',
+          userProductId: userProductId,
+          productSlug: 'car-insurance'
+        });
         
         const result = await fortusService.requestCall({
           userProductId,
