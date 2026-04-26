@@ -43,6 +43,15 @@ const Results = () => {
   const [recommendedInsurer, setRecommendedInsurer] = useState(null);
   const [recalculateCount, setRecalculateCount] = useState(0);
   const [showRecalculateLimitModal, setShowRecalculateLimitModal] = useState(false);
+  const shouldOpenModalRef = React.useRef(false);
+
+  // Open CourtikaModal after selectedInsurer state updates
+  React.useEffect(() => {
+    if (shouldOpenModalRef.current && selectedInsurer) {
+      setIsCourtikaModalOpen(true);
+      shouldOpenModalRef.current = false;
+    }
+  }, [selectedInsurer]);
 
   // Get user profile from Redux state
   const userProfile = useSelector(state => state.app?.user_profile);
@@ -142,23 +151,12 @@ const Results = () => {
 
           const isLUnique = carrier.carrierCode === 'UNI' || displayName.toLowerCase().includes('l\'unique');
 
-          // Base prices from API
+          // Base prices from API (no discount calculation for L'Unique, just show badge)
           let finalPrice = monthly;
           let finalYearlyPrice = annual;
           let oldPrice = carrier.oldPrice || null;
           let oldYearlyPrice = carrier.oldYearlyPrice || null;
           let discountBonus = isLUnique ? "L'Unique offre actuellement 1 mois gratuit sur cette assurance." : null;
-
-          if (isLUnique) {
-            // Apply "1 month free" discount: (Annual - (Annual / 12))
-            const oneMonthValue = annual / 12;
-            oldYearlyPrice = Math.round(annual);
-            oldPrice = Math.round(annual / 12);
-            
-            finalYearlyPrice = Math.round(annual - oneMonthValue);
-            // Use floor to match user's example (2339/12 = 194.9 => 194)
-            finalPrice = Math.floor(finalYearlyPrice / 12);
-          }
 
           // Build insurer object
           const insurerData = {
@@ -433,6 +431,28 @@ const Results = () => {
       return true; // Keep all other coverages
     });
 
+    // Special handling for Wawanesa: ensure FAQ 34 is always shown separately
+    let finalProtections = filteredProtections;
+    const isWawanesa = recommendedInsurer?.name?.toLowerCase().includes('wawanesa');
+    
+    if (isWawanesa) {
+      const hasFaq34 = finalProtections.some(p => p.code === '34');
+      
+      if (!hasFaq34) {
+        // Inject FAQ 34 with 15,000$ coverage
+        const faq34Protection = {
+          title: 'Assurance de personnes (FAQ 34)',
+          description: 'Suite à un accident d\'auto, vous serez couvert pour les frais médicaux non couverts par la SAAQ pour les dommages corporels. Vous pourriez aussi recevoir une indemnité pour décès et mutilation. Cet avenant inclut aussi votre conjoint (e) et enfants à votre charge.',
+          coverage: '15 000$',
+          type: 'couverture',
+          code: '34',
+          isPak: false
+        };
+        
+        finalProtections = [...finalProtections, faq34Protection];
+      }
+    }
+
     // Sort protections in desired order:
     // 1. TP (Responsabilité civile)
     // 2. COL (Collision)
@@ -441,7 +461,7 @@ const Results = () => {
     // 5. PAK (Protections bonifiées) at the end
     const sortOrder = ['TP', 'TPL', 'COL', 'COLL', 'CMP', 'COMP'];
     
-    return filteredProtections.sort((a, b) => {
+    return finalProtections.sort((a, b) => {
       // PAK always goes to the end
       if (a.isPak && !b.isPak) return 1;
       if (!a.isPak && b.isPak) return -1;
@@ -648,9 +668,7 @@ const Results = () => {
       };
     });
     
-    console.log('[Results] Transformed coverages:', transformedCoverages);
-    
-    setSelectedInsurer({
+    const selectedInsurerData = {
       insurerName: insurer.name,
       carrierCode: insurer.carrierCode,
       logo: insurer.logo,
@@ -662,8 +680,11 @@ const Results = () => {
       discountLabel: insurer.discountLabel || null,
       discountBonus: insurer.discountBonus || null,
       coverages: transformedCoverages
-    });
-    setIsCourtikaModalOpen(true);
+    };
+    
+    // Flag that we want to open the modal after state updates
+    shouldOpenModalRef.current = true;
+    setSelectedInsurer(selectedInsurerData);
   };
 
   const toggleInsurerDetails = (insurerId) => {
@@ -963,7 +984,41 @@ const Results = () => {
                                             })
                                           : sortedCoverages;
 
-                                        return filteredCoverages.map((coverage, index) => {
+                                        // Special handling for Wawanesa: ensure FAQ 34 is always shown separately
+                                        const isWawanesa = insurer.name?.toLowerCase().includes('wawanesa');
+                                        let finalCoverages = filteredCoverages;
+                                        
+                                        if (isWawanesa) {
+                                          const hasFaq34 = filteredCoverages.some(c => String(c.code || '').toUpperCase() === '34');
+                                          
+                                          if (!hasFaq34) {
+                                            // Inject FAQ 34 with 15,000$ coverage before PAK
+                                            const pakIndex = filteredCoverages.findIndex(c => 
+                                              String(c.code || '').toUpperCase().includes('PAK')
+                                            );
+                                            
+                                            const faq34Coverage = {
+                                              code: '34',
+                                              name: 'Assurance de personnes (FAQ 34)',
+                                              limit: '15 000$',
+                                              deductible: null
+                                            };
+                                            
+                                            if (pakIndex !== -1) {
+                                              // Insert before PAK
+                                              finalCoverages = [
+                                                ...filteredCoverages.slice(0, pakIndex),
+                                                faq34Coverage,
+                                                ...filteredCoverages.slice(pakIndex)
+                                              ];
+                                            } else {
+                                              // No PAK found, add at the end
+                                              finalCoverages = [...filteredCoverages, faq34Coverage];
+                                            }
+                                          }
+                                        }
+
+                                        return finalCoverages.map((coverage, index) => {
                                           const upperCode = String(coverage.code || '').toUpperCase();
                                           const isPak = upperCode.includes('PAK');
                                           
@@ -1048,12 +1103,12 @@ const Results = () => {
                                   type="primary"
                                   className={styles.courtikaButton}
                                   onClick={() => {
+                                    shouldOpenModalRef.current = true;
                                     setSelectedInsurer({
                                       insurerName: "Magasiner plus d'options avec Courtika",
                                       logo: "/images/courtika-assurances-inc.png",
                                       isCourtikaSearch: true
                                     });
-                                    setIsCourtikaModalOpen(true);
                                   }}
                                 >
                                   Parler à Courtika
