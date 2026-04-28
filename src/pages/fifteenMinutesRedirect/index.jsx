@@ -93,7 +93,14 @@ const FifteenMinutesRedirect = () => {
                 return currentPrice < lowestPrice ? current : lowest;
               });
               carrierCode = lowestPriceCarrier.carrierCode;
-              console.log('[FifteenMinutesRedirect] Selected lowest price carrier:', carrierCode, 'with premium:', lowestPriceCarrier.annualPremium || lowestPriceCarrier.premium);
+              console.log('\n🔍 [FifteenMinutesRedirect DEBUG] ===================');
+              console.log('🏆 Selected lowest price carrier:', {
+                carrierCode: carrierCode,
+                name: lowestPriceCarrier.carrierName || lowestPriceCarrier.name,
+                premium: lowestPriceCarrier.annualPremium || lowestPriceCarrier.premium
+              });
+              console.log('📤 This carrier will be sent to ezLeads');
+              console.log('=========================================\n');
             }
           }
         } catch (quoteError) {
@@ -101,6 +108,12 @@ const FifteenMinutesRedirect = () => {
           // Continue without carrierCode - backend will use default
         }
       }
+      
+      console.log('\n🚀 [FifteenMinutesRedirect] SENDING REQUEST:', {
+        carrierCode: carrierCode || 'not specified (backend will use cheapest)',
+        userProductId: productId,
+        productSlug: 'car-insurance'
+      });
       
       // Send ezLead request
       const result = await fortusService.requestCall({
