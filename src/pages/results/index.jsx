@@ -585,7 +585,8 @@ const Results = () => {
         logo: recommendedInsurer.logo,
         monthlyPrice: recommendedInsurer.price,
         yearlyPrice: recommendedInsurer.yearlyPrice,
-        coverages: recommendedInsurer.coverages
+        coverages: recommendedInsurer.coverages,
+        billingPeriod: billingPeriod
       });
     }
     setIsPersonalizeModalOpen(true);
@@ -648,7 +649,8 @@ const Results = () => {
       discount: insurer.discount || false,
       discountLabel: insurer.discountLabel || null,
       discountBonus: insurer.discountBonus || null,
-      coverages: transformedCoverages
+      coverages: transformedCoverages,
+      billingPeriod: billingPeriod
     });
     setIsCourtikaModalOpen(true);
   };
@@ -736,7 +738,7 @@ const Results = () => {
                                 {billingPeriod === 'monthly' ? recommendedInsurer.price : recommendedInsurer.yearlyPrice}
                               </span>
                               <span className={styles.priceSuffix}>$/{billingPeriod === 'monthly' ? 'mois' : 'année'}</span>
-                              {billingPeriod === 'monthly' && (
+                              {(billingPeriod === 'monthly' || billingPeriod === 'yearly') && (
                                 <span className={styles.taxLabel} style={{ marginLeft: '4px', color: '#667085', fontSize: '11px', fontWeight: '400' }}>
                                   (+9% taxes)
                                 </span>
@@ -864,7 +866,7 @@ const Results = () => {
                                       <span className={styles.insurerPriceSuffix}>
                                          $/{billingPeriod === 'monthly' ? 'mois' : 'année'}
                                       </span>
-                                      {billingPeriod === 'monthly' && (
+                                      {(billingPeriod === 'monthly' || billingPeriod === 'yearly') && (
                                         <span className={styles.insurerTaxLabel} style={{ marginLeft: '4px', color: '#667085', fontSize: '11px', fontWeight: '400' }}>
                                           (+9% taxes)
                                         </span>
@@ -1133,7 +1135,8 @@ const Results = () => {
         selectedQuote={{
           insurerName: "Magasiner plus d'options avec Courtika",
           logo: "/images/courtika-assurances-inc.png",
-          isCourtikaSearch: true
+          isCourtikaSearch: true,
+          billingPeriod: billingPeriod
         }}
         recommendedInsurer={recommendedInsurer}
         recalculatedQuote={recalculatedQuote}
