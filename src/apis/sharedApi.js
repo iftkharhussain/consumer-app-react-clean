@@ -14,6 +14,7 @@ export const authUrl = `${baseUrl}/api/auth/verify`;
 export const LoginUrl = `${baseUrl}/api/auth/login`;
 export const RegisterUrl = `${baseUrl}/api/auth/register`;
 export const PhoneLoginUrl = `${baseUrl}/api/auth/phone-login`;
+export const PhoneLoginCompleteUrl = `${baseUrl}/api/auth/phone-login-complete`;
 export const LeadLoginUrl = `${baseUrl}/api/auth/lead-login`;
 export const CheckTokenUrl = `${baseUrl}/api/auth/check-token`;
 export const logoutUrl = `${baseUrl}/api/auth/logout`;

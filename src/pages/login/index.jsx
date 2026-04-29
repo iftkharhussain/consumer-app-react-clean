@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast'
 import React, { useState, useEffect } from 'react'
-import { LoginUrl, addPhoneOTPUrl, verifyPhoneOTPUrl } from '../../apis/sharedApi'
+import { LoginUrl, addPhoneOTPUrl, verifyPhoneOTPUrl, PhoneLoginCompleteUrl } from '../../apis/sharedApi'
 import { useDispatch } from 'react-redux'
 import { Form, Button, Typography, Input, Alert } from 'antd'
 import { Types, setRequest } from '../../utils/helper'
@@ -27,6 +27,7 @@ const Login = props => {
   const [attempts, setAttempts] = useState(0);
   const [cooldownEnd, setCooldownEnd] = useState(null);
   const [timeRemaining, setTimeRemaining] = useState('');
+  const [resendCountdown, setResendCountdown] = useState(0); // Countdown for resend button
 
   // Load rate limiting data from localStorage
   useEffect(() => {
@@ -89,6 +90,29 @@ const Login = props => {
     }
   };
 
+  // Resend countdown timer
+  useEffect(() => {
+    if (resendCountdown <= 0) return;
+
+    const interval = setInterval(() => {
+      setResendCountdown(prev => Math.max(0, prev - 1));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [resendCountdown]);
+
+  const handleResendOTP = async () => {
+    if (resendCountdown > 0) return;
+    
+    try {
+      await sendOTP(phoneNumber);
+      setResendCountdown(60); // Set 60 second countdown
+      toast.success('Code renvoyé');
+    } catch (error) {
+      toast.error('Échec de renvoi du code');
+    }
+  };
+
   const onVerifyPhone = async (values) => {
     if (cooldownEnd && Date.now() < cooldownEnd) {
       toast.error(`Trop de tentatives. Veuillez réessayer dans ${timeRemaining}`);
@@ -113,22 +137,17 @@ const Login = props => {
       const phoneLoginUrl = LoginUrl.replace('/login', '/phone-login');
       const verifyRes = await setRequest(Types.AUTH, formData, phoneLoginUrl, Types.POST, dispatch);
       
-      setLoading(false);
-
       if (verifyRes?.success) {
-        // Phone verified, user exists, proceed to step 2 (OTP)
-        toast.success('Numéro vérifié! Connexion...');
+        // Phone verified, user exists, now send OTP
+        toast.success('Numéro vérifié! Envoi du code...');
         
-        // For now, directly log in (since OTP might not be implemented yet)
-        // In production with OTP, move to step 2
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
+        // Send OTP
+        await sendOTP(phone);
         
-        // Uncomment below when OTP is implemented:
-        // setStep(2);
-        // await sendOTP(phone);
+        // Move to step 2 (OTP input)
+        setStep(2);
       } else {
+        setLoading(false);
         incrementAttempts();
         return toast.error(verifyRes?.message || t('phoneLoginFailed'));
       }
@@ -152,6 +171,7 @@ const Login = props => {
 
       if (otpRes?.success) {
         toast.success('Code envoyé à votre téléphone');
+        setResendCountdown(60); // Set 60 second countdown
       } else {
         toast.error(otpRes?.message || 'Échec de l\'envoi du code');
         setStep(1);
@@ -174,7 +194,7 @@ const Login = props => {
 
       setLoading(true);
       
-      // Backend verify endpoint expects query parameters
+      // Step 1: Verify OTP code
       const queryParams = new URLSearchParams({
         otp: code.toString().trim(),
         phoneNumber: phoneNumber.toString().trim(),
@@ -185,14 +205,29 @@ const Login = props => {
       const verifyUrl = `${verifyPhoneOTPUrl}?${queryParams.toString()}`;
       const verifyRes = await setRequest(Types.AUTH, null, verifyUrl, Types.GET, dispatch);
       
-      setLoading(false);
-
       if (verifyRes?.success) {
-        toast.success('Connexion réussie!');
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
+        // OTP verified successfully, now complete login
+        toast.success('Code vérifié! Connexion...');
+        
+        // Step 2: Complete login
+        const loginFormData = new URLSearchParams();
+        loginFormData.append("phone", phoneNumber.toString().trim());
+        
+        const loginRes = await setRequest(Types.AUTH, loginFormData, PhoneLoginCompleteUrl, Types.POST, dispatch);
+        
+        setLoading(false);
+        
+        if (loginRes?.success) {
+          toast.success('Connexion réussie!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        } else {
+          incrementAttempts();
+          return toast.error(loginRes?.message || 'Échec de connexion');
+        }
       } else {
+        setLoading(false);
         incrementAttempts();
         return toast.error(verifyRes?.message || 'Code invalide');
       }
@@ -315,12 +350,12 @@ const Login = props => {
                 style={{ marginBottom: 0 }}
                 rules={[
                   { required: true, message: 'Code requis' },
-                  { pattern: /^\d{6}$/, message: 'Le code doit contenir 6 chiffres' }
+                  { pattern: /^\d{4}$/, message: 'Le code doit contenir 4 chiffres' }
                 ]}
               >
                 <Input 
-                  placeholder="000000"
-                  maxLength={6}
+                  placeholder="0000"
+                  maxLength={4}
                   style={{ fontSize: '20px', textAlign: 'center', letterSpacing: '8px' }}
                 />
               </Form.Item>
@@ -338,6 +373,24 @@ const Login = props => {
                 Vérifier
               </Button>
             </Form.Item>
+
+            {/* Resend OTP Section */}
+            <div style={{ textAlign: 'center', marginBottom: 12 }}>
+              {resendCountdown > 0 ? (
+                <Text style={{ fontSize: '14px', color: '#6b7280' }}>
+                  Renvoyer le code dans {resendCountdown}s
+                </Text>
+              ) : (
+                <Button 
+                  type="link" 
+                  onClick={handleResendOTP}
+                  disabled={loading}
+                  style={{ padding: 0, height: 'auto' }}
+                >
+                  Renvoyer le code
+                </Button>
+              )}
+            </div>
 
             <div style={{ textAlign: 'center' }}>
               <Button 
