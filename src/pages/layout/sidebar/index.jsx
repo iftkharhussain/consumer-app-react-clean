@@ -145,21 +145,22 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 			{
 				key: 'home',
 				selectPaths: [
-					'/car-insurance', 
+					'/result', 
 					'/', 
-					'/car-insurance/product-order/*', 
-					'/call-confirmation/*', 
-					'/fifteen-minutes-redirect/*', 
+					'/result/product-order/*', 
+					'/confirmation-call/*', 
+					'/result-expired/*', 
 					'/schedule-call/*', 
-					'/schedule-confirmation/*'
+					'/confirmation-meeting/*',
+					'/result-fallback'
 				],
 				icon: (
-					<Link to='/car-insurance'>
+					<Link to='/result'>
 						<Car01 />
 					</Link>
 				),
 				label: (
-					<Link to='/car-insurance' style={{ color: 'inherit', textDecoration: 'none' }}>
+					<Link to='/result' style={{ color: 'inherit', textDecoration: 'none' }}>
 						Assurance auto
 					</Link>
 				),
@@ -239,14 +240,14 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 			},
 			{
 				key: 'call-confirmation',
-				selectPaths: ['/call-confirmation'],
+				selectPaths: ['/confirmation-call'],
 				icon: (
-					<Link to='/call-confirmation'>
+					<Link to='/confirmation-call'>
 						<InfoCircle />
 					</Link>
 				),
 				label: (
-					<Link to='/call-confirmation' style={{ color: 'inherit', textDecoration: 'none' }}>
+					<Link to='/confirmation-call' style={{ color: 'inherit', textDecoration: 'none' }}>
 						Call Confirmation
 					</Link>
 				),
@@ -267,28 +268,28 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 			},
 			{
 				key: 'schedule-confirmation',
-				selectPaths: ['/schedule-confirmation'],
+				selectPaths: ['/confirmation-meeting'],
 				icon: (
-					<Link to='/schedule-confirmation'>
+					<Link to='/confirmation-meeting'>
 						<InfoCircle />
 					</Link>
 				),
 				label: (
-					<Link to='/schedule-confirmation' style={{ color: 'inherit', textDecoration: 'none' }}>
+					<Link to='/confirmation-meeting' style={{ color: 'inherit', textDecoration: 'none' }}>
 						Schedule Confirmation
 					</Link>
 				),
 			},
 			{
-				key: '15-minutes-redirect',
-				selectPaths: ['/15-minutes-redirect'],
+				key: 'result-expired',
+				selectPaths: ['/result-expired'],
 				icon: (
-					<Link to='/15-minutes-redirect'>
+					<Link to='/result-expired'>
 						<InfoCircle />
 					</Link>
 				),
 				label: (
-					<Link to='/15-minutes-redirect' style={{ color: 'inherit', textDecoration: 'none' }}>
+					<Link to='/result-expired' style={{ color: 'inherit', textDecoration: 'none' }}>
 						15 Minutes Redirect
 					</Link>
 				),
