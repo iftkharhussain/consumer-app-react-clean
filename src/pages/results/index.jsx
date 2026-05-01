@@ -82,7 +82,7 @@ const Results = () => {
       setTimeLeft((prevTime) => {
         if (prevTime <= 0) {
           clearInterval(timer);
-          navigate('/fifteen-minutes-redirect');
+          navigate('/result-expired');
           return 0;
         }
         return prevTime - 1;
@@ -108,8 +108,8 @@ const Results = () => {
         const result = await checkPendingOrder('car-insurance');
         if (result.success && result.hasPendingOrder && result.userProductId && result.fortusDeliveryId) {
           // Redirect to call confirmation page (user has already selected insurer AND lead was sent)
-          console.log('[Results] Sent order found, redirecting to call-confirmation:', result.userProductId);
-          navigate(`/call-confirmation/${result.userProductId}`);
+          console.log('[Results] Sent order found, redirecting to confirmation-call:', result.userProductId);
+          navigate(`/confirmation-call/${result.userProductId}`);
         }
       } catch (error) {
         console.error('Failed to check pending order:', error);

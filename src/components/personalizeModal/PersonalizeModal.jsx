@@ -101,7 +101,7 @@ const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-i
                 
                 // Redirect to call confirmation page with userProductId
                 timerRef.current = setTimeout(() => {
-                    navigate(`/call-confirmation/${productId}`);
+                    navigate(`/confirmation-call/${productId}`);
                 }, 2000);
             } else {
                 console.warn('Fortus request failed:', result);

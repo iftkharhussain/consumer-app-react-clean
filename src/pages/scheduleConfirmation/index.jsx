@@ -208,7 +208,7 @@ const ScheduleConfirmation = () => {
           <div className={styles.actionCard}>
             <h1 className={styles.mainTitle} style={{ color: '#dc2626' }}>Erreur</h1>
             <p className={styles.subTitle}>{error}</p>
-            <Button type="primary" onClick={() => navigate('/car-insurance')} style={{ marginTop: '20px' }}>
+            <Button type="primary" onClick={() => navigate('/result')} style={{ marginTop: '20px' }}>
               Retour aux résultats
             </Button>
           </div>
