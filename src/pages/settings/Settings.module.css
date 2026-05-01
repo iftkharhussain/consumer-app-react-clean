@@ -89,9 +89,12 @@
 }
 
 .profileForm .ant-form-item-label > label {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--colors-text-text-secondary-700, #414651);
+  color: var(--Gray-700, #364152) !important;
+  font-family: Inter !important;
+  font-size: 14px !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  line-height: 20px !important;
 }
 
 .leftLabel .labelTitle {
@@ -112,7 +115,9 @@
 .securityForm .ant-input,
 .securityForm .ant-input-password,
 .securityForm .ant-select-selector {
-  border-radius: 8px;
+  border-radius: 8px !important;
+  border: 1px solid var(--Gray-300, #CDD5DF) !important;
+  background: var(--Base-White, #FFF) !important;
 }
 
 .photoSection .ant-form-item-label > label {
@@ -142,12 +147,12 @@
   flex: 1;
 }
 
-.uploadDragger .ant-upload-drag-icon img {
+.uploadDragger :global(.ant-upload-drag-icon) img {
   margin-bottom: 12px;
   padding: 10px;
   border-radius: 28px;
-  border: 6px solid #F8FAFC;
-  background: #EEF2F6;
+  border: 6px solid var(--Gray-50, #F8FAFC);
+  background: var(--Gray-100, #EEF2F6);
 }
 
 /* Gap between form rows */
@@ -166,6 +171,11 @@
   min-width: 512px;
   max-width: 512px; */
 }
+
+.mobileLabel {
+  display: none;
+}
+
 
 /* Horizontal gap between label and input field */
 .profileForm .ant-row {
@@ -195,9 +205,12 @@
 }
 
 .securityForm .ant-form-item-label > label {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--colors-text-text-secondary-700, #414651);
+  color: var(--Gray-700, #364152) !important;
+  font-family: Inter !important;
+  font-size: 14px !important;
+  font-style: normal !important;
+  font-weight: 500 !important;
+  line-height: 20px !important;
 }
 
 .securityOption {
@@ -290,10 +303,10 @@
 
 .saveButton {
   padding: 10px 16px;
-  background: var(--colors-bg-brand-solid, #2121DD);
-  border-color: var(--colors-bg-brand-solid, #2121DD);
+  background: #1A1ABA !important;
+  border: 1px solid #1A1ABA !important;
   font-weight: 500;
-  border-radius: 8px;
+  border-radius: 8px !important;
 }
 
 /* Settings Profile Container */
@@ -337,12 +350,12 @@
   line-height: 20px !important; /* 142.857% */
 }
 
-.settingsProfile .ant-upload-drag-icon img {
+.settingsProfile :global(.ant-upload-drag-icon) img {
   margin-bottom: 12px;
   padding: 10px;
   border-radius: 28px;
-  border: 6px solid #F8FAFC;
-  background: #EEF2F6;
+  border: 6px solid var(--Gray-50, #F8FAFC);
+  background: var(--Gray-100, #EEF2F6);
 }
 
 .settingsProfile .ant-upload-wrapper .ant-upload-drag-container {
@@ -476,6 +489,43 @@
   .appConfigRightSection {
     width: 100%;
   }
+
+  .settingsContent {
+    padding: 16px !important;
+  }
+
+  .leftLabel {
+    margin-bottom: 4px;
+  }
+
+  .formRow {
+    margin-bottom: 12px !important;
+  }
+
+  .hideOnMobile {
+    display: none !important;
+  }
+
+  .mobileLabel {
+    display: block !important;
+    color: var(--Gray-700, #364152);
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    margin-bottom: 2px !important;
+  }
+
+  .leftLabel {
+    margin-bottom: 2px !important;
+  }
+  
+  .photoUpload {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px !important;
+  }
+
   
   .settingsProfile .formLabelTd {
     width: 100%;

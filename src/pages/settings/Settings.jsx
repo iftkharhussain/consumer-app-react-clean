@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Tabs } from 'antd';
 import PageHeader from '../../components/pageHeader';
 import SettingsProfile from './SettingsProfile';
-import SettingsSecurity from './SettingsSecurity';
-import SettingsNotifications from './SettingsNotifications';
 import styles from './Settings.module.css';
 
 const Settings = () => {
@@ -13,17 +11,7 @@ const Settings = () => {
     {
       key: 'profile',
       label: 'Profile',
-  children: <SettingsProfile />,
-    },
-    {
-      key: 'security',
-      label: 'Security',
-  children: <SettingsSecurity />,
-    },
-    {
-      key: 'notifications',
-      label: 'Notifications',
-      children: <SettingsNotifications />,
+      children: <SettingsProfile />,
     }
   ];
 

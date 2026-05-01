@@ -47,3 +47,4 @@ export const getQuoteDetailsUrl = `${baseUrl}/api/quote/details`;
 // For backwards compatibility (these were imported in helper.js but not used)
 export const login = LoginUrl;
 export const signup = `${baseUrl}/api/auth/signup`;
+export const getAllAdvisorsUrl = `${baseUrl}/api/advisor/all`;

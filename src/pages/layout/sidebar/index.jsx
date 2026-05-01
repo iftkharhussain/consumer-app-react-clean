@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Layout, Menu, Tag, Input, Dropdown, Space, Popover } from 'antd';
 import { InfoCircle, LayersThree01, Users01, CheckDone01, CurrencyDollarCircle, Flash, LifeBuoy01, Settings01, Bell01, ChevronLeftDouble, File04, Home01, ImageUser, MessageChatSquare, FileSearch02, Cube01, Target01, Car01, LogOut01, XClose } from "utils/icons";
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUrl, serverUrl } from '../../../apis/sharedApi';
 import styles from './Sidebar.module.css';
@@ -18,6 +18,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 	const { t } = useTranslation();
 	const dispatch = useDispatch();
 	const location = useLocation();
+	const navigate = useNavigate();
 	const localSettings = getUserAppLocalConfig();
 	const [logoutLoading, setLogoutLoading] = useState(false);
 	const [collapsed, setCollapsed] = useState(propsCollapsed);
@@ -238,6 +239,20 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 				),
 			},
 			{
+				key: 'settings',
+				selectPaths: ['/settings'],
+				icon: (
+					<Link to='/settings'>
+						<Settings01 />
+					</Link>
+				),
+				label: (
+					<Link to='/settings' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Settings
+					</Link>
+				),
+			},
+			{
 				key: 'call-confirmation',
 				selectPaths: ['/call-confirmation'],
 				icon: (
@@ -332,8 +347,8 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 		// 	setSideMenu([...menuItemsAdvisor, ...menuItemsOther]);
 		// }
 
-		// Active behavior: keep only the first sidebar link (Car Insurance).
-		setSideMenu(menuItemsAdvisor.slice(0, 1));
+		// Active behavior: showing Home, Life Insurance, My Advisors, Messages, Explore, Boost Your Savings, and Settings.
+		setSideMenu(menuItemsAdvisor.slice(0, 7));
 	}, [userType, leadDefaultPath]);
 
 	useEffect(() => {
@@ -488,19 +503,15 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 
 							{/* User Profile Section with Popover */}
 							{/* Popover disabled: no popup on click */}
-								<div className={styles.userProfile} style={{ cursor: 'pointer' }}>
-										{/* <img
-											src={profilePic ? `${serverUrl}${profilePic}` : '/images/Avatar.png'}
-											alt="User Avatar"
-											className={styles.userAvatar}
-										/> */}
+								<div className={styles.userProfile} onClick={() => navigate('/settings')} style={{ cursor: 'pointer' }}>
+									<img
+										src={profilePic ? `${serverUrl}${profilePic}` : '/images/Avatar.png'}
+										alt="User Avatar"
+										className={styles.userAvatar}
+									/>
 									<div className={styles.userInfo}>
-											{/* <div className={styles.userNameRow}>
-												<span className={styles.userLevel}>Level 1</span>
-												<span className={styles.levelBadge}>1 category to level up</span>
-											</div> */}
 										<div className={styles.userName}>
-											{firstName || 'John Paul'}
+											{firstName && lastName ? `${firstName} ${lastName}` : (firstName || 'John Paul')}
 										</div>
 										<div className={styles.userEmail}>
 											{email || 'johnp@norgaapp.com'}
