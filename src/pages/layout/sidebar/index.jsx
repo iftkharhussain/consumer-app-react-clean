@@ -348,8 +348,8 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 		// 	setSideMenu([...menuItemsAdvisor, ...menuItemsOther]);
 		// }
 
-		// Active behavior: showing Home, Life Insurance, My Advisors, Messages, Explore, Boost Your Savings, and Settings.
-		setSideMenu(menuItemsAdvisor.slice(0, 7));
+		// Active behavior: showing only Assurance auto (Home).
+		setSideMenu(menuItemsAdvisor.slice(0, 1));
 	}, [userType, leadDefaultPath]);
 
 	useEffect(() => {
@@ -478,49 +478,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 
 				<div className="app-menus">
 					<Menu className={styles.appMenu} expandIcon={null} theme="light" selectedKeys={getSelectedMenuKey()} style={{ borderInlineEnd: 'none' }} mode='inline' items={sideMenu} />
-					{!collapsed && (
-						<div className={styles.sidebarFooter}>
-							{/* Progress Section - Conditional */}
-							{/* {showProgressSection && (
-								<ProgressCard
-									title="Level Progress"
-									percentage={66}
-									description="2 of 3 categories finished. One more to go for full completion."
-									completedCount={2}
-									totalCount={3}
-									categories={[
-										{ name: 'People Insurance', completed: true },
-										{ name: 'P & C Insurance', completed: true },
-										{ name: 'Mortgage', completed: false },
-										{ name: 'Reward', completed: false }
-									]}
-									buttonText="Continue with your quotes"
-									onButtonClick={() => {
-										// Handle navigation to quotes or profile completion
-										console.log('Continue with quotes clicked');
-									}}
-								/>
-							)} */}
-
-							{/* User Profile Section with Popover */}
-							{/* Popover disabled: no popup on click */}
-								<div className={styles.userProfile} onClick={() => navigate('/settings')} style={{ cursor: 'pointer' }}>
-									<img
-										src={profilePic ? `${serverUrl}${profilePic}` : '/images/Avatar.png'}
-										alt="User Avatar"
-										className={styles.userAvatar}
-									/>
-									<div className={styles.userInfo}>
-										<div className={styles.userName}>
-											{firstName && lastName ? `${firstName} ${lastName}` : (firstName || 'John Paul')}
-										</div>
-										<div className={styles.userEmail}>
-											{email || 'johnp@norgaapp.com'}
-										</div>
-									</div>
-								</div>
-						</div>
-					)}
+					{/* Profile section hidden as per user request */}
 				</div>
 
 			</Sider>
