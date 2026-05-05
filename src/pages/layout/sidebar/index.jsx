@@ -4,7 +4,7 @@ import { InfoCircle, LayersThree01, Users01, CheckDone01, CurrencyDollarCircle, 
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logoutUrl, serverUrl } from '../../../apis/sharedApi';
+import { logoutUrl, serverUrl, getQuoteSessionsUrl, activateQuoteSessionUrl } from '../../../apis/sharedApi';
 import styles from './Sidebar.module.css';
 import Button from '../../../components/button';
 import ProgressCard from '../../../components/progressCard';
@@ -24,6 +24,8 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 	const [collapsed, setCollapsed] = useState(propsCollapsed);
 	const [adminMenuItems, setAdminMenuItems] = useState([]);
 	const [showProgressSection, setShowProgressSection] = useState(true); // Control progress section visibility
+	const [quoteSessions, setQuoteSessions] = useState([]); // Quote sessions for multiple quotes
+	const [loadingSessions, setLoadingSessions] = useState(false);
 	const { firstName, lastName, email, type: userType, superAdmin, profilePic } = useSelector((state) => state.app.user_profile);
 	const [isGetQuoteModalOpen, setIsGetQuoteModalOpen] = useState(false);
 	const { sidebar } = useSelector(
@@ -32,6 +34,67 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 	const { leadDefaultPath, sidebarBehavior } = useSelector((state) => state.app.user_local_config);
 
 	const [sideMenu, setSideMenu] = useState();
+	
+	// Fetch quote sessions on mount
+	useEffect(() => {
+		fetchQuoteSessions();
+	}, []);
+	
+	// Fetch quote sessions from API
+	const fetchQuoteSessions = async () => {
+		try {
+			setLoadingSessions(true);
+			console.log('🔍 [SIDEBAR] Fetching quote sessions...');
+			const response = await setRequest(Types.USER, {}, getQuoteSessionsUrl, Types.GET, dispatch);
+			
+			console.log('🔍 [SIDEBAR] API response:', response);
+			
+			if (response?.success && response?.sessions) {
+				setQuoteSessions(response.sessions);
+				console.log('✅ [SIDEBAR] Quote sessions loaded:', response.sessions.length, response.sessions);
+				
+				// Debug: Check what's in each session's label
+				response.sessions.forEach((session, i) => {
+					console.log(`  Session ${i + 1}:`, {
+						sessionId: session.sessionId,
+						labelPrimary: session.label?.primary,
+						labelSecondary: session.label?.secondary,
+						isActive: session.isActive
+					});
+				});
+			} else {
+				console.warn('⚠️ [SIDEBAR] No sessions in response:', response);
+			}
+		} catch (error) {
+			console.error('❌ [SIDEBAR] Error fetching quote sessions:', error);
+		} finally {
+			setLoadingSessions(false);
+		}
+	};
+	
+	// Handle quote session switch
+	const handleSessionSwitch = async (sessionId) => {
+		try {
+			const response = await setRequest(
+				Types.USER, 
+				{}, 
+				activateQuoteSessionUrl(sessionId), 
+				Types.PUT, 
+				dispatch
+			);
+			
+			if (response?.success) {
+				toast.success('Session de soumission activée');
+				// Refresh sessions
+				await fetchQuoteSessions();
+				// Reload the page to show new quote data
+				window.location.reload();
+			}
+		} catch (error) {
+			console.error('Error switching session:', error);
+			toast.error('Erreur lors du changement de session');
+		}
+	};
 
 	// Helper function to create menu labels with badges
 	const createMenuLabel = (label, badgeCount = null) => {
@@ -142,6 +205,66 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 	];
 
 	useEffect(() => {
+		// Build submenu items if multiple quote sessions exist
+		console.log('🔍 [SIDEBAR] Building menu with quoteSessions:', quoteSessions.length, quoteSessions);
+		
+		let assuranceAutoChildren = null;
+		
+		if (quoteSessions.length > 1) {
+			console.log('✅ [SIDEBAR] Creating submenu with', quoteSessions.length, 'sessions');
+			assuranceAutoChildren = quoteSessions.map((session, index) => {
+				// Extract date and time from session data
+				const createdDate = new Date(session.createdAt);
+				const dateStr = createdDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+				const timeStr = createdDate.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', hour12: false }).replace(':', 'h');
+				
+				return {
+					key: `quote-session-${session.sessionId}`,
+					label: (
+						<div 
+							onClick={() => !session.isActive && handleSessionSwitch(session.sessionId)}
+							style={{ 
+								cursor: session.isActive ? 'default' : 'pointer',
+								padding: '12px',
+								backgroundColor: session.isActive ? '#f0f7ff' : 'transparent',
+								borderRadius: '8px',
+								transition: 'all 0.2s ease',
+								border: session.isActive ? '1px solid #d6e4ff' : '1px solid transparent',
+								marginBottom: '4px'
+							}}
+						>
+							<div style={{ 
+								marginBottom: '6px'
+							}}>
+								<div style={{ 
+									color: '#364152',
+									fontFamily: 'Inter',
+									fontSize: '13px',
+									fontWeight: '600',
+									lineHeight: '19.5px',
+									letterSpacing: '-0.076px'
+								}}>
+									{dateStr}
+								</div>
+							</div>
+							<div style={{ 
+								color: '#697586',
+								fontFamily: 'Inter',
+								fontSize: '11px',
+								fontWeight: '500',
+								lineHeight: '16.5px',
+								letterSpacing: '0.064px'
+							}}>
+								{timeStr}
+							</div>
+						</div>
+					)
+				};
+			});
+		} else {
+			console.log('ℹ️ [SIDEBAR] Not enough sessions for submenu:', quoteSessions.length);
+		}
+		
 		const menuItemsAdvisor = [
 			{
 				key: 'home',
@@ -155,16 +278,18 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 					'/confirmation-meeting/*',
 					'/result-fallback'
 				],
-				icon: (
+				icon: assuranceAutoChildren ? <Car01 /> : (
 					<Link to='/result'>
 						<Car01 />
 					</Link>
 				),
-				label: (
+				label: assuranceAutoChildren ? 'Assurance auto' : (
 					<Link to='/result' style={{ color: 'inherit', textDecoration: 'none' }}>
 						Assurance auto
 					</Link>
 				),
+				// Add submenu children if multiple quote sessions exist
+				...(assuranceAutoChildren && { children: assuranceAutoChildren })
 			},
 			{
 				key: 'overview',
@@ -349,8 +474,10 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 		// }
 
 		// Active behavior: showing only Assurance auto (Home).
+		console.log('🔍 [SIDEBAR] Setting menu, first item has children:', !!menuItemsAdvisor[0].children);
+		console.log('🔍 [SIDEBAR] Menu items:', menuItemsAdvisor.slice(0, 1));
 		setSideMenu(menuItemsAdvisor.slice(0, 1));
-	}, [userType, leadDefaultPath]);
+	}, [userType, leadDefaultPath, quoteSessions]);
 
 	useEffect(() => {
 		setCollapsed(!sidebar);
@@ -477,7 +604,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 
 
 				<div className="app-menus">
-					<Menu className={styles.appMenu} expandIcon={null} theme="light" selectedKeys={getSelectedMenuKey()} style={{ borderInlineEnd: 'none' }} mode='inline' items={sideMenu} />
+					<Menu className={styles.appMenu} theme="light" selectedKeys={getSelectedMenuKey()} style={{ borderInlineEnd: 'none' }} mode='inline' items={sideMenu} />
 					{/* Profile section hidden as per user request */}
 				</div>
 

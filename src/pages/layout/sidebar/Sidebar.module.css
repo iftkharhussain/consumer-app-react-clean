@@ -524,7 +524,7 @@
 
 /* Menu height adjustments based on progress section visibility */
 .appSidebar :global(ul.ant-menu) {
-  height: calc(100% - 118px);
+  /* height: calc(100% - 118px); */
   display: flex;
   flex-direction: column;
 }
