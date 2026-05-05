@@ -2,31 +2,23 @@
   padding: 0;
   min-height: 100vh;
   background: var(--color-bg-secondary);
+  box-sizing: border-box;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .pageHeader {
   margin-bottom: 16px;
 }
 
-.content { padding: 0; }
-
-.sectionHeader {
-  margin: 28px 0 24px 0;
+@media (max-width: 768px) {
+  .pageHeader {
+    padding: 0 24px;
+  }
 }
 
-.sectionTitle {
-  font-size: 18px;
-  line-height: 28px;
-  font-weight: 600;
-  color: var(--color-text-primary);
-  margin: 0 0 4px 0;
-}
-
-.sectionSubtitle {
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--color-text-tertiary);
-  margin: 0;
+.content { 
+  padding: 0; 
 }
 
 /* Category Section */
@@ -38,66 +30,87 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 0;
+  padding: 16px 12px;
+  margin: 0 -12px 24px -12px;
   cursor: pointer;
   user-select: none;
+  border-bottom: 2px solid #F2F4F7;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 12px 12px 0 0;
 }
 
 .categoryHeader:hover {
-  opacity: 0.8;
+  background-color: #F9FAFB;
+  border-bottom-color: #1A1ABA;
 }
 
 .categoryTitle {
   overflow: hidden;
-  color: #181D27;
+  color: #101828;
   text-overflow: ellipsis;
-  font-family: var(--Font-family-font-family-body, Inter);
-  font-size: var(--Font-size-text-sm, 14px);
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
   font-style: normal;
-  font-weight: 500;
-  line-height: var(--Line-height-text-sm, 20px); /* 142.857% */
+  font-weight: 600;
+  line-height: 24px;
   margin: 0;
+  letter-spacing: -0.01em;
 }
 
 .collapseButton {
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
+  background: #F2F4F7;
   border: none;
+  border-radius: 50%;
   cursor: pointer;
   padding: 0;
-  color: #181D27;
-  transition: transform 0.2s ease;
+  color: #667085;
+  transition: all 0.2s ease;
 }
 
-.collapseButton:hover {
-  opacity: 0.7;
+.categoryHeader:hover .collapseButton {
+  background: #1A1ABA;
+  color: white;
+  transform: translateY(-1px);
 }
 
 .collapseButton svg {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
 }
 
 .cardsGrid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  column-gap: 24px;
-  row-gap: 28px;
+  grid-template-columns: repeat(auto-fill, 320px);
+  column-gap: 26px;
+  row-gap: 26px;
+  justify-content: start;
   max-width: none;
   margin: 0;
   margin-bottom: 16px;
 }
 
-/* Responsive adjustments */
-@media (max-width: 1200px) {
-  .cardsGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+  .content {
+    padding: 0 24px; /* Space from screen edges */
+  }
+
+  .cardsGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    width: 100%;
+    margin: 0;
+  }
 }
 
-@media (max-width: 768px) {
-  .cardsGrid { grid-template-columns: 1fr; }
-  .content { padding: 0; }
+/* Desktop Responsive Adjustments */
+@media (min-width: 769px) and (max-width: 1200px) {
+  .cardsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }

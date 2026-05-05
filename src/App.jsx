@@ -40,6 +40,7 @@ const FifteenMinutesRedirect = React.lazy(() => import('./pages/fifteenMinutesRe
 const ScheduleCall = React.lazy(() => import('./pages/scheduleCall/index'));
 const ScheduleConfirmation = React.lazy(() => import('./pages/scheduleConfirmation/index'));
 const FallbackNoQuotes = React.lazy(() => import('./pages/fallbackNoQuotes/index'));
+const ExploreForm = React.lazy(() => import('./pages/exploreForm/index'));
 const PrivateWrapper = ({ auth: { isAuthenticated }, heading, _style }) => {
 	return isAuthenticated === true ? (
 		<Layout _style={_style}>
@@ -145,6 +146,7 @@ function App(props) {
 							<Route path="/result-expired/:userProductId?" element={<Suspense fallback={<div></div>}><FifteenMinutesRedirect /></Suspense>} />
 							<Route path="/schedule-call/:userProductId?" element={<Suspense fallback={<div></div>}><ScheduleCall /></Suspense>} />
 							<Route path="/confirmation-meeting/:userProductId?" element={<Suspense fallback={<div></div>}><ScheduleConfirmation /></Suspense>} />
+							<Route path="/explore-form" element={<Suspense fallback={<div></div>}><ExploreForm /></Suspense>} />
 							<Route path="/question-public" element={<Suspense fallback={<div></div>}><QuestionPage /></Suspense>} />
 							<Route path="/logout" element={<Logout />} />
 						</Route>

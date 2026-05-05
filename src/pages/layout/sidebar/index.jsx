@@ -126,8 +126,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 		},
 		{
 			key: 'settings',
-			selectPaths: ['/settings'],
-			selectPaths: ['/settings/*'],
+			selectPaths: ['/settings', '/settings/*'],
 			icon: (
 				<Link to='/settings'>
 					<Settings01 />
@@ -135,7 +134,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 			),
 			label: (
 				<Link to='/settings' style={{ color: 'inherit', textDecoration: 'none' }}>
-					Account Settings
+					Paramètres
 				</Link>
 			),
 		},
@@ -190,7 +189,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 				),
 				label: (
 					<Link to='/my-advisors' style={{ color: 'inherit', textDecoration: 'none' }}>
-						My Advisors
+						Mes conseillers
 					</Link>
 				),
 			},
@@ -249,7 +248,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 				),
 				label: (
 					<Link to='/settings' style={{ color: 'inherit', textDecoration: 'none' }}>
-						Settings
+						Paramètres
 					</Link>
 				),
 			},
@@ -348,8 +347,8 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 		// 	setSideMenu([...menuItemsAdvisor, ...menuItemsOther]);
 		// }
 
-		// Active behavior: showing only Assurance auto (Home).
-		setSideMenu(menuItemsAdvisor.slice(0, 1));
+		// Active behavior: showing Assurance auto, Mes conseillers, and Explore at the top.
+		setSideMenu(menuItemsAdvisor.filter(item => ['home', 'advisors', 'explore'].includes(item.key)));
 	}, [userType, leadDefaultPath]);
 
 	useEffect(() => {
@@ -407,9 +406,12 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 
 	const getSelectedMenuKey = () => {
 		if (location.pathname === '/') return ['home'];
-		if (location.pathname === '/analytics' && location.search.includes('status=error')) return ['error-leads'];
+		
+		// Combine top and bottom menus to check for the active path
+		const allMenuItems = [...(sideMenu || []), ...menuItemsOther];
 
-		const selectedKey = sideMenu?.find((item) => {
+		const selectedKey = allMenuItems.find((item) => {
+			if (!item.selectPaths) return false;
 			return item.selectPaths.some((path) => {
 				if (path.endsWith('/*')) {
 					const basePath = path.slice(0, -2); // Remove the '/*'
@@ -419,7 +421,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 			});
 		})?.key;
 
-		return selectedKey ? [selectedKey] : []; // Fallback to an empty array if no key is found
+		return selectedKey ? [selectedKey] : [];
 	};
 
 	useEffect(() => {
@@ -478,7 +480,36 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 
 				<div className="app-menus">
 					<Menu className={styles.appMenu} expandIcon={null} theme="light" selectedKeys={getSelectedMenuKey()} style={{ borderInlineEnd: 'none' }} mode='inline' items={sideMenu} />
-					{/* Profile section hidden as per user request */}
+					
+					<div className={styles.bottomMenuContainer}>
+						<Menu 
+							className={styles.bottomMenu} 
+							expandIcon={null} 
+							theme="light" 
+							selectedKeys={getSelectedMenuKey()} 
+							style={{ borderInlineEnd: 'none' }} 
+							mode='inline' 
+							items={menuItemsOther.filter(item => item.key === 'settings')} 
+						/>
+					</div>
+
+					<div className={styles.sidebarFooter}>
+						<div className={styles.userProfile}>
+							<img
+								src={profilePic ? (profilePic.startsWith('http') ? profilePic : serverUrl + profilePic) : '/images/user-placeholder.png'}
+								alt="Avatar"
+								className={styles.userAvatar}
+							/>
+							{!collapsed && (
+								<div className={styles.userInfo}>
+									<div className={styles.userNameRow}>
+										<p className={styles.userName}>{firstName} {lastName}</p>
+									</div>
+									<p className={styles.userEmail}>{email}</p>
+								</div>
+							)}
+						</div>
+					</div>
 				</div>
 
 			</Sider>

@@ -244,7 +244,20 @@ const SettingsProfile = () => {
                 />
               </Form.Item>
             </Col>
-          </Row>        
+          </Row>    
+
+                {/* Phone Number */}
+          <Row gutter={[24, 0]} align="top" className={styles.formRow}>
+            <Col xs={24} sm={8} md={8} lg={7} className={styles.leftLabel}>
+              <div className={styles.labelTitle}>{t('phoneNumber') || 'Phone Number'}</div>
+            </Col>
+            <Col xs={24} sm={16} md={16} lg={12}>
+              <Form.Item name="phone"> 
+                <Input placeholder="123 456 7890" disabled readOnly className={styles.singleInput} />
+              </Form.Item>
+            </Col>
+          </Row>
+    
           
           {/* Photo Upload */}
           <Row gutter={[24, 0]} align="top" className={styles.formRow}>
@@ -259,7 +272,7 @@ const SettingsProfile = () => {
                 <div className={styles.currentPhoto}>
                   <Spin spinning={isUpdating}>
                     <img 
-                      src={profilePic?.url || "/images/Avatar.png"} 
+                      src={profilePic?.url || "/images/user-placeholder.png"} 
                       alt="Current profile" 
                       className={styles.profileAvatar} 
                     />
@@ -293,25 +306,24 @@ const SettingsProfile = () => {
             </Col>
           </Row>
 
-          {/* Phone Number */}
-          <Row gutter={[24, 0]} align="top" className={styles.formRow}>
-            <Col xs={24} sm={8} md={8} lg={7} className={styles.leftLabel}>
-              <div className={styles.labelTitle}>{t('phoneNumber') || 'Phone Number'}</div>
-            </Col>
-            <Col xs={24} sm={16} md={16} lg={12}>
-              <Form.Item name="phone"> 
-                <Input placeholder="123 456 7890" disabled readOnly className={styles.singleInput} />
-              </Form.Item>
-            </Col>
-          </Row>
-
+    
 
           {/* Action Buttons */}
           <Row gutter={[24, 0]}>
             <Col xs={0} sm={8} md={8} lg={7} />
             <Col xs={24} sm={16} md={16} lg={12}>
-              <div className={styles.formActions} style={{ borderTop: 'none', paddingTop: '8px' }}>
-                <Button className={styles.cancelButton} onClick={() => form.resetFields()}>
+              <div className={styles.formActions}>
+                <Button 
+                  className={styles.cancelButton} 
+                  onClick={() => {
+                    form.setFieldsValue({ 
+                      email, 
+                      firstName, 
+                      lastName, 
+                      phone: profilePhone || phone 
+                    });
+                  }}
+                >
                   {t('cancel') || 'Cancel'}
                 </Button>
                 <Button type="primary" htmlType="submit" className={styles.saveButton} loading={loading}>

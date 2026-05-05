@@ -5,13 +5,13 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: var(--Colors-Background-bg-primary, #FFF);
+  background: transparent;
 }
 
 .pageHeaderContainer {
-  padding: 16px 24px 8px;
-  border-bottom: 1px solid var(--color-border-secondary);
-  background: var(--color-bg-primary);
+  padding: 32px 24px 8px;
+  border-bottom: none;
+  background: transparent;
 }
 
 .settingsContent {
@@ -157,7 +157,7 @@
 
 /* Gap between form rows */
 .formRow {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 /* Form field widths */
@@ -288,8 +288,8 @@
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 32px;
-  padding-top: 24px;
+  margin-top: 0;
+  padding-top: 0;
 }
 
 .cancelButton {
@@ -492,14 +492,17 @@
 
   .settingsContent {
     padding: 16px !important;
+    overflow-y: visible !important;
+    flex: none !important;
+  }
+  
+  .settingsContainer {
+    height: auto !important;
+    min-height: 100vh;
   }
 
   .leftLabel {
-    margin-bottom: 4px;
-  }
-
-  .formRow {
-    margin-bottom: 12px !important;
+    margin-bottom: 6px !important;
   }
 
   .hideOnMobile {
@@ -513,11 +516,97 @@
     font-size: 14px;
     font-weight: 500;
     line-height: 20px;
-    margin-bottom: 2px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .profileForm :global(.ant-row) {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Internal spacing between label and input */
+    row-gap: 8px !important;
+    margin-bottom: 25px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Ensure columns don't have side padding that makes inputs narrower */
+  .profileForm :global(.ant-col) {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Spacing between First and Last name blocks */
+  .profileForm :global(.ant-row .ant-row) {
+    gap: 25px;
+    row-gap: 25px !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Special case: keep 25px gap for the photo section label as requested earlier */
+  .formRow:has(.profileAvatar) {
+    gap: 25px;
+    row-gap: 25px !important;
   }
 
   .leftLabel {
-    margin-bottom: 2px !important;
+    margin-bottom: 0 !important;
+  }
+
+  .mobileLabel {
+    display: block !important;
+    color: var(--Gray-700, #364152);
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    margin-bottom: 8px !important;
+  }
+
+  .formRow {
+    margin-bottom: 25px !important;
+  }
+
+  /* Reset individual margins */
+  .profileForm :global(.ant-form-item),
+  .securityForm :global(.ant-form-item),
+  .formRow :global(.ant-col-xs-24) {
+    margin-bottom: 0 !important;
+  }
+
+  /* For vertical forms like security */
+  /* Ensure inputs and their containers take full width on mobile */
+  .profileForm,
+  .profileForm :global(.ant-col),
+  .profileForm :global(.ant-row),
+  .profileForm :global(.ant-form-item),
+  .profileForm :global(.ant-form-item-control),
+  .profileForm :global(.ant-input),
+  .profileForm :global(.ant-input-affix-wrapper),
+  .profileForm :global(.ant-select),
+  .nameInput,
+  .singleInput {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+    flex: 0 0 100% !important;
+  }
+
+  /* Prevent text overflow in email and other inputs */
+  .profileForm :global(.ant-input) {
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+  }
+
+  /* Ensure the input inside the wrapper (with icon) doesn't push the box out */
+  .profileForm :global(.ant-input-affix-wrapper .ant-input) {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 !important;
+  }
+
+  .securityForm :global(.ant-form-item) {
+    margin-bottom: 25px !important;
   }
   
   .photoUpload {
@@ -536,5 +625,27 @@
   
   .settingsProfile .wrapperMultipleChild > .ant-form-item {
     flex-direction: column;
+  }
+
+  .pageHeaderContainer {
+    padding: 16px 16px 8px !important;
+  }
+
+  .pageHeaderContainer h1 {
+    color: var(--Gray-900, #121926) !important;
+    font-family: Inter !important;
+    font-size: 24px !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    line-height: 32px !important; /* 133.333% */
+  }
+
+  .pageHeaderContainer p {
+    color: var(--Gray-600, #4B5565) !important;
+    font-family: Inter !important;
+    font-size: 16px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 24px !important; /* 150% */
   }
 }

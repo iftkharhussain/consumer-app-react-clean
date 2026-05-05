@@ -265,6 +265,7 @@
   color: var(--colors-text-text-primary-900, #181D27);
   font-size: 16px;
   flex-shrink: 0;
+  overflow: hidden;
 }
 
 .emptyAvatarIcon {
@@ -360,26 +361,36 @@
 .messageButton:hover {
   background: var(--color-bg-secondary, #f8fafc) !important;
   color: var(--colors-text-text-primary-900, #181D27) !important;
+  transform: scale(1.02);
+}
+
+.messageButton:active {
+  transform: scale(0.98);
 }
 
 .bookButton {
-  border-radius: var(--radius-md, 8px) !important;
-  border: 2px solid var(--Gradient-skeuemorphic-gradient-border, rgba(255, 255, 255, 0.12)) !important;
-  background: #2121DD !important;
-  box-shadow: 0 0 0 1px var(--Colors-Effects-Shadows-shadow-skeumorphic-inner-border, rgba(10, 13, 18, 0.18)) inset, 0 -2px 0 0 var(--Colors-Effects-Shadows-shadow-skeumorphic-inner, rgba(10, 13, 18, 0.05)) inset, 0 1px 2px 0 var(--Colors-Effects-Shadows-shadow-xs, rgba(10, 13, 18, 0.05)) !important;
+  border-radius: 12px !important;
+  border: none !important;
+  background: linear-gradient(to right, #1a1aba, #2525c5) !important;
+  box-shadow: 0 2px 8px rgba(26, 26, 186, 0.2), 0 1px 2px 0 rgba(10, 13, 18, 0.05) !important;
   color: #FFF !important;
   font-family: var(--font-body, Inter) !important;
   font-size: var(--text-sm, 14px) !important;
   font-weight: 500 !important;
   line-height: var(--text-sm--line-height, 20px) !important;
-  padding: 10px 16px !important;
+  padding: 10px 20px !important;
   height: auto !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .bookButton:hover {
-  background: var(--Primary-700, #1515A3) !important;
-  border-color: var(--Primary-700, #1515A3) !important;
-  color: #FFF !important;
+  background: linear-gradient(to right, #1a1aba, #2525c5) !important;
+  box-shadow: 0 6px 20px rgba(26, 26, 186, 0.4) !important;
+  transform: scale(1.02);
+}
+
+.bookButton:active {
+  transform: scale(0.98);
 }
 
 .requestButton {
@@ -430,6 +441,24 @@
     width: 100%;
     box-sizing: border-box;
     align-items: stretch;
+  }
+
+  .header h1 {
+    color: var(--Gray-900, #121926) !important;
+    font-family: Inter !important;
+    font-size: 24px !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    line-height: 32px !important; /* 133.333% */
+  }
+
+  .header p {
+    color: var(--Gray-600, #4B5565) !important;
+    font-family: Inter !important;
+    font-size: 16px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 24px !important; /* 150% */
   }
 
   .alertBox {
@@ -541,9 +570,20 @@
   }
 
   .mobileBookButton {
-    background: #2121DD !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    box-shadow: 0 0 0 1px rgba(10, 13, 18, 0.18) inset, 0 -2px 0 0 rgba(10, 13, 18, 0.05) inset, 0 1px 2px 0 rgba(10, 13, 18, 0.05) !important;
+    background: linear-gradient(to right, #1a1aba, #2525c5) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 8px rgba(26, 26, 186, 0.2) !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .mobileBookButton:hover {
+    box-shadow: 0 6px 20px rgba(26, 26, 186, 0.4) !important;
+    transform: scale(1.02);
+  }
+
+  .mobileBookButton:active {
+    transform: scale(0.98);
   }
 
   .mobileRequestButton {
@@ -558,4 +598,79 @@
     font-weight: 500 !important;
     line-height: 20px !important;
   }
+}
+
+/* Status Badge Styles */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #dcfce7;
+  color: #166534;
+  padding: 2px 10px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.statusBadgeClosed {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #22c55e;
+  animation: pulseOpen 2s infinite;
+}
+
+.statusDotClosed {
+  background-color: #ef4444;
+  animation: pulseClosed 2s infinite;
+}
+
+@keyframes pulseOpen {
+  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+  70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+@keyframes pulseClosed {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+  70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.officeHoursCell {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.infoIcon {
+  color: #6b7280;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.infoText {
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.infoLink {
+  display: block;
+  font-size: 13px;
+  color: #1f01c8;
+  text-decoration: none;
+  margin-top: 4px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.infoLink:hover {
+  text-decoration: underline;
 }

@@ -10,7 +10,7 @@ const Settings = () => {
   const tabItems = [
     {
       key: 'profile',
-      label: 'Profile',
+      label: 'Profil',
       children: <SettingsProfile />,
     }
   ];
@@ -18,9 +18,8 @@ const Settings = () => {
   return (
     <div className={styles.settingsContainer}>
       <PageHeader 
-        title="Settings"
-        style={{paddingBottom: '16px'}}
-        subtitle="Lorem Ipsum"
+        title="Paramètres"
+        subtitle="Gérez vos préférences et informations personnelles"
         className={styles.pageHeaderContainer}
       />
       

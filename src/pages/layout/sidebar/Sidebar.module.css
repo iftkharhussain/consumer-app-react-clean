@@ -128,12 +128,13 @@
 .appMenu {
   border-right: none;
   background: transparent;
-  flex: 1;
-  overflow-y: auto;
+  flex: none;
+  overflow-y: visible;
   padding: 0 calc(var(--spacing) * 3);
 }
 
-.appMenu :global(.ant-menu-item) {
+.appMenu :global(.ant-menu-item),
+.bottomMenu :global(.ant-menu-item) {
   margin: 0 0 calc(var(--spacing) * 1) 0;
   border-radius: 6px;
   padding: 8px 12px;
@@ -165,22 +166,30 @@
   text-decoration: none;
 }
 
-.appMenu :global(.ant-menu-item:hover) {
+.appMenu :global(.ant-menu-item:hover),
+.bottomMenu :global(.ant-menu-item:hover) {
   background: var(--color-bg-secondary);
   color: rgba(54, 65, 82, 1);
 }
 
-.appMenu :global(.ant-menu-item.ant-menu-item-selected) {
+.appMenu :global(.ant-menu-item.ant-menu-item-selected),
+.bottomMenu :global(.ant-menu-item.ant-menu-item-selected) {
   background: var(--color-bg-brand-primary);
   color: var(--color-text-brand-primary);
   font-weight: 600;
+}
+
+.appMenu :global(.ant-menu-item.ant-menu-item-selected) svg,
+.bottomMenu :global(.ant-menu-item.ant-menu-item-selected) svg {
+  color: var(--color-text-brand-primary);
 }
 
 .appMenu :global(.ant-menu-item.ant-menu-item-selected::after) {
   display: none;
 }
 
-.appMenu :global(.ant-menu-item .ant-menu-item-icon) {
+.appMenu :global(.ant-menu-item .ant-menu-item-icon),
+.bottomMenu :global(.ant-menu-item .ant-menu-item-icon) {
   /* margin-right: calc(var(--spacing) * 3); */
   font-size: calc(var(--spacing) * 5);
 }
@@ -328,6 +337,17 @@
   margin-top: auto;
   padding: calc(var(--spacing) * 4) calc(var(--spacing) * 3);
   border-top: 1px solid var(--color-border-secondary);
+  background: var(--color-bg-primary);
+}
+
+@media (max-width: 768px) {
+  .sidebarFooter {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+  }
 }
 
 /* Progress Section */
@@ -519,26 +539,41 @@
 }
 
 .appSidebar :global(.app-menus) {
-  height: calc(100% - 59px);
+  min-height: calc(100% - 59px);
+  display: flex;
+  flex-direction: column;
+  overflow-y: visible;
+}
+
+.bottomMenuContainer {
+  margin-top: auto;
+  padding-bottom: calc(var(--spacing) * 1);
+}
+
+.bottomMenu {
+  border-right: none;
+  background: transparent;
+  padding: 0 calc(var(--spacing) * 3);
 }
 
 /* Menu height adjustments based on progress section visibility */
-.appSidebar :global(ul.ant-menu) {
-  height: calc(100% - 118px);
+.appSidebar :global(ul.ant-menu:not(.bottomMenu)) {
+  flex: 1;
   display: flex;
   flex-direction: column;
 }
 
 /* When progress section is hidden */
-.appSidebar.hideProgressSection :global(ul.ant-menu) {
-  height: calc(100% - 245px + 131px);
+.appSidebar.hideProgressSection :global(ul.ant-menu:not(.bottomMenu)) {
+  flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.appSidebar :global(.ant-menu .ant-menu-item:nth-last-child(3)) {
+/* Removed margin-top: auto that was pushing items to the bottom */
+/* .appSidebar :global(.ant-menu .ant-menu-item:nth-last-child(3)) {
   margin-top: auto;
-}
+} */
 
 
 /* Responsive config sidebar */

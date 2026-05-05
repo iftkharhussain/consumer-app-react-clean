@@ -2,12 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { PageContent, AdvisorTypeBadge, PageHeader } from 'components';
-import { Button, Table, Spin } from 'antd';
+import { Button, Table, Spin, Tooltip } from 'antd';
 import { ArrowRightIcon, XIcon, MailIcon, PhoneIcon } from '../../components/icon';
+import { CalendarOutlined } from '@ant-design/icons';
 import { ImageUser } from 'utils/icons';
 import Text from '../../components/text';
 import { Types, requestHelper } from '../../utils/helper';
 import { getAllAdvisorsUrl } from '../../apis/sharedApi';
+import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
+import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import styles from './MyAdvisors.module.css';
 
 const MyAdvisors = () => {
@@ -18,13 +21,14 @@ const MyAdvisors = () => {
   
   const [advisorsData, setAdvisorsData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isScheduleOpen, setIsScheduleOpen] = useState(false);
 
   // The 3 mandatory categories we always want to show
   const MANDATORY_CATEGORIES = [
     { 
       key: 'insurance', 
-      type: 'Courtier en assurance de dommages', 
-      specialties: ['Assurance de dommages'],
+      type: 'Cabinet en assurance de dommages', 
+      specialties: ['Assurance auto et habitation'],
       matchKeywords: ['insurance', 'auto', 'habitation', 'broker', 'courtier', 'dommage']
     },
     { 
@@ -98,8 +102,8 @@ const MyAdvisors = () => {
               email: realAdvisor.advisor?.email,
               phone: realAdvisor.advisor?.phone,
               calendarLink: realAdvisor.advisor?.calendarLink || '',
-              avatar: realAdvisor.advisor?.avatar && !realAdvisor.advisor.avatar.includes('default') ? (
-                <img src={realAdvisor.advisor.avatar} alt={realAdvisor.advisor.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              avatar: realAdvisor.advisor.avatar && !realAdvisor.advisor.avatar.includes('default') ? (
+                <img src={realAdvisor.advisor.avatar} alt={realAdvisor.advisor.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
               ) : null,
               isEmpty: false
             };
@@ -119,22 +123,12 @@ const MyAdvisors = () => {
           }
         });
 
-        setAdvisorsData(finalDisplayData);
+        // Only show advisors that are NOT empty (hide unassigned categories)
+        setAdvisorsData(finalDisplayData.filter(item => !item.isEmpty));
       } catch (error) {
         console.error('Error fetching advisors:', error);
-        // Fallback to all empty if error
-        setAdvisorsData(MANDATORY_CATEGORIES.map(cat => ({
-          key: `empty-${cat.key}`,
-          name: null,
-          license: null,
-          type: cat.type,
-          specialties: cat.specialties,
-          email: null,
-          phone: null,
-          calendarLink: '',
-          avatar: null,
-          isEmpty: true
-        })));
+        // If error, show no advisors (hide empty categories)
+        setAdvisorsData([]);
       } finally {
         setLoading(false);
       }
@@ -186,26 +180,22 @@ const MyAdvisors = () => {
           <div className={styles.nameCell}>
             <div className={styles.avatar}>
               {record.avatar || (
-                <svg 
-                  width="16" 
-                  height="18" 
-                  viewBox="0 0 18 20" 
-                  fill="none" 
-                  xmlns="http://www.w3.org/2000/svg"
-                  className={styles.emptyAvatarIcon}
-                >
-                  <path 
-                    d="M16.9967 18.9965V16.9969C16.9967 15.9362 16.5754 14.919 15.8253 14.169C15.0754 13.419 14.0582 12.9977 12.9975 12.9977H4.99903C3.93837 12.9977 2.92116 13.419 2.17116 14.169C1.42116 14.919 0.999817 15.9362 0.999817 16.9969V18.9965M12.9975 4.99922C12.9975 7.20792 11.2069 8.99843 8.99825 8.99843C6.78954 8.99843 4.99903 7.20792 4.99903 4.99922C4.99903 2.79051 6.78954 1 8.99825 1C11.2069 1 12.9975 2.79051 12.9975 4.99922Z" 
-                    stroke="#A4A7AE" 
-                    strokeWidth="2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                <img 
+                  src="/images/user-placeholder.png" 
+                  alt="Avatar" 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} 
+                />
               )}
             </div>
             <div>
               <div className={styles.advisorName}>{text}</div>
+              {/* Business Hours Badge */}
+              <Tooltip title={getFormattedTodayHours()}>
+                <div className={`${styles.statusBadge} ${!isOpenNow() ? styles.statusBadgeClosed : ''}`}>
+                  <div className={`${styles.statusDot} ${!isOpenNow() ? styles.statusDotClosed : ''}`}></div>
+                  {isOpenNow() ? 'Ouvert' : 'Fermé'}
+                </div>
+              </Tooltip>
             </div>
           </div>
         );
@@ -258,6 +248,32 @@ const MyAdvisors = () => {
       },
     },
     {
+      title: 'Heures d\'ouverture',
+      key: 'officeHours',
+      render: (_, record) => {
+        if (record.isEmpty) return null;
+        return (
+          <div className={styles.officeHoursCell}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.infoIcon}>
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <div>
+              <span className={styles.infoText}>{getFormattedTodayHours()}</span>
+              <span 
+                className={styles.infoLink} 
+                onClick={() => setIsScheduleOpen(true)}
+              >
+                Voir l'horaire complet
+              </span>
+            </div>
+          </div>
+        );
+      },
+    },
+    {
       title: '',
       key: 'actions',
       render: (_, record) => {
@@ -283,8 +299,8 @@ const MyAdvisors = () => {
       <div className={styles.myAdvisorsPage}>
         {/* Main Header */}
         <PageHeader 
-          title="My Advisors" 
-          subtitle="These are your advisors"
+          title="Mes conseillers" 
+          subtitle="Voici les conseillers qui vous accompagnent."
           className={styles.header}
         />
 
@@ -311,33 +327,29 @@ const MyAdvisors = () => {
                 <div className={styles.cardHeader}>
                   <div className={styles.avatar}>
                     {advisor.isEmpty ? (
-                      <svg 
-                        width="16" 
-                        height="18" 
-                        viewBox="0 0 18 20" 
-                        fill="none" 
-                        xmlns="http://www.w3.org/2000/svg"
-                        className={styles.emptyAvatarIcon}
-                      >
-                        <path 
-                          d="M16.9967 18.9965V16.9969C16.9967 15.9362 16.5754 14.919 15.8253 14.169C15.0754 13.419 14.0582 12.9977 12.9975 12.9977H4.99903C3.93837 12.9977 2.92116 13.419 2.17116 14.169C1.42116 14.919 0.999817 15.9362 0.999817 16.9969V18.9965M12.9975 4.99922C12.9975 7.20792 11.2069 8.99843 8.99825 8.99843C6.78954 8.99843 4.99903 7.20792 4.99903 4.99922C4.99903 2.79051 6.78954 1 8.99825 1C11.2069 1 12.9975 2.79051 12.9975 4.99922Z" 
-                          stroke="#A4A7AE" 
-                          strokeWidth="2" 
-                          strokeLinecap="round" 
-                          strokeLinejoin="round"
-                        />
-                      </svg>
+                      <img 
+                        src="/images/user-placeholder.png" 
+                        alt="Placeholder" 
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} 
+                      />
                     ) : (
-                      advisor.avatar || (advisor.name ? advisor.name.split(' ').map(n => n[0]).join('') : '?')
+                      advisor.avatar || (
+                        <img 
+                          src="/images/user-placeholder.png" 
+                          alt="Placeholder" 
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} 
+                        />
+                      )
                     )}
                   </div>
                   <div className={styles.headerInfo}>
                     <div className={styles.advisorName}>
                       {advisor.isEmpty ? "Vous n'avez actuellement pas de courtier d'assurance" : advisor.name}
                     </div>
-                    {!advisor.isEmpty && advisor.license && (
-                      <div className={styles.advisorLicense}>
-                        License: {advisor.license}
+                    {!advisor.isEmpty && (
+                      <div className={`${styles.statusBadge} ${!isOpenNow() ? styles.statusBadgeClosed : ''}`} style={{ marginTop: '4px' }}>
+                        <div className={`${styles.statusDot} ${!isOpenNow() ? styles.statusDotClosed : ''}`}></div>
+                        {isOpenNow() ? 'Ouvert' : 'Fermé'}
                       </div>
                     )}
                   </div>
@@ -361,6 +373,10 @@ const MyAdvisors = () => {
                       <div className={styles.contactItem}>
                         <PhoneIcon size={14} />
                         <span>{advisor.phone}</span>
+                      </div>
+                      <div className={styles.contactItem} onClick={() => setIsScheduleOpen(true)} style={{ cursor: 'pointer', color: '#1A1ABA' }}>
+                        <CalendarOutlined style={{ fontSize: '18px' }} />
+                        <span style={{ fontWeight: 600 }}>Voir l'horaire complet</span>
                       </div>
                     </div>
                   )}
@@ -390,6 +406,7 @@ const MyAdvisors = () => {
           </div>
         )}
       </div>
+      <ScheduleModal isOpen={isScheduleOpen} onClose={() => setIsScheduleOpen(false)} />
     </PageContent>
   );
 };

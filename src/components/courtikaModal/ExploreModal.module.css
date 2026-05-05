@@ -1,0 +1,234 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modalContent {
+  background: #FFF;
+  border: 1px solid #e9eaeb;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 650px;
+  padding: 40px 40px 24px 40px;
+  position: relative;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.topSection {
+  border-bottom: 1px solid #e9eaeb;
+  margin-left: -40px;
+  margin-right: -40px;
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-bottom: 12px;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.logoBox {
+  width: 64px;
+  height: 64px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+}
+
+.logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background-color: #1a1aba;
+  border-radius: 50%;
+  animation: dotPulse 1.5s infinite ease-in-out;
+}
+
+@keyframes dotPulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+.body {
+  text-align: center;
+  padding-top: 24px;
+}
+
+.title {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  font-style: normal;
+  color: #121926;
+  line-height: 30px;
+  letter-spacing: -0.449px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.description {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  color: #535862;
+  line-height: 19.5px;
+  letter-spacing: -0.076px;
+  text-align: center;
+  margin-bottom: 0;
+  max-width: 580px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.selectionBox {
+  background-color: #f8fafc;
+  border: 1px solid #e9eaeb;
+  border-radius: 10px;
+  padding: 17px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.selectionIconBox {
+  width: 48px;
+  height: 48px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px;
+}
+
+.selectionLabel {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.selectionValue {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-top: 0;
+  line-height: 1.2;
+}
+
+.ctaButton {
+  width: 100%;
+  background-color: #1a1aba;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 24px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  font-style: normal;
+  line-height: 22.5px;
+  letter-spacing: -0.234px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.10), 0 1px 2px -1px rgba(0, 0, 0, 0.10);
+}
+
+.ctaButton:hover {
+  background-color: #15159a;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+}
+
+.footerItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  font-style: normal;
+  color: #697586;
+  line-height: 18px;
+}
+
+.checkIcon {
+  color: #22c55e;
+}
+
+.closeButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.closeButton:hover {
+  color: #64748b;
+}
