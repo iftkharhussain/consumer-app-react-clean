@@ -216,12 +216,25 @@
   color: rgba(54, 65, 82, 1);
 }
 
+.appMenu :global(.ant-menu-submenu-open .ant-menu-submenu-title),
+.appMenu :global(.ant-menu-submenu-selected .ant-menu-submenu-title) {
+  background: #FCFCFD !important;
+}
+
 .appMenu :global(.ant-menu-sub) {
-  background: transparent;
+  background: transparent !important;
+  padding-left: 0 !important;
 }
 
 .appMenu :global(.ant-menu-sub .ant-menu-item) {
-  padding-left: calc(var(--spacing) * 12);
+  padding: 0px 12px !important;
+  height: auto !important;
+  margin: 0px !important;
+  line-height: normal !important;
+}
+
+.appMenu :global(.ant-menu-sub .ant-menu-item:hover) {
+  background: transparent !important;
 }
 
 /* Badge styles for menu items */
@@ -557,8 +570,8 @@
 }
 
 /* Menu height adjustments based on progress section visibility */
-.appSidebar :global(ul.ant-menu:not(.bottomMenu)) {
-  flex: 1;
+.appSidebar :global(ul.ant-menu) {
+  /* height: calc(100% - 118px); */
   display: flex;
   flex-direction: column;
 }
@@ -591,3 +604,51 @@
     width: auto;
   }
 }
+
+/* Quote Session Submenu Styles */
+.sessionItem {
+  cursor: pointer;
+  padding: 8px 0px 8px 61px;
+
+  background-color: transparent;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  border: none;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.sessionItemActive {
+  cursor: default;
+ 
+}
+.sessionItemActive .sessionDate,
+.sessionItemActive .sessionTime {
+  color: #1a1aba !important;
+}
+
+
+.sessionDate {
+ color: #364152;
+font-family: Inter;
+font-size: 13px;
+font-style: normal;
+font-weight: 600;
+line-height: 19.5px; /* 150% */
+letter-spacing: -0.076px;
+}
+
+.sessionTime {
+color: #697586;
+font-family: Inter;
+font-size: 11px;
+font-style: normal;
+font-weight: 500;
+line-height: 16.5px; /* 150% */
+letter-spacing: 0.064px;
+
+}
+

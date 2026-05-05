@@ -4,7 +4,7 @@ import { InfoCircle, LayersThree01, Users01, CheckDone01, CurrencyDollarCircle, 
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logoutUrl, serverUrl } from '../../../apis/sharedApi';
+import { logoutUrl, serverUrl, getQuoteSessionsUrl, activateQuoteSessionUrl } from '../../../apis/sharedApi';
 import styles from './Sidebar.module.css';
 import Button from '../../../components/button';
 import ProgressCard from '../../../components/progressCard';
@@ -24,6 +24,8 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 	const [collapsed, setCollapsed] = useState(propsCollapsed);
 	const [adminMenuItems, setAdminMenuItems] = useState([]);
 	const [showProgressSection, setShowProgressSection] = useState(true); // Control progress section visibility
+	const [quoteSessions, setQuoteSessions] = useState([]); // Quote sessions for multiple quotes
+	const [loadingSessions, setLoadingSessions] = useState(false);
 	const { firstName, lastName, email, type: userType, superAdmin, profilePic } = useSelector((state) => state.app.user_profile);
 	const [isGetQuoteModalOpen, setIsGetQuoteModalOpen] = useState(false);
 	const { sidebar } = useSelector(
@@ -32,6 +34,69 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 	const { leadDefaultPath, sidebarBehavior } = useSelector((state) => state.app.user_local_config);
 
 	const [sideMenu, setSideMenu] = useState();
+	const [openKeys, setOpenKeys] = useState([]);
+	const hasAutoOpened = React.useRef(false);
+	
+	// Fetch quote sessions on mount
+	useEffect(() => {
+		fetchQuoteSessions();
+	}, []);
+	
+	// Fetch quote sessions from API
+	const fetchQuoteSessions = async () => {
+		try {
+			setLoadingSessions(true);
+			console.log('🔍 [SIDEBAR] Fetching quote sessions...');
+			const response = await setRequest(Types.USER, {}, getQuoteSessionsUrl, Types.GET, dispatch);
+			
+			console.log('🔍 [SIDEBAR] API response:', response);
+			
+			if (response?.success && response?.sessions) {
+				setQuoteSessions(response.sessions);
+				console.log('✅ [SIDEBAR] Quote sessions loaded:', response.sessions.length, response.sessions);
+				
+				// Debug: Check what's in each session's label
+				response.sessions.forEach((session, i) => {
+					console.log(`  Session ${i + 1}:`, {
+						sessionId: session.sessionId,
+						labelPrimary: session.label?.primary,
+						labelSecondary: session.label?.secondary,
+						isActive: session.isActive
+					});
+				});
+			} else {
+				console.warn('⚠️ [SIDEBAR] No sessions in response:', response);
+			}
+		} catch (error) {
+			console.error('❌ [SIDEBAR] Error fetching quote sessions:', error);
+		} finally {
+			setLoadingSessions(false);
+		}
+	};
+	
+	// Handle quote session switch
+	const handleSessionSwitch = async (sessionId) => {
+		try {
+			const response = await setRequest(
+				Types.USER, 
+				{}, 
+				activateQuoteSessionUrl(sessionId), 
+				Types.PUT, 
+				dispatch
+			);
+			
+			if (response?.success) {
+				toast.success('Session de soumission activée');
+				// Refresh sessions
+				await fetchQuoteSessions();
+				// Reload the page to show new quote data
+				window.location.reload();
+			}
+		} catch (error) {
+			console.error('Error switching session:', error);
+			toast.error('Erreur lors du changement de session');
+		}
+	};
 
 	// Helper function to create menu labels with badges
 	const createMenuLabel = (label, badgeCount = null) => {
@@ -141,6 +206,36 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 	];
 
 	useEffect(() => {
+		// Build submenu items if multiple quote sessions exist
+		console.log('🔍 [SIDEBAR] Building menu with quoteSessions:', quoteSessions.length, quoteSessions);
+		
+		let assuranceAutoChildren = null;
+		
+		if (quoteSessions.length > 1) {
+			console.log('✅ [SIDEBAR] Creating submenu with', quoteSessions.length, 'sessions');
+			assuranceAutoChildren = quoteSessions.map((session, index) => {
+				// Extract date and time from session data
+				const createdDate = new Date(session.createdAt);
+				const dateStr = createdDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+				const timeStr = createdDate.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', hour12: false }).replace(':', 'h');
+				
+				return {
+					key: `quote-session-${session.sessionId}`,
+					label: (
+						<div 
+							onClick={() => !session.isActive && handleSessionSwitch(session.sessionId)}
+							className={`${styles.sessionItem} ${session.isActive ? styles.sessionItemActive : ''}`}
+						>
+							<span className={styles.sessionDate}>{dateStr}</span>
+							<span className={styles.sessionTime}>{timeStr}</span>
+						</div>
+					)
+				};
+			});
+		} else {
+			console.log('ℹ️ [SIDEBAR] Not enough sessions for submenu:', quoteSessions.length);
+		}
+		
 		const menuItemsAdvisor = [
 			{
 				key: 'home',
@@ -154,16 +249,18 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 					'/confirmation-meeting/*',
 					'/result-fallback'
 				],
-				icon: (
+				icon: assuranceAutoChildren ? <Car01 /> : (
 					<Link to='/result'>
 						<Car01 />
 					</Link>
 				),
-				label: (
+				label: assuranceAutoChildren ? 'Assurance auto' : (
 					<Link to='/result' style={{ color: 'inherit', textDecoration: 'none' }}>
 						Assurance auto
 					</Link>
 				),
+				// Add submenu children if multiple quote sessions exist
+				...(assuranceAutoChildren && { children: assuranceAutoChildren })
 			},
 			{
 				key: 'overview',
@@ -348,8 +445,16 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 		// }
 
 		// Active behavior: showing Assurance auto, Mes conseillers, and Explore at the top.
-		setSideMenu(menuItemsAdvisor.filter(item => ['home', 'advisors', 'explore'].includes(item.key)));
-	}, [userType, leadDefaultPath]);
+		console.log('🔍 [SIDEBAR] Setting menu, first item has children:', !!menuItemsAdvisor[0].children);
+		console.log('🔍 [SIDEBAR] Menu items:', menuItemsAdvisor.slice(0, 1));
+		setSideMenu(menuItemsAdvisor.filter(item => ['home'].includes(item.key)));
+		
+		// Auto-open 'home' only once when sessions first appear
+		if (assuranceAutoChildren && !hasAutoOpened.current) {
+			setOpenKeys(['home']);
+			hasAutoOpened.current = true;
+		}
+	}, [userType, leadDefaultPath, quoteSessions]);
 
 	useEffect(() => {
 		setCollapsed(!sidebar);
@@ -479,19 +584,29 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 
 
 				<div className="app-menus">
-					<Menu className={styles.appMenu} expandIcon={null} theme="light" selectedKeys={getSelectedMenuKey()} style={{ borderInlineEnd: 'none' }} mode='inline' items={sideMenu} />
+					<Menu 
+						className={styles.appMenu} 
+						expandIcon={(props) => (
+							<span style={{ 
+								display: 'flex', 
+								alignItems: 'center', 
+								transition: 'transform 0.3s ease',
+								transform: props.isOpen ? 'rotate(0deg)' : 'rotate(180deg)'
+							}}>
+								<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none">
+									<path d="M8.66406 4.66602L4.66406 0.666016L0.664062 4.66602" stroke="#697586" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</span>
+						)}
+						theme="light" 
+						selectedKeys={getSelectedMenuKey()} 
+						openKeys={openKeys}
+						onOpenChange={(keys) => setOpenKeys(keys)}
+						style={{ borderInlineEnd: 'none' }} 
+						mode='inline' 
+						items={sideMenu} 
+					/>
 					
-					<div className={styles.bottomMenuContainer}>
-						<Menu 
-							className={styles.bottomMenu} 
-							expandIcon={null} 
-							theme="light" 
-							selectedKeys={getSelectedMenuKey()} 
-							style={{ borderInlineEnd: 'none' }} 
-							mode='inline' 
-							items={menuItemsOther.filter(item => item.key === 'settings')} 
-						/>
-					</div>
 
 					<div className={styles.sidebarFooter}>
 						<div className={styles.userProfile}>

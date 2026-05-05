@@ -44,6 +44,13 @@ export const getUserProductsUrl = `${baseUrl}/api/quote/products`;
 export const getQuoteStatusUrl = `${baseUrl}/api/quote/status`;
 export const getQuoteDetailsUrl = `${baseUrl}/api/quote/details`;
 
+// Quote Sessions (Multiple Quotes Support)
+export const createQuoteSessionUrl = `${baseUrl}/api/quote-sessions`;
+export const getQuoteSessionsUrl = `${baseUrl}/api/quote-sessions`;
+export const getActiveQuoteSessionUrl = `${baseUrl}/api/quote-sessions/active`;
+export const activateQuoteSessionUrl = (sessionId) => `${baseUrl}/api/quote-sessions/${sessionId}/activate`;
+export const updateQuoteSessionStatusUrl = (sessionId) => `${baseUrl}/api/quote-sessions/${sessionId}/status`;
+
 // For backwards compatibility (these were imported in helper.js but not used)
 export const login = LoginUrl;
 export const signup = `${baseUrl}/api/auth/signup`;
