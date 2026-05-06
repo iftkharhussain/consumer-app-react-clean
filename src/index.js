@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
+import './index.css';
 import App from './App';
 import { Provider } from 'react-redux';
 import toast, { Toaster } from 'react-hot-toast'

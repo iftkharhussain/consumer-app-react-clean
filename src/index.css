@@ -1,7 +1,15 @@
-/* Import UntitledUI Design System */
-@import './styles/untitledui-theme.css';
-@import './styles/globals.css';
-@import './styles/typography.css';
+/* CSS Variables */
+:root {
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --font-mono: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  --color-text-primary: #121926;
+  --color-text-secondary: #364152;
+  --color-text-tertiary: #697586;
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #F8FAFC;
+  --color-bg-tertiary: #EEF2F6;
+  --color-border-secondary: #E3E8EF;
+}
 
 body {
   margin: 0;
@@ -40,3 +48,25 @@ code {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+/* Smooth transition for sidebar submenu collapse/expand */
+.ant-menu-sub.ant-menu-inline {
+  max-height: 1000px;
+  overflow: hidden;
+  opacity: 1;
+  transform: scaleY(1);
+  transform-origin: top;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ant-menu-sub.ant-menu-inline.ant-menu-hidden {
+  max-height: 0;
+  opacity: 0;
+  transform: scaleY(0.95);
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
