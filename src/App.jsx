@@ -57,15 +57,41 @@ const PixelTracker = () => {
 	const location = useLocation();
 
 	useEffect(() => {
-		trackPixelEvent('PageView');
+		// Log current location for debugging tracking handover
+		console.info('[Tracking] Navigated to:', location.pathname + location.search);
+
+		// Extract event_id from URL if present (from redirect)
+		const searchParams = new URLSearchParams(location.search);
+		const urlEventId = searchParams.get('event_id');
+		
+		if (urlEventId) {
+			localStorage.setItem('meta_event_id', urlEventId);
+			console.info(' [Pixel] Captured event_id from URL:', urlEventId);
+			
+			// Push to dataLayer for GTM to capture
+			if (window.dataLayer) {
+				window.dataLayer.push({
+					'event': 'meta_event_id_captured',
+					'event_id': urlEventId
+				});
+			}
+		}
+
+		const eventId = localStorage.getItem('meta_event_id');
+		if (eventId) {
+			console.info('[Pixel] Using persistent event_id:', eventId);
+		}
+
+		// Track PageView with eventId for deduplication
+		trackPixelEvent('PageView', {}, eventId);
 
 		// Track Lead event once per session when the user first lands
 		const hasTrackedLead = sessionStorage.getItem('pixel_lead_tracked');
 		if (!hasTrackedLead) {
-			trackPixelEvent('Lead');
+			trackPixelEvent('Lead', {}, eventId);
 			sessionStorage.setItem('pixel_lead_tracked', 'true');
 		}
-	}, [location]);
+	}, [location.pathname, location.search]); // Be more specific about dependency
 
 	return null;
 };
