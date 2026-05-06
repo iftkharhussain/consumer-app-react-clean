@@ -2,6 +2,7 @@
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
+  padding: 32px 24px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -46,23 +47,31 @@
 }
 
 .advisorTitleLarge {
-  font-size: 14px;
-  color: #6B7280;
-  margin: 0 0 16px 0;
-  text-align: center;
+ color: #697586;
+text-align: center;
+font-family: Inter;
+font-size: 13px;
+font-style: normal;
+font-weight: 400;
+line-height: 19.5px; /* 150% */
+letter-spacing: -0.076px;
 }
 
 .advisorContactBox {
-  background: #F9FAFB;
-  border-radius: 8px;
+  border-radius: 10px;
+  background: #F8FAFC;
   padding: 16px;
   width: 100%;
-  text-align: center;
-  font-size: 12px;
-  color: #6B7280;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  color: #535862;
+  text-align: center;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 150% */
 }
 
 .bannerContent {
@@ -108,9 +117,13 @@
 }
 
 .bannerDesc {
+  color: #535862;
+  font-family: Inter;
   font-size: 14px;
-  color: #4B5563;
-  line-height: 1.5;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22.75px; /* 162.5% */
+  letter-spacing: -0.15px;
   margin: 0 0 24px 0;
 }
 
@@ -135,7 +148,8 @@
 
 /* Two Columns */
 .twoColGrid {
-  display: flex;
+  display: grid;
+  grid-template-columns: 5.4fr 4.6fr;
   gap: 24px;
   width: 100%;
 }
@@ -145,7 +159,6 @@
   border-radius: 16px;
   border: 1px solid #E5E7EB;
   padding: 32px;
-  flex: 1;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
@@ -171,11 +184,15 @@
 }
 
 .priceBig {
+  color: #1A1ABA;
+  text-align: center;
+  font-family: Inter;
   font-size: 48px;
-  font-weight: 800;
-  color: #2121DD;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 48px; /* 100% */
+  letter-spacing: -0.2px;
   margin: 0 0 8px 0;
-  line-height: 1;
 }
 
 .priceNote {
@@ -225,68 +242,57 @@
 
 /* FAQ Card */
 .faqCard {
+  border-radius: 12px;
+  border: 1px solid #e9eaeb;
+  padding: 32px;
   background: #FFFFFF;
-  border-radius: 16px;
-  border: 1px solid #E5E7EB;
-  padding: 48px 32px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 .faqHeader {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
 .faqTitle {
   font-size: 24px;
-  font-weight: 700;
-  color: #111827;
+  font-weight: 600;
+  color: #121926;
   margin: 0 0 8px 0;
 }
 
 .faqSub {
   font-size: 14px;
-  color: #6B7280;
+  color: #535862;
   margin: 0;
 }
 
 .faqCollapse {
-  background: transparent !important;
+  width: 100%;
+  background-color: transparent !important;
   border: none !important;
 }
 
-.faqCollapse :global(.ant-collapse-item) {
-  border-bottom: 1px solid #E5E7EB !important;
+.faqPanel {
+  border-top: 1px solid #e9eaeb;
+  border-radius: 0 !important;
+  margin-bottom: 0;
 }
 
-.faqCollapse :global(.ant-collapse-item:last-child) {
-  border-bottom: none !important;
+.faqPanel:first-child {
+  border-top: none;
 }
 
-.faqCollapse :global(.ant-collapse-header) {
-  padding: 24px 0 !important;
-  font-size: 16px !important;
-  font-weight: 600 !important;
-  color: #111827 !important;
-  align-items: center !important;
-}
-
-.faqCollapse :global(.ant-collapse-content) {
-  border-top: none !important;
-  background: transparent !important;
-}
-
-.faqCollapse :global(.ant-collapse-content-box) {
-  padding: 0 0 24px 0 !important;
-  font-size: 14px !important;
-  color: #4B5563 !important;
-  line-height: 1.6 !important;
+.faqAnswer {
+  font-size: 13px;
+  color: #535862;
+  line-height: 1.6;
+  margin: 0;
 }
 
 /* FAQ Bottom CTA */
 .faqCta {
-  background: #F9FAFB;
-  border-radius: 12px;
+  border-radius: 14px;
+background: #F8FAFC;
   padding: 32px;
   display: flex;
   flex-direction: column;
@@ -317,19 +323,38 @@
 }
 
 .ctaButton {
-  background: #2121DD !important;
-  color: white !important;
-  border: none !important;
-  height: 40px !important;
-  padding: 0 24px !important;
-  border-radius: 8px !important;
+  background: linear-gradient(to right, #1a1aba, #2525c5) !important;
+  color: #FFF !important;
+  text-align: center;
+  font-family: Inter;
+  font-size: 15px !important;
+  font-style: normal;
   font-weight: 600 !important;
+  line-height: 22.5px; /* 150% */
+  letter-spacing: 0.2px;
+  padding: 16px 24px !important;
+  height: auto !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 16px rgba(26, 26, 186, 0.3) !important;
+  border: none !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
 }
+
 .ctaButton:hover {
-  background: #1A1ABA !important;
+  background: linear-gradient(to right, #1a1aba, #2525c5) !important;
+  box-shadow: 0 6px 20px rgba(26, 26, 186, 0.4) !important;
+  transform: scale(1.02);
+}
+
+.ctaButton:active {
+  background: linear-gradient(to right, #1a1aba, #2525c5) !important;
+  transform: scale(0.98);
 }
 
 @media (max-width: 768px) {
+  .overviewPage {
+    padding: 16px;
+  }
   .bannerCard {
     flex-direction: column;
   }
@@ -343,12 +368,16 @@
     align-items: center;
   }
   .freeBadge {
-    position: static;
-    margin-bottom: 16px;
-    width: fit-content;
+    top: 12px;
+    right: 12px;
+    padding: 6px 12px;
+    font-size: 11px;
+    position: absolute;
+    margin: 0;
+    width: auto;
   }
   .twoColGrid {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
   .insurersGrid {
     grid-template-columns: 1fr;

@@ -9,6 +9,26 @@ import styles from './Overview.module.css';
 
 const { Panel } = Collapse;
 
+const CustomArrowIcon = ({ rotate = 0, size = '1.2em' }) => (
+  <span 
+    role="img" 
+    aria-label="arrow" 
+    className="anticon" 
+    style={{ 
+      display: 'inline-flex', 
+      alignItems: 'center',
+      transform: `rotate(${rotate}deg)`,
+      transition: 'transform 0.3s',
+      verticalAlign: '-0.125em',
+      fontSize: size
+    }}
+  >
+    <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </span>
+);
+
 const Overview = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -154,35 +174,12 @@ const Overview = () => {
           <Collapse 
             className={styles.faqCollapse} 
             defaultActiveKey={['1']} 
-            ghost
             expandIconPosition="end"
-            expandIcon={({ isActive }) => (
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="10" 
-                height="5" 
-                viewBox="0 0 12 7" 
-                fill="none"
-                style={{ 
-                  transform: isActive ? 'rotate(0deg)' : 'rotate(180deg)', 
-                  transition: 'transform 0.3s',
-                  strokeWidth: '1.667px',
-                  stroke: '#697586'
-                }}
-              >
-                <path 
-                  d="M10.833 5.83337L5.83301 0.833374L0.833008 5.83337" 
-                  stroke="#697586" 
-                  strokeWidth="1.66667" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round"
-                />
-              </svg>
-            )}
+            expandIcon={({ isActive }) => <CustomArrowIcon rotate={isActive ? 180 : 0} />}
           >
             {faqItems.map(item => (
-              <Panel header={item.label} key={item.key}>
-                <p>{item.children}</p>
+              <Panel header={item.label} key={item.key} className={styles.faqPanel}>
+                <p className={styles.faqAnswer}>{item.children}</p>
               </Panel>
             ))}
           </Collapse>
