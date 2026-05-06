@@ -67,6 +67,14 @@ const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-i
             // Use cheapest insurer (recommendedInsurer) for the call, not the displayed one
             const carrierCode = submissionQuote?.carrierCode;
             
+            console.log('\n🚀 [PersonalizeModal] SENDING REQUEST:', {
+                carrierCode: carrierCode,
+                insurerName: submissionQuote?.insurerName,
+                premium: submissionQuote?.monthlyPrice,
+                userProductId: userProductId,
+                isCustomizeRequest: true
+            });
+            
             // Prefer userProductId over productSlug for more reliable matching
             const params = userProductId 
                 ? { userProductId, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, isCustomizeRequest: true } 
@@ -93,7 +101,7 @@ const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-i
                 
                 // Redirect to call confirmation page with userProductId
                 timerRef.current = setTimeout(() => {
-                    navigate(`/call-confirmation/${productId}`);
+                    navigate(`/confirmation-call/${productId}`);
                 }, 2000);
             } else {
                 console.warn('Fortus request failed:', result);
@@ -277,7 +285,7 @@ const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-i
                            Vous souhaitez personnaliser vos protections?
                         </h1>
                         <p className={styles.mainDescription}>
-                            Courtika, cabinet certifié à l’AMF, peut poursuivre avec vous pour ajuster votre franchise, revoir vos protections et comparer d’autres options, sans engagement. Vos informations seront déjà transmises pour vous faire gagner du temps.
+                            Courtika, cabinet certifié à l’AMF, peut poursuivre avec vous pour ajuster vos franchises, revoir vos protections et comparer d’autres options, sans engagement. Vos informations seront déjà transmises pour vous faire gagner du temps.
                         </p>
                     </div>
 
@@ -301,7 +309,10 @@ const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-i
                                 </div>
                                 {!displayQuote.isCourtikaSearch && (
                             <div className={styles.summaryRight}>
-                                <p className={styles.summaryPrice}>{displayQuote.monthlyPrice}$/mois</p>
+                                <p className={styles.summaryPrice}>
+                                    {displayQuote.monthlyPrice}$/mois 
+                                    <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '400', marginLeft: '4px' }}>(+9% taxes)</span>
+                                </p>
                                 {displayQuote.yearlyPrice && !displayQuote.discount && (
                                     <p className={styles.summaryOldPrice}>{displayQuote.yearlyPrice}$/an</p>
                                 )}

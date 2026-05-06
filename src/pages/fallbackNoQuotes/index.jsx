@@ -100,7 +100,14 @@ const FallbackNoQuotes = () => {
                 return currentPrice < lowestPrice ? current : lowest;
               });
               carrierCode = lowestPriceCarrier.carrierCode;
-              console.log('[FallbackNoQuotes] Selected lowest price carrier:', carrierCode, 'with premium:', lowestPriceCarrier.annualPremium || lowestPriceCarrier.premium);
+              console.log('\n🔍 [FallbackNoQuotes DEBUG] ===================');
+              console.log('🏆 Selected lowest price carrier:', {
+                carrierCode: carrierCode,
+                name: lowestPriceCarrier.carrierName || lowestPriceCarrier.name,
+                premium: lowestPriceCarrier.annualPremium || lowestPriceCarrier.premium
+              });
+              console.log('📤 This carrier will be sent to ezLeads');
+              console.log('=========================================\n');
             }
           }
         } catch (quoteError) {
@@ -109,6 +116,12 @@ const FallbackNoQuotes = () => {
         }
       }
 
+      console.log('\n🚀 [FallbackNoQuotes] SENDING REQUEST:', {
+        carrierCode: carrierCode || 'not specified (backend will use cheapest)',
+        userProductId: userProductId,
+        productSlug: 'car-insurance'
+      });
+      
       // Call Fortus API to send the lead and email
       const result = await fortusService.requestCall({
         userProductId,

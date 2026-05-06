@@ -8,7 +8,8 @@ import styles from './FifteenMinutesRedirect.module.css';
 import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
 import { getOrderDetails, checkPendingOrder } from '../../services/api/productOrderService';
 import fortusService from '../../services/api/fortusService';
-import { getQuoteDetails } from '../../services/api/quoteService';
+import { fetchQuote } from '../../services/api/quoteService';
+import useQuote from '../../hooks/useQuote';
 
 const FifteenMinutesRedirect = () => {
   const initialized = useRef(false);
@@ -22,6 +23,16 @@ const FifteenMinutesRedirect = () => {
   const [error, setError] = useState(null);
   const [orderData, setOrderData] = useState(null);
 
+  // Fetch user's quote to get userProductId if not in URL
+  const {
+    userProductId: quoteUserProductId,
+    quoteData,
+    hasQuote
+  } = useQuote('car-insurance', { autoFetch: true });
+
+  // Use URL param first, fallback to quote hook
+  const effectiveUserProductId = urlUserProductId || quoteUserProductId;
+
   useEffect(() => {
     if (!initialized.current) {
       document.title = 'Vos soumissions ont expiré - Consumer App';
@@ -34,16 +45,14 @@ const FifteenMinutesRedirect = () => {
       try {
         setLoading(true);
         
-        let productIdToFetch = urlUserProductId;
+        let productIdToFetch = effectiveUserProductId;
         
-        // If no userProductId in URL, check for pending order
+        // If still no userProductId, check for pending order (last resort)
         if (!productIdToFetch) {
-          console.log('[FifteenMinutesRedirect] No userProductId in URL, checking for pending order...');
           const pendingOrderResponse = await checkPendingOrder('car-insurance');
           
           if (pendingOrderResponse.success && pendingOrderResponse.hasPendingOrder && pendingOrderResponse.userProductId) {
             productIdToFetch = pendingOrderResponse.userProductId;
-            console.log('[FifteenMinutesRedirect] Found pending order:', productIdToFetch);
           }
         }
         
@@ -54,12 +63,8 @@ const FifteenMinutesRedirect = () => {
           if (response.success) {
             setOrderData(response.data);
           } else {
-            console.warn('[FifteenMinutesRedirect] Failed to load order:', response.message);
             setError(response.message || 'Failed to load order details');
           }
-        } else {
-          // No order found, show page with defaults
-          console.log('[FifteenMinutesRedirect] No pending order found, showing defaults');
         }
       } catch (err) {
         console.error('[FifteenMinutesRedirect] Error fetching order details:', err);
@@ -70,34 +75,53 @@ const FifteenMinutesRedirect = () => {
     };
 
     fetchOrderDetails();
-  }, [urlUserProductId]);
+  }, [effectiveUserProductId]);
 
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
       
-      const productId = urlUserProductId || orderData?.userProductId;
+      const productId = effectiveUserProductId || orderData?.userProductId;
       
       // Fetch quote details to find lowest price carrier
       let carrierCode = null;
       if (productId) {
         try {
-          const quoteResponse = await getQuoteDetails(productId);
+          const quoteResponse = await fetchQuote('car-insurance');
+          
           if (quoteResponse.success && quoteResponse.quote?.carriers) {
-            // Find carrier with lowest annual premium
-            const availableCarriers = quoteResponse.quote.carriers.filter(c => c.available !== false);
+            // Filter available carriers with valid premium (same logic as Results page)
+            const availableCarriers = quoteResponse.quote.carriers.filter(r => {
+              const isAvailable = r.available === true || r.status === 'success';
+              const hasPremium = (r.annualPremium || r.premium || 0) > 0;
+              return isAvailable && hasPremium;
+            });
+            
             if (availableCarriers.length > 0) {
-              const lowestPriceCarrier = availableCarriers.reduce((lowest, current) => {
-                const lowestPrice = lowest.annualPremium || lowest.premium || 999999;
-                const currentPrice = current.annualPremium || current.premium || 999999;
-                return currentPrice < lowestPrice ? current : lowest;
+              // Transform carriers using EXACT same logic as Results page
+              const transformedCarriers = availableCarriers.map((carrier, index) => {
+                const annual = carrier.annualPremium || carrier.premium || 0;
+                const monthly = carrier.monthlyPremium || Math.round(annual / 12);
+                
+                return {
+                  carrierCode: carrier.carrierCode,
+                  name: carrier.carrierName || carrier.name,
+                  monthlyPrice: monthly,
+                  annualPrice: annual,
+                  originalData: carrier
+                };
               });
-              carrierCode = lowestPriceCarrier.carrierCode;
-              console.log('[FifteenMinutesRedirect] Selected lowest price carrier:', carrierCode, 'with premium:', lowestPriceCarrier.annualPremium || lowestPriceCarrier.premium);
+              
+              // Sort by monthly price (same as Results page)
+              const sortedCarriers = transformedCarriers.sort((a, b) => a.monthlyPrice - b.monthlyPrice);
+              
+              // Select cheapest (first in sorted list)
+              const cheapest = sortedCarriers[0];
+              carrierCode = cheapest.carrierCode;
             }
           }
         } catch (quoteError) {
-          console.warn('[FifteenMinutesRedirect] Could not fetch quote details:', quoteError);
+          console.error('[FifteenMinutesRedirect] Error fetching quote:', quoteError.message);
           // Continue without carrierCode - backend will use default
         }
       }
@@ -289,7 +313,7 @@ const FifteenMinutesRedirect = () => {
                   <PhoneOutlined className={styles.phoneIcon} /> Appeler maintenant: {phone}
                 </Button>
                 
-                <Button className={styles.secondaryOutlineButton} size="large" onClick={() => navigate(`/schedule-call/${urlUserProductId || ''}`)}>
+                <Button className={styles.secondaryOutlineButton} size="large" onClick={() => navigate(`/schedule-call/${effectiveUserProductId || ''}`)}>
                   <CalendarOutlined /> Planifier l'appel plus tard
                 </Button>
               </div>

@@ -45,7 +45,7 @@ const CarInsurance = () => {
       try {
         const result = await checkPendingOrder('car-insurance');
         if (result.success && result.hasPendingOrder && result.userProductId) {
-          navigate(`/call-confirmation/${result.userProductId}`);
+          navigate(`/confirmation-call/${result.userProductId}`);
         }
       } catch (error) {
         console.error('Failed to check pending order:', error);

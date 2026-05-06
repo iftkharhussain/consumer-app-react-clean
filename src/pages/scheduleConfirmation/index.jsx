@@ -132,13 +132,26 @@ const ScheduleConfirmation = () => {
                 return currentPrice < lowestPrice ? current : lowest;
               });
               carrierCode = lowestPriceCarrier.carrierCode;
-              console.log('[ScheduleConfirmation] Selected lowest price carrier:', carrierCode, 'with premium:', lowestPriceCarrier.annualPremium || lowestPriceCarrier.premium);
+              console.log('\n🔍 [ScheduleConfirmation DEBUG] ===================');
+              console.log('🏆 Selected lowest price carrier:', {
+                carrierCode: carrierCode,
+                name: lowestPriceCarrier.carrierName || lowestPriceCarrier.name,
+                premium: lowestPriceCarrier.annualPremium || lowestPriceCarrier.premium
+              });
+              console.log('📤 This carrier will be sent to ezLeads');
+              console.log('=========================================\n');
             }
           }
         } catch (quoteError) {
           console.warn('[ScheduleConfirmation] Could not fetch quote details:', quoteError);
           // Continue without carrierCode - backend will use default
         }
+        
+        console.log('\n🚀 [ScheduleConfirmation] SENDING REQUEST:', {
+          carrierCode: carrierCode || 'not specified (backend will use cheapest)',
+          userProductId: userProductId,
+          productSlug: 'car-insurance'
+        });
         
         const result = await fortusService.requestCall({
           userProductId,
@@ -195,7 +208,7 @@ const ScheduleConfirmation = () => {
           <div className={styles.actionCard}>
             <h1 className={styles.mainTitle} style={{ color: '#dc2626' }}>Erreur</h1>
             <p className={styles.subTitle}>{error}</p>
-            <Button type="primary" onClick={() => navigate('/car-insurance')} style={{ marginTop: '20px' }}>
+            <Button type="primary" onClick={() => navigate('/result')} style={{ marginTop: '20px' }}>
               Retour aux résultats
             </Button>
           </div>
@@ -272,7 +285,7 @@ const ScheduleConfirmation = () => {
       'COLL': 'Collision et renversement (B2)',
       'CMP': 'Accidents sans collision ni renversement (B3)',
       'COMP': 'Accidents sans collision ni renversement (B3)',
-      '34': 'Protection supplémentaire (FAQ 34)',
+      '34': 'Assurance de personnes (FAQ 34)',
       '33': 'Assistance routière (FAQ 33)',
       '20': 'Assistance routière (FAQ 20)',
       '27': 'Assurance des personnes (FAQ 27)',

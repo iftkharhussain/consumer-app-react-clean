@@ -15,10 +15,16 @@ const InsuranceCard = ({
   buttonText = 'Speak with an advisor',
   buttonType = 'secondary',
   additionalButtons = [],
+  timeToComplete,
   onButtonClick 
 }) => {
   const ActionBtn = ({ label, type = 'secondary', onClick }) => (
-    <Button size="md" color={type === 'primary' ? 'primary' : 'secondary'} onClick={onClick}>
+    <Button 
+      size="md" 
+      color={type === 'primary' ? 'primary' : 'secondary'} 
+      onClick={onClick}
+      className={type === 'primary' ? styles.btnPrimary : styles.btnSecondary}
+    >
       {label}
     </Button>
   );
@@ -47,11 +53,16 @@ const InsuranceCard = ({
         </div>
 
         {/* Footer actions */}
-        <div className={styles.cardFooter}>
-          <ActionBtn label={buttonText} type={buttonType} onClick={onButtonClick} />
-          {additionalButtons.map((lbl, idx) => (
-            <ActionBtn key={idx} label={lbl} type="primary" onClick={() => onButtonClick && onButtonClick(lbl)} />
-          ))}
+        <div className={`${styles.cardFooter} ${!timeToComplete ? styles.footerRight : ''}`}>
+          {timeToComplete && (
+            <span className={styles.timeToComplete}>{timeToComplete}</span>
+          )}
+          <div className={styles.footerButtons}>
+            <ActionBtn label={buttonText} type={buttonType} onClick={onButtonClick} />
+            {additionalButtons.map((lbl, idx) => (
+              <ActionBtn key={idx} label={lbl} type="primary" onClick={() => onButtonClick && onButtonClick(lbl)} />
+            ))}
+          </div>
         </div>
       </div>
     </ContentBox>

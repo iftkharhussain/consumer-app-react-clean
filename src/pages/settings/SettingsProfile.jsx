@@ -37,8 +37,7 @@ const SettingsProfile = () => {
       email, 
       firstName, 
       lastName, 
-      phone: profilePhone || phone,
-      role: profession 
+      phone: profilePhone || phone
     };
     form.setFieldsValue(profileObject);
 
@@ -59,7 +58,6 @@ const SettingsProfile = () => {
     const formData = new URLSearchParams();
     formData.append('firstName', values?.firstName || '');
     formData.append('lastName', values?.lastName || '');
-    formData.append('profession', values?.role || '');
     formData.append('profilePhone', values?.phone || '');
 
     try {
@@ -154,9 +152,16 @@ const SettingsProfile = () => {
     if (file?.success) {
       setIsUpdating(false);
       toast.success(t('profilePictureHasBeenUpdated') || 'Profile picture has been updated');
+      const newPicPath = file?.data?.profilePic;
+      setProfilePic({
+        uid: '-1',
+        name: 'image.png',
+        status: 'done',
+        url: serverUrl + newPicPath,
+      });
       dispatch({
         type: Types.UPDATE_PROFILE,
-        payLoad: { profilePic: file?.data?.profilePic }
+        payLoad: { profilePic: newPicPath }
       });
     }
   };
@@ -202,17 +207,19 @@ const SettingsProfile = () => {
         >
           {/* Name Row */}
           <Row gutter={[24, 0]} align="top" className={styles.formRow}>
-            <Col xs={24} sm={8} md={8} lg={7} className={styles.leftLabel}>
+            <Col xs={24} sm={8} md={8} lg={7} className={`${styles.leftLabel} ${styles.hideOnMobile}`}>
               <div className={styles.labelTitle}>{t('name') || 'Name'}</div>
             </Col>
             <Col xs={24} sm={16} md={16} lg={12}>
-              <Row gutter={24}>
+              <Row gutter={[24, 16]}>
                 <Col xs={24} sm={12}>
+                  <div className={styles.mobileLabel}>{t('firstName') || 'First name'}</div>
                   <Form.Item name="firstName" rules={[{ required: true, message: t('firstNameIsRequired') || 'First name is required' }]}>
                     <Input placeholder={t('firstName') || 'First Name'} className={styles.nameInput} />
                   </Form.Item>
                 </Col>
                 <Col xs={24} sm={12}>
+                  <div className={styles.mobileLabel}>{t('lastName') || 'Last name'}</div>
                   <Form.Item name="lastName" rules={[{ required: true, message: t('lastNameIsRequired') || 'Last name is required' }]}>
                     <Input placeholder={t('lastName') || 'Last Name'} className={styles.nameInput} />
                   </Form.Item>
@@ -227,17 +234,30 @@ const SettingsProfile = () => {
               <div className={styles.labelTitle}>{t('email') || 'Email address'}</div>
             </Col>
             <Col xs={24} sm={16} md={16} lg={12}>
-              <Form.Item name="email" rules={[{ type: 'email', message: t('invalidEmail') || 'Please enter a valid email!' }]}> 
+              <Form.Item name="email"> 
                 <Input 
-                  placeholder="nicolashm@norgaapp.com" 
+                  placeholder="email@example.com" 
                   disabled 
                   readOnly 
-                  prefix={<Mail01 className='input-icon' />} 
+                  prefix={<Mail01 className='input-icon' style={{ marginRight: '8px' }} />} 
                   className={`custom-icon-input ${styles.singleInput}`} 
                 />
               </Form.Item>
             </Col>
-          </Row>        
+          </Row>    
+
+                {/* Phone Number */}
+          <Row gutter={[24, 0]} align="top" className={styles.formRow}>
+            <Col xs={24} sm={8} md={8} lg={7} className={styles.leftLabel}>
+              <div className={styles.labelTitle}>{t('phoneNumber') || 'Phone Number'}</div>
+            </Col>
+            <Col xs={24} sm={16} md={16} lg={12}>
+              <Form.Item name="phone"> 
+                <Input placeholder="123 456 7890" disabled readOnly className={styles.singleInput} />
+              </Form.Item>
+            </Col>
+          </Row>
+    
           
           {/* Photo Upload */}
           <Row gutter={[24, 0]} align="top" className={styles.formRow}>
@@ -250,11 +270,13 @@ const SettingsProfile = () => {
             <Col xs={24} sm={16} md={16} lg={12}>
               <div className={styles.photoUpload}>
                 <div className={styles.currentPhoto}>
-                  <img 
-                    src={profilePic?.url || "/images/Avatar.png"} 
-                    alt="Current profile" 
-                    className={styles.profileAvatar} 
-                  />
+                  <Spin spinning={isUpdating}>
+                    <img 
+                      src={profilePic?.url || "/images/user-placeholder.png"} 
+                      alt="Current profile" 
+                      className={styles.profileAvatar} 
+                    />
+                  </Spin>
                 </div>
                 <div className={styles.uploadArea}>
                   <ImgCrop
@@ -284,44 +306,32 @@ const SettingsProfile = () => {
             </Col>
           </Row>
 
-          {/* Phone Number */}
-          <Row gutter={[24, 0]} align="top" className={styles.formRow}>
-            <Col xs={24} sm={8} md={8} lg={7} className={styles.leftLabel}>
-              <div className={styles.labelTitle}>{t('phoneNumber') || 'Phone Number'}</div>
-            </Col>
-            <Col xs={24} sm={16} md={16} lg={12}>
-              <Form.Item name="phone" rules={[{ required: true, message: t('phoneIsRequired') || 'Please input your phone number!' }]}> 
-                <Input placeholder="123 456 7890" className={styles.singleInput} />
-              </Form.Item>
-            </Col>
-          </Row>
-
-          {/* Role */}
-          <Row gutter={[24, 0]} align="top" className={styles.formRow}>
-            <Col xs={24} sm={8} md={8} lg={7} className={styles.leftLabel}>
-              <div className={styles.labelTitle}>{t('role') || 'Role'}</div>
-            </Col>
-            <Col xs={24} sm={16} md={16} lg={12}>
-              <Form.Item name="role" rules={[{ required: true, message: t('professionIsRequired') || 'Please select your role!' }]}> 
-                <Select placeholder={t('selectARole') || 'Select a role'} className={styles.singleInput}>
-                  <Option value="Developer">{t('developer') || 'Developer'}</Option>
-                  <Option value="Marketing">{t('marketing') || 'Marketing'}</Option>
-                  <Option value="Assistant">{t('assistant') || 'Assistant'}</Option>
-                  <Option value="Financial advisor">{t('financialAdvisor') || 'Financial Advisor'}</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
+    
 
           {/* Action Buttons */}
-          <div className={styles.formActions}>
-            <Button className={styles.cancelButton} onClick={() => form.resetFields()}>
-              {t('cancel') || 'Cancel'}
-            </Button>
-            <Button type="primary" htmlType="submit" className={styles.saveButton} loading={loading}>
-              {t('save') || 'Save'}
-            </Button>
-          </div>
+          <Row gutter={[24, 0]}>
+            <Col xs={0} sm={8} md={8} lg={7} />
+            <Col xs={24} sm={16} md={16} lg={12}>
+              <div className={styles.formActions}>
+                <Button 
+                  className={styles.cancelButton} 
+                  onClick={() => {
+                    form.setFieldsValue({ 
+                      email, 
+                      firstName, 
+                      lastName, 
+                      phone: profilePhone || phone 
+                    });
+                  }}
+                >
+                  {t('cancel') || 'Cancel'}
+                </Button>
+                <Button type="primary" htmlType="submit" className={styles.saveButton} loading={loading}>
+                  {t('save') || 'Save'}
+                </Button>
+              </div>
+            </Col>
+          </Row>
         </Form>
       </Spin>
     </div>

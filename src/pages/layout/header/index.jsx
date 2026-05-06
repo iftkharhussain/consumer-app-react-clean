@@ -141,8 +141,8 @@ const AppHeader = ({ children, collapsed }) => {
 					)}
 				</div>
 				<div className='right-wrapper'>
-					<AppSearch />
-					<Notification />
+					{/* <AppSearch />
+					<Notification /> */}
 					<Dropdown menu={{ items, onClick }} trigger={['click']}>
 						<Avatar
 							size={40}

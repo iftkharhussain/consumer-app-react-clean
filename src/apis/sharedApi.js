@@ -14,6 +14,7 @@ export const authUrl = `${baseUrl}/api/auth/verify`;
 export const LoginUrl = `${baseUrl}/api/auth/login`;
 export const RegisterUrl = `${baseUrl}/api/auth/register`;
 export const PhoneLoginUrl = `${baseUrl}/api/auth/phone-login`;
+export const PhoneLoginCompleteUrl = `${baseUrl}/api/auth/phone-login-complete`;
 export const LeadLoginUrl = `${baseUrl}/api/auth/lead-login`;
 export const CheckTokenUrl = `${baseUrl}/api/auth/check-token`;
 export const logoutUrl = `${baseUrl}/api/auth/logout`;
@@ -43,6 +44,14 @@ export const getUserProductsUrl = `${baseUrl}/api/quote/products`;
 export const getQuoteStatusUrl = `${baseUrl}/api/quote/status`;
 export const getQuoteDetailsUrl = `${baseUrl}/api/quote/details`;
 
+// Quote Sessions (Multiple Quotes Support)
+export const createQuoteSessionUrl = `${baseUrl}/api/quote-sessions`;
+export const getQuoteSessionsUrl = `${baseUrl}/api/quote-sessions`;
+export const getActiveQuoteSessionUrl = `${baseUrl}/api/quote-sessions/active`;
+export const activateQuoteSessionUrl = (sessionId) => `${baseUrl}/api/quote-sessions/${sessionId}/activate`;
+export const updateQuoteSessionStatusUrl = (sessionId) => `${baseUrl}/api/quote-sessions/${sessionId}/status`;
+
 // For backwards compatibility (these were imported in helper.js but not used)
 export const login = LoginUrl;
 export const signup = `${baseUrl}/api/auth/signup`;
+export const getAllAdvisorsUrl = `${baseUrl}/api/advisor/all`;

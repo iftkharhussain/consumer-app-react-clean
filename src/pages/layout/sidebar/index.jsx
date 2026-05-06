@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { Layout, Menu, Tag, Input, Dropdown, Space, Popover } from 'antd';
-import { InfoCircle, LayersThree01, Users01, CheckDone01, CurrencyDollarCircle, Flash, LifeBuoy01, Settings01, Bell01, ChevronLeftDouble, File04, Home01, ImageUser, MessageChatSquare, FileSearch02, Cube01, Target01, Car01, LogOut01, XClose } from "utils/icons";
+import { InfoCircle, LayersThree01, Users01, CheckDone01, CurrencyDollarCircle, Flash, LifeBuoy01, Settings01, Bell01, ChevronLeftDouble, File04, Home01, ImageUser, MessageChatSquare, FileSearch02, Cube01, Target01, Car01, LogOut01, XClose, User01, Shield01, Mail01 } from "utils/icons";
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logoutUrl, serverUrl } from '../../../apis/sharedApi';
+import { logoutUrl, serverUrl, getQuoteSessionsUrl, activateQuoteSessionUrl } from '../../../apis/sharedApi';
 import styles from './Sidebar.module.css';
 import Button from '../../../components/button';
 import ProgressCard from '../../../components/progressCard';
@@ -18,11 +18,14 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 	const { t } = useTranslation();
 	const dispatch = useDispatch();
 	const location = useLocation();
+	const navigate = useNavigate();
 	const localSettings = getUserAppLocalConfig();
 	const [logoutLoading, setLogoutLoading] = useState(false);
 	const [collapsed, setCollapsed] = useState(propsCollapsed);
 	const [adminMenuItems, setAdminMenuItems] = useState([]);
 	const [showProgressSection, setShowProgressSection] = useState(true); // Control progress section visibility
+	const [quoteSessions, setQuoteSessions] = useState([]); // Quote sessions for multiple quotes
+	const [loadingSessions, setLoadingSessions] = useState(false);
 	const { firstName, lastName, email, type: userType, superAdmin, profilePic } = useSelector((state) => state.app.user_profile);
 	const [isGetQuoteModalOpen, setIsGetQuoteModalOpen] = useState(false);
 	const { sidebar } = useSelector(
@@ -31,6 +34,69 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 	const { leadDefaultPath, sidebarBehavior } = useSelector((state) => state.app.user_local_config);
 
 	const [sideMenu, setSideMenu] = useState();
+	const [openKeys, setOpenKeys] = useState([]);
+	const hasAutoOpened = React.useRef(false);
+	
+	// Fetch quote sessions on mount
+	useEffect(() => {
+		fetchQuoteSessions();
+	}, []);
+	
+	// Fetch quote sessions from API
+	const fetchQuoteSessions = async () => {
+		try {
+			setLoadingSessions(true);
+			console.log('🔍 [SIDEBAR] Fetching quote sessions...');
+			const response = await setRequest(Types.USER, {}, getQuoteSessionsUrl, Types.GET, dispatch);
+			
+			console.log('🔍 [SIDEBAR] API response:', response);
+			
+			if (response?.success && response?.sessions) {
+				setQuoteSessions(response.sessions);
+				console.log('✅ [SIDEBAR] Quote sessions loaded:', response.sessions.length, response.sessions);
+				
+				// Debug: Check what's in each session's label
+				response.sessions.forEach((session, i) => {
+					console.log(`  Session ${i + 1}:`, {
+						sessionId: session.sessionId,
+						labelPrimary: session.label?.primary,
+						labelSecondary: session.label?.secondary,
+						isActive: session.isActive
+					});
+				});
+			} else {
+				console.warn('⚠️ [SIDEBAR] No sessions in response:', response);
+			}
+		} catch (error) {
+			console.error('❌ [SIDEBAR] Error fetching quote sessions:', error);
+		} finally {
+			setLoadingSessions(false);
+		}
+	};
+	
+	// Handle quote session switch
+	const handleSessionSwitch = async (sessionId) => {
+		try {
+			const response = await setRequest(
+				Types.USER, 
+				{}, 
+				activateQuoteSessionUrl(sessionId), 
+				Types.PUT, 
+				dispatch
+			);
+			
+			if (response?.success) {
+				toast.success('Session de soumission activée');
+				// Refresh sessions
+				await fetchQuoteSessions();
+				// Reload the page to show new quote data
+				window.location.reload();
+			}
+		} catch (error) {
+			console.error('Error switching session:', error);
+			toast.error('Erreur lors du changement de session');
+		}
+	};
 
 	// Helper function to create menu labels with badges
 	const createMenuLabel = (label, badgeCount = null) => {
@@ -125,8 +191,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 		},
 		{
 			key: 'settings',
-			selectPaths: ['/settings'],
-			selectPaths: ['/settings/*'],
+			selectPaths: ['/settings', '/settings/*'],
 			icon: (
 				<Link to='/settings'>
 					<Settings01 />
@@ -134,35 +199,68 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 			),
 			label: (
 				<Link to='/settings' style={{ color: 'inherit', textDecoration: 'none' }}>
-					Account Settings
+					Paramètres
 				</Link>
 			),
 		},
 	];
 
 	useEffect(() => {
+		// Build submenu items if multiple quote sessions exist
+		console.log('🔍 [SIDEBAR] Building menu with quoteSessions:', quoteSessions.length, quoteSessions);
+		
+		let assuranceAutoChildren = null;
+		
+		if (quoteSessions.length > 1) {
+			console.log('✅ [SIDEBAR] Creating submenu with', quoteSessions.length, 'sessions');
+			assuranceAutoChildren = quoteSessions.map((session, index) => {
+				// Extract date and time from session data
+				const createdDate = new Date(session.createdAt);
+				const dateStr = createdDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+				const timeStr = createdDate.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', hour12: false }).replace(':', 'h');
+				
+				return {
+					key: `quote-session-${session.sessionId}`,
+					label: (
+						<div 
+							onClick={() => !session.isActive && handleSessionSwitch(session.sessionId)}
+							className={`${styles.sessionItem} ${session.isActive ? styles.sessionItemActive : ''}`}
+						>
+							<span className={styles.sessionDate}>{dateStr}</span>
+							<span className={styles.sessionTime}>{timeStr}</span>
+						</div>
+					)
+				};
+			});
+		} else {
+			console.log('ℹ️ [SIDEBAR] Not enough sessions for submenu:', quoteSessions.length);
+		}
+		
 		const menuItemsAdvisor = [
 			{
 				key: 'home',
 				selectPaths: [
-					'/car-insurance', 
+					'/result', 
 					'/', 
-					'/car-insurance/product-order/*', 
-					'/call-confirmation/*', 
-					'/fifteen-minutes-redirect/*', 
+					'/result/product-order/*', 
+					'/confirmation-call/*', 
+					'/result-expired/*', 
 					'/schedule-call/*', 
-					'/schedule-confirmation/*'
+					'/confirmation-meeting/*',
+					'/result-fallback'
 				],
-				icon: (
-					<Link to='/car-insurance'>
+				icon: assuranceAutoChildren ? <Car01 /> : (
+					<Link to='/result'>
 						<Car01 />
 					</Link>
 				),
-				label: (
-					<Link to='/car-insurance' style={{ color: 'inherit', textDecoration: 'none' }}>
+				label: assuranceAutoChildren ? 'Assurance auto' : (
+					<Link to='/result' style={{ color: 'inherit', textDecoration: 'none' }}>
 						Assurance auto
 					</Link>
 				),
+				// Add submenu children if multiple quote sessions exist
+				...(assuranceAutoChildren && { children: assuranceAutoChildren })
 			},
 			{
 				key: 'overview',
@@ -188,7 +286,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 				),
 				label: (
 					<Link to='/my-advisors' style={{ color: 'inherit', textDecoration: 'none' }}>
-						My Advisors
+						Mes conseillers
 					</Link>
 				),
 			},
@@ -238,15 +336,29 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 				),
 			},
 			{
-				key: 'call-confirmation',
-				selectPaths: ['/call-confirmation'],
+				key: 'settings',
+				selectPaths: ['/settings'],
 				icon: (
-					<Link to='/call-confirmation'>
+					<Link to='/settings'>
+						<Settings01 />
+					</Link>
+				),
+				label: (
+					<Link to='/settings' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Paramètres
+					</Link>
+				),
+			},
+			{
+				key: 'call-confirmation',
+				selectPaths: ['/confirmation-call'],
+				icon: (
+					<Link to='/confirmation-call'>
 						<InfoCircle />
 					</Link>
 				),
 				label: (
-					<Link to='/call-confirmation' style={{ color: 'inherit', textDecoration: 'none' }}>
+					<Link to='/confirmation-call' style={{ color: 'inherit', textDecoration: 'none' }}>
 						Call Confirmation
 					</Link>
 				),
@@ -267,28 +379,28 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 			},
 			{
 				key: 'schedule-confirmation',
-				selectPaths: ['/schedule-confirmation'],
+				selectPaths: ['/confirmation-meeting'],
 				icon: (
-					<Link to='/schedule-confirmation'>
+					<Link to='/confirmation-meeting'>
 						<InfoCircle />
 					</Link>
 				),
 				label: (
-					<Link to='/schedule-confirmation' style={{ color: 'inherit', textDecoration: 'none' }}>
+					<Link to='/confirmation-meeting' style={{ color: 'inherit', textDecoration: 'none' }}>
 						Schedule Confirmation
 					</Link>
 				),
 			},
 			{
-				key: '15-minutes-redirect',
-				selectPaths: ['/15-minutes-redirect'],
+				key: 'result-expired',
+				selectPaths: ['/result-expired'],
 				icon: (
-					<Link to='/15-minutes-redirect'>
+					<Link to='/result-expired'>
 						<InfoCircle />
 					</Link>
 				),
 				label: (
-					<Link to='/15-minutes-redirect' style={{ color: 'inherit', textDecoration: 'none' }}>
+					<Link to='/result-expired' style={{ color: 'inherit', textDecoration: 'none' }}>
 						15 Minutes Redirect
 					</Link>
 				),
@@ -332,9 +444,17 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 		// 	setSideMenu([...menuItemsAdvisor, ...menuItemsOther]);
 		// }
 
-		// Active behavior: keep only the first sidebar link (Car Insurance).
-		setSideMenu(menuItemsAdvisor.slice(0, 1));
-	}, [userType, leadDefaultPath]);
+		// Active behavior: showing Assurance auto, Mes conseillers, and Explore at the top.
+		console.log('🔍 [SIDEBAR] Setting menu, first item has children:', !!menuItemsAdvisor[0].children);
+		console.log('🔍 [SIDEBAR] Menu items:', menuItemsAdvisor.slice(0, 1));
+		setSideMenu(menuItemsAdvisor.filter(item => ['home'].includes(item.key)));
+		
+		// Auto-open 'home' only once when sessions first appear
+		if (assuranceAutoChildren && !hasAutoOpened.current) {
+			setOpenKeys(['home']);
+			hasAutoOpened.current = true;
+		}
+	}, [userType, leadDefaultPath, quoteSessions]);
 
 	useEffect(() => {
 		setCollapsed(!sidebar);
@@ -391,9 +511,12 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 
 	const getSelectedMenuKey = () => {
 		if (location.pathname === '/') return ['home'];
-		if (location.pathname === '/analytics' && location.search.includes('status=error')) return ['error-leads'];
+		
+		// Combine top and bottom menus to check for the active path
+		const allMenuItems = [...(sideMenu || []), ...menuItemsOther];
 
-		const selectedKey = sideMenu?.find((item) => {
+		const selectedKey = allMenuItems.find((item) => {
+			if (!item.selectPaths) return false;
 			return item.selectPaths.some((path) => {
 				if (path.endsWith('/*')) {
 					const basePath = path.slice(0, -2); // Remove the '/*'
@@ -403,7 +526,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 			});
 		})?.key;
 
-		return selectedKey ? [selectedKey] : []; // Fallback to an empty array if no key is found
+		return selectedKey ? [selectedKey] : [];
 	};
 
 	useEffect(() => {
@@ -422,6 +545,58 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 			window.removeEventListener('resize', handleResize);
 		};
 	}, []);
+	const userMenuItems = [
+		{
+			key: 'profile-name',
+			label: (
+				<div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#667085' }}>
+					<User01 style={{ width: 16, height: 16 }} />
+					<span>{firstName} {lastName}</span>
+				</div>
+			),
+			disabled: true,
+		},
+		...(userType === 'admin' ? [{
+			key: 'access-admin',
+			label: (
+				<div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#101828' }}>
+					<Shield01 style={{ width: 16, height: 16 }} />
+					<span>Accès administrateur</span>
+				</div>
+			),
+		}] : []),
+		{
+			key: 'profile-email',
+			label: (
+				<div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#667085' }}>
+					<Mail01 style={{ width: 16, height: 16 }} />
+					<span>{email}</span>
+				</div>
+			),
+			disabled: true,
+		},
+		{ type: 'divider' },
+		{
+			key: 'settings',
+			label: (
+				<Link to='/settings' style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#101828' }}>
+					<Settings01 style={{ width: 16, height: 16 }} />
+					<span>Paramètres</span>
+				</Link>
+			),
+		},
+		{ type: 'divider' },
+		{
+			key: 'logout',
+			label: (
+				<div onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#101828' }}>
+					<LogOut01 style={{ width: 16, height: 16 }} />
+					<span>Déconnexion</span>
+				</div>
+			),
+		},
+	];
+
 	return (
 		<>
 			<Sider
@@ -461,54 +636,49 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 
 
 				<div className="app-menus">
-					<Menu className={styles.appMenu} expandIcon={null} theme="light" selectedKeys={getSelectedMenuKey()} style={{ borderInlineEnd: 'none' }} mode='inline' items={sideMenu} />
-					{!collapsed && (
-						<div className={styles.sidebarFooter}>
-							{/* Progress Section - Conditional */}
-							{/* {showProgressSection && (
-								<ProgressCard
-									title="Level Progress"
-									percentage={66}
-									description="2 of 3 categories finished. One more to go for full completion."
-									completedCount={2}
-									totalCount={3}
-									categories={[
-										{ name: 'People Insurance', completed: true },
-										{ name: 'P & C Insurance', completed: true },
-										{ name: 'Mortgage', completed: false },
-										{ name: 'Reward', completed: false }
-									]}
-									buttonText="Continue with your quotes"
-									onButtonClick={() => {
-										// Handle navigation to quotes or profile completion
-										console.log('Continue with quotes clicked');
-									}}
-								/>
-							)} */}
+					<Menu 
+						className={styles.appMenu} 
+						expandIcon={(props) => (
+							<span style={{ 
+								display: 'flex', 
+								alignItems: 'center', 
+								transition: 'transform 0.3s ease',
+								transform: props.isOpen ? 'rotate(0deg)' : 'rotate(180deg)'
+							}}>
+								<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none">
+									<path d="M8.66406 4.66602L4.66406 0.666016L0.664062 4.66602" stroke="#697586" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</span>
+						)}
+						theme="light" 
+						selectedKeys={getSelectedMenuKey()} 
+						openKeys={openKeys}
+						onOpenChange={(keys) => setOpenKeys(keys)}
+						style={{ borderInlineEnd: 'none' }} 
+						mode='inline' 
+						items={sideMenu} 
+					/>
+					
 
-							{/* User Profile Section with Popover */}
-							{/* Popover disabled: no popup on click */}
-								<div className={styles.userProfile} style={{ cursor: 'pointer' }}>
-										{/* <img
-											src={profilePic ? `${serverUrl}${profilePic}` : '/images/Avatar.png'}
-											alt="User Avatar"
-											className={styles.userAvatar}
-										/> */}
+					<div className={styles.sidebarFooter}>
+						<Dropdown menu={{ items: userMenuItems }} trigger={['click']} placement="topLeft" arrow={false}>
+							<div className={styles.userProfile} style={{ cursor: 'pointer', width: '100%' }}>
+								<img
+									src={profilePic ? (profilePic.startsWith('http') ? profilePic : serverUrl + profilePic) : '/images/user-placeholder.png'}
+									alt="Avatar"
+									className={styles.userAvatar}
+								/>
+								{!collapsed && (
 									<div className={styles.userInfo}>
-											{/* <div className={styles.userNameRow}>
-												<span className={styles.userLevel}>Level 1</span>
-												<span className={styles.levelBadge}>1 category to level up</span>
-											</div> */}
-										<div className={styles.userName}>
-											{firstName || 'John Paul'}
+										<div className={styles.userNameRow}>
+											<p className={styles.userName}>{firstName} {lastName}</p>
 										</div>
-										<div className={styles.userEmail}>
-											{email || 'johnp@norgaapp.com'}
-										</div>
+										<p className={styles.userEmail}>{email}</p>
 									</div>
-								</div>
-						</div>
-					)}
+								)}
+							</div>
+						</Dropdown>
+					</div>
 				</div>
 
 			</Sider>

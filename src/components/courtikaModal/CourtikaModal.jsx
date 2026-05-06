@@ -43,6 +43,7 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
     // If user clicked "Parler à Courtika", show Courtika in UI but submit with recommendedInsurer
     // If user clicked "Choisir" on an insurer card, use that insurer for both display and submission
     const isFromCourtikaButton = selectedQuote?.isCourtikaSearch === true;
+    const hasValidSelectedQuote = selectedQuote && selectedQuote.carrierCode;
     
     const displayQuote = selectedQuote;
     const submissionQuote = isFromCourtikaButton && recommendedInsurer
@@ -56,7 +57,7 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
             isCourtikaSearch: true,
             discount: selectedQuote?.discount || false
         }
-        : selectedQuote; // Use the clicked insurer for both display and submission
+        : selectedQuote; // Use the selected insurer from state
 
     const handleDemanderAppel = async () => {
         if (timerRef.current) {
@@ -64,10 +65,8 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
         }
         setIsLoading(true);
         setRequestStatus(null);
-        console.log('Demander un appel clicked - calling Fortus API');
 
         try {
-            // Use cheapest insurer (recommendedInsurer) for the call, not the displayed one
             const carrierCode = submissionQuote?.carrierCode;
             
             // Prefer userProductId over productSlug for more reliable matching
@@ -75,13 +74,10 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
                 ? { userProductId, selectedQuote: submissionQuote, recalculatedQuote, carrierCode } 
                 : { productSlug, selectedQuote: submissionQuote, recalculatedQuote, carrierCode };
             
-            console.log('[CourtikaModal] Request params:', params);
-            
             // Call Fortus API to send the lead
             const result = await fortusService.requestCall(params);
             
             if (result.success) {
-                console.log('Fortus request successful:', result);
                 setRequestStatus('success');
                 message.success('Votre demande a été envoyée avec succès!');
 
@@ -96,7 +92,7 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
                 
                 // Redirect to call confirmation page with userProductId
                 timerRef.current = setTimeout(() => {
-                    navigate(`/call-confirmation/${productId}`);
+                    navigate(`/confirmation-call/${productId}`);
                 }, 2000);
             } else {
                 console.warn('Fortus request failed:', result);

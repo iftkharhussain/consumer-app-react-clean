@@ -172,7 +172,7 @@ const CallConfirmation = () => {
       'COLL': 'Collision et renversement (B2)',
       'CMP': 'Accidents sans collision ni renversement (B3)',
       'COMP': 'Accidents sans collision ni renversement (B3)',
-      '34': 'Protection supplémentaire (FAQ 34)',
+      '34': 'Assurance de personnes (FAQ 34)',
       '33': 'Assistance routière (FAQ 33)',
       '20': 'Assistance routière (FAQ 20)',
       '27': 'Assurance des personnes (FAQ 27)',

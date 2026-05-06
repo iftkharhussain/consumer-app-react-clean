@@ -18,6 +18,17 @@
 .content-box.lead-card{
   gap: 0 !important;
   padding: 16px;
+  width: 320px !important;
+  height: 197px !important;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .content-box.lead-card {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 180px;
+  }
 }
 .content-box.lead-card .ant-form-item{
 margin-bottom: 16px !important;

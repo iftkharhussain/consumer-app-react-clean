@@ -1,0 +1,62 @@
+.container {
+  max-width: 1060px;
+  width: 100%;
+  padding: 0 32px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #1A1ABA !important;
+  font-size: 14px;
+  font-weight: 600 !important;
+  line-height: 18px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 6px 10px;
+  margin-bottom: 32px;
+  align-self: flex-start;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  height: auto;
+}
+
+.backButton:hover {
+  color: #1A1ABA !important;
+  background: #F0F4FF !important;
+  text-decoration: none;
+}
+
+.backButton:hover .backIcon {
+  transform: translateX(-3px);
+}
+
+.backIcon {
+  height: 11px;
+  width: auto;
+  transition: transform 0.2s ease;
+}
+
+.formContainer {
+  width: 100%;
+  min-height: 800px;
+  position: relative;
+  overflow: hidden;
+}
+
+.formContainer iframe {
+  border: none !important;
+}
+
+/* --- Mobile Responsive Optimizations --- */
+@media (max-width: 768px) {
+  .container {
+    padding: 24px 16px;
+  }
+}

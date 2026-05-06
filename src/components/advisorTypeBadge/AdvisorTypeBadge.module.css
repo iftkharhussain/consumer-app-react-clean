@@ -22,10 +22,16 @@
   color: var(--colors-text-text-secondary-700, #414651);
   text-align: center;
   /* Text xs/Medium */
-  font-family: var(--Font-family-font-family-body, Inter);
+  font-family: var(--font-body, Inter);
   font-size: var(--Font-size-text-xs, 12px);
   font-style: normal;
   font-weight: 500;
   line-height: var(--Line-height-text-xs, 18px); /* 150% */
   white-space: nowrap;
+}
+
+.mortgage-broker,
+.insurance-broker,
+.financial-advisor {
+  /* Inherit base styles from .badge (White bg, Grey border, Shadow) */
 }

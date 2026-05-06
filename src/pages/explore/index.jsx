@@ -1,16 +1,24 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PageHeader from '../../components/pageHeader';
 import InsuranceCard from '../../components/insuranceCard';
 import { Home05, UserCheck01, Car01, Heart, Building05, Shield01, ChevronDown, ChevronUp } from '../../utils/icons';
+import { ExploreModal } from '../../components/courtikaModal';
 import styles from './Explore.module.css';
 
 const Explore = () => {
+  const navigate = useNavigate();
   // State for collapsible categories
   const [expandedCategories, setExpandedCategories] = useState({
-    'People Insurance': true,
-    'P & C Insurance': true,
-    'Mortgage': true
+    'Conseiller en sécurité financière': true,
+    'Cabinet en assurance de dommages': true,
+    'Courtier hypothécaire': true
   });
+
+  // State for the Courtika Modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isCourtikaModal, setIsCourtikaModal] = useState(true);
 
   const toggleCategory = (category) => {
     setExpandedCategories(prev => ({
@@ -19,9 +27,24 @@ const Explore = () => {
     }));
   };
 
+  const handleCardClick = (product, actionLabel) => {
+    const isCourtikaAction = product.buttonText === 'Speak with Courtika';
+    const isRefinanceAction = actionLabel === 'Refinance';
+
+    if (isCourtikaAction || isRefinanceAction) {
+      // If it's a refinance action, we might want to use "REFINANCE" as the product title in the modal
+      setSelectedProduct(isRefinanceAction ? 'REFINANCEMENT HYPOTHÉCAIRE' : product.title);
+      setIsCourtikaModal(isCourtikaAction);
+      setIsModalOpen(true);
+    } else {
+      console.log(`Navigating to funnel for: ${product.title}`);
+      // Standard funnel navigation would go here
+    }
+  };
+
   // Mock data for insurance cards organized by categories
   const insuranceCategories = {
-    'People Insurance': [
+    'Conseiller en sécurité financière': [
       {
         id: 1,
         icon: <Heart />,
@@ -67,7 +90,7 @@ const Explore = () => {
         timeToComplete: '2 min to complete'
       }
     ],
-    'P & C Insurance': [
+    'Cabinet en assurance de dommages': [
       {
         id: 5,
         icon: <Home05 />,
@@ -75,7 +98,7 @@ const Explore = () => {
         badgeText: 'Quote Received',
         badgeType: 'blue',
         description: 'Brief Description on Life Insurance',
-        buttonText: 'Speak with Marcus',
+        buttonText: 'Speak with Courtika',
         buttonType: 'secondary'
       },
       {
@@ -85,11 +108,11 @@ const Explore = () => {
         badgeText: 'Quote Received',
         badgeType: 'blue',
         description: 'Brief Description on Life Insurance',
-        buttonText: 'Speak with Marcus',
+        buttonText: 'Speak with Courtika',
         buttonType: 'secondary'
       }
     ],
-    'Mortgage': [
+    'Courtier hypothécaire': [
       {
         id: 7,
         icon: <Building05 />,
@@ -108,17 +131,11 @@ const Explore = () => {
     <div>
       <PageHeader 
         title="Explore"
-        subtitle="blah blah"
+        subtitle="What kind of insurance quote are you looking for?"
         className={styles.pageHeader}
       />
       
       <div className={styles.content}>
-        <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>What kind of insurance quote do you want?</h2>
-          <p className={styles.sectionSubtitle}>
-            You may need to input additional information on the intake to receive a quote.
-          </p>
-        </div>
 
         {/* Render categories with collapsible sections */}
         {Object.entries(insuranceCategories).map(([categoryName, products]) => (
@@ -136,13 +153,25 @@ const Explore = () => {
             {expandedCategories[categoryName] && (
               <div className={styles.cardsGrid}>
                 {products.map((option) => (
-                  <InsuranceCard key={option.id} {...option} />
+                  <InsuranceCard 
+                    key={option.id} 
+                    {...option} 
+                    onButtonClick={(actionLabel) => handleCardClick(option, actionLabel)}
+                  />
                 ))}
               </div>
             )}
           </div>
         ))}
       </div>
+
+      <ExploreModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        onStart={() => navigate('/explore-form', { state: { product: selectedProduct } })}
+        productName={selectedProduct ? selectedProduct.charAt(0).toUpperCase() + selectedProduct.slice(1).toLowerCase() : ''}
+        isCourtika={isCourtikaModal}
+      />
     </div>
   );
 };
