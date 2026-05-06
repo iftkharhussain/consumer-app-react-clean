@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Layout, Menu, Tag, Input, Dropdown, Space, Popover } from 'antd';
-import { InfoCircle, LayersThree01, Users01, CheckDone01, CurrencyDollarCircle, Flash, LifeBuoy01, Settings01, Bell01, ChevronLeftDouble, File04, Home01, ImageUser, MessageChatSquare, FileSearch02, Cube01, Target01, Car01, LogOut01, XClose } from "utils/icons";
+import { InfoCircle, LayersThree01, Users01, CheckDone01, CurrencyDollarCircle, Flash, LifeBuoy01, Settings01, Bell01, ChevronLeftDouble, File04, Home01, ImageUser, MessageChatSquare, FileSearch02, Cube01, Target01, Car01, LogOut01, XClose, User01, Shield01, Mail01 } from "utils/icons";
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -545,6 +545,58 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 			window.removeEventListener('resize', handleResize);
 		};
 	}, []);
+	const userMenuItems = [
+		{
+			key: 'profile-name',
+			label: (
+				<div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#667085' }}>
+					<User01 style={{ width: 16, height: 16 }} />
+					<span>{firstName} {lastName}</span>
+				</div>
+			),
+			disabled: true,
+		},
+		...(userType === 'admin' ? [{
+			key: 'access-admin',
+			label: (
+				<div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#101828' }}>
+					<Shield01 style={{ width: 16, height: 16 }} />
+					<span>Accès administrateur</span>
+				</div>
+			),
+		}] : []),
+		{
+			key: 'profile-email',
+			label: (
+				<div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#667085' }}>
+					<Mail01 style={{ width: 16, height: 16 }} />
+					<span>{email}</span>
+				</div>
+			),
+			disabled: true,
+		},
+		{ type: 'divider' },
+		{
+			key: 'settings',
+			label: (
+				<Link to='/settings' style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#101828' }}>
+					<Settings01 style={{ width: 16, height: 16 }} />
+					<span>Paramètres</span>
+				</Link>
+			),
+		},
+		{ type: 'divider' },
+		{
+			key: 'logout',
+			label: (
+				<div onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#101828' }}>
+					<LogOut01 style={{ width: 16, height: 16 }} />
+					<span>Déconnexion</span>
+				</div>
+			),
+		},
+	];
+
 	return (
 		<>
 			<Sider
@@ -609,21 +661,23 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 					
 
 					<div className={styles.sidebarFooter}>
-						<div className={styles.userProfile}>
-							<img
-								src={profilePic ? (profilePic.startsWith('http') ? profilePic : serverUrl + profilePic) : '/images/user-placeholder.png'}
-								alt="Avatar"
-								className={styles.userAvatar}
-							/>
-							{!collapsed && (
-								<div className={styles.userInfo}>
-									<div className={styles.userNameRow}>
-										<p className={styles.userName}>{firstName} {lastName}</p>
+						<Dropdown menu={{ items: userMenuItems }} trigger={['click']} placement="topLeft" arrow={false}>
+							<div className={styles.userProfile} style={{ cursor: 'pointer', width: '100%' }}>
+								<img
+									src={profilePic ? (profilePic.startsWith('http') ? profilePic : serverUrl + profilePic) : '/images/user-placeholder.png'}
+									alt="Avatar"
+									className={styles.userAvatar}
+								/>
+								{!collapsed && (
+									<div className={styles.userInfo}>
+										<div className={styles.userNameRow}>
+											<p className={styles.userName}>{firstName} {lastName}</p>
+										</div>
+										<p className={styles.userEmail}>{email}</p>
 									</div>
-									<p className={styles.userEmail}>{email}</p>
-								</div>
-							)}
-						</div>
+								)}
+							</div>
+						</Dropdown>
 					</div>
 				</div>
 
