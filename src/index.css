@@ -70,3 +70,20 @@ code {
               transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+
+.otp-container {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.otp-container .ant-otp {
+  gap: 12px;
+}
+
+.otp-container .ant-otp-input {
+  width: 50px !important;
+  height: 50px !important;
+  font-size: 20px !important;
+  border-radius: 8px !important;
+}

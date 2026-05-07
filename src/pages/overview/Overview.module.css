@@ -135,8 +135,7 @@ letter-spacing: -0.076px;
   border-radius: 8px !important;
   font-size: 16px !important;
   font-weight: 600 !important;
-  width: 100%;
-  max-width: 400px;
+  width: 100% !important;
   box-shadow: 0 4px 16px rgba(26, 26, 186, 0.3) !important;
   transition: transform 0.2s ease, box-shadow 0.2s ease !important;
 }
@@ -149,7 +148,7 @@ letter-spacing: -0.076px;
 /* Two Columns */
 .twoColGrid {
   display: grid;
-  grid-template-columns: 5.4fr 4.6fr;
+  grid-template-columns: 6.2fr 3.8fr;
   gap: 24px;
   width: 100%;
 }
@@ -166,9 +165,13 @@ letter-spacing: -0.076px;
   display: flex;
   align-items: center;
   gap: 8px;
+  color: #121926;
+  font-family: Inter;
   font-size: 18px;
+  font-style: normal;
   font-weight: 600;
-  color: #111827;
+  line-height: 27px; /* 150% */
+  letter-spacing: -0.439px;
   margin-bottom: 24px;
 }
 
@@ -191,7 +194,7 @@ letter-spacing: -0.076px;
   font-style: normal;
   font-weight: 900;
   line-height: 48px; /* 100% */
-  letter-spacing: -0.2px;
+  letter-spacing: 0.8px;
   margin: 0 0 8px 0;
 }
 

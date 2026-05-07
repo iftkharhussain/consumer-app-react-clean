@@ -1,6 +1,49 @@
-.ant-space{
+.phone-field-wrapper {
   display: flex;
+  position: relative;
+  width: 100%;
 }
-.ant-space .ant-space-item:last-child{
-  flex: 1;
+
+.phone-country-code {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 60px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px 0 0 8px;
+  border: 1.5px solid #ededed;
+  background: #F9FAFB;
+  flex-shrink: 0;
+  z-index: 10;
+  color: #1A1ABA;
+  font-size: 14px;
+  font-weight: 500;
+  pointer-events: none;
+  border-right: 1.5px solid #ededed;
+}
+
+.phone-input {
+  width: 100% !important;
+  height: 40px !important;
+  padding-left: 72px !important; /* Offset for prefix */
+  border-radius: 8px !important;
+  border: 1.5px solid #ededed !important;
+  font-size: 14px !important;
+  background: white !important;
+  color: #1A1ABA !important;
+  outline: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.phone-input:hover, .phone-input:focus {
+  border-color: #1A1ABA !important;
+  box-shadow: 0 0 0 2px rgba(26, 26, 186, 0.1) !important;
+}
+
+.phone-field-wrapper:focus-within .phone-country-code {
+  border-color: #1A1ABA;
+  border-right-color: #1A1ABA;
 }

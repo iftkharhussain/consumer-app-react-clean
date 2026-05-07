@@ -1,103 +1,67 @@
 import './style.css'
-import InputMask from 'react-input-mask'
 import React, { useState, useEffect } from 'react'
-import { Input, Select, Space } from 'antd'
-import { useTranslation } from 'react-i18next'
+import { Input } from 'antd'
 
-const { Option } = Select;
-
-const countries = [
-  { countryCode: 'CA', value: '1', label: 'CA +1' },
-  // { countryCode: 'US', value: '1', label: 'US +1' },
-  // { countryCode: 'PK', value: '92', label: 'PK +92' },
-  // { countryCode: 'GB', value: '44', label: 'GB +44' }
-];
+// Format phone number as (XXX) XXX-XXXX
+const formatPhoneNumber = (value) => {
+  if (!value) return '';
+  let phoneNumber = value.replace(/\D/g, '');
+  
+  // If it starts with 1, strip it for formatting
+  if (phoneNumber.length === 11 && phoneNumber.startsWith('1')) {
+    phoneNumber = phoneNumber.slice(1);
+  } else if (phoneNumber.length > 10) {
+    phoneNumber = phoneNumber.slice(0, 10);
+  }
+  
+  const len = phoneNumber.length;
+  if (len < 4) return phoneNumber;
+  if (len < 7) return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+  return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+};
 
 const Phone = ({ value, onChange }) => {
-  const { t } = useTranslation()
-  const [selectedCountry, setSelectedCountry] = useState('CA')
   const [phoneValue, setPhoneValue] = useState('')
 
   useEffect(() => {
-    // If there's an initial value, try to parse it
     if (value) {
-      const countryCode = countries.find(c => value.startsWith(c.value))
-      if (countryCode) {
-        setSelectedCountry(countryCode.countryCode)
-        setPhoneValue(value.substring(countryCode.value.length))
-      } else {
-        setPhoneValue(value)
-      }
+      // For the parent, we always send '1' + digits.
+      // For display, we strip the '1' and format the rest.
+      const raw = value.startsWith('1') ? value.substring(1) : value;
+      setPhoneValue(formatPhoneNumber(raw));
+    } else {
+      setPhoneValue('');
     }
   }, [value])
 
-  function countryChangeHandle(countryCode) {
-    const country = countries.find(c => c.countryCode === countryCode)
-    setSelectedCountry(countryCode)
-    setPhoneValue('') // Reset phone value when country changes
-    if (onChange) {
-      onChange('')
-    }
-  }
-
-  const getMask = (countryCode) => {
-    switch (countryCode) {
-      case 'CA':
-      case 'US':
-        return '(999) 999-9999'
-      case 'PK':
-        return '999-9999999'
-      case 'GB':
-        return '99999 999999'
-      default:
-        return '999-999-9999'
-    }
-  }
-
   const handlePhoneChange = (e) => {
-    const newValue = e.target.value
-    setPhoneValue(newValue)
+    const input = e.target.value;
+    const numbersOnly = input.replace(/\D/g, '').slice(0, 10);
     
-    // Strip formatting and get just the numbers
-    const numbersOnly = newValue.replace(/\D/g, '')
-    const country = countries.find(c => c.countryCode === selectedCountry)
+    // Update local display state
+    setPhoneValue(formatPhoneNumber(numbersOnly));
     
-    if (onChange && country) {
-      // Pass up the full number with country code but without formatting
-      onChange(country.value + numbersOnly)
+    if (onChange) {
+      // Backend expects '1' + digits
+      onChange('1' + numbersOnly);
     }
   }
 
   return (
-    <Space.Compact style={{ width: '100%' }}>
-      <Select 
-        style={{width: 120}} 
-        placeholder="Country" 
-        value={selectedCountry} 
-        onChange={countryChangeHandle}
-      >
-        {countries.map((country) => (
-          <Option key={country.countryCode} value={country.countryCode}>
-            {country.label}
-          </Option>
-        ))}
-      </Select>
-      <InputMask 
-        mask={getMask(selectedCountry)}
+    <div className="phone-field-wrapper">
+      <div className="phone-country-code">
+        +1
+      </div>
+      <Input 
+        type="tel"
+        inputMode="tel"
         value={phoneValue}
         onChange={handlePhoneChange}
-        maskChar="_"
-        style={{ flex: 1 }}
-      >
-        {(inputProps) => (
-          <Input 
-            {...inputProps}
-            placeholder={`Ex: ${getMask(selectedCountry)}`}
-            style={{ flex: 1 }}
-          />
-        )}
-      </InputMask>
-    </Space.Compact>
+        placeholder="(514) 123-4567"
+        className="phone-input"
+        maxLength={14}
+      />
+    </div>
   )
 }
 

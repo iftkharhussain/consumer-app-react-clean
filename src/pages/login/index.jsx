@@ -28,6 +28,7 @@ const Login = props => {
   const [cooldownEnd, setCooldownEnd] = useState(null);
   const [timeRemaining, setTimeRemaining] = useState('');
   const [resendCountdown, setResendCountdown] = useState(0); // Countdown for resend button
+  const [showAccountError, setShowAccountError] = useState(false);
 
   // Load rate limiting data from localStorage
   useEffect(() => {
@@ -107,15 +108,14 @@ const Login = props => {
     try {
       await sendOTP(phoneNumber);
       setResendCountdown(60); // Set 60 second countdown
-      toast.success('Code renvoyé');
+      toast.success(t('codeResent'));
     } catch (error) {
-      toast.error('Échec de renvoi du code');
+      toast.error(t('codeResendFailed'));
     }
   };
 
   const onVerifyPhone = async (values) => {
     if (cooldownEnd && Date.now() < cooldownEnd) {
-      toast.error(`Trop de tentatives. Veuillez réessayer dans ${timeRemaining}`);
       return;
     }
 
@@ -139,7 +139,8 @@ const Login = props => {
       
       if (verifyRes?.success) {
         // Phone verified, user exists, now send OTP
-        toast.success('Numéro vérifié! Envoi du code...');
+        toast.success(t('phoneVerifiedSendingCode'));
+        setShowAccountError(false);
         
         // Send OTP
         await sendOTP(phone);
@@ -149,7 +150,15 @@ const Login = props => {
       } else {
         setLoading(false);
         incrementAttempts();
-        return toast.error(verifyRes?.message || t('phoneLoginFailed'));
+        
+        // DEVELOPER NOTE: Catch account not found to show the premium red box
+        const msg = verifyRes?.message?.toLowerCase() || '';
+        if (msg.includes('compte') || msg.includes('exist') || msg.includes('not found') || msg.includes('register')) {
+          setShowAccountError(true);
+        } else {
+          toast.error(verifyRes?.message || t('phoneLoginFailed'));
+        }
+        return;
       }
     } catch (error) {
       setLoading(false);
@@ -170,15 +179,15 @@ const Login = props => {
       setLoading(false);
 
       if (otpRes?.success) {
-        toast.success('Code envoyé à votre téléphone');
+        toast.success(t('codeSentToPhone'));
         setResendCountdown(60); // Set 60 second countdown
       } else {
-        toast.error(otpRes?.message || 'Échec de l\'envoi du code');
+        toast.error(otpRes?.message || t('codeSendFailed'));
         setStep(1);
       }
     } catch (error) {
       setLoading(false);
-      toast.error('Échec de l\'envoi du code');
+      toast.error(t('codeSendFailed'));
       setStep(1);
     }
   };
@@ -188,7 +197,7 @@ const Login = props => {
       const code = values.code;
 
       if (!code) {
-        toast.error('Code requis');
+        toast.error(t('codeRequired'));
         return;
       }
 
@@ -207,7 +216,7 @@ const Login = props => {
       
       if (verifyRes?.success) {
         // OTP verified successfully, now complete login
-        toast.success('Code vérifié! Connexion...');
+        toast.success(t('codeVerifiedLoggingIn'));
         
         // Step 2: Complete login
         const loginFormData = new URLSearchParams();
@@ -218,23 +227,23 @@ const Login = props => {
         setLoading(false);
         
         if (loginRes?.success) {
-          toast.success('Connexion réussie!');
+          toast.success(t('loginSuccessful'));
           setTimeout(() => {
             window.location.reload();
           }, 500);
         } else {
           incrementAttempts();
-          return toast.error(loginRes?.message || 'Échec de connexion');
+          return toast.error(loginRes?.message || t('loginFailedSimple'));
         }
       } else {
         setLoading(false);
         incrementAttempts();
-        return toast.error(verifyRes?.message || 'Code invalide');
+        return toast.error(verifyRes?.message || t('invalidCode'));
       }
     } catch (error) {
       setLoading(false);
       incrementAttempts();
-      toast.error('Vérification échouée');
+      toast.error(t('verificationFailed'));
     }
   };
 
@@ -253,26 +262,30 @@ const Login = props => {
       <div className={styles.card}>
         {/* Title */}
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
-          <h2 style={{ margin: 0, fontSize: '24px', fontWeight: '600', color: '#1f2937' }}>
-            {step === 1 ? t('signInWithPhone') : 'Vérification'}
+          <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600', color: '#1f2937' }}>
+            {step === 1 ? t('signInWithPhone') : t('verification')}
           </h2>
+          {step === 1 && (
+            <p style={{ margin: '8px 0 0 0', color: '#6b7280', fontSize: '10px' }}>
+              {t('phoneLoginSMSTip')}
+            </p>
+          )}
         </div>
 
         {/* Rate limit warning */}
         {isBlocked && (
-          <Alert
-            message="Trop de tentatives"
-            description={`Vous avez atteint la limite de ${MAX_ATTEMPTS} tentatives. Veuillez réessayer dans ${timeRemaining}.`}
-            type="error"
-            showIcon
-            style={{ marginBottom: 16 }}
-          />
+          <div style={{ textAlign: 'center', marginBottom: 16 }}>
+            <Text type="danger" strong style={{ display: 'block', fontSize: '16px' }}>{t('tooManyAttempts')}</Text>
+            <Text type="danger" style={{ fontSize: '14px' }}>
+              {t('tooManyAttemptsDescription', { count: MAX_ATTEMPTS, time: timeRemaining })}
+            </Text>
+          </div>
         )}
 
         {/* Attempts remaining warning */}
         {!isBlocked && attempts > 0 && attemptsRemaining <= 2 && (
           <Alert
-            message={`${attemptsRemaining} tentative${attemptsRemaining > 1 ? 's' : ''} restante${attemptsRemaining > 1 ? 's' : ''}`}
+            message={`${attemptsRemaining} ${attemptsRemaining > 1 ? t('attemptsRemainingPlural') : t('attemptsRemaining')}`}
             type="warning"
             showIcon
             style={{ marginBottom: 16 }}
@@ -287,6 +300,7 @@ const Login = props => {
             loading={loading}
             className={styles.form}
             onFinish={onVerifyPhone}
+            onValuesChange={() => showAccountError && setShowAccountError(false)}
             initialValues={{
               phone: ''
             }}
@@ -305,6 +319,19 @@ const Login = props => {
                 <PhoneInput />
               </Form.Item>
             </div>
+
+            {showAccountError && (
+              <div className={styles.accountErrorBox}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginTop: '2px', flexShrink: 0 }}>
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <div className={styles.accountErrorText}>
+                  Vous n'avez pas encore de compte. Pour créer un compte, visitez <a href="https://norga.io" target="_blank" rel="noopener noreferrer">norga.io</a> et soumettez votre première demande de devis.
+                </div>
+              </div>
+            )}
             
             <Form.Item style={{ marginBottom: 16 }}>
               <Button 
@@ -338,25 +365,25 @@ const Login = props => {
             }}
           >
             <div style={{ marginBottom: 16, textAlign: 'center', color: '#6b7280' }}>
-              <p>Un code a été envoyé au {phoneNumber}</p>
+              <p>{t('codeSentTo', { phoneNumber: phoneNumber })}</p>
             </div>
 
             <div style={{ marginBottom: 16 }}>
               <label style={{ display: 'block', marginBottom: 6, color: '#374151', fontSize: '14px', fontWeight: '500' }}>
-                Code de vérification
+                {t('verificationCode')}
               </label>
               <Form.Item 
                 name="code" 
                 style={{ marginBottom: 0 }}
                 rules={[
-                  { required: true, message: 'Code requis' },
-                  { pattern: /^\d{4}$/, message: 'Le code doit contenir 4 chiffres' }
+                  { required: true, message: t('codeRequired') },
+                  { pattern: /^\d{4}$/, message: t('codeMustBe4Digits') }
                 ]}
               >
                 <Input 
                   placeholder="0000"
                   maxLength={4}
-                  style={{ fontSize: '20px', textAlign: 'center', letterSpacing: '8px' }}
+                  className={styles.otpInput}
                 />
               </Form.Item>
             </div>
@@ -370,7 +397,7 @@ const Login = props => {
                 className={styles.button}
                 disabled={isBlocked}
               > 
-                Vérifier
+                {t('verify')}
               </Button>
             </Form.Item>
 
@@ -378,7 +405,7 @@ const Login = props => {
             <div style={{ textAlign: 'center', marginBottom: 12 }}>
               {resendCountdown > 0 ? (
                 <Text style={{ fontSize: '14px', color: '#6b7280' }}>
-                  Renvoyer le code dans {resendCountdown}s
+                  {t('resendCodeIn', { seconds: resendCountdown })}
                 </Text>
               ) : (
                 <Button 
@@ -387,7 +414,7 @@ const Login = props => {
                   disabled={loading}
                   style={{ padding: 0, height: 'auto' }}
                 >
-                  Renvoyer le code
+                  {t('resendCode')}
                 </Button>
               )}
             </div>
@@ -398,7 +425,7 @@ const Login = props => {
                 onClick={handleBackToPhone}
                 disabled={loading}
               >
-                Changer de numéro
+                {t('changeNumber')}
               </Button>
             </div>
           </Form>
