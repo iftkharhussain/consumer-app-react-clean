@@ -68,10 +68,45 @@ export const getOfficeHours = async (params) => {
   }
 };
 
+/**
+ * Track call or meeting event for analytics
+ * 
+ * Called after ezLead is successfully sent on confirmation pages.
+ * Prevents duplicate tracking on page reload.
+ * 
+ * @param {string} userProductId - User product ID
+ * @param {string} eventType - 'call' or 'meeting'
+ * @returns {Promise<Object>} { success, message, recordId?, alreadyExists? }
+ */
+export const trackEvent = async (userProductId, eventType) => {
+  try {
+    const response = await apiClient.post('/api/fortus/track-event', {
+      userProductId,
+      eventType
+    });
+    return response.data;
+  } catch (error) {
+    console.error('[fortusService] trackEvent ERROR:', {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+      userProductId,
+      eventType
+    });
+    
+    // Return error response (don't throw - tracking failure shouldn't break UI)
+    return {
+      success: false,
+      message: error.response?.data?.message || 'Failed to track event'
+    };
+  }
+};
+
 // Named export for object-style import
 export const fortusService = {
   requestCall,
-  getOfficeHours
+  getOfficeHours,
+  trackEvent
 };
 
 export default fortusService;

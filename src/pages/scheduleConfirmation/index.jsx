@@ -15,6 +15,7 @@ const ScheduleConfirmation = () => {
   const { userProductId: urlUserProductId } = useParams();
   const initialized = useRef(false);
   const ezLeadSent = useRef(false);
+  const meetingTracked = useRef(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -170,6 +171,24 @@ const ScheduleConfirmation = () => {
             eventType: eventType,
             userProductId: userProductId
           });
+          
+          // Track meeting event for analytics (only once, prevents duplicates)
+          if (!meetingTracked.current) {
+            meetingTracked.current = true;
+            console.log('[ScheduleConfirmation] Tracking meeting event for userProductId:', userProductId);
+            
+            const trackResult = await fortusService.trackEvent(userProductId, 'meeting');
+            
+            if (trackResult.success) {
+              if (trackResult.alreadyExists) {
+                console.log('[ScheduleConfirmation] Meeting event already tracked');
+              } else {
+                console.log('[ScheduleConfirmation] Meeting event tracked successfully');
+              }
+            } else {
+              console.warn('[ScheduleConfirmation] Failed to track meeting event:', trackResult.message);
+            }
+          }
         } else {
           console.error('[ScheduleConfirmation] Failed to send ezLead:', result.message);
         }

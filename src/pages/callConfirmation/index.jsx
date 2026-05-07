@@ -14,6 +14,7 @@ import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
 import { getOrderDetails, checkPendingOrder } from '../../services/api/productOrderService';
 import { trackPixelEvent } from '../../utils/pixel';
+import fortusService from '../../services/api/fortusService';
 
 const CallConfirmation = () => {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ const CallConfirmation = () => {
   const [error, setError] = useState(null);
   const [orderData, setOrderData] = useState(null);
   const pixelTracked = useRef(false);
+  const callTracked = useRef(false);
 
   useEffect(() => {
     if (!initialized.current) {
@@ -84,6 +86,34 @@ const CallConfirmation = () => {
         });
         pixelTracked.current = true;
     }
+  }, [loading, orderData, urlUserProductId]);
+
+  // Track call event for analytics (only once, prevents duplicates on reload)
+  useEffect(() => {
+    const trackCallEvent = async () => {
+      if (!loading && orderData && !callTracked.current) {
+        const userProductId = urlUserProductId || orderData?.userProductId;
+        
+        if (userProductId) {
+          console.log('[CallConfirmation] Tracking call event for userProductId:', userProductId);
+          callTracked.current = true; // Mark as tracked before API call
+          
+          const result = await fortusService.trackEvent(userProductId, 'call');
+          
+          if (result.success) {
+            if (result.alreadyExists) {
+              console.log('[CallConfirmation] Call event already tracked (page reload)');
+            } else {
+              console.log('[CallConfirmation] Call event tracked successfully');
+            }
+          } else {
+            console.warn('[CallConfirmation] Failed to track call event:', result.message);
+          }
+        }
+      }
+    };
+    
+    trackCallEvent();
   }, [loading, orderData, urlUserProductId]);
 
   // Loading state
