@@ -366,7 +366,25 @@ const ScheduleConfirmation = () => {
     }
 
     return { title, type, coverageValue, code, isPak: isPakCode };
-  }).filter(p => p.coverageValue || p.isPak).sort((a, b) => {
+  }).filter(p => p.coverageValue || p.isPak);
+
+  // Deduplicate protections based on code, coverage value, and type
+  // When there are multiple vehicles, same coverages appear multiple times
+  const uniqueProtections = [];
+  const seen = new Set();
+  
+  protections.forEach(protection => {
+    // Create a unique key based on code, coverage value, and type
+    const key = `${protection.code}-${protection.coverageValue || 'none'}-${protection.type || 'none'}`;
+    
+    if (!seen.has(key)) {
+      seen.add(key);
+      uniqueProtections.push(protection);
+    }
+  });
+
+  // Sort unique protections
+  const sortedProtections = uniqueProtections.sort((a, b) => {
     // Sort order: TP, COL, CMP, other coverages, PAK at the end
     const sortOrder = ['TP', 'TPL', 'COL', 'COLL', 'CMP', 'COMP'];
     
@@ -481,11 +499,11 @@ const ScheduleConfirmation = () => {
                 </>
               )}
 
-              {protections.length > 0 && (
+              {sortedProtections.length > 0 && (
                 <div className={styles.protectionsSection}>
                   <h3 className={styles.protectionsTitle}>Vos protections</h3>
                   <ul className={styles.protectionsList}>
-                    {protections.map((protection, index) => (
+                    {sortedProtections.map((protection, index) => (
                       <li key={index}>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.checkIcon}>
                             <polyline points="20 6 9 17 4 12"></polyline>

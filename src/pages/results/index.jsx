@@ -420,11 +420,26 @@ const Results = () => {
       };
     });
 
+    // Deduplicate coverages based on code, limit, and deductible
+    // When there are multiple vehicles, same coverages appear multiple times
+    const uniqueProtections = [];
+    const seen = new Set();
+    
+    protectionsList.forEach(protection => {
+      // Create a unique key based on code, coverage value, and type
+      const key = `${protection.code}-${protection.coverage || 'none'}-${protection.type || 'none'}`;
+      
+      if (!seen.has(key)) {
+        seen.add(key);
+        uniqueProtections.push(protection);
+      }
+    });
+
     // Check if coverage '34' exists
-    const has34 = protectionsList.some(p => p.code === '34');
+    const has34 = uniqueProtections.some(p => p.code === '34');
     
     // Filter out coverage code '41' only if coverage '34' exists
-    const filteredProtections = protectionsList.filter(protection => {
+    const filteredProtections = uniqueProtections.filter(protection => {
       if (protection.code === '41') {
         return !has34; // Hide '41' only if '34' exists
       }
