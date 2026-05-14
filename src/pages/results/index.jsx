@@ -27,7 +27,7 @@ const Results = () => {
   const [expandedFAQ, setExpandedFAQ] = useState([0]);
   const [expandedInsurer, setExpandedInsurer] = useState(null);
   const [billingPeriod, setBillingPeriod] = useState('monthly'); // 'monthly' or 'yearly'
-  const [timeLeft, setTimeLeft] = useState(900); // 15 minutes in seconds (15 * 60 = 900)
+  const [timeLeft, setTimeLeft] = useState(null); 
   const [showLoadingModal, setShowLoadingModal] = useState(true);
   const [showResubmitAlert, setShowResubmitAlert] = useState(false);
   const [showCustomize, setShowCustomize] = useState(false);
@@ -76,8 +76,29 @@ const Results = () => {
     refresh: refreshQuote
   } = useQuote('car-insurance');
 
-  // Countdown timer
+  // Sync timer and check expiry BEFORE hiding loading state
   useEffect(() => {
+    if (!quoteLoading && hasQuote && quoteData?.createdAt) {
+      const createdTime = new Date(quoteData.createdAt).getTime();
+      const now = Date.now();
+      const elapsedSeconds = Math.floor((now - createdTime) / 1000);
+      const totalAllowedSeconds = 1800; // 30 minutes
+      const remaining = totalAllowedSeconds - elapsedSeconds;
+      
+      if (remaining <= 0) {
+        // Expired! Redirect without ever showing the results
+        navigate('/result-expired');
+      } else {
+        // Not expired, set time and ONLY THEN allow the UI to show
+        setTimeLeft(remaining);
+      }
+    }
+  }, [quoteData, quoteLoading, hasQuote, navigate]);
+
+  // Countdown timer logic
+  useEffect(() => {
+    if (timeLeft === null) return;
+
     const timer = setInterval(() => {
       setTimeLeft((prevTime) => {
         if (prevTime <= 0) {
@@ -90,7 +111,7 @@ const Results = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [navigate]);
+  }, [timeLeft, navigate]);
 
   // Check for resubmit alert flag on mount
   useEffect(() => {
@@ -119,13 +140,17 @@ const Results = () => {
     checkForPendingOrder();
   }, [navigate]);
 
-  // Close loading modal when quote data is loaded
+  // Close loading modal when quote data is ready AND time is synced (to avoid flash)
   useEffect(() => {
-    if (!quoteLoading && (hasQuote || hasFailed)) {
+    // Only hide loading if we have a failed quote OR a successful one with a valid timer
+    const isReadyToShowSuccess = !quoteLoading && hasQuote && timeLeft !== null;
+    const isReadyToShowFailed = !quoteLoading && hasFailed;
+
+    if (isReadyToShowSuccess || isReadyToShowFailed) {
       setHasLoadedOnce(true);
       setShowLoadingModal(false);
     }
-  }, [quoteLoading, hasQuote, hasFailed]);
+  }, [quoteLoading, hasQuote, hasFailed, timeLeft]);
 
   // Process quote data when available
   useEffect(() => {
@@ -213,6 +238,7 @@ const Results = () => {
 
   // Format time as MM:SS
   const formatTime = (seconds) => {
+    if (seconds === null) return '--:--';
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
@@ -725,7 +751,7 @@ const Results = () => {
                   )}
 
                   {/* Show results when data is available */}
-                {hasQuote && recommendedInsurer && (
+                {timeLeft !== null && timeLeft > 0 && hasQuote && recommendedInsurer && (
                   <>
                     {/* Timer */}
                     <div className={styles.timerSection}>

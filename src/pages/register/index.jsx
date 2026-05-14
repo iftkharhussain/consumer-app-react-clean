@@ -7,6 +7,7 @@ import { Form, Input, Button, Layout } from 'antd'
 import { Types, setRequest } from '../../utils/helper'
 import { useTranslation } from 'react-i18next'
 import { RegisterUrl } from '../../apis/sharedApi'
+import { PhoneInput } from '../../components'
 import styles from '../login/Login.module.css' // Reuse login styles
 
 const { Content } = Layout;
@@ -125,19 +126,15 @@ const Register = () => {
 
           <div style={{ marginBottom: 16 }}>
             <label style={{ display: 'block', marginBottom: 6, color: '#374151', fontSize: '14px', fontWeight: '500' }}>Phone Number</label>
-            <Form.Item 
-              name="phone" 
-              style={{ marginBottom: 0 }}
-              rules={[
-                { required: true, message: 'Phone number is required' },
-              ]}
-            >
-              <Input 
-                placeholder="Enter your phone number" 
-                className={styles.input}
-                readOnly={loading}
-              />
-            </Form.Item>
+              <Form.Item 
+                name="phone" 
+                style={{ marginBottom: 0 }}
+                rules={[
+                  { required: true, message: 'Phone number is required' },
+                ]}
+              >
+                <PhoneInput />
+              </Form.Item>
           </div>
           
           <div style={{ marginBottom: 16 }}>

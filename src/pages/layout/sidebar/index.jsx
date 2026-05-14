@@ -89,8 +89,8 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 				toast.success('Session de soumission activée');
 				// Refresh sessions
 				await fetchQuoteSessions();
-				// Reload the page to show new quote data
-				window.location.reload();
+				// Redirect to home to show new quote data and leave limit page if necessary
+				window.location.href = '/';
 			}
 		} catch (error) {
 			console.error('Error switching session:', error);
@@ -226,8 +226,19 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 							onClick={() => !session.isActive && handleSessionSwitch(session.sessionId)}
 							className={`${styles.sessionItem} ${session.isActive ? styles.sessionItemActive : ''}`}
 						>
-							<span className={styles.sessionDate}>{dateStr}</span>
-							<span className={styles.sessionTime}>{timeStr}</span>
+							<div className={styles.sessionIconWrapper}>
+								<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+									<path d="M8.74992 1.16699H3.49992C3.1905 1.16699 2.89375 1.28991 2.67496 1.5087C2.45617 1.72749 2.33325 2.02424 2.33325 2.33366V11.667C2.33325 11.9764 2.45617 12.2732 2.67496 12.4919C2.89375 12.7107 3.1905 12.8337 3.49992 12.8337H10.4999C10.8093 12.8337 11.1061 12.7107 11.3249 12.4919C11.5437 12.2732 11.6666 11.9764 11.6666 11.667V4.08366L8.74992 1.16699Z" stroke="currentColor" strokeWidth="1.16667" strokeLinecap="round" strokeLinejoin="round"/>
+									<path d="M8.16675 1.16699V3.50033C8.16675 3.80974 8.28966 4.10649 8.50846 4.32528C8.72725 4.54408 9.024 4.66699 9.33341 4.66699H11.6667" stroke="currentColor" strokeWidth="1.16667" strokeLinecap="round" strokeLinejoin="round"/>
+									<path d="M5.83341 5.25H4.66675" stroke="currentColor" strokeWidth="1.16667" strokeLinecap="round" strokeLinejoin="round"/>
+									<path d="M9.33341 7.58301H4.66675" stroke="currentColor" strokeWidth="1.16667" strokeLinecap="round" strokeLinejoin="round"/>
+									<path d="M9.33341 9.91699H4.66675" stroke="currentColor" strokeWidth="1.16667" strokeLinecap="round" strokeLinejoin="round"/>
+								</svg>
+							</div>
+							<div className={styles.sessionContent}>
+								<span className={styles.sessionDate}>{dateStr}</span>
+								<span className={styles.sessionTime}>{timeStr}</span>
+							</div>
 						</div>
 					)
 				};
@@ -249,9 +260,9 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 					'/confirmation-meeting/*',
 					'/result-fallback'
 				],
-				icon: assuranceAutoChildren ? <Car01 /> : (
+				icon: assuranceAutoChildren ? <img src="/images/Assurance-Auto_new.svg" className={styles.sidebarIcon} alt="" /> : (
 					<Link to='/result'>
-						<Car01 />
+						<img src="/images/Assurance-Auto_new.svg" className={styles.sidebarIcon} alt="" />
 					</Link>
 				),
 				label: assuranceAutoChildren ? 'Assurance auto' : (
@@ -263,16 +274,100 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 				...(assuranceAutoChildren && { children: assuranceAutoChildren })
 			},
 			{
-				key: 'overview',
-				selectPaths: ['/overview'],
+				key: 'habitation',
+				selectPaths: ['/habitation'],
 				icon: (
-					<Link to='/overview'>
-						<Flash />
+					<Link to='/explore'>
+						<img src="/images/Assurance-Habitation.svg" className={styles.sidebarIcon} alt="" />
 					</Link>
 				),
 				label: (
-					<Link to='/overview' style={{ color: 'inherit', textDecoration: 'none' }}>
-						Life Insurance
+					<Link to='/explore' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Assurance<br />habitation
+					</Link>
+				),
+			},
+			{
+				key: 'overview',
+				selectPaths: ['/life-insurance'],
+				icon: (
+					<Link to='/life-insurance'>
+						<img src="/images/NORGA-Assurance-Vie.svg" className={styles.sidebarIcon} alt="" />
+					</Link>
+				),
+				label: (
+					<Link to='/life-insurance' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Assurance vie
+					</Link>
+				),
+			},
+			{
+				key: 'mortgage',
+				selectPaths: ['/mortgage-insurance'],
+				icon: (
+					<Link to='/mortgage-insurance'>
+						<img src="/images/NORGA-Assurance-Hypothécaire.svg" className={styles.sidebarIcon} alt="" />
+					</Link>
+				),
+				label: (
+					<Link to='/mortgage-insurance' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Assurance hypothécaire
+					</Link>
+				),
+			},
+			{
+				key: 'mortgage-expert',
+				selectPaths: ['/mortgage'],
+				icon: (
+					<Link to='/mortgage'>
+						<img src="/images/Prêt-Hypothécaire.svg" className={styles.sidebarIcon} alt="" />
+					</Link>
+				),
+				label: (
+					<Link to='/mortgage' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Hypothèque
+					</Link>
+				),
+			},
+			{
+				key: 'disability',
+				selectPaths: ['/disability'],
+				icon: (
+					<Link to='/disability'>
+						<img src="/images/Assurance-Salaire.svg" className={styles.sidebarIcon} alt="" />
+					</Link>
+				),
+				label: (
+					<Link to='/disability' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Assurance salaire
+					</Link>
+				),
+			},
+			{
+				key: 'critical-illness',
+				selectPaths: ['/critical-illness'],
+				icon: (
+					<Link to='/critical-illness'>
+						<img src="/images/NORGA-Assurance-Maladie-Grave.svg" className={styles.sidebarIcon} alt="" />
+					</Link>
+				),
+				label: (
+					<Link to='/critical-illness' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Assurance maladies graves
+					</Link>
+				),
+			},
+			{
+				key: 'quoteLimitExceeded',
+				selectPaths: ['/quote-limit-exceeded'],
+				icon: (
+					<Link to='/quote-limit-exceeded'>
+						<LifeBuoy01 />
+					</Link>
+				),
+				label: (
+					<Link to='/quote-limit-exceeded' style={{ color: 'inherit', textDecoration: 'none' }}>
+						Limite atteinte
 					</Link>
 				),
 			},
@@ -281,7 +376,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 				selectPaths: ['/advisors', '/my-advisors'],
 				icon: (
 					<Link to='/my-advisors'>
-						<ImageUser />
+						<img src="/images/icon-people.svg" className={styles.sidebarIcon} alt="" />
 					</Link>
 				),
 				label: (
@@ -447,7 +542,10 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 		// Active behavior: showing Assurance auto, Mes conseillers, and Explore at the top.
 		console.log('🔍 [SIDEBAR] Setting menu, first item has children:', !!menuItemsAdvisor[0].children);
 		console.log('🔍 [SIDEBAR] Menu items:', menuItemsAdvisor.slice(0, 1));
-		setSideMenu(menuItemsAdvisor.filter(item => ['home'].includes(item.key)));
+		setSideMenu(menuItemsAdvisor.filter(item => [
+			'home'
+		
+		].includes(item.key)));
 		
 		// Auto-open 'home' only once when sessions first appear
 		if (assuranceAutoChildren && !hasAutoOpened.current) {
@@ -604,8 +702,8 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 				collapsed={collapsed}
 				className={`${styles.appSidebar} ${collapsed ? styles.collapse : ''} ${!showProgressSection ? styles.hideProgressSection : ''}`}
 				breakpoint='sm'
-				style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0, }}
-				width={300} collapsedWidth={80}
+				style={{ position: 'fixed', left: 0, top: 0, bottom: 0 }}
+				width={320} collapsedWidth={80}
 				onCollapse={(value) => {
 					setCollapsed(value);
 					propsSetCollapsed(value);
@@ -660,25 +758,26 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 					/>
 					
 
-					<div className={styles.sidebarFooter}>
-						<Dropdown menu={{ items: userMenuItems }} trigger={['click']} placement="topLeft" arrow={false}>
-							<div className={styles.userProfile} style={{ cursor: 'pointer', width: '100%' }}>
-								<img
-									src={profilePic ? (profilePic.startsWith('http') ? profilePic : serverUrl + profilePic) : '/images/user-placeholder.png'}
-									alt="Avatar"
-									className={styles.userAvatar}
-								/>
-								{!collapsed && (
-									<div className={styles.userInfo}>
-										<div className={styles.userNameRow}>
-											<p className={styles.userName}>{firstName} {lastName}</p>
-										</div>
-										<p className={styles.userEmail}>{email}</p>
+				</div>
+
+				<div className={styles.sidebarFooter}>
+					<Dropdown menu={{ items: userMenuItems }} trigger={['click']} placement="topLeft" arrow={false}>
+						<div className={styles.userProfile} style={{ cursor: 'pointer', width: '100%' }}>
+							<img
+								src={profilePic ? (profilePic.startsWith('http') ? profilePic : serverUrl + profilePic) : '/images/user-placeholder.png'}
+								alt="Avatar"
+								className={styles.userAvatar}
+							/>
+							{!collapsed && (
+								<div className={styles.userInfo}>
+									<div className={styles.userNameRow}>
+										<p className={styles.userName}>{firstName} {lastName}</p>
 									</div>
-								)}
-							</div>
-						</Dropdown>
-					</div>
+									<p className={styles.userEmail}>{email}</p>
+								</div>
+							)}
+						</div>
+					</Dropdown>
 				</div>
 
 			</Sider>

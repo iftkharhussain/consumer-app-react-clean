@@ -40,6 +40,15 @@ apiClient.interceptors.response.use(
         window.location.href = '/login';
       }
     }
+
+    // Handle quote limit exceeded
+    if (error.response?.status === 400 || error.response?.status === 500) {
+      const data = error.response.data;
+      if (data?.code === 'MAX_SESSIONS_REACHED' || data?.errorCode === 'MAX_SESSIONS_REACHED') {
+        console.warn('[apiClient] Quote limit reached, redirecting...');
+        window.location.href = '/quote-limit-exceeded';
+      }
+    }
     return Promise.reject(error);
   }
 );

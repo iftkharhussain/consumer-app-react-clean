@@ -29,6 +29,10 @@ const CustomArrowIcon = ({ rotate = 0, size = '1.2em' }) => (
   </span>
 );
 
+const CustomInfoIcon = () => (
+  <img src="/images/info1.svg" alt="Info" style={{ width: 16, height: 16, cursor: 'pointer', flexShrink: 0 }} />
+);
+
 const Overview = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -107,8 +111,11 @@ const Overview = () => {
             </div>
           </div>
           <div className={styles.bannerContent}>
-            <h4 className={styles.bannerSubHead}>établir votre stratégie</h4>
-            <h2 className={styles.bannerHead}>{customerName}, voici votre conseiller pour finaliser votre soumission gratuite</h2>
+            <h2 className={styles.bannerHead}>
+              {customerName}, voici votre conseiller <br></br>pour <span style={{ color: '#2121DD' }}>établir</span> 
+              <span style={{ color: '#2121DD' }}>votre stratégie</span> et finaliser votre  
+              soumission gratuite
+            </h2>
             <p className={styles.bannerDesc}>
               Nos experts sont toujours là pour bâtir avec vous une stratégie d'assurance personnalisée, confirmer votre prix instantané, recueillir vos questions personnelles et de santé, puis ajuster la soumission avec précision selon vos besoins.
             </p>
@@ -150,8 +157,9 @@ const Overview = () => {
 
           {/* Top Insurers Card */}
           <div className={styles.gridCard}>
-            <div className={styles.cardHeader}>
+            <div className={styles.subCardHeader}>
               <span>Meilleurs assureurs</span>
+              <CustomInfoIcon />
             </div>
             <div className={styles.insurersGrid}>
               <div className={styles.insurerBlank}></div>
@@ -173,12 +181,12 @@ const Overview = () => {
           
           <Collapse 
             className={styles.faqCollapse} 
-            defaultActiveKey={['1']} 
+            defaultActiveKey={[]} 
             expandIconPosition="end"
             expandIcon={({ isActive }) => <CustomArrowIcon rotate={isActive ? 180 : 0} />}
           >
             {faqItems.map(item => (
-              <Panel header={item.label} key={item.key} className={styles.faqPanel}>
+              <Panel header={item.label} key={item.key} className={styles.faqPanel} style={{ fontWeight: 500 }}>
                 <p className={styles.faqAnswer}>{item.children}</p>
               </Panel>
             ))}

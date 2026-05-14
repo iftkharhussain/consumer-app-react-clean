@@ -172,7 +172,13 @@ const LeadLogin = () => {
 
           // Redirect after showing success message
           setTimeout(() => {
-            const destination = redirectTo === 'app' ? '/' : (response.redirectTo || '/');
+            let destination = redirectTo === 'app' ? '/' : (response.redirectTo || '/');
+            
+            // If limit was exceeded during sync, override destination to limit exceeded page
+            if (response.limitExceeded) {
+              destination = '/quote-limit-exceeded';
+            }
+            
             navigate(destination, { replace: true });
             // Reload to ensure app state is updated
             window.location.reload();

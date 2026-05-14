@@ -5,14 +5,16 @@ import { Input } from 'antd'
 // Format phone number as (XXX) XXX-XXXX
 const formatPhoneNumber = (value) => {
   if (!value) return '';
+  // Remove non-digits
   let phoneNumber = value.replace(/\D/g, '');
   
-  // If it starts with 1, strip it for formatting
+  // If it starts with 1 and is 11 digits, it's a US/CA number with country code
   if (phoneNumber.length === 11 && phoneNumber.startsWith('1')) {
     phoneNumber = phoneNumber.slice(1);
-  } else if (phoneNumber.length > 10) {
-    phoneNumber = phoneNumber.slice(0, 10);
   }
+  
+  // Limit to 10 digits
+  phoneNumber = phoneNumber.slice(0, 10);
   
   const len = phoneNumber.length;
   if (len < 4) return phoneNumber;
@@ -25,9 +27,13 @@ const Phone = ({ value, onChange }) => {
 
   useEffect(() => {
     if (value) {
-      // For the parent, we always send '1' + digits.
-      // For display, we strip the '1' and format the rest.
-      const raw = value.startsWith('1') ? value.substring(1) : value;
+      // Handle +1 prefix or just 1 prefix for backwards compatibility
+      let raw = value;
+      if (raw.startsWith('+1')) {
+        raw = raw.substring(2);
+      } else if (raw.startsWith('1')) {
+        raw = raw.substring(1);
+      }
       setPhoneValue(formatPhoneNumber(raw));
     } else {
       setPhoneValue('');
@@ -36,14 +42,23 @@ const Phone = ({ value, onChange }) => {
 
   const handlePhoneChange = (e) => {
     const input = e.target.value;
-    const numbersOnly = input.replace(/\D/g, '').slice(0, 10);
+    // Extract only digits
+    let digits = input.replace(/\D/g, '');
+    
+    // If user typed '1' at start, handle it
+    if (digits.length > 10 && digits.startsWith('1')) {
+      digits = digits.slice(1);
+    }
+    
+    // Cap at 10 digits
+    const numbersOnly = digits.slice(0, 10);
     
     // Update local display state
     setPhoneValue(formatPhoneNumber(numbersOnly));
     
     if (onChange) {
-      // Backend expects '1' + digits
-      onChange('1' + numbersOnly);
+      // Backend expects '+1' + digits for consistent E.164
+      onChange('+1' + numbersOnly);
     }
   }
 

@@ -119,6 +119,17 @@ export const requestHelper = async (url, method, headers, data) => {
           window.location.href = "/login";
         }
       }
+
+      // Handle quote limit exceeded
+      if (response.status === 400 || response.status === 500) {
+        const clonedRes = response.clone();
+        clonedRes.json().then(data => {
+          if (data?.code === 'MAX_SESSIONS_REACHED' || data?.errorCode === 'MAX_SESSIONS_REACHED') {
+            console.warn('[Helper] Quote limit reached, redirecting...');
+            window.location.href = '/quote-limit-exceeded';
+          }
+        }).catch(() => { /* Ignore parsing errors */ });
+      }
     }
 
     return response;

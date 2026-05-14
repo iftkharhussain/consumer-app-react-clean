@@ -1,0 +1,681 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: "Inter", sans-serif;
+  color: #333;
+  text-align: center;
+}
+
+.clockIconWrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #fafafa;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+}
+
+.clockIcon {
+  font-size: 28px;
+  color: #1f01c8;
+}
+
+.mainTitle {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #111827;
+}
+
+.subTitle {
+  font-size: 16px;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0 auto 24px;
+}
+
+.infoButton {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #1f01c8;
+  font-size: 14px;
+  margin-bottom: 32px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  text-align: left;
+}
+
+.cardTitleCenter {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  text-align: center;
+  margin-bottom: 24px;
+  margin-top: 0;
+}
+
+.brokerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.courtikaLogoBox {
+  border: 1px solid #e5e7eb;
+  padding: 8px 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+}
+
+.courtikaImageLogo {
+  max-width: 100px;
+  max-height: 24px;
+  object-fit: contain;
+}
+
+.statusInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #dcfce7;
+  color: #166534;
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.statusBadgeClosed {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #22c55e;
+  animation: pulseOpen 2s infinite;
+}
+
+.statusDotClosed {
+  background-color: #ef4444;
+  animation: pulseClosed 2s infinite;
+}
+
+@keyframes pulseOpen {
+  0% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+  }
+}
+
+@keyframes pulseClosed {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+.statusSubtitle {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+.reasonsBox {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.reasonsTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.reasonsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reasonsList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.reasonsList li strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+.checkIcon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #1f01c8;
+}
+
+.primaryButton {
+  width: 100%;
+  height: 56px;
+  border-radius: 8px;
+  background-color: #1f01c8 !important;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  color: white !important;
+  border: none;
+  gap: 8px;
+}
+
+.primaryButton:hover {
+  background-color: #18009e !important;
+}
+
+.buttonSubtext {
+  font-size: 12px;
+  color: #6b7280;
+  text-align: center;
+  margin-top: 12px;
+}
+
+/* Submitted State Styles */
+
+.successBanner {
+  background-color: #eaf8f1;
+  border: 1px solid #d0f0db;
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.successIcon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  font-size: 20px;
+  color: #137333;
+  margin-top: 2px;
+}
+
+.successContent {
+  flex: 1;
+}
+
+.successTitle {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #137333;
+}
+
+.successText {
+  font-size: 14px;
+  color: #137333;
+  margin: 0;
+}
+
+.submittedCardTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 16px 0;
+  text-align: left;
+}
+
+.statusSectionLeft {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 24px;
+}
+
+.courtikaLogoBoxLeft {
+  border: 1px solid #e5e7eb;
+  padding: 8px 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+}
+
+.statusInfoLeft {
+  display: flex;
+  flex-direction: column;
+}
+
+.statusSubtitleLeft {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+.infoList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.infoList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.infoIcon {
+  color: #6b7280;
+  font-size: 18px;
+  margin-top: 2px;
+}
+
+.infoText {
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.infoLink {
+  display: block;
+  font-size: 13px;
+  color: #1f01c8;
+  text-decoration: none;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.infoLink:hover {
+  text-decoration: underline;
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.secondaryOutlineButton {
+  width: 100%;
+  min-height: 52px;
+  height: auto !important;
+  padding: 12px 16px;
+  white-space: normal !important;
+  border-radius: 8px;
+  background-color: white !important;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #374151 !important;
+  border: 1px solid #d1d5db !important;
+  box-shadow: none !important;
+}
+
+.secondaryOutlineButton:hover {
+  background-color: #f9fafb !important;
+  color: #111827 !important;
+}
+
+.phoneIcon {
+  transform: scaleX(-1);
+}
+
+/* Second Card */
+.aboutCard {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 32px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  text-align: left;
+}
+
+.aboutTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #111827;
+}
+
+.aboutText {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0 0 24px 0;
+}
+
+.benefitsBox {
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.benefitsBoxTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.benefitsBoxList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.benefitsBoxList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.benefitsBoxList li strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+.benefitsBoxIcon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #F57C00;
+}
+
+.certificationSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.amfImageLogo {
+  max-width: 120px;
+  max-height: 48px;
+  object-fit: contain;
+}
+
+.certText {
+  display: flex;
+  flex-direction: column;
+}
+
+.certTitle {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 2px 0;
+  color: #111827;
+}
+
+.certSubtitle {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Loading Modal Overlay */
+.loadingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.98) !important;
+  z-index: 9999;
+  pointer-events: all;
+}
+
+.loadingContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #ffffff !important;
+  border-radius: 12px;
+  padding: 40px;
+}
+
+.loadingText {
+  color: #1A1ABA;
+  font-family: Inter, sans-serif;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+  margin: 0 0 20px 0;
+  opacity: 1 !important;
+  background: #ffffff;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.loadingGif {
+  width: 250px;
+  height: auto;
+  display: block;
+  background: #ffffff !important;
+  border-radius: 10px;
+  padding: 16px;
+  opacity: 1 !important;
+}
+
+/* --- Visibility Utilities --- */
+.desktopOnly {
+  display: flex !important;
+}
+
+.mobileOnly {
+  display: none !important;
+}
+
+/* --- Mobile Responsive Optimizations --- */
+@media (max-width: 768px) {
+  .desktopOnly {
+    display: none !important;
+  }
+  
+  .mobileOnly {
+    display: flex !important;
+  }
+
+  .container {
+    padding: 24px 16px;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .card, .aboutCard {
+    padding: 16px 12px;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .clockIconWrapper {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+
+  .clockIcon {
+    font-size: 24px;
+  }
+
+  .mainTitle {
+    font-size: 20px;
+  }
+
+  .subTitle {
+    font-size: 13px;
+    margin-bottom: 24px;
+    word-break: break-word;
+    white-space: normal;
+  }
+
+  .infoButton {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 13px;
+    padding: 12px;
+    margin-bottom: 24px;
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: center;
+    text-align: center;
+    height: auto;
+    word-break: break-word;
+  }
+
+  .cardTitleCenter, .submittedCardTitle {
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .brokerHeader, .statusSectionLeft {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .courtikaLogoBox, .courtikaLogoBoxLeft {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .statusInfo, .statusInfoLeft {
+    align-items: center;
+    text-align: center;
+  }
+
+  .successBanner {
+    padding: 16px;
+    align-items: flex-start;
+  }
+
+  .primaryButton, .secondaryOutlineButton {
+    min-height: 44px;
+    padding: 8px 12px;
+    font-size: 14px;
+    text-wrap: wrap;
+    white-space: normal;
+    height: auto;
+  }
+
+  .buttonSubtext {
+    font-size: 11px;
+    margin-top: 8px;
+  }
+
+  .aboutTitle {
+    font-size: 16px;
+  }
+
+  .aboutText, .infoText {
+    font-size: 13px;
+  }
+
+  .benefitsBox {
+    padding: 16px;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .reasonsList li,
+  .benefitsBoxList li {
+    font-size: 13px;
+    align-items: flex-start;
+  }
+
+  .certificationSection {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .amfImageLogo {
+    max-width: 100px;
+  }
+  
+  .loadingText {
+    font-size: 20px;
+    padding: 6px 12px;
+  }
+  
+  .loadingGif {
+    width: 180px;
+    padding: 12px;
+  }
+  
+  .loadingContent {
+    padding: 24px;
+  }
+}

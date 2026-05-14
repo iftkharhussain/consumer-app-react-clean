@@ -41,6 +41,13 @@ const ScheduleCall = React.lazy(() => import('./pages/scheduleCall/index'));
 const ScheduleConfirmation = React.lazy(() => import('./pages/scheduleConfirmation/index'));
 const FallbackNoQuotes = React.lazy(() => import('./pages/fallbackNoQuotes/index'));
 const ExploreForm = React.lazy(() => import('./pages/exploreForm/index'));
+const Mortgage = React.lazy(() => import('./pages/mortgage/index'));
+const Disability = React.lazy(() => import('./pages/disability/index'));
+const QuoteLimitExceeded = React.lazy(() => import('./pages/quoteLimitExceeded/index'));
+const Advisors = React.lazy(() => import('./pages/myAdvisors/index'));
+const CriticalIllness = React.lazy(() => import('./pages/criticalIllness/index'));
+const MortgageExpert = React.lazy(() => import('./pages/mortgageExpert/index'));
+
 const PrivateWrapper = ({ auth: { isAuthenticated }, heading, _style }) => {
 	return isAuthenticated === true ? (
 		<Layout _style={_style}>
@@ -164,7 +171,7 @@ function App(props) {
 					<Route path="/explore" element={<Suspense fallback={<div></div>}><Explore /></Suspense>} />
 					<Route path="/boost-savings" element={<Suspense fallback={<div></div>}><BoostSavings /></Suspense>} />
 					<Route path="/question" element={<Suspense fallback={<div></div>}><QuestionPage /></Suspense>} />
-							<Route path="/overview" element={<Suspense fallback={<div></div>}><Overview /></Suspense>} />
+							<Route path="/life-insurance" element={<Suspense fallback={<div></div>}><Overview /></Suspense>} />
 							<Route path="/result" element={<Suspense fallback={<div></div>}><Results /></Suspense>} />
 							<Route path="/result-fallback" element={<Suspense fallback={<div></div>}><FallbackNoQuotes /></Suspense>} />
 							<Route path="/result/product-order/:userProductId?" element={<Suspense fallback={<div></div>}><OrderProduct /></Suspense>} />
@@ -173,6 +180,13 @@ function App(props) {
 							<Route path="/schedule-call/:userProductId?" element={<Suspense fallback={<div></div>}><ScheduleCall /></Suspense>} />
 							<Route path="/confirmation-meeting/:userProductId?" element={<Suspense fallback={<div></div>}><ScheduleConfirmation /></Suspense>} />
 							<Route path="/explore-form" element={<Suspense fallback={<div></div>}><ExploreForm /></Suspense>} />
+							<Route path="/mortgage-insurance" element={<Suspense fallback={<div></div>}><Mortgage /></Suspense>} />
+							<Route path="/disability" element={<Suspense fallback={<div></div>}><Disability /></Suspense>} />
+							<Route path="/quote-limit-exceeded" element={<Suspense fallback={<div></div>}><QuoteLimitExceeded /></Suspense>} />
+							<Route path="/advisors" element={<Suspense fallback={<div></div>}><Advisors /></Suspense>} />
+							<Route path="/critical-illness" element={<Suspense fallback={<div></div>}><CriticalIllness /></Suspense>} />
+							<Route path="/mortgage" element={<Suspense fallback={<div></div>}><MortgageExpert /></Suspense>} />
+
 							<Route path="/question-public" element={<Suspense fallback={<div></div>}><QuestionPage /></Suspense>} />
 							<Route path="/logout" element={<Logout />} />
 						</Route>

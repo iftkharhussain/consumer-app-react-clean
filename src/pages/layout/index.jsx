@@ -20,7 +20,7 @@ const AppLayout = ({ heading, children, _style }) => {
   // Detect mobile view
   useEffect(() => {
     const handleResize = () => {
-      const mobile = window.innerWidth <= 768;
+      const mobile = window.innerWidth <= 1024;
       setIsMobileView(mobile);
 
       // Add/remove mobile-view class to body
@@ -95,9 +95,9 @@ const AppLayout = ({ heading, children, _style }) => {
           </div>
         }
         <Content style={{ 
-          marginLeft: isMobileView ? 0 : (collapsed ? 80 : 300), 
+          marginLeft: isMobileView ? 0 : (collapsed ? 80 : 320), 
           minWidth: 0, // Helps with deeply nested flex/overflow elements
-          width: isMobileView ? '100%' : `calc(100% - ${collapsed ? 80 : 300}px)`, 
+          width: isMobileView ? '100%' : `calc(100% - ${collapsed ? 80 : 320}px)`, 
         }} >
           <div
             className='main-body-wrapper'

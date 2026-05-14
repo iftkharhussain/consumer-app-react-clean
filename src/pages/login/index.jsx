@@ -103,7 +103,7 @@ const Login = props => {
   }, [resendCountdown]);
 
   const handleResendOTP = async () => {
-    if (resendCountdown > 0) return;
+    if (resendCountdown > 0 || !!cooldownEnd) return;
     
     try {
       await sendOTP(phoneNumber);
@@ -168,6 +168,8 @@ const Login = props => {
   };
 
   const sendOTP = async (phone) => {
+    if (cooldownEnd && Date.now() < cooldownEnd) return;
+    
     try {
       setLoading(true);
       const formData = new URLSearchParams();
@@ -340,7 +342,7 @@ const Login = props => {
                 htmlType="submit" 
                 block 
                 className={styles.button}
-                disabled={isBlocked}
+                disabled={false}
               > 
                 {t('signIn')}
               </Button>
@@ -389,15 +391,15 @@ const Login = props => {
             </div>
             
             <Form.Item style={{ marginBottom: 16 }}>
-              <Button 
-                type="primary" 
-                loading={loading} 
-                htmlType="submit" 
-                block 
-                className={styles.button}
-                disabled={isBlocked}
-              > 
-                {t('verify')}
+              <Button
+                type="primary"
+                htmlType="submit"
+                block
+                loading={loading}
+                disabled={false}
+                className={styles.loginButton}
+              >
+                {t('verifyCode')}
               </Button>
             </Form.Item>
 
