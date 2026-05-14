@@ -647,9 +647,9 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 		{
 			key: 'profile-name',
 			label: (
-				<div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#667085' }}>
-					<User01 style={{ width: 16, height: 16 }} />
-					<span>{firstName} {lastName}</span>
+				<div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#667085', maxWidth: '200px' }}>
+					<User01 style={{ width: 16, height: 16, flexShrink: 0 }} />
+					<span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{firstName} {lastName}</span>
 				</div>
 			),
 			disabled: true,
@@ -666,9 +666,9 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 		{
 			key: 'profile-email',
 			label: (
-				<div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#667085' }}>
-					<Mail01 style={{ width: 16, height: 16 }} />
-					<span>{email}</span>
+				<div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#667085', maxWidth: '200px' }}>
+					<Mail01 style={{ width: 16, height: 16, flexShrink: 0 }} />
+					<span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{email}</span>
 				</div>
 			),
 			disabled: true,
@@ -761,7 +761,13 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 				</div>
 
 				<div className={styles.sidebarFooter}>
-					<Dropdown menu={{ items: userMenuItems }} trigger={['click']} placement="topLeft" arrow={false}>
+					<Dropdown 
+						menu={{ items: userMenuItems }} 
+						trigger={['click']} 
+						placement="topLeft" 
+						arrow={false}
+						overlayStyle={{ maxWidth: '260px' }}
+					>
 						<div className={styles.userProfile} style={{ cursor: 'pointer', width: '100%' }}>
 							<img
 								src={profilePic ? (profilePic.startsWith('http') ? profilePic : serverUrl + profilePic) : '/images/user-placeholder.png'}

@@ -38,7 +38,8 @@
   height: 100vh !important;
   height: 100dvh !important;
   min-height: 100dvh !important;
-  overflow: hidden !important;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
 }
 
 .appSidebar :global(.ant-layout-sider-children) {
@@ -148,7 +149,8 @@
   border-radius: 6px;
   padding: 8px 12px;
   height: 40px;
-  width: 280px;
+  width: 100%;
+  max-width: 280px;
   gap: 8px;
   line-height: 24px;
   display: flex;
@@ -257,7 +259,8 @@
   margin-top: 4px;
   margin-left: 10px !important;
   margin-right: 0 !important;
-  width: 272px !important;
+  width: calc(100% - 10px) !important;
+  max-width: 272px;
   overflow: hidden !important;
 }
 
@@ -661,7 +664,8 @@
   align-self: stretch;
   transition: all 0.2s ease;
   gap: 12px;
-  width: 236px;
+  width: 100%;
+  max-width: 236px;
   margin-bottom: 4px;
 }
 
@@ -728,6 +732,12 @@ font-style: normal;
 font-weight: 500;
 line-height: 16.5px; /* 150% */
 letter-spacing: 0.064px;
-
 }
+
+@media (max-width: 1024px) {
+  .sessionItem {
+    max-width: 210px;
+  }
+}
+
 
