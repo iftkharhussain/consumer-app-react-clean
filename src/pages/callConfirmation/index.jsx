@@ -29,7 +29,7 @@ const CallConfirmation = () => {
 
   useEffect(() => {
     if (!initialized.current) {
-      document.title = 'Appelez Courtika - Consumer App';
+      document.title = 'Appelez Courtika - Norga';
       initialized.current = true;
     }
   }, []);

@@ -41,6 +41,10 @@ const CarInsurance = () => {
   }, []);
 
   useEffect(() => {
+    document.title = 'Assurance auto - Norga';
+  }, []);
+
+  useEffect(() => {
     const checkForPendingOrder = async () => {
       try {
         const result = await checkPendingOrder('car-insurance');

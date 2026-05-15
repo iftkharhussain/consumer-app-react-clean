@@ -113,7 +113,7 @@ const Mortgage = () => {
           subtitle: 'Vos détails de soumission hypothécaire'
         }
       });
-      document.title = 'Mortgage Insurance - Consumer App';
+      document.title = 'Assurance hypothécaire - Norga';
       initialized.current = true;
     }
   }, [dispatch]);

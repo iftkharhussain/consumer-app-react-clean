@@ -42,7 +42,7 @@ const QuoteLimitExceeded = () => {
 
   useEffect(() => {
     if (!initialized.current) {
-      document.title = 'Limite de soumissions atteinte - Consumer App';
+      document.title = 'Limite de soumissions atteinte - Norga';
       initialized.current = true;
     }
   }, []);

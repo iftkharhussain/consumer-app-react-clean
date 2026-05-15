@@ -32,7 +32,7 @@ const ScheduleCall = () => {
 
   useEffect(() => {
     if (!initialized.current) {
-      document.title = 'Planifier un appel - Consumer App';
+      document.title = 'Planifier un appel - Norga';
       
       // Save userProductId to localStorage so the confirmation page can find it
       // even if Calendly redirects without it.

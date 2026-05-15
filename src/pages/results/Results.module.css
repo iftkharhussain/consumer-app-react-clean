@@ -316,6 +316,72 @@ justify-content: center;
   padding: 0;
 }
 
+.carTabs {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e9eaeb;
+  padding: 0 4px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.carTabs::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+.carTab {
+  padding: 8px 0 16px 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  position: relative;
+  min-width: 140px;
+}
+
+.carTabMain {
+  color: #697586;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 19.5px;
+  letter-spacing: -0.076px;
+  margin-bottom: 2px;
+  transition: color 0.2s ease;
+  text-transform: capitalize;
+}
+
+.carTabSub {
+  color: #697586;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16.5px;
+  letter-spacing: 0.064px;
+  text-transform: capitalize;
+}
+
+.carTabActive .carTabMain {
+  color: #1A1ABA;
+}
+
+.carTabActive::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #1A1ABA;
+
+}
+
 .protectionsList {
   display: flex;
   flex-direction: column;

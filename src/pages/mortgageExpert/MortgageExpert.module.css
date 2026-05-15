@@ -495,13 +495,13 @@ background: #F8FAFC;
   transform: scale(1.02);
 }
 
-@media (max-width: 992px) {
+@media (max-width: 986px) {
   .twoColGrid {
     grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 986px) {
   .mortgageExpertPage {
     padding: 16px;
     gap: 16px;

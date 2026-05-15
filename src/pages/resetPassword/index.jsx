@@ -64,7 +64,7 @@ const ResetPassword = () => {
       const verifyTokenRes = await setRequest(Types.VERIFY_TOKEN, null, verifyTokenUrl + '/' + token, Types.GET, dispatch);
       if (verifyTokenRes?.success && verifyTokenRes?.data?.type === 'resetToken') {
         setIsTokenValid(true)
-        document.title = t('resetPassword') + ' - Consumer App';
+        document.title = t('resetPassword') + ' - Norga';
       } else {
         setIsTokenValid(false)
         document.title = t('invalidOrExpiredInvitation');
@@ -85,7 +85,7 @@ const ResetPassword = () => {
     if (!initialized.current) {
       verifyToken()
       initialized.current = true
-      document.title = t('loading') + ' - Consumer App';
+      document.title = t('loading') + ' - Norga';
     }
   }, []);
 
@@ -135,7 +135,9 @@ const ResetPassword = () => {
                   <span><ExclamationCircleOutlined style={{ color: 'red' }} /> &nbsp;&nbsp;&nbsp; <h3>{t('invalidOrExpiredToken')}</h3></span>
                 </div> :
                 <span style={{ textAlign: 'center' }}>
-                  <img src="/images/norga_logo_noir-resized.svg" alt="Logo" style={{ marginBottom: 60, width: 200 }} />
+                  <a href="https://norga.io">
+                    <img src="/images/norga_logo_noir-resized.svg" alt="Logo" style={{ marginBottom: 60, width: 200 }} />
+                  </a>
                   <Form
                     form={form}
                     name="passwordForm"
@@ -146,12 +148,12 @@ const ResetPassword = () => {
                     <div className='reset-password-auth-page'>
                       <div className='input-content'>
                         <Form.Item
-                          label="New Password"
+                          label="Nouveau mot de passe"
                           name="newPassword"
                           rules={[
                             {
                               required: true,
-                              message: 'Please enter a new password',
+                              message: 'Veuillez saisir un nouveau mot de passe.',
                             },
                             {
                               validator: async (_, value) => {
@@ -212,7 +214,7 @@ const ResetPassword = () => {
                           rules={[
                             {
                               required: true,
-                              message: t('pleaseReenterYourNewPassword'),
+                              message: 'Veuillez saisir à nouveau votre mot de passe.',
                             },
                             ({ getFieldValue }) => ({
                               validator(_, value) {

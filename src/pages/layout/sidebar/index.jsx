@@ -283,7 +283,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 				),
 				label: (
 					<Link to='/explore' style={{ color: 'inherit', textDecoration: 'none' }}>
-						Assurance<br />habitation
+						Assurance habitation
 					</Link>
 				),
 			},
@@ -544,7 +544,6 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 		console.log('🔍 [SIDEBAR] Menu items:', menuItemsAdvisor.slice(0, 1));
 		setSideMenu(menuItemsAdvisor.filter(item => [
 			'home'
-		
 		].includes(item.key)));
 		
 		// Auto-open 'home' only once when sessions first appear

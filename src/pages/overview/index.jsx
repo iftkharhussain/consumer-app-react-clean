@@ -48,7 +48,7 @@ const Overview = () => {
           subtitle: 'Your insurance estimate details'
         }
       });
-      document.title = 'Overview - Consumer App';
+      document.title = 'Aperçu - Norga';
       initialized.current = true;
     }
   }, [dispatch]);

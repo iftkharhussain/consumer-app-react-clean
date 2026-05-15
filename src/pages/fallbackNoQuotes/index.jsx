@@ -46,7 +46,7 @@ const FallbackNoQuotes = () => {
 
   useEffect(() => {
     if (!initialized.current) {
-      document.title = 'Impossible de générer vos soumissions - Consumer App';
+      document.title = 'Impossible de générer vos soumissions - Norga';
       initialized.current = true;
     }
   }, []);

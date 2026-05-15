@@ -402,7 +402,7 @@ background: #F8FAFC;
   transform: scale(0.98);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 986px) {
   .overviewPage {
     padding: 16px;
   }
@@ -484,7 +484,7 @@ background: #F8FAFC;
   margin: 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 986px) {
   .priceBig {
     font-size: 26px !important;
     line-height: 1.2 !important;

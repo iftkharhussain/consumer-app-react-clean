@@ -32,6 +32,7 @@ const Login = props => {
 
   // Load rate limiting data from localStorage
   useEffect(() => {
+    document.title = 'Connexion - Norga';
     const savedAttempts = localStorage.getItem(RATE_LIMIT_KEY);
     const savedCooldown = localStorage.getItem(COOLDOWN_KEY);
     
@@ -259,7 +260,9 @@ const Login = props => {
 
   return (
     <div className={styles.container}>
-      <img src="/images/norga-blue-logo.png" alt="Logo" className={styles.logo} />
+      <a href="https://norga.io" className={styles.logoWrapper}>
+        <img src="/images/norga-blue-logo.png" alt="Logo" className={styles.logo} />
+      </a>
       
       <div className={styles.card}>
         {/* Title */}
@@ -268,7 +271,7 @@ const Login = props => {
             {step === 1 ? t('signInWithPhone') : t('verification')}
           </h2>
           {step === 1 && (
-            <p style={{ margin: '8px 0 0 0', color: '#6b7280', fontSize: '10px' }}>
+            <p style={{ margin: '8px 0 0 0', color: '#6b7280', fontSize: '14px' }}>
               {t('phoneLoginSMSTip')}
             </p>
           )}

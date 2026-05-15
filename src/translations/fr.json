@@ -136,5 +136,17 @@
   "tooManyAttempts": "Trop de tentatives",
   "tooManyAttemptsDescription": "Vous avez atteint la limite de {{count}} tentatives. Veuillez réessayer dans {{time}}.",
   "attemptsRemaining": "tentative restante",
-  "attemptsRemainingPlural": "tentatives restantes"
+  "attemptsRemainingPlural": "tentatives restantes",
+  "accountCreated": "Compte créé avec succès !",
+  "registrationFailed": "Échec de l'enregistrement",
+  "allFieldsRequired": "Tous les champs sont requis",
+  "createAccount": "Créer un compte",
+  "joinInsuranceJourney": "Rejoignez-nous pour commencer votre parcours d'assurance",
+  "enterYourEmail": "Entrez votre email",
+  "createPassword": "Créer un mot de passe",
+  "alreadyHaveAccount": "Vous avez déjà un compte ?",
+  "signInLink": "Se connecter",
+  "phoneRequired": "Le numéro de téléphone est requis",
+  "passwordMinLength": "Le mot de passe doit contenir au moins {{count}} caractères",
+  "invalidOrExpiredInvitation": "Invitation invalide ou expirée"
 }

@@ -12,10 +12,20 @@
 }
 
 .logo {
-  top: 60px;
   width: 200px;
-  z-index: 2;
+  transition: opacity 0.2s;
+}
+
+.logoWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 40px;
+  z-index: 2;
+}
+
+.logoWrapper:hover .logo {
+  opacity: 0.8;
 }
 
 .card {

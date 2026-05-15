@@ -48,7 +48,7 @@ const CriticalIllness = () => {
           subtitle: 'Détails de votre protection'
         }
       });
-      document.title = 'Assurance maladie grave - Consumer App';
+      document.title = 'Assurance maladie grave - Norga';
       initialized.current = true;
     }
   }, [dispatch]);

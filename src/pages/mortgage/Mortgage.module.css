@@ -810,11 +810,70 @@ background: #F8FAFC;
   transition: transform 0.2s ease, box-shadow 0.2s ease !important;
 }
 
-.ctaButton:hover {
-  background: linear-gradient(to right, #1a1aba, #2525c5) !important;
-  box-shadow: 0 6px 20px rgba(26, 26, 186, 0.4) !important;
-  transform: scale(1.02);
+
+
+@media (max-width: 986px) {
+  .onePersonPage, .twoPersonPage, .threePersonPage {
+    padding: 16px;
+  }
+  .onePersonPage .bannerCard, .twoPersonPage .bannerCard, .threePersonPage .bannerCard {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .onePersonPage .advisorProfileBox, .twoPersonPage .advisorProfileBox, .threePersonPage .advisorProfileBox {
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 32px 20px !important;
+    border-bottom: 1px solid #E5E7EB;
+  }
+  
+  .onePersonPage .bannerContent, .twoPersonPage .bannerContent, .threePersonPage .bannerContent {
+    padding: 32px 20px !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .onePersonPage .onePersonGrid, .twoPersonPage .twoPersonGrid, .threePersonPage .threePersonGrid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .twoPersonPage .individualCard {
+    margin-bottom: 16px !important;
+  }
+
+  .twoPersonPage .insurersGrid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    width: 100% !important;
+    gap: 12px !important;
+  }
+
+  .twoPersonPage .insurerBlank {
+    width: 100% !important;
+    height: 56px !important;
+  }
+  
+  .onePersonPage .onePersonInsurerCard .insurersGrid, .threePersonPage .threePersonInsurerCard .insurersGrid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 12px !important;
+  }
+  
+  .onePersonPage .onePersonInsurerCard .insurerBlank, .threePersonPage .threePersonInsurerCard .insurerBlank {
+    width: 100% !important;
+    height: 56px !important;
+    padding: 10px !important;
+  }
+
+  .onePersonPage .priceBig {
+    font-size: 32px !important;
+    line-height: 1.2 !important;
+  }
 }
+
 
 @media (max-width: 768px) {
   .mortgagePage {

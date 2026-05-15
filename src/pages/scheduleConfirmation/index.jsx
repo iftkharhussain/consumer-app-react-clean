@@ -41,7 +41,7 @@ const ScheduleConfirmation = () => {
     }
 
     if (!initialized.current) {
-      document.title = 'Rendez-vous Confirmé - Consumer App';
+      document.title = 'Rendez-vous confirmé - Norga';
       initialized.current = true;
     }
   }, []);

@@ -27,6 +27,7 @@ const Results = () => {
   const [expandedFAQ, setExpandedFAQ] = useState([0]);
   const [expandedInsurer, setExpandedInsurer] = useState(null);
   const [billingPeriod, setBillingPeriod] = useState('monthly'); // 'monthly' or 'yearly'
+  const [selectedCarIndex, setSelectedCarIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState(null); 
   const [showLoadingModal, setShowLoadingModal] = useState(true);
   const [showResubmitAlert, setShowResubmitAlert] = useState(false);
@@ -140,6 +141,10 @@ const Results = () => {
     checkForPendingOrder();
   }, [navigate]);
 
+  useEffect(() => {
+    document.title = 'Vos soumissions auto - Norga';
+  }, []);
+
   // Close loading modal when quote data is ready AND time is synced (to avoid flash)
   useEffect(() => {
     // Only hide loading if we have a failed quote OR a successful one with a valid timer
@@ -154,6 +159,12 @@ const Results = () => {
 
   // Process quote data when available
   useEffect(() => {
+    if (quoteData) {
+      console.log('📦 [DEBUG] quoteData received:', quoteData);
+      if (quoteData.carriers?.[0]?.coverages?.[0]) {
+        console.log('🛡️ [DEBUG] First Coverage Object Full:', JSON.parse(JSON.stringify(quoteData.carriers[0].coverages[0])));
+      }
+    }
     if (quoteData?.carriers && Array.isArray(quoteData.carriers)) {
       // Filter available carriers with valid premium
       const availableCarriers = quoteData.carriers.filter(r => {
@@ -442,16 +453,20 @@ const Results = () => {
         coverage: coverageValue,
         type,
         code,
-        isPak: isPakCode
+        isPak: isPakCode,
+        vehicleIndex: coverage.vehicleIndex ?? 0
       };
     });
+
+    // Filter protections by selected vehicle
+    const vehicleProtections = protectionsList.filter(p => p.vehicleIndex === selectedCarIndex);
 
     // Deduplicate coverages based on code, limit, and deductible
     // When there are multiple vehicles, same coverages appear multiple times
     const uniqueProtections = [];
     const seen = new Set();
     
-    protectionsList.forEach(protection => {
+    vehicleProtections.forEach(protection => {
       // Create a unique key based on code, coverage value, and type
       const key = `${protection.code}-${protection.coverage || 'none'}-${protection.type || 'none'}`;
       
@@ -525,7 +540,7 @@ const Results = () => {
       // Neither in sortOrder, maintain original order
       return 0;
     });
-  }, [recommendedInsurer, formatFrenchCurrency]);
+  }, [recommendedInsurer, formatFrenchCurrency, selectedCarIndex]);
 
   const faqs = [
     {
@@ -882,6 +897,32 @@ const Results = () => {
                             Personnaliser
                           </Button>
                         </div>
+
+                        {quoteData?.cars && quoteData.cars.length > 1 && (
+                          <div className={styles.carTabs}>
+                            {quoteData.cars.map((car, idx) => {
+                              const carInfo = car.vehicleDetails || {};
+                              const carMake = carInfo.make || car.manufacturer || '';
+                              const carYear = carInfo.year || car.year || '';
+                              const carModel = carInfo.modelFr || carInfo.model || car.model || '';
+                              
+                              return (
+                                <button
+                                  key={idx}
+                                  className={`${styles.carTab} ${selectedCarIndex === idx ? styles.carTabActive : ''}`}
+                                  onClick={() => setSelectedCarIndex(idx)}
+                                >
+                                  <div className={styles.carTabMain}>
+                                    {carMake}, {carYear}
+                                  </div>
+                                  <div className={styles.carTabSub}>
+                                    {carModel}
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        )}
                         <div className={styles.protectionsList}>
                           {protections.map((protection, index) => (
                             <div key={index} className={styles.protectionItem}>

@@ -427,7 +427,7 @@ background: #F8FAFC;
   transform: scale(1.02);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 986px) {
   .disabilityPage {
     padding: 16px;
     gap: 16px;

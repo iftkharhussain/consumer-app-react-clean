@@ -85,10 +85,10 @@
 
 .cardsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 320px);
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   column-gap: 26px;
   row-gap: 26px;
-  justify-content: start;
+  justify-content: stretch;
   max-width: none;
   margin: 0;
   margin-bottom: 16px;
@@ -112,5 +112,19 @@
 @media (min-width: 769px) and (max-width: 1200px) {
   .cardsGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Tablet / iPad Pro Specific Spacing */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .pageHeader, .content {
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+  }
+  
+  .cardsGrid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 20px !important;
+    justify-content: stretch !important;
   }
 }

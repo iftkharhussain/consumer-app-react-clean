@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, Collapse } from 'antd';
 import { 
@@ -81,6 +81,10 @@ const DisabilityPage = () => {
     console.log("Booking call for disability insurance...");
     // Future integration with booking logic
   };
+
+  useEffect(() => {
+    document.title = 'Assurance salaire et invalidité - Norga';
+  }, []);
 
   return (
     <div className={styles.disabilityPage}>

@@ -81,7 +81,8 @@ export const useQuote = (productSlug, options = {}) => {
               carriers: response.carriers || [],
               carriersCount: response.carriersCount || response.carriers?.length || 0,
               responseTime: response.responseTime,
-              createdAt: response.createdAt
+              createdAt: response.createdAt,
+              cars: response.cars || []
             });
           } else if (status === 'failed') {
             setError(response.error || response.errorMessage || 'Quote request failed');

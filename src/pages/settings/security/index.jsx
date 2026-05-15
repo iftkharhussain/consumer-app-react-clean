@@ -68,7 +68,7 @@ const SecurityPage = ({ section, pageHeading }) => {
 					subtitle: t(section)
 				}
 			});
-			document.title = `${t('settings')} - ${t(section)}`;
+			document.title = `${t('settings')} - ${t(section).toLowerCase()} - Norga`;
 			initialized.current = true;
 		}
 	}, [t, dispatch, section]);

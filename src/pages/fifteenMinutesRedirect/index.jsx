@@ -35,7 +35,7 @@ const FifteenMinutesRedirect = () => {
 
   useEffect(() => {
     if (!initialized.current) {
-      document.title = 'Vos soumissions ont expiré - Consumer App';
+      document.title = 'Vos soumissions ont expiré - Norga';
       initialized.current = true;
     }
   }, []);

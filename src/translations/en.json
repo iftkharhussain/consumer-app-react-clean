@@ -111,5 +111,17 @@
   "signIn": "Sign in",
   "phoneNumberRequired": "Please input your phone number!",
   "phoneLoginFailed": "Phone login failed",
-  "phoneLoginVerifiedAccountsOnly": "Phone login is available for verified accounts only"
+  "phoneLoginVerifiedAccountsOnly": "Phone login is available for verified accounts only",
+  "accountCreated": "Account created successfully!",
+  "registrationFailed": "Registration failed",
+  "allFieldsRequired": "All fields are required",
+  "createAccount": "Create Account",
+  "joinInsuranceJourney": "Join us to get started with your insurance journey",
+  "enterYourEmail": "Enter your email",
+  "createPassword": "Create a password",
+  "alreadyHaveAccount": "Already have an account?",
+  "signInLink": "Sign in",
+  "phoneRequired": "Phone number is required",
+  "passwordMinLength": "Password must be at least {{count}} characters",
+  "invalidOrExpiredInvitation": "Invalid or expired invitation"
 }
