@@ -115,6 +115,7 @@
   "phoneLoginVerifiedAccountsOnly": "La connexion par téléphone est disponible uniquement pour les comptes vérifiés",
   "verification": "Vérification",
   "codeSentTo": "Un code a été envoyé au {{phoneNumber}}",
+  "codeSentToLabel": "Un code a été envoyé au",
   "verificationCode": "Code de vérification",
   "codeRequired": "Code requis",
   "codeMustBe4Digits": "Le code doit contenir 4 chiffres",

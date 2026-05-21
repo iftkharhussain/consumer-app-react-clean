@@ -8,6 +8,20 @@ import { useTranslation } from 'react-i18next'
 import { PhoneInput } from '../../components'
 import styles from './Login.module.css'
 
+// Format a raw phone number (e.g. +18194695018) into (819) 469-5018 for display
+const formatPhoneForDisplay = (phone) => {
+  if (!phone) return phone;
+  let digits = phone.replace(/\D/g, '');
+  // Strip leading country code '1'
+  if (digits.length === 11 && digits.startsWith('1')) {
+    digits = digits.slice(1);
+  }
+  if (digits.length === 10) {
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+  }
+  return phone; // fallback to original if unexpected length
+};
+
 const { Text } = Typography;
 
 // Rate limiting constants
@@ -33,6 +47,21 @@ const Login = props => {
   // Load rate limiting data from localStorage
   useEffect(() => {
     document.title = 'Connexion - Norga';
+
+    // Disable Mouseflow on login page
+    if (window._mfq) {
+      window._mfq.push(['stop']);
+    }
+
+    return () => {
+      // Re-enable Mouseflow when leaving login page
+      if (window._mfq) {
+        window._mfq.push(['start']);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     const savedAttempts = localStorage.getItem(RATE_LIMIT_KEY);
     const savedCooldown = localStorage.getItem(COOLDOWN_KEY);
     
@@ -150,13 +179,14 @@ const Login = props => {
         setStep(2);
       } else {
         setLoading(false);
-        incrementAttempts();
         
-        // DEVELOPER NOTE: Catch account not found to show the premium red box
+        // Check if this is an "account not found" error — don't count as an attempt
         const msg = verifyRes?.message?.toLowerCase() || '';
         if (msg.includes('compte') || msg.includes('exist') || msg.includes('not found') || msg.includes('register')) {
           setShowAccountError(true);
         } else {
+          // Only count actual unexpected failures as attempts
+          incrementAttempts();
           toast.error(verifyRes?.message || t('phoneLoginFailed'));
         }
         return;
@@ -370,7 +400,7 @@ const Login = props => {
             }}
           >
             <div style={{ marginBottom: 16, textAlign: 'center', color: '#6b7280' }}>
-              <p>{t('codeSentTo', { phoneNumber: phoneNumber })}</p>
+              <p>{t('codeSentToLabel')} <span style={{ color: '#1a1aba', fontWeight: 600 }}>+1 {formatPhoneForDisplay(phoneNumber)}</span></p>
             </div>
 
             <div style={{ marginBottom: 16 }}>

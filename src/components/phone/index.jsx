@@ -72,7 +72,7 @@ const Phone = ({ value, onChange }) => {
         inputMode="tel"
         value={phoneValue}
         onChange={handlePhoneChange}
-        placeholder="(514) 123-4567"
+        placeholder="(450) 000-0000"
         className="phone-input"
         maxLength={14}
       />
