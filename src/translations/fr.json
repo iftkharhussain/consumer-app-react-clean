@@ -120,6 +120,7 @@
   "codeRequired": "Code requis",
   "codeMustBe4Digits": "Le code doit contenir 4 chiffres",
   "verify": "Vérifier",
+  "verifyCode": "Vérifier le code",
   "resendCodeIn": "Renvoyer le code dans {{seconds}}s",
   "resendCode": "Renvoyer le code",
   "changeNumber": "Changer de numéro",
