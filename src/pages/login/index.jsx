@@ -2,19 +2,27 @@ import toast from 'react-hot-toast'
 import React, { useState, useEffect } from 'react'
 import { LoginUrl, addPhoneOTPUrl, verifyPhoneOTPUrl, PhoneLoginCompleteUrl } from '../../apis/sharedApi'
 import { useDispatch } from 'react-redux'
-import { Form, Button, Typography, Input, Alert } from 'antd'
+import { Form, Button, Typography, Input } from 'antd'
 import { Types, setRequest } from '../../utils/helper'
 import { useTranslation } from 'react-i18next'
 import { PhoneInput } from '../../components'
 import styles from './Login.module.css'
 
-const { Text } = Typography;
+// Format a raw phone number (e.g. +18194695018) into (819) 469-5018 for display
+const formatPhoneForDisplay = (phone) => {
+  if (!phone) return phone;
+  let digits = phone.replace(/\D/g, '');
+  // Strip leading country code '1'
+  if (digits.length === 11 && digits.startsWith('1')) {
+    digits = digits.slice(1);
+  }
+  if (digits.length === 10) {
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+  }
+  return phone; // fallback to original if unexpected length
+};
 
-// Rate limiting constants
-const MAX_ATTEMPTS = 10;
-const RATE_LIMIT_HOURS = 1;
-const RATE_LIMIT_KEY = 'phoneLoginAttempts';
-const COOLDOWN_KEY = 'phoneLoginCooldown';
+const { Text } = Typography;
 
 const Login = props => {
   const { t } = useTranslation();
@@ -24,73 +32,24 @@ const Login = props => {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1); // 1 = phone input, 2 = OTP input
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [attempts, setAttempts] = useState(0);
-  const [cooldownEnd, setCooldownEnd] = useState(null);
-  const [timeRemaining, setTimeRemaining] = useState('');
   const [resendCountdown, setResendCountdown] = useState(0); // Countdown for resend button
   const [showAccountError, setShowAccountError] = useState(false);
 
-  // Load rate limiting data from localStorage
   useEffect(() => {
     document.title = 'Connexion - Norga';
-    const savedAttempts = localStorage.getItem(RATE_LIMIT_KEY);
-    const savedCooldown = localStorage.getItem(COOLDOWN_KEY);
-    
-    if (savedAttempts) {
-      setAttempts(parseInt(savedAttempts, 10));
+
+    // Disable Mouseflow on login page
+    if (window._mfq) {
+      window._mfq.push(['stop']);
     }
-    
-    if (savedCooldown) {
-      const cooldownTime = parseInt(savedCooldown, 10);
-      if (Date.now() < cooldownTime) {
-        setCooldownEnd(cooldownTime);
-      } else {
-        // Cooldown expired, reset attempts
-        localStorage.removeItem(RATE_LIMIT_KEY);
-        localStorage.removeItem(COOLDOWN_KEY);
-        setAttempts(0);
-        setCooldownEnd(null);
+
+    return () => {
+      // Re-enable Mouseflow when leaving login page
+      if (window._mfq) {
+        window._mfq.push(['start']);
       }
-    }
+    };
   }, []);
-
-  // Update countdown timer
-  useEffect(() => {
-    if (!cooldownEnd) return;
-
-    const interval = setInterval(() => {
-      const now = Date.now();
-      if (now >= cooldownEnd) {
-        // Cooldown expired
-        localStorage.removeItem(RATE_LIMIT_KEY);
-        localStorage.removeItem(COOLDOWN_KEY);
-        setAttempts(0);
-        setCooldownEnd(null);
-        setTimeRemaining('');
-      } else {
-        // Calculate remaining time
-        const diff = cooldownEnd - now;
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        setTimeRemaining(`${hours}h ${minutes}m`);
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [cooldownEnd]);
-
-  const incrementAttempts = () => {
-    const newAttempts = attempts + 1;
-    setAttempts(newAttempts);
-    localStorage.setItem(RATE_LIMIT_KEY, newAttempts.toString());
-
-    if (newAttempts >= MAX_ATTEMPTS) {
-      // Set cooldown
-      const cooldownTime = Date.now() + (RATE_LIMIT_HOURS * 60 * 60 * 1000);
-      setCooldownEnd(cooldownTime);
-      localStorage.setItem(COOLDOWN_KEY, cooldownTime.toString());
-    }
-  };
 
   // Resend countdown timer
   useEffect(() => {
@@ -104,7 +63,7 @@ const Login = props => {
   }, [resendCountdown]);
 
   const handleResendOTP = async () => {
-    if (resendCountdown > 0 || !!cooldownEnd) return;
+    if (resendCountdown > 0) return;
     
     try {
       await sendOTP(phoneNumber);
@@ -116,10 +75,6 @@ const Login = props => {
   };
 
   const onVerifyPhone = async (values) => {
-    if (cooldownEnd && Date.now() < cooldownEnd) {
-      return;
-    }
-
     try {
       const phone = values.phone;
 
@@ -150,28 +105,25 @@ const Login = props => {
         setStep(2);
       } else {
         setLoading(false);
-
-        // DEVELOPER NOTE: Catch account not found to show the premium red box
+        
+        // Check if this is an "account not found" error
         const msg = verifyRes?.message?.toLowerCase() || '';
         if (msg.includes('compte') || msg.includes('exist') || msg.includes('not found') || msg.includes('register')) {
           setShowAccountError(true);
           // Don't increment attempts — user has no account, not an OTP abuse attempt
         } else {
-          incrementAttempts();
+          // Show backend error message directly
           toast.error(verifyRes?.message || t('phoneLoginFailed'));
         }
         return;
       }
     } catch (error) {
       setLoading(false);
-      incrementAttempts();
       toast.error(t('phoneLoginFailed'));
     }
   };
 
   const sendOTP = async (phone) => {
-    if (cooldownEnd && Date.now() < cooldownEnd) return;
-    
     try {
       setLoading(true);
       const formData = new URLSearchParams();
@@ -236,17 +188,14 @@ const Login = props => {
             window.location.reload();
           }, 500);
         } else {
-          incrementAttempts();
           return toast.error(loginRes?.message || t('loginFailedSimple'));
         }
       } else {
         setLoading(false);
-        incrementAttempts();
         return toast.error(verifyRes?.message || t('invalidCode'));
       }
     } catch (error) {
       setLoading(false);
-      incrementAttempts();
       toast.error(t('verificationFailed'));
     }
   };
@@ -255,9 +204,6 @@ const Login = props => {
     setStep(1);
     otpForm.resetFields();
   };
-
-  const isBlocked = cooldownEnd && Date.now() < cooldownEnd;
-  const attemptsRemaining = MAX_ATTEMPTS - attempts;
 
   return (
     <div className={styles.container}>
@@ -277,26 +223,6 @@ const Login = props => {
             </p>
           )}
         </div>
-
-        {/* Rate limit warning */}
-        {isBlocked && (
-          <div style={{ textAlign: 'center', marginBottom: 16 }}>
-            <Text type="danger" strong style={{ display: 'block', fontSize: '16px' }}>{t('tooManyAttempts')}</Text>
-            <Text type="danger" style={{ fontSize: '14px' }}>
-              {t('tooManyAttemptsDescription', { count: MAX_ATTEMPTS, time: timeRemaining })}
-            </Text>
-          </div>
-        )}
-
-        {/* Attempts remaining warning */}
-        {!isBlocked && attempts > 0 && attemptsRemaining <= 2 && (
-          <Alert
-            message={`${attemptsRemaining} ${attemptsRemaining > 1 ? t('attemptsRemainingPlural') : t('attemptsRemaining')}`}
-            type="warning"
-            showIcon
-            style={{ marginBottom: 16 }}
-          />
-        )}
 
         {/* Step 1: Phone Number Input */}
         {step === 1 && (
@@ -346,7 +272,6 @@ const Login = props => {
                 htmlType="submit" 
                 block 
                 className={styles.button}
-                disabled={false}
               > 
                 {t('signIn')}
               </Button>
@@ -358,7 +283,7 @@ const Login = props => {
           </Form>
         )}
 
-        {/* Step 2: OTP Input (uncomment when OTP is implemented) */}
+        {/* Step 2: OTP Input */}
         {step === 2 && (
           <Form
             form={otpForm}
@@ -371,7 +296,7 @@ const Login = props => {
             }}
           >
             <div style={{ marginBottom: 16, textAlign: 'center', color: '#6b7280' }}>
-              <p>{t('codeSentTo', { phoneNumber: phoneNumber })}</p>
+              <p>{t('codeSentToLabel')} <span style={{ color: '#1a1aba', fontWeight: 600 }}>+1 {formatPhoneForDisplay(phoneNumber)}</span></p>
             </div>
 
             <div style={{ marginBottom: 16 }}>
@@ -400,7 +325,6 @@ const Login = props => {
                 htmlType="submit"
                 block
                 loading={loading}
-                disabled={false}
                 className={styles.loginButton}
               >
                 {t('verifyCode')}
