@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { ConfigProvider, theme } from "antd";
 import { BrowserRouter as Router, Route, Routes, Outlet, useLocation } from 'react-router-dom';
 import { trackPixelEvent } from './utils/pixel';
+import { trackAnalyticsEvent } from './utils/analyticsHelper';
 import { PageNotFound } from './components/index';
 import { useSelector, useDispatch } from 'react-redux';
 import Layout from './pages/layout/index';
@@ -13,7 +14,7 @@ import SecuritySkeleton from './pages/skeltons/securitySkeleton';
 
 import { useTranslation } from 'react-i18next';
 
-import { authUrl } from './apis/sharedApi';
+import { authUrl, baseUrl } from './apis/sharedApi';
 import { Types, action, setRequest, userAppLocalConfig, setUserAppLocalConfig, getUserAppLocalConfig } from './utils/helper';
 import { globalToken, lightToken, darkToken } from './utils/themeConfig';
 
@@ -67,9 +68,10 @@ const PixelTracker = () => {
 		// Log current location for debugging tracking handover
 		console.info('[Tracking] Navigated to:', location.pathname + location.search);
 
-		// Extract event_id from URL if present (from redirect)
+		// Extract event_id and norga_sid from URL if present (from redirect)
 		const searchParams = new URLSearchParams(location.search);
 		const urlEventId = searchParams.get('event_id');
+		const urlNorgaSid = searchParams.get('norga_sid');
 		
 		if (urlEventId) {
 			localStorage.setItem('meta_event_id', urlEventId);
@@ -84,6 +86,20 @@ const PixelTracker = () => {
 			}
 		}
 
+		if (urlNorgaSid) {
+			localStorage.setItem('norga_sid', urlNorgaSid);
+			console.info('[Analytics] Captured norga_sid from URL:', urlNorgaSid);
+			
+			// Clean URL parameter so users don't see the query string
+			try {
+				const url = new URL(window.location.href);
+				url.searchParams.delete('norga_sid');
+				window.history.replaceState({}, document.title, url.pathname + url.search);
+			} catch (err) {
+				console.error('[Analytics] Failed to sanitize URL:', err);
+			}
+		}
+
 		const eventId = localStorage.getItem('meta_event_id');
 		if (eventId) {
 			console.info('[Pixel] Using persistent event_id:', eventId);
@@ -92,6 +108,49 @@ const PixelTracker = () => {
 		// Track PageView with eventId for deduplication
 		trackPixelEvent('PageView', {}, eventId);
 
+		// First-Party Server-Side Analytics funnel tracking
+		const norgaSid = localStorage.getItem('norga_sid');
+		if (norgaSid) {
+			const path = location.pathname;
+			// List of views we want to capture on the consumer app
+			const isFunnelPage = path === '/result' || path === '/' || path.startsWith('/confirmation');
+			
+			if (isFunnelPage) {
+				const isResult = path === '/result' || path === '/';
+				
+				fetch(`${baseUrl}/api/analytics/track`, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						sessionId: norgaSid,
+						eventName: isResult ? 'lead_conversion' : 'page_view',
+						url: window.location.href,
+						path: path,
+						metadata: {
+							leadId: localStorage.getItem('lead_id') || localStorage.getItem('user_id') || ''
+						}
+					})
+				})
+				.then(() => {
+					if (isResult) {
+						// Keep norga_sid in localStorage so the session persists across the visit.
+
+						// Set a tiny cookie on the root domain (.norga.io) so that Webflow (norga.io)
+						// knows to reset its session ID for a brand-new quote.
+						// Session cookie (no max-age): lives until the browser/tab is closed.
+						try {
+							document.cookie = "norga_session_reset=true; path=/; domain=.norga.io";
+						} catch (e) {
+							console.error('[Analytics] Failed to set session reset cookie:', e);
+						}
+
+						console.info('[Analytics] Funnel completed. Session reset flag set for returning visits.');
+					}
+				})
+				.catch(err => console.error('[Analytics] Track hit failed:', err));
+			}
+		}
+
 		// Track Lead event once per session when the user first lands
 		const hasTrackedLead = sessionStorage.getItem('pixel_lead_tracked');
 		if (!hasTrackedLead) {
@@ -99,6 +158,12 @@ const PixelTracker = () => {
 			sessionStorage.setItem('pixel_lead_tracked', 'true');
 		}
 	}, [location.pathname, location.search]); // Be more specific about dependency
+
+	// Independent analytics tracing layer (visitor_id_analytics + session_id_analytics).
+	// Fires on every route change; fully decoupled from the norga_sid logic above.
+	useEffect(() => {
+		trackAnalyticsEvent({ eventName: 'page_view' });
+	}, [location.pathname]);
 
 	return null;
 };

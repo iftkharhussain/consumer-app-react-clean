@@ -11,8 +11,8 @@ import styles from './Login.module.css'
 const { Text } = Typography;
 
 // Rate limiting constants
-const MAX_ATTEMPTS = 4;
-const RATE_LIMIT_HOURS = 10;
+const MAX_ATTEMPTS = 10;
+const RATE_LIMIT_HOURS = 1;
 const RATE_LIMIT_KEY = 'phoneLoginAttempts';
 const COOLDOWN_KEY = 'phoneLoginCooldown';
 
@@ -142,21 +142,22 @@ const Login = props => {
         // Phone verified, user exists, now send OTP
         toast.success(t('phoneVerifiedSendingCode'));
         setShowAccountError(false);
-        
+
         // Send OTP
         await sendOTP(phone);
-        
+
         // Move to step 2 (OTP input)
         setStep(2);
       } else {
         setLoading(false);
-        incrementAttempts();
-        
+
         // DEVELOPER NOTE: Catch account not found to show the premium red box
         const msg = verifyRes?.message?.toLowerCase() || '';
         if (msg.includes('compte') || msg.includes('exist') || msg.includes('not found') || msg.includes('register')) {
           setShowAccountError(true);
+          // Don't increment attempts — user has no account, not an OTP abuse attempt
         } else {
+          incrementAttempts();
           toast.error(verifyRes?.message || t('phoneLoginFailed'));
         }
         return;

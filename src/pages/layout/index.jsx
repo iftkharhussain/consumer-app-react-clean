@@ -94,10 +94,13 @@ const AppLayout = ({ heading, children, _style }) => {
             <ChevronRightDouble style={{ color: '#697586' }} />
           </div>
         }
-        <Content style={{ 
-          marginLeft: isMobileView ? 0 : (collapsed ? 80 : 320), 
+        <Content style={{
+          marginLeft: isMobileView ? 0 : (collapsed ? 80 : 320),
           minWidth: 0, // Helps with deeply nested flex/overflow elements
-          width: isMobileView ? '100%' : `calc(100% - ${collapsed ? 80 : 320}px)`, 
+          width: isMobileView ? '100%' : `calc(100% - ${collapsed ? 80 : 320}px)`,
+          // Publish the live sidebar width so fixed-position bars (e.g. the
+          // recalculate footer) can align flush with the sidebar instead of overlapping it.
+          '--app-sidebar-width': isMobileView ? '0px' : (collapsed ? '80px' : '320px'),
         }} >
           <div
             className='main-body-wrapper'

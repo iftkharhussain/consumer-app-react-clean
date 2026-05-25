@@ -13,6 +13,20 @@
   padding: 32px 24px;
 }
 
+/* Customize ("modifier") view: left-align the content column with the fixed
+   bottom bar buttons instead of centering it. Desktop only (>1024px), where the
+   sidebar is present and the bar sits at the sidebar edge. On tablet/mobile the
+   bar is full-width and the default centered/padded layout is kept. */
+@media (min-width: 1025px) {
+  .resultsContentCustomize {
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 /* Timer Section */
 .timerSection {
   display: flex;

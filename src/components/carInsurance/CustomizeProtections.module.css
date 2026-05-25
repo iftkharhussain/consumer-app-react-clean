@@ -7,7 +7,10 @@
 .fixedBottomContainer {
   position: fixed;
   bottom: 0;
-  left: 300px;
+  /* Align flush with the sidebar's actual width (published by the layout),
+     so the bar never overlaps the sidebar whether it's expanded or collapsed.
+     Falls back to the expanded width if the variable isn't set. */
+  left: var(--app-sidebar-width, 320px);
   right: 0;
   display: flex;
   justify-content: flex-start;
@@ -52,10 +55,11 @@
   justify-content: center;
   align-items: center;
   gap: 4px;
-  border-radius: 8px;
-  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md, 8px);
+  border: 2px solid var(--Gradient-skeuemorphic-gradient-border, rgba(255, 255, 255, 0.12));
   background: #FFF;
-  box-shadow: 0 0 0 1px rgba(10, 13, 18, 0.18) inset, 0 -2px 0 0 rgba(10, 13, 18, 0.05) inset, 0 1px 2px 0 rgba(10, 13, 18, 0.05);
+  /* Shadows/shadow-xs-skeuomorphic */
+  box-shadow: 0 0 0 1px var(--Colors-Effects-Shadows-shadow-skeumorphic-inner-border, rgba(10, 13, 18, 0.18)) inset, 0 -2px 0 0 var(--Colors-Effects-Shadows-shadow-skeumorphic-inner, rgba(10, 13, 18, 0.05)) inset, 0 1px 2px 0 var(--Colors-Effects-Shadows-shadow-xs, rgba(10, 13, 18, 0.05));
   cursor: pointer;
   color: #535862;
   font-family: Inter;
@@ -187,21 +191,25 @@
 }
 
 .vehicleMake {
-  color: #1A1ABA;
+  color: #000;
+  leading-trim: both;
+  text-edge: cap;
   font-family: Inter;
-  font-size: 13px;
+  font-size: 12px;
   font-style: normal;
-  font-weight: 700;
-  line-height: 20px;
+  font-weight: 500;
+  line-height: var(--Line-height-text-sm, 20px); /* 166.667% */
 }
 
 .vehicleYear {
-  color: #1A1ABA;
+  color: #000;
+  leading-trim: both;
+  text-edge: cap;
   font-family: Inter;
-  font-size: 13px;
+  font-size: 12px;
   font-style: normal;
-  font-weight: 400;
-  line-height: 20px;
+  font-weight: 500;
+  line-height: var(--Line-height-text-sm, 20px); /* 166.667% */
 }
 
 .vehicleModel {
@@ -267,11 +275,14 @@
 
 .alwaysIncluded {
   color: #1A1ABA;
+  text-align: right;
+  leading-trim: both;
+  text-edge: cap;
   font-family: Inter;
   font-size: 12px;
   font-style: normal;
-  font-weight: 600;
-  line-height: 18px;
+  font-weight: 500;
+  line-height: var(--Line-height-text-sm, 20px); /* 166.667% */
 }
 
 /* Protection Cards */
@@ -280,7 +291,9 @@
   grid-template-columns: 1fr 1fr 1fr;
   gap: 16px;
   margin-bottom: 32px;
-  align-items: start;
+  /* Stretch cards in the same row to equal height so a card with less
+     content (e.g. Assistance routière) matches the tallest card in the row. */
+  align-items: stretch;
 }
 
 .protectionCard {
@@ -299,6 +312,7 @@
   align-items: center;
   padding: 16px;
   flex-direction: column;
+
   background: #F8F8F8;
 }
 
@@ -311,17 +325,21 @@
   border-top: 1px solid #E9EAEB;
   background: #fff;
   min-height: 301px;
+  /* Grow to fill the stretched card so the white box matches the row height. */
+  flex: 1;
   justify-content: space-between;
 }
 
 .protectionTitle {
   color: #000;
   text-align: center;
+  leading-trim: both;
+  text-edge: cap;
   font-family: Inter;
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
-  line-height: 14px;
+  line-height: 14px; /* 116.667% */
   margin: 0 0 16px 0;
 }
 
@@ -497,9 +515,8 @@
 
 /* Custom Switch Styling */
 .protectionCardHeader :global(.ant-switch) {
-  /* min-width: 44px !important;
-  height: 24px !important;
-  background-color: #CBD5E1 !important; */
+  /* "non couvert" (off) state background */
+  background-color: #C8C8C8 !important;
 }
 
 .protectionCardHeader :global(.ant-switch-checked) {
@@ -535,7 +552,7 @@
 }
 
 .toggleLabelInactive {
-  color: #94A3B8;
+  color: #C8C8C8;
   font-family: Inter;
   font-size: 12px;
   font-style: normal;

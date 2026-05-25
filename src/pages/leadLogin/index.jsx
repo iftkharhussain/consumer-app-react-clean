@@ -158,6 +158,12 @@ const LeadLogin = () => {
           setIsNewUser(response.isNewUser);
           setUserData(response.user);
 
+          // Persist the LMS lead id for the independent analytics tracing layer.
+          // Safety-checked: only when a product carrying a leadId came back in the response.
+          if (response.products && response.products.length > 0 && response.products[0].leadId) {
+            localStorage.setItem('analytics_lead_id', response.products[0].leadId);
+          }
+
           // Store session token if returned
           if (response.sessionToken) {
             localStorage.setItem('sessionToken', response.sessionToken);
