@@ -57,11 +57,31 @@ export const updateOrderStatus = async (orderId, status, metadata = null) => {
   return response.data;
 };
 
+/**
+ * Send a quote confirmation email (call or meeting) to the authenticated user.
+ * @param {Object} params
+ * @param {string} params.userProductId - User product ID (used for de-duplication)
+ * @param {'call'|'meeting'} params.type - Confirmation type
+ * @param {Object} params.quote - Selected quote details to show in the email
+ * @param {string} [params.meetingDate] - Human-readable meeting date (meeting type)
+ * @returns {Promise<Object>} { success, alreadySent? }
+ */
+export const sendConfirmationEmail = async ({ userProductId, type, quote, meetingDate }) => {
+  const response = await apiClient.post('/api/product-order/send-confirmation-email', {
+    userProductId,
+    type,
+    quote,
+    meetingDate
+  });
+  return response.data;
+};
+
 const productOrderService = {
   getOrderDetails,
   checkPendingOrder,
   getUserOrders,
-  updateOrderStatus
+  updateOrderStatus,
+  sendConfirmationEmail
 };
 
 export default productOrderService;

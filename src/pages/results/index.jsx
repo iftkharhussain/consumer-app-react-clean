@@ -83,7 +83,7 @@ const Results = () => {
       const createdTime = new Date(quoteData.createdAt).getTime();
       const now = Date.now();
       const elapsedSeconds = Math.floor((now - createdTime) / 1000);
-      const totalAllowedSeconds = 999999; // 30 minutes
+      const totalAllowedSeconds = 1800 ; // 30 minutes
       const remaining = totalAllowedSeconds - elapsedSeconds;
       
       if (remaining <= 0) {
@@ -1232,25 +1232,6 @@ const Results = () => {
                     </Card>
                   </>
                 )}
-
-                {/* Toggle Customize Protections Button */}
-                <div style={{ textAlign: 'center', margin: '32px 0' }}>
-                  <Button
-                    type="default"
-                    onClick={() => setShowCustomize(true)}
-                    style={{
-                      borderRadius: '8px',
-                      padding: '8px 24px',
-                      height: 'auto',
-                      fontSize: '14px',
-                      border: '1px dashed #7c3aed',
-                      color: '#7c3aed',
-                      background: '#faf5ff',
-                    }}
-                  >
-                    🔧 Personnaliser les protections (Re-quote)
-                  </Button>
-                </div>
 
               </>
             )}

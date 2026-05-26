@@ -12,9 +12,10 @@ import {
 import styles from './CallConfirmation.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
-import { getOrderDetails, checkPendingOrder } from '../../services/api/productOrderService';
+import { getOrderDetails, checkPendingOrder, sendConfirmationEmail } from '../../services/api/productOrderService';
 import { trackPixelEvent } from '../../utils/pixel';
 import fortusService from '../../services/api/fortusService';
+import { buildProtections } from '../../utils/quoteProtections';
 
 const CallConfirmation = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const CallConfirmation = () => {
   const [orderData, setOrderData] = useState(null);
   const pixelTracked = useRef(false);
   const callTracked = useRef(false);
+  const confirmationEmailSent = useRef(false);
 
   useEffect(() => {
     if (!initialized.current) {
@@ -114,6 +116,47 @@ const CallConfirmation = () => {
     };
     
     trackCallEvent();
+  }, [loading, orderData, urlUserProductId]);
+
+  // Send the call confirmation email (with the selected quote) once on land
+  useEffect(() => {
+    if (loading || !orderData || confirmationEmailSent.current) return;
+
+    const userProductId = urlUserProductId || orderData?.userProductId;
+    if (!userProductId) return;
+
+    confirmationEmailSent.current = true;
+
+    const sq = orderData.selectedQuote || {};
+    const name = sq.insurerName || '';
+    const isCourtikaSearch = sq.isCourtikaSearch || (name && name.toLowerCase().includes('courtika') && name.toLowerCase().includes('magasiner'));
+
+    // Only show the quote card in the email when the user explicitly selected a carrier ("Choisir").
+    // For "Parler à Courtika" (courtika) and "Personnaliser" (personalize), send the generic message only.
+    // (isCourtikaSearch kept as a fallback for legacy orders saved before selectionType existed.)
+    const showQuoteDetails = (sq.selectionType || 'explicit') === 'explicit' && !isCourtikaSearch;
+
+    const quote = showQuoteDetails
+      ? {
+          insurerName: sq.insurerName || null,
+          monthlyPrice: sq.monthlyPrice || null,
+          yearlyPrice: sq.yearlyPrice || null,
+          hasDiscount: sq.discount || false,
+          discountLabel: sq.discountLabel || 'Rabais 1 mois gratuit',
+          protections: buildProtections(orderData.coverages || []),
+        }
+      : {
+          insurerName: null,
+          monthlyPrice: null,
+          yearlyPrice: null,
+          hasDiscount: false,
+          discountLabel: null,
+          protections: [],
+        };
+
+    sendConfirmationEmail({ userProductId, type: 'call', quote }).catch((err) => {
+      console.warn('[CallConfirmation] Failed to send confirmation email:', err?.message);
+    });
   }, [loading, orderData, urlUserProductId]);
 
   // Loading state
@@ -270,11 +313,11 @@ const CallConfirmation = () => {
   // When there are multiple vehicles, same coverages appear multiple times
   const uniqueProtections = [];
   const seen = new Set();
-  
+
   protections.forEach(protection => {
     // Create a unique key based on code, coverage value, and type
     const key = `${protection.code}-${protection.coverageValue || 'none'}-${protection.type || 'none'}`;
-    
+
     if (!seen.has(key)) {
       seen.add(key);
       uniqueProtections.push(protection);
@@ -285,26 +328,26 @@ const CallConfirmation = () => {
   const sortedProtections = uniqueProtections.sort((a, b) => {
     // Sort order: TP, COL, CMP, other coverages, PAK at the end
     const sortOrder = ['TP', 'TPL', 'COL', 'COLL', 'CMP', 'COMP'];
-    
+
     // PAK always goes to the end
     if (a.isPak && !b.isPak) return 1;
     if (!a.isPak && b.isPak) return -1;
-    
+
     // Both are PAK or both are not PAK
     const aIndex = sortOrder.indexOf(a.code);
     const bIndex = sortOrder.indexOf(b.code);
-    
+
     // If both are in sortOrder, use that order
     if (aIndex !== -1 && bIndex !== -1) {
       return aIndex - bIndex;
     }
-    
+
     // If only a is in sortOrder, it comes first
     if (aIndex !== -1) return -1;
-    
+
     // If only b is in sortOrder, it comes first
     if (bIndex !== -1) return 1;
-    
+
     // Neither in sortOrder, maintain original order
     return 0;
   });

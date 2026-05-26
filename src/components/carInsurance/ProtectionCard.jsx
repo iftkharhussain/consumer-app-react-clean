@@ -144,7 +144,10 @@ const ProtectionCard = ({
                                     className={styles.amountButton}
                                     onClick={() => onAmountChange(amountDelta)}
                                 >
-                                    +
+                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6 0.5L6 11.5" stroke="white" stroke-linecap="round" />
+                                        <path d="M0.5 6L11.5 6" stroke="white" stroke-linecap="round" />
+                                    </svg>
                                 </button>
                             )}
                         </div>

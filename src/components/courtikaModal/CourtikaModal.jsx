@@ -55,9 +55,12 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
             yearlyPrice: recommendedInsurer.yearlyPrice,
             coverages: recommendedInsurer.coverages,
             isCourtikaSearch: true,
+            // "Parler à Courtika" flow -> hide quote card in the confirmation email
+            // (Fortus still receives this recommended/cheapest carrier - unchanged)
+            selectionType: 'courtika',
             discount: selectedQuote?.discount || false
         }
-        : selectedQuote; // Use the selected insurer from state
+        : { ...selectedQuote, selectionType: 'explicit' }; // "Choisir" flow -> show quote in email
 
     const handleDemanderAppel = async () => {
         if (timerRef.current) {

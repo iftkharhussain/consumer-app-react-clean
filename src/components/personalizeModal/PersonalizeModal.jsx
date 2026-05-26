@@ -49,9 +49,12 @@ const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-i
             yearlyPrice: recommendedInsurer.yearlyPrice,
             coverages: recommendedInsurer.coverages,
             isCourtikaSearch: selectedQuote?.isCourtikaSearch || false,
+            // "Personnaliser" flow -> hide quote card in the confirmation email
+            // (Fortus still receives this recommended/cheapest carrier - unchanged)
+            selectionType: 'personalize',
             discount: selectedQuote?.discount || false
         }
-        : selectedQuote;
+        : { ...selectedQuote, selectionType: 'personalize' };
 
     const displayQuote = selectedQuote;
 

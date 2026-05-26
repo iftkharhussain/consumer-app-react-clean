@@ -5,10 +5,11 @@ import { Spin, Button, message } from 'antd';
 import styles from './ScheduleConfirmation.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { getFormattedTodayHours } from '../../utils/businessHours';
-import { getOrderDetails, checkPendingOrder } from '../../services/api/productOrderService';
+import { getOrderDetails, checkPendingOrder, sendConfirmationEmail } from '../../services/api/productOrderService';
 import fortusService from '../../services/api/fortusService';
 import { trackPixelEvent } from '../../utils/pixel';
 import { getQuoteDetails } from '../../services/api/quoteService';
+import { buildProtections } from '../../utils/quoteProtections';
 
 const ScheduleConfirmation = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const ScheduleConfirmation = () => {
   const initialized = useRef(false);
   const ezLeadSent = useRef(false);
   const meetingTracked = useRef(false);
+  const confirmationEmailSent = useRef(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -205,6 +207,60 @@ const ScheduleConfirmation = () => {
     sendEzLead();
   }, [loading, orderData, urlUserProductId]);
 
+  // Send the meeting confirmation email (with the selected quote) once on land
+  useEffect(() => {
+    if (loading || !orderData || confirmationEmailSent.current) return;
+
+    const userProductId = urlUserProductId || orderData?.userProductId;
+    if (!userProductId) return;
+
+    confirmationEmailSent.current = true;
+
+    const sq = orderData.selectedQuote || {};
+    const name = sq.insurerName || '';
+    const isCourtikaSearch = sq.isCourtikaSearch || (name && name.toLowerCase().includes('courtika') && name.toLowerCase().includes('magasiner'));
+
+    // Only show the quote card in the email when the user explicitly selected a carrier ("Choisir").
+    // For "Parler à Courtika" (courtika) and "Personnaliser" (personalize), send the generic message only.
+    // (isCourtikaSearch kept as a fallback for legacy orders saved before selectionType existed.)
+    const showQuoteDetails = (sq.selectionType || 'explicit') === 'explicit' && !isCourtikaSearch;
+
+    const quote = showQuoteDetails
+      ? {
+          insurerName: sq.insurerName || null,
+          monthlyPrice: sq.monthlyPrice || null,
+          yearlyPrice: sq.yearlyPrice || null,
+          hasDiscount: sq.discount || false,
+          discountLabel: sq.discountLabel || 'Rabais 1 mois gratuit',
+          protections: buildProtections(orderData.coverages || []),
+        }
+      : {
+          insurerName: null,
+          monthlyPrice: null,
+          yearlyPrice: null,
+          hasDiscount: false,
+          discountLabel: null,
+          protections: [],
+        };
+
+    // Human-readable meeting date from the Calendly start time
+    let meetingDate = null;
+    if (eventStartTime) {
+      try {
+        const date = new Date(eventStartTime);
+        const datePart = new Intl.DateTimeFormat('fr-CA', { day: 'numeric', month: 'long' }).format(date);
+        const timePart = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).format(date);
+        meetingDate = `${datePart} • ${timePart}`;
+      } catch {
+        meetingDate = null;
+      }
+    }
+
+    sendConfirmationEmail({ userProductId, type: 'meeting', quote, meetingDate }).catch((err) => {
+      console.warn('[ScheduleConfirmation] Failed to send confirmation email:', err?.message);
+    });
+  }, [loading, orderData, urlUserProductId, eventStartTime]);
+
   // Loading state
   if (loading) {
     return (
@@ -372,11 +428,11 @@ const ScheduleConfirmation = () => {
   // When there are multiple vehicles, same coverages appear multiple times
   const uniqueProtections = [];
   const seen = new Set();
-  
+
   protections.forEach(protection => {
     // Create a unique key based on code, coverage value, and type
     const key = `${protection.code}-${protection.coverageValue || 'none'}-${protection.type || 'none'}`;
-    
+
     if (!seen.has(key)) {
       seen.add(key);
       uniqueProtections.push(protection);
@@ -387,26 +443,26 @@ const ScheduleConfirmation = () => {
   const sortedProtections = uniqueProtections.sort((a, b) => {
     // Sort order: TP, COL, CMP, other coverages, PAK at the end
     const sortOrder = ['TP', 'TPL', 'COL', 'COLL', 'CMP', 'COMP'];
-    
+
     // PAK always goes to the end
     if (a.isPak && !b.isPak) return 1;
     if (!a.isPak && b.isPak) return -1;
-    
+
     // Both are PAK or both are not PAK
     const aIndex = sortOrder.indexOf(a.code);
     const bIndex = sortOrder.indexOf(b.code);
-    
+
     // If both are in sortOrder, use that order
     if (aIndex !== -1 && bIndex !== -1) {
       return aIndex - bIndex;
     }
-    
+
     // If only a is in sortOrder, it comes first
     if (aIndex !== -1) return -1;
-    
+
     // If only b is in sortOrder, it comes first
     if (bIndex !== -1) return 1;
-    
+
     // Neither in sortOrder, maintain original order
     return 0;
   });
