@@ -882,7 +882,7 @@ const Results = () => {
                             onClick={() => handleSelectInsurer(recommendedInsurer)}
                             block
                           >
-                            Choisir {recommendedInsurer.name}
+                            Acheter {recommendedInsurer.name}
                           </Button>
                         </div>
                       </div>
@@ -1007,7 +1007,7 @@ const Results = () => {
                                     className={styles.insurerSelectButton}
                                     onClick={() => handleSelectInsurer(insurer)}
                                   >
-                                    Choisir
+                                    Acheter
                                   </Button>
                                   <Button
                                     type="link"
@@ -1038,10 +1038,45 @@ const Results = () => {
                                   <Divider className={styles.expandedDivider} />
                                   <div className={styles.expandedProtections}>
                                     <h4 className={styles.expandedTitle}>Protections incluses</h4>
+
+                                    {/* Car tabs - only show if multiple cars */}
+                                    {quoteData?.cars && quoteData.cars.length > 1 && (
+                                      <div className={styles.carTabs}>
+                                        {quoteData.cars.map((car, idx) => {
+                                          const carInfo = car.vehicleDetails || {};
+                                          const carMake = carInfo.make || car.manufacturer || '';
+                                          const carYear = carInfo.year || car.year || '';
+                                          const carModel = carInfo.modelFr || carInfo.model || car.model || '';
+
+                                          return (
+                                            <button
+                                              key={idx}
+                                              className={`${styles.carTab} ${selectedCarIndex === idx ? styles.carTabActive : ''}`}
+                                              onClick={() => setSelectedCarIndex(idx)}
+                                            >
+                                              <div className={styles.carTabMain}>
+                                                {carMake}, {carYear}
+                                              </div>
+                                              <div className={styles.carTabSub}>
+                                                {carModel}
+                                              </div>
+                                            </button>
+                                          );
+                                        })}
+                                      </div>
+                                    )}
+
                                     <div className={styles.expandedProtectionsList}>
                                       {(() => {
+                                        // Filter coverages by selected vehicle (only when multi-car AND coverages carry vehicleIndex)
+                                        const hasMultipleCars = quoteData?.cars && quoteData.cars.length > 1;
+                                        const coveragesHaveVehicleIndex = (insurer.coverages || []).some(c => c.vehicleIndex !== undefined && c.vehicleIndex !== null);
+                                        const vehicleFilteredCoverages = (hasMultipleCars && coveragesHaveVehicleIndex)
+                                          ? (insurer.coverages || []).filter(c => (c.vehicleIndex ?? 0) === selectedCarIndex)
+                                          : (insurer.coverages || []);
+
                                         // Sort coverages before displaying (same order as main protections section)
-                                        const sortedCoverages = (insurer.coverages || []).slice().sort((a, b) => {
+                                        const sortedCoverages = vehicleFilteredCoverages.slice().sort((a, b) => {
                                           const sortOrder = ['TP', 'TPL', 'COL', 'COLL', 'CMP', 'COMP'];
                                           const codeA = String(a.code || '').toUpperCase();
                                           const codeB = String(b.code || '').toUpperCase();
