@@ -24,3 +24,7 @@ yarn-error.log*
 
 # IDE / Editor
 .claude
+
+graphify-out/
+.claude
+CLAUDE.md
