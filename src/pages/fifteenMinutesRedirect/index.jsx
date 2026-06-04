@@ -139,6 +139,11 @@ const FifteenMinutesRedirect = () => {
         // On mobile, trigger phone dialer
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (isMobile) {
+          fortusService.trackEvent(productId, 'call', {
+            buttonName: 'Auto-dial (Mobile)',
+            position: '15 Minutes Redirect Page',
+            insurerName: 'Courtika'
+          }).catch(err => console.error('Error tracking call event:', err));
           window.location.href = 'tel:+14507629240';
         }
         
@@ -303,13 +308,23 @@ const FifteenMinutesRedirect = () => {
                 <li className={styles.desktopOnly}>
                   <PhoneOutlined className={styles.infoIcon} />
                   <div>
-                    <span className={styles.infoText}>Ligne prioritaire : <a href={phoneLink} className={styles.infoLink} style={{display: 'inline', marginTop: '0', color: '#1f01c8'}}>{phone}</a></span>
+                    <span className={styles.infoText}>Ligne prioritaire : <a href={phoneLink} className={styles.infoLink} style={{display: 'inline', marginTop: '0', color: '#1f01c8'}} onClick={() => {
+                      const productId = effectiveUserProductId || orderData?.userProductId;
+                      if (productId) {
+                        fortusService.trackEvent(productId, 'call', { buttonName: 'Ligne prioritaire', position: '15 Minutes Redirect Page', insurerName: 'Courtika' }).catch(console.error);
+                      }
+                    }}>{phone}</a></span>
                   </div>
                 </li>
               </ul>
 
               <div className={styles.actionButtons}>
-                <Button type="primary" className={`${styles.primaryButton} ${styles.mobileOnly}`} size="large" href={phoneLink}>
+                <Button type="primary" className={`${styles.primaryButton} ${styles.mobileOnly}`} size="large" href={phoneLink} onClick={() => {
+                  const productId = effectiveUserProductId || orderData?.userProductId;
+                  if (productId) {
+                    fortusService.trackEvent(productId, 'call', { buttonName: 'Appeler maintenant (Mobile Button)', position: '15 Minutes Redirect Page', insurerName: 'Courtika' }).catch(console.error);
+                  }
+                }}>
                   <PhoneOutlined className={styles.phoneIcon} /> Appeler maintenant: {phone}
                 </Button>
                 

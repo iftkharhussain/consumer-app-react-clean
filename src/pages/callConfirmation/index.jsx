@@ -100,7 +100,11 @@ const CallConfirmation = () => {
           console.log('[CallConfirmation] Tracking call event for userProductId:', userProductId);
           callTracked.current = true; // Mark as tracked before API call
           
-          const result = await fortusService.trackEvent(userProductId, 'call');
+          const result = await fortusService.trackEvent(userProductId, 'call', {
+            buttonName: 'Appeler maintenant',
+            position: 'Call Confirmation Page',
+            insurerName: orderData?.selectedQuote?.insurerName || orderData?.selectedQuote?.carrierName
+          });
           
           if (result.success) {
             if (result.alreadyExists) {

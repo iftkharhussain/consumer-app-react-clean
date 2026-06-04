@@ -179,7 +179,11 @@ const ScheduleConfirmation = () => {
             meetingTracked.current = true;
             console.log('[ScheduleConfirmation] Tracking meeting event for userProductId:', userProductId);
             
-            const trackResult = await fortusService.trackEvent(userProductId, 'meeting');
+            const trackResult = await fortusService.trackEvent(userProductId, 'meeting', {
+              buttonName: 'Planifier un appel plus tard',
+              position: 'Schedule Confirmation Page',
+              insurerName: orderData?.selectedQuote?.insurerName || orderData?.selectedQuote?.carrierName
+            });
             
             if (trackResult.success) {
               if (trackResult.alreadyExists) {

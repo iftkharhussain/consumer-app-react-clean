@@ -76,13 +76,15 @@ export const getOfficeHours = async (params) => {
  * 
  * @param {string} userProductId - User product ID
  * @param {string} eventType - 'call' or 'meeting'
+ * @param {Object} additionalData - Additional metadata for the event
  * @returns {Promise<Object>} { success, message, recordId?, alreadyExists? }
  */
-export const trackEvent = async (userProductId, eventType) => {
+export const trackEvent = async (userProductId, eventType, additionalData = {}) => {
   try {
     const response = await apiClient.post('/api/fortus/track-event', {
       userProductId,
-      eventType
+      eventType,
+      additionalData
     });
     return response.data;
   } catch (error) {

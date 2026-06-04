@@ -142,6 +142,11 @@ const FallbackNoQuotes = () => {
         // Trigger the phone call dialer on mobile only
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (isMobile) {
+          fortusService.trackEvent(userProductId, 'call', {
+            buttonName: 'Auto-dial (Mobile)',
+            position: 'Fallback No Quotes Page',
+            insurerName: 'Courtika'
+          }).catch(err => console.error('Error tracking call event:', err));
           window.location.href = 'tel:+14507629240';
         }
 
@@ -288,13 +293,21 @@ const FallbackNoQuotes = () => {
                     <li className={styles.desktopOnly}>
                       <PhoneOutlined className={styles.infoIcon} style={{ transform: 'scaleX(-1)' }} />
                       <div>
-                        <span className={styles.infoText}>Ligne prioritaire : <a href="tel:+14507629240" className={styles.infoLink} style={{display: 'inline', marginTop: '0', color: '#1f01c8'}}>1 (450) 762-9240</a></span>
+                        <span className={styles.infoText}>Ligne prioritaire : <a href="tel:+14507629240" className={styles.infoLink} style={{display: 'inline', marginTop: '0', color: '#1f01c8'}} onClick={() => {
+                          if (userProductId) {
+                            fortusService.trackEvent(userProductId, 'call', { buttonName: 'Ligne prioritaire', position: 'Fallback No Quotes Page', insurerName: 'Courtika' }).catch(console.error);
+                          }
+                        }}>1 (450) 762-9240</a></span>
                       </div>
                     </li>
                   </ul>
 
                   <div className={styles.actionButtons}>
-                    <Button type="primary" className={`${styles.primaryButton} ${styles.mobileOnly}`} size="large" href="tel:+14507629240">
+                    <Button type="primary" className={`${styles.primaryButton} ${styles.mobileOnly}`} size="large" href="tel:+14507629240" onClick={() => {
+                      if (userProductId) {
+                        fortusService.trackEvent(userProductId, 'call', { buttonName: 'Appeler maintenant (Mobile Button)', position: 'Fallback No Quotes Page', insurerName: 'Courtika' }).catch(console.error);
+                      }
+                    }}>
                       <PhoneOutlined className={styles.phoneIcon} /> Appeler maintenant: 1 (450) 762-9240
                     </Button>
                     
