@@ -299,16 +299,24 @@ const ScheduleConfirmation = () => {
   // Check if we have actual quote data (not just fallback)
   const hasQuoteData = orderData && orderData.selectedQuote && orderData.selectedQuote.insurerName;
   
-  const insurerName = selectedQuote.insurerName || 'Intact Insurance';
-  const isCourtikaSearch = selectedQuote.isCourtikaSearch || (insurerName && insurerName.toLowerCase().includes('courtika') && insurerName.toLowerCase().includes('magasiner'));
-  const insurerLogo = selectedQuote.logo || '/images/intact-insurance.svg';
-  
-  // Only show price if it's not a general Courtika search (quote comparison)
-  // Removed the hardcoded '90' default to avoid showing fake prices when data is missing
+  const isCourtikaSearch =
+    selectedQuote.selectionType === 'courtika'
+    || selectedQuote.selectionType === 'personalize'
+    || selectedQuote.isCourtikaSearch
+    || (selectedQuote.insurerName
+        && selectedQuote.insurerName.toLowerCase().includes('courtika')
+        && selectedQuote.insurerName.toLowerCase().includes('magasiner'));
+  const insurerName = isCourtikaSearch
+    ? "Magasiner plus d'options avec Courtika"
+    : (selectedQuote.insurerName || 'Intact Insurance');
+  const insurerLogo = isCourtikaSearch
+    ? '/images/courtika-assurances-inc.png'
+    : (selectedQuote.logo || '/images/intact-insurance.svg');
+
   const monthlyPrice = !isCourtikaSearch ? (selectedQuote.monthlyPrice || null) : null;
   const yearlyPrice = !isCourtikaSearch ? (selectedQuote.yearlyPrice || null) : null;
   const oldMonthlyPrice = !isCourtikaSearch ? (selectedQuote.oldMonthlyPrice || null) : null;
-  const hasDiscount = selectedQuote.discount || false;
+  const hasDiscount = !isCourtikaSearch && (selectedQuote.discount || false);
   const discountLabel = selectedQuote.discountLabel || 'Rabais 1 mois gratuit';
   const discountBonus = selectedQuote.discountBonus || null;
   // Advisor details
@@ -320,8 +328,8 @@ const ScheduleConfirmation = () => {
   const formattedHours = getFormattedTodayHours();
   const callDuration = 15; // Set to 15 as requested
   
-  // Coverages
-  const coverages = orderData?.coverages || [];
+  // Coverages — hidden for Courtika flow (cheapest carrier still in orderData for email/analytics)
+  const coverages = isCourtikaSearch ? [] : (orderData?.coverages || []);
 
   // Format currency in French format (10 000$ instead of $10,000)
   const formatFrenchCurrency = (value) => {
