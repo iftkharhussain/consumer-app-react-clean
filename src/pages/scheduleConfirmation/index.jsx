@@ -17,7 +17,6 @@ const ScheduleConfirmation = () => {
   const initialized = useRef(false);
   const ezLeadSent = useRef(false);
   const meetingTracked = useRef(false);
-  const confirmationEmailSent = useRef(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -212,13 +211,19 @@ const ScheduleConfirmation = () => {
   }, [loading, orderData, urlUserProductId]);
 
   // Send the meeting confirmation email (with the selected quote) once on land
+  // Uses DB record to prevent resends across page reloads and devices
   useEffect(() => {
-    if (loading || !orderData || confirmationEmailSent.current) return;
+    if (loading || !orderData) return;
 
     const userProductId = urlUserProductId || orderData?.userProductId;
     if (!userProductId) return;
 
-    confirmationEmailSent.current = true;
+    // Check if email was already sent (from DB via orderData.metadata)
+    const emailAlreadySent = orderData?.metadata?.confirmationEmailSent?.meeting;
+    if (emailAlreadySent) {
+      console.log('[ScheduleConfirmation] Email already sent (DB record check)');
+      return;
+    }
 
     const sq = orderData.selectedQuote || {};
     const name = sq.insurerName || '';

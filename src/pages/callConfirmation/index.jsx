@@ -27,7 +27,6 @@ const CallConfirmation = () => {
   const [orderData, setOrderData] = useState(null);
   const pixelTracked = useRef(false);
   const callTracked = useRef(false);
-  const confirmationEmailSent = useRef(false);
 
   useEffect(() => {
     if (!initialized.current) {
@@ -123,13 +122,19 @@ const CallConfirmation = () => {
   }, [loading, orderData, urlUserProductId]);
 
   // Send the call confirmation email (with the selected quote) once on land
+  // Uses DB record to prevent resends across page reloads and devices
   useEffect(() => {
-    if (loading || !orderData || confirmationEmailSent.current) return;
+    if (loading || !orderData) return;
 
     const userProductId = urlUserProductId || orderData?.userProductId;
     if (!userProductId) return;
 
-    confirmationEmailSent.current = true;
+    // Check if email was already sent (from DB via orderData.metadata)
+    const emailAlreadySent = orderData?.metadata?.confirmationEmailSent?.call;
+    if (emailAlreadySent) {
+      console.log('[CallConfirmation] Email already sent (DB record check)');
+      return;
+    }
 
     const sq = orderData.selectedQuote || {};
     const name = sq.insurerName || '';
