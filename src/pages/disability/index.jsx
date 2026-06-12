@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, Collapse } from 'antd';
+import { Button, Collapse, Modal } from 'antd';
 import { 
   CheckCircleOutlined, 
   CheckCircleFilled,
   BulbOutlined,
-  InfoCircleOutlined
+  InfoCircleOutlined,
+  LeftOutlined,
+  RightOutlined
 } from '@ant-design/icons';
 import styles from './Disability.module.css';
 
@@ -73,9 +75,66 @@ const FAQ_DATA = [
   }
 ];
 
+const OTHER_PRODUCTS = [
+  {
+    key: 'mortgage',
+    title: 'Assurance hypothécaire',
+    desc: 'Protégez votre hypothèque.',
+    icon: '/images/NORGA-Assurance-Hypothécaire.svg',
+    recommended: true
+  },
+  {
+    key: 'life',
+    title: 'Assurance vie',
+    desc: 'Protégez vos proches.',
+    icon: '/images/NORGA-Assurance-Vie.svg'
+  },
+  {
+    key: 'disability',
+    title: 'Assurance salaire',
+    desc: 'Protégez votre revenu.',
+    icon: '/images/Assurance-Salaire.svg'
+  },
+  {
+    key: 'auto',
+    title: 'Assurance auto',
+    desc: 'Comparez et économisez.',
+    icon: '/images/Assurance-Auto_new.svg'
+  },
+  {
+    key: 'critical',
+    title: 'Assurance maladies graves',
+    desc: "Faites face à l'imprévu.",
+    icon: '/images/NORGA-Assurance-Maladie-Grave.svg'
+  }
+];
+
+const CheckIcon = () => (
+  <div className={styles.featureIconBox}>
+    <svg width="10" height="10" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 3L4.5 8.5L2 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  </div>
+);
+
 const DisabilityPage = () => {
   const [activeFaq, setActiveFaq] = useState([]);
   const { firstName } = useSelector((state) => state.app.user_profile);
+  const scrollContainerRef = useRef(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+  };
 
   const handleBookCall = () => {
     console.log("Booking call for disability insurance...");
@@ -212,6 +271,125 @@ const DisabilityPage = () => {
           </Button>
         </div>
       </div>
+
+      {/* Other Products Section */}
+      <div className={styles.otherProductsCard}>
+        <div className={styles.otherProductsHeader}>
+          <h2 className={styles.otherProductsTitle}>Selon votre profil, vous pourriez aussi économiser sur ces produits</h2>
+          <div className={styles.otherProductsNav}>
+            <button className={styles.navButton} aria-label="Previous" onClick={scrollLeft}>
+              <LeftOutlined />
+            </button>
+            <button className={styles.navButton} aria-label="Next" onClick={scrollRight}>
+              <RightOutlined />
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.productsScrollContainer} ref={scrollContainerRef}>
+          {OTHER_PRODUCTS.map((product) => (
+            <div key={product.key} className={`${styles.productCard} ${product.recommended ? styles.recommendedCard : ''}`}>
+              <div className={styles.productCardTop}>
+                <div className={styles.productIconWrapper}>
+                  <img src={product.icon} alt={product.title} className={styles.productIcon} />
+                </div>
+                {product.recommended && (
+                  <div className={styles.recommendedBadge}>RECOMMANDÉ</div>
+                )}
+              </div>
+              <h3 className={styles.productTitle}>{product.title}</h3>
+              <p className={styles.productDesc}>{product.desc}</p>
+              <Button className={styles.productButton} onClick={() => {
+                setSelectedProduct(product);
+                setIsModalVisible(true);
+              }}>
+                <span>Obtenir une soumission</span>
+              </Button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Modal
+        open={isModalVisible}
+        visible={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={null}
+        width={800}
+        centered
+        className={styles.productModal}
+        closeIcon={
+          <span className={styles.modalCloseIcon}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none" style={{ flexShrink: 0 }}>
+              <path d="M11.25 3.75L3.75 11.25" stroke="#697586" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M3.75 3.75L11.25 11.25" stroke="#697586" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </span>
+        }
+      >
+        {selectedProduct && (
+          <div className={styles.modalContent}>
+            {/* Left Column */}
+            <div className={styles.modalLeft}>
+              <div className={styles.modalHeader}>
+                <div className={styles.modalIconBox}>
+                  <img src={selectedProduct.icon} alt={selectedProduct.title} className={styles.modalProductIcon} />
+                </div>
+                <div className={styles.modalBadge}>{selectedProduct.title}</div>
+              </div>
+              <h2 className={styles.modalTitle}>Délègue le magasinage de ton {selectedProduct.title.toLowerCase()}</h2>
+              <p className={styles.modalDesc}>On compare les différents assureurs pour toi.</p>
+              
+              <Button className={styles.modalActionBtn}>
+                Commencer maintenant
+              </Button>
+
+              <div className={styles.modalFeatures}>
+                <div className={styles.featureItem}>
+                  <CheckIcon />
+                  <span>Gratuit et sans engagement</span>
+                </div>
+                <div className={styles.featureItem}>
+                  <CheckIcon />
+                  <span>Comparaison de plusieurs options</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column */}
+            <div className={styles.modalRight}>
+              <h4 className={styles.partnersTitle}>ASSUREURS ET PARTENAIRES</h4>
+              
+              <div className={styles.partnersGrid}>
+                <div className={styles.marqueeTrack}>
+                  {[
+                    { name: 'Assureur B', icon: '/images/Assurance-Habitation.svg' },
+                    { name: 'Assureur C', icon: '/images/NORGA-Assurance-Vie.svg' },
+                    { name: 'Assureur D', icon: '/images/Assurance-Salaire.svg' },
+                    { name: 'Assureur E', icon: '/images/NORGA-Assurance-Maladie-Grave.svg' },
+                    { name: 'Assureur F', icon: '/images/Assurance-Auto_new.svg' },
+                    { name: 'Assureur B', icon: '/images/Assurance-Habitation.svg' },
+                    { name: 'Assureur C', icon: '/images/NORGA-Assurance-Vie.svg' },
+                    { name: 'Assureur D', icon: '/images/Assurance-Salaire.svg' },
+                    { name: 'Assureur E', icon: '/images/NORGA-Assurance-Maladie-Grave.svg' },
+                    { name: 'Assureur F', icon: '/images/Assurance-Auto_new.svg' }
+                  ].map((partner, idx) => (
+                    <div key={idx} className={styles.partnerCard}>
+                       <img src={partner.icon} alt={partner.name} className={styles.partnerIcon} />
+                       <span>{partner.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <p className={styles.partnersDesc}>
+                Nous analysons les offres de nos partenaires pour vous présenter les meilleures options selon votre profil.
+              </p>
+            </div>
+          </div>
+        )}
+      </Modal>
+
     </div>
   );
 };

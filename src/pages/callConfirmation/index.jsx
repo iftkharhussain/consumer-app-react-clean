@@ -121,52 +121,7 @@ const CallConfirmation = () => {
     trackCallEvent();
   }, [loading, orderData, urlUserProductId]);
 
-  // Send the call confirmation email (with the selected quote) once on land
-  // Uses DB record to prevent resends across page reloads and devices
-  useEffect(() => {
-    if (loading || !orderData) return;
 
-    const userProductId = urlUserProductId || orderData?.userProductId;
-    if (!userProductId) return;
-
-    // Check if email was already sent (from DB via orderData.metadata)
-    const emailAlreadySent = orderData?.metadata?.confirmationEmailSent?.call;
-    if (emailAlreadySent) {
-      console.log('[CallConfirmation] Email already sent (DB record check)');
-      return;
-    }
-
-    const sq = orderData.selectedQuote || {};
-    const name = sq.insurerName || '';
-    const isCourtikaSearch = sq.isCourtikaSearch || (name && name.toLowerCase().includes('courtika') && name.toLowerCase().includes('magasiner'));
-
-    // Only show the quote card in the email when the user explicitly selected a carrier ("Choisir").
-    // For "Parler à Courtika" (courtika) and "Personnaliser" (personalize), send the generic message only.
-    // (isCourtikaSearch kept as a fallback for legacy orders saved before selectionType existed.)
-    const showQuoteDetails = (sq.selectionType || 'explicit') === 'explicit' && !isCourtikaSearch;
-
-    const quote = showQuoteDetails
-      ? {
-          insurerName: sq.insurerName || null,
-          monthlyPrice: sq.monthlyPrice || null,
-          yearlyPrice: sq.yearlyPrice || null,
-          hasDiscount: sq.discount || false,
-          discountLabel: sq.discountLabel || 'Rabais 1 mois gratuit',
-          protections: buildProtections(orderData.coverages || []),
-        }
-      : {
-          insurerName: null,
-          monthlyPrice: null,
-          yearlyPrice: null,
-          hasDiscount: false,
-          discountLabel: null,
-          protections: [],
-        };
-
-    sendConfirmationEmail({ userProductId, type: 'call', quote }).catch((err) => {
-      console.warn('[CallConfirmation] Failed to send confirmation email:', err?.message);
-    });
-  }, [loading, orderData, urlUserProductId]);
 
   // Loading state
   if (loading) {

@@ -80,8 +80,8 @@ const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-i
             
             // Prefer userProductId over productSlug for more reliable matching
             const params = userProductId 
-                ? { userProductId, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, isCustomizeRequest: true } 
-                : { productSlug, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, isCustomizeRequest: true };
+                ? { userProductId, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, isCustomizeRequest: true, emailType: 'call' } 
+                : { productSlug, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, isCustomizeRequest: true, emailType: 'call' };
             
             console.log('[CourtikaModal] Request params:', params);
             

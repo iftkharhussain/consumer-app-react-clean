@@ -74,8 +74,8 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
             
             // Prefer userProductId over productSlug for more reliable matching
             const params = userProductId 
-                ? { userProductId, selectedQuote: submissionQuote, recalculatedQuote, carrierCode } 
-                : { productSlug, selectedQuote: submissionQuote, recalculatedQuote, carrierCode };
+                ? { userProductId, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, emailType: 'call' } 
+                : { productSlug, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, emailType: 'call' };
             
             // Call Fortus API to send the lead
             const result = await fortusService.requestCall(params);
