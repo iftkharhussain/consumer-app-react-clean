@@ -36,6 +36,7 @@ const ForgotPassword = React.lazy(() => import('./pages/forgotPassword/index'));
 const QuestionPage = React.lazy(() => import('./pages/question/index'));
 const Logout = React.lazy(() => import('./pages/logout/index'));
 const OrderProduct = React.lazy(() => import('./pages/product-order'));
+const ThankyouAdvisor = React.lazy(() => import('./pages/thankyouAdvisor/index'));
 const CallConfirmation = React.lazy(() => import('./pages/callConfirmation/index'));
 const FifteenMinutesRedirect = React.lazy(() => import('./pages/fifteenMinutesRedirect/index'));
 const ScheduleCall = React.lazy(() => import('./pages/scheduleCall/index'));
@@ -249,6 +250,7 @@ function App(props) {
 							<Route path="/disability" element={<Suspense fallback={<div></div>}><Disability /></Suspense>} />
 							<Route path="/quote-limit-exceeded" element={<Suspense fallback={<div></div>}><QuoteLimitExceeded /></Suspense>} />
 							<Route path="/advisors" element={<Suspense fallback={<div></div>}><Advisors /></Suspense>} />
+							<Route path="/thankyou-advisor" element={<Suspense fallback={<div></div>}><ThankyouAdvisor /></Suspense>} />
 							<Route path="/critical-illness" element={<Suspense fallback={<div></div>}><CriticalIllness /></Suspense>} />
 							<Route path="/mortgage" element={<Suspense fallback={<div></div>}><MortgageExpert /></Suspense>} />
 

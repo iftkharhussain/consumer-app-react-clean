@@ -1,0 +1,601 @@
+.container {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #111827;
+  overflow-x: hidden;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.successIconWrapper {
+  display: flex;
+  width: 72px;
+  height: 72px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16777200px;
+  background: #DCFCE7;
+  margin: 0 auto 24px;
+}
+
+.successIcon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #111827;
+}
+
+.subtitle {
+  color: #697586;
+  text-align: center;
+  font-family: Inter, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px;
+  margin: 0;
+}
+
+/* Card General */
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  margin-bottom: 24px;
+  border: 1px solid #f3f4f6;
+  overflow: hidden;
+}
+
+/* Appointment Info Section */
+.appointmentGrid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+}
+
+.appointmentCol {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 32px;
+  border-right: 1px solid #f3f4f6;
+}
+
+.appointmentCol:last-child {
+  border-right: none;
+}
+
+.avatar {
+  display: flex;
+  width: 56px;
+  height: 56px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 16777200px;
+  border: 2px solid #D5D7DA;
+  background: linear-gradient(135deg, #E0E0F8 0%, #C7C7F0 100%);
+  color: #1A1ABA;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.iconWrapper {
+  width: 40px;
+  height: 40px;
+  background: #F0F0FF;
+  color: #1A1ABA;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.colText {
+  display: flex;
+  flex-direction: column;
+}
+
+.colTitle {
+  color: #121926;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 21px;
+  margin-bottom: 4px;
+}
+
+.colSubtitle {
+  color: #697586;
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 19.5px;
+}
+
+.confirmationMessage {
+  background: #F8FAFC;
+  padding: 20px 32px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.messageIcon {
+  color: #6b7280;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.messageText {
+  color: #697586;
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  margin: 0;
+}
+
+/* Products Section */
+.otherProductsCard {
+  border-radius: 12px;
+  border: 1px solid #e9eaeb;
+  padding: 32px;
+  background: #FFFFFF;
+  margin-top: 24px !important;
+}
+
+.otherProductsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.otherProductsTitle {
+  color: #121926;
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: -0.312px;
+  margin: 0;
+}
+
+.otherProductsNav {
+  display: flex;
+  gap: 8px;
+}
+
+.productsScrollContainer {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 16px;
+}
+
+.productsScrollContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.navButton {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #E9EAEB;
+  background: #FFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #697586;
+  transition: all 0.2s;
+}
+
+.navButton:hover {
+  background: #F8FAFC;
+  color: #101828;
+}
+
+.productCard {
+  min-width: 220px;
+  width: 220px;
+  min-height: 213px;
+  height: auto;
+  border-radius: 14px;
+  background: #F8FAFC;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1 1;
+}
+
+.recommendedCard {
+  border-radius: 12px;
+  border: 1.5px solid #1A1ABA;
+  background: #FFF;
+}
+
+.productCardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 11px;
+}
+
+.recommendedBadge {
+  background: #EEF;
+  color: #1A1ABA;
+  padding: 4px 8px;
+  border-radius: 16px;
+  font-family: Inter, sans-serif;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 15px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.productIconWrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #FFF;
+  border: 1px solid #E9EAEB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.productIcon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.productTitle {
+  color: #121926;
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  margin: 0 0 2px 0;
+  line-height: 17.875px;
+  letter-spacing: -0.076px;
+}
+
+.productDesc {
+  color: #697586;
+  font-family: Inter, sans-serif;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 15.125px;
+  letter-spacing: 0.064px;
+  margin: 0 0 24px 0;
+  flex-grow: 1;
+}
+
+.productButton {
+  background: linear-gradient(to right, #1a1aba, #2525c5) !important;
+  color: #FFF !important;
+  border: none !important;
+  border-radius: 12px !important;
+  height: auto !important;
+  min-height: 40px !important;
+  padding: 9px 12px 7px 12px !important;
+  font-family: Inter !important;
+  font-size: 13px !important;
+  font-style: normal;
+  font-weight: 600 !important;
+  line-height: 18px !important;
+  text-align: center;
+  width: 100% !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  box-shadow: 0 4px 16px rgba(26, 26, 186, 0.3) !important;
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+}
+
+.productButton:hover {
+  background: linear-gradient(to right, #1a1aba, #2525c5) !important;
+  box-shadow: 0 6px 20px rgba(26, 26, 186, 0.4) !important;
+  transform: scale(1.02);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .appointmentGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .appointmentCol {
+    padding: 16px 24px;
+    border-right: none;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  
+  .appointmentCol:last-child {
+    border-bottom: none;
+  }
+}
+
+@media (max-width: 986px) {
+  .otherProductsCard {
+    padding: 24px 16px !important;
+  }
+  
+  .otherProductsHeader {
+    gap: 20px;
+  }
+  
+  .otherProductsNav {
+    align-self: flex-start;
+  }
+  
+  .navButton {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .otherProductsTitle {
+    color: #121926;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: -0.312px;
+  }
+
+  .productsScrollContainer {
+    padding-bottom: 8px;
+  }
+
+  .productCard {
+    min-width: unset;
+    width: 220px;
+    min-height: 213px;
+    height: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-shrink: 0;
+    border-radius: 14px;
+  }
+
+  .productCardTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .productDesc {
+    color: #667085;
+    font-family: Inter, sans-serif;
+    font-size: 11px;
+    margin: 0 0 24px 0;
+    line-height: 1.5;
+    flex-grow: 1;
+  }
+
+  .productIconWrapper {
+    display: flex;
+    width: 35.993px;
+    height: 35.993px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    background: #FFF;
+  }
+
+  .productIcon {
+    width: 19.993px;
+    height: 19.993px;
+  }
+
+  .recommendedBadge {
+    display: flex;
+    padding: 2.268px 8.943px 1.722px 7.995px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 21328500px;
+    background: #EEF;
+    color: #1A1ABA;
+    font-family: Inter;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 15px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+
+  .productTitle {
+    color: #121926;
+    font-family: Inter;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 17.875px;
+    letter-spacing: -0.076px;
+  }
+
+  .productButton {
+    display: flex !important;
+    width: 100% !important;
+    min-height: 51.983px !important;
+    height: auto !important;
+    padding: 8.902px 11.014px 7.081px 12px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    color: #FFF !important;
+    text-align: center;
+    font-family: Inter;
+    font-size: 12px !important;
+    font-style: normal;
+    font-weight: 600 !important;
+    line-height: 18px !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* Exit Modal */
+.exitModal :global(.ant-modal-content) {
+  border-radius: 20px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.exitModalContent {
+  display: block;
+  min-height: 500px;
+  position: relative;
+}
+
+.modalCloseIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #FFFFFF;
+  border: 1px solid #E9EAEB;
+  border-radius: 16777200px;
+  margin-top: 8px;
+  margin-right: 9px;
+  transition: background 0.2s;
+}
+
+.modalCloseIcon:hover {
+  background: #F3F4F6;
+  color: #101828;
+}
+
+.exitModalLeft {
+  width: 100%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.exitModalTitle {
+  color: #121926;
+  font-family: Inter, sans-serif;
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 34px;
+  letter-spacing: -0.8px;
+  margin-bottom: 8px;
+  max-width: 531px;
+}
+
+.exitModalSubtitle {
+  color: #697586;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 21px;
+  margin-bottom: 32px;
+  max-width: 600px;
+}
+
+.exitProductsScrollContainer {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 16px;
+  max-width: 575px;
+}
+
+.exitProductsScrollContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.exitProductCard {
+  min-width: 220px;
+  width: 220px;
+  height: auto;
+  border-radius: 14px;
+  background: #FFFFFF;
+  border: 1px solid #E9EAEB;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.exitModalNav {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+  position: relative;
+  z-index: 10;
+}
+
+.exitModalRight {
+  position: absolute;
+  right: 0;
+  top: 140px;
+  bottom: 0;
+  width: 479px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, #FFFFFF 25%, #FFFFFF 100%);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  pointer-events: none;
+  z-index: 5;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.exitModalIllustration {
+  width: 378px;
+  height: auto;
+  object-fit: contain;
+  margin-right: -7px;
+}
+
+@media (max-width: 986px) {
+  .exitModalContent {
+    flex-direction: column;
+  }
+  .exitModalRight {
+    display: none;
+  }
+  .exitModalLeft {
+    padding: 24px;
+  }
+}

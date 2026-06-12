@@ -11,13 +11,14 @@ import { trackPixelEvent } from '../../utils/pixel';
 import { getQuoteDetails } from '../../services/api/quoteService';
 import { buildProtections } from '../../utils/quoteProtections';
 
+const sentEmailCache = new Set();
+
 const ScheduleConfirmation = () => {
   const navigate = useNavigate();
   const { userProductId: urlUserProductId } = useParams();
   const initialized = useRef(false);
   const ezLeadSent = useRef(false);
   const meetingTracked = useRef(false);
-  const confirmationEmailSent = useRef(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -156,10 +157,25 @@ const ScheduleConfirmation = () => {
           productSlug: 'car-insurance'
         });
         
+        // Human-readable meeting date from the Calendly start time
+        let meetingDate = null;
+        if (eventStartTime) {
+          try {
+            const date = new Date(eventStartTime);
+            const datePart = new Intl.DateTimeFormat('fr-CA', { day: 'numeric', month: 'long' }).format(date);
+            const timePart = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).format(date);
+            meetingDate = `${datePart} • ${timePart}`;
+          } catch {
+            meetingDate = null;
+          }
+        }
+        
         const result = await fortusService.requestCall({
           userProductId,
           productSlug: 'car-insurance',
-          carrierCode // Pass the lowest price carrier
+          carrierCode, // Pass the lowest price carrier
+          emailType: 'meeting',
+          meetingDate
         });
         
         if (result.success) {
@@ -211,59 +227,6 @@ const ScheduleConfirmation = () => {
     sendEzLead();
   }, [loading, orderData, urlUserProductId]);
 
-  // Send the meeting confirmation email (with the selected quote) once on land
-  useEffect(() => {
-    if (loading || !orderData || confirmationEmailSent.current) return;
-
-    const userProductId = urlUserProductId || orderData?.userProductId;
-    if (!userProductId) return;
-
-    confirmationEmailSent.current = true;
-
-    const sq = orderData.selectedQuote || {};
-    const name = sq.insurerName || '';
-    const isCourtikaSearch = sq.isCourtikaSearch || (name && name.toLowerCase().includes('courtika') && name.toLowerCase().includes('magasiner'));
-
-    // Only show the quote card in the email when the user explicitly selected a carrier ("Choisir").
-    // For "Parler à Courtika" (courtika) and "Personnaliser" (personalize), send the generic message only.
-    // (isCourtikaSearch kept as a fallback for legacy orders saved before selectionType existed.)
-    const showQuoteDetails = (sq.selectionType || 'explicit') === 'explicit' && !isCourtikaSearch;
-
-    const quote = showQuoteDetails
-      ? {
-          insurerName: sq.insurerName || null,
-          monthlyPrice: sq.monthlyPrice || null,
-          yearlyPrice: sq.yearlyPrice || null,
-          hasDiscount: sq.discount || false,
-          discountLabel: sq.discountLabel || 'Rabais 1 mois gratuit',
-          protections: buildProtections(orderData.coverages || []),
-        }
-      : {
-          insurerName: null,
-          monthlyPrice: null,
-          yearlyPrice: null,
-          hasDiscount: false,
-          discountLabel: null,
-          protections: [],
-        };
-
-    // Human-readable meeting date from the Calendly start time
-    let meetingDate = null;
-    if (eventStartTime) {
-      try {
-        const date = new Date(eventStartTime);
-        const datePart = new Intl.DateTimeFormat('fr-CA', { day: 'numeric', month: 'long' }).format(date);
-        const timePart = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).format(date);
-        meetingDate = `${datePart} • ${timePart}`;
-      } catch {
-        meetingDate = null;
-      }
-    }
-
-    sendConfirmationEmail({ userProductId, type: 'meeting', quote, meetingDate }).catch((err) => {
-      console.warn('[ScheduleConfirmation] Failed to send confirmation email:', err?.message);
-    });
-  }, [loading, orderData, urlUserProductId, eventStartTime]);
 
   // Loading state
   if (loading) {
