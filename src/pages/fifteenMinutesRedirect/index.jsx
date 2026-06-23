@@ -130,7 +130,9 @@ const FifteenMinutesRedirect = () => {
       const result = await fortusService.requestCall({
         userProductId: productId,
         productSlug: 'car-insurance',
-        carrierCode // Pass the lowest price carrier
+        carrierCode, // Pass the lowest price carrier
+        position: '15 Minutes Redirect Page',
+        buttonName: 'Oui, je veux magasiner avec Courtika'
       });
       
       if (result.success) {
@@ -328,7 +330,11 @@ const FifteenMinutesRedirect = () => {
                   <PhoneOutlined className={styles.phoneIcon} /> Appeler maintenant: {phone}
                 </Button>
                 
-                <Button className={styles.secondaryOutlineButton} size="large" onClick={() => navigate(`/schedule-call/${effectiveUserProductId || ''}`)}>
+                <Button className={styles.secondaryOutlineButton} size="large" onClick={() => {
+                  localStorage.setItem('lead_source_page', '15 Minutes Redirect Page');
+                  localStorage.setItem('lead_source_button', "Planifier l'appel plus tard");
+                  navigate(`/schedule-call/${effectiveUserProductId || ''}`);
+                }}>
                   <CalendarOutlined /> Planifier l'appel plus tard
                 </Button>
               </div>

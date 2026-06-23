@@ -675,13 +675,21 @@ const Results = () => {
         monthlyPrice: recommendedInsurer.price,
         yearlyPrice: recommendedInsurer.yearlyPrice,
         coverages: recommendedInsurer.coverages,
-        billingPeriod: billingPeriod
+        billingPeriod: billingPeriod,
+        position: 'Result Page',
+        buttonName: 'Personnaliser'
+      });
+    } else if (selectedInsurer) {
+      setSelectedInsurer({
+        ...selectedInsurer,
+        position: 'Result Page',
+        buttonName: 'Personnaliser'
       });
     }
     setIsPersonalizeModalOpen(true);
   };
 
-  const handleSelectInsurer = (insurer) => {
+  const handleSelectInsurer = (insurer, buttonName) => {
     // Transform coverages to the format expected by backend
     const transformedCoverages = (insurer.coverages || []).map(coverage => {
       // Extract numeric limit from string like "$2,000,000/-$1"
@@ -737,7 +745,9 @@ const Results = () => {
       discountLabel: insurer.discountLabel || null,
       discountBonus: insurer.discountBonus || null,
       coverages: transformedCoverages,
-      billingPeriod: billingPeriod
+      billingPeriod: billingPeriod,
+      position: 'Result Page',
+      buttonName: buttonName || 'Acheter'
     };
     
     // Flag that we want to open the modal after state updates
@@ -879,7 +889,7 @@ const Results = () => {
                             type="primary"
                             size="large"
                             className={styles.selectButton}
-                            onClick={() => handleSelectInsurer(recommendedInsurer)}
+                            onClick={() => handleSelectInsurer(recommendedInsurer, `Acheter ${recommendedInsurer.name}`)}
                             block
                           >
                             Acheter {recommendedInsurer.name}
@@ -1005,7 +1015,8 @@ const Results = () => {
                                   <Button
                                     type="primary"
                                     className={styles.insurerSelectButton}
-                                    onClick={() => handleSelectInsurer(insurer)}
+                                    onClick={() => handleSelectInsurer(insurer, 'Acheter')}
+                                    block
                                   >
                                     Acheter
                                   </Button>
@@ -1283,6 +1294,8 @@ const Results = () => {
         selectedQuote={selectedInsurer}
         recommendedInsurer={recommendedInsurer}
         recalculatedQuote={recalculatedQuote}
+        position={selectedInsurer?.position || 'Result Page'}
+        buttonName={selectedInsurer?.buttonName || 'Acheter'}
       />
 
       {/* Recalculation Limit Modal */}
@@ -1322,10 +1335,14 @@ const Results = () => {
           insurerName: "Magasiner plus d'options avec Courtika",
           logo: "/images/courtika-assurances-inc.png",
           isCourtikaSearch: true,
-          billingPeriod: billingPeriod
+          billingPeriod: billingPeriod,
+          position: selectedInsurer?.position || 'Result Page',
+          buttonName: selectedInsurer?.buttonName || 'Personnaliser'
         }}
         recommendedInsurer={recommendedInsurer}
         recalculatedQuote={recalculatedQuote}
+        position={selectedInsurer?.position || 'Result Page'}
+        buttonName={selectedInsurer?.buttonName || 'Personnaliser'}
       />
     </>
   );

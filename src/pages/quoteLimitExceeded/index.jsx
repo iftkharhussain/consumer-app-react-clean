@@ -115,7 +115,9 @@ const QuoteLimitExceeded = () => {
       const result = await fortusService.requestCall({
         userProductId: productId,
         productSlug: 'car-insurance',
-        carrierCode
+        carrierCode,
+        position: 'Quote Limit Exceeded Page',
+        buttonName: 'Oui, je veux magasiner avec Courtika'
       });
       
       if (result.success) {
@@ -305,7 +307,11 @@ const QuoteLimitExceeded = () => {
                   <PhoneOutlined className={styles.phoneIcon} /> Appeler maintenant: {phone}
                 </Button>
                 
-                <Button className={styles.secondaryOutlineButton} size="large" onClick={() => navigate(`/schedule-call/${effectiveUserProductId || ''}`)}>
+                <Button className={styles.secondaryOutlineButton} size="large" onClick={() => {
+                  localStorage.setItem('lead_source_page', 'Quote Limit Exceeded Page');
+                  localStorage.setItem('lead_source_button', "Planifier l'appel plus tard");
+                  navigate(`/schedule-call/${effectiveUserProductId || ''}`);
+                }}>
                   <CalendarOutlined /> Planifier l'appel plus tard
                 </Button>
               </div>

@@ -20,7 +20,7 @@ import { trackPixelEvent } from '../../utils/pixel';
  * 
  * Prefer passing userProductId as it's more reliable than productSlug matching
  */
-const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insurance', selectedQuote, recommendedInsurer = null, recalculatedQuote = null }) => {
+const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insurance', selectedQuote, recommendedInsurer = null, recalculatedQuote = null, position, buttonName }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [requestStatus, setRequestStatus] = useState(null); // 'success', 'error', null
     const [selectedOption, setSelectedOption] = useState(isOpenNow() ? 'now' : 'later'); // 'now' or 'later'
@@ -80,8 +80,8 @@ const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-i
             
             // Prefer userProductId over productSlug for more reliable matching
             const params = userProductId 
-                ? { userProductId, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, isCustomizeRequest: true, emailType: 'call' } 
-                : { productSlug, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, isCustomizeRequest: true, emailType: 'call' };
+                ? { userProductId, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, isCustomizeRequest: true, emailType: 'call', position, buttonName } 
+                : { productSlug, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, isCustomizeRequest: true, emailType: 'call', position, buttonName };
             
             console.log('[CourtikaModal] Request params:', params);
             
@@ -128,13 +128,16 @@ const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-i
             // Schedule for later - save order first, then navigate to schedule page
             setIsLoading(true);
             try {
+                if (position) localStorage.setItem('lead_source_page', position);
+                if (buttonName) localStorage.setItem('lead_source_button', buttonName);
+
                 // Extract carrier code from selected quote
                 const carrierCode = submissionQuote?.carrierCode;
                 
                 // Prefer userProductId over productSlug for more reliable matching
                 const params = userProductId 
-                    ? { userProductId, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, scheduleLater: true, isCustomizeRequest: true } 
-                    : { productSlug, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, scheduleLater: true, isCustomizeRequest: true };
+                    ? { userProductId, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, scheduleLater: true, isCustomizeRequest: true, position, buttonName } 
+                    : { productSlug, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, scheduleLater: true, isCustomizeRequest: true, position, buttonName };
                 
                 console.log('[CourtikaModal] Saving order for schedule later:', params);
                 

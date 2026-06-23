@@ -170,17 +170,26 @@ const ScheduleConfirmation = () => {
           }
         }
         
+        const position = localStorage.getItem('lead_source_page');
+        const buttonName = localStorage.getItem('lead_source_button');
+
         const result = await fortusService.requestCall({
           userProductId,
           productSlug: 'car-insurance',
           carrierCode, // Pass the lowest price carrier
           emailType: 'meeting',
-          meetingDate
+          meetingDate,
+          position,
+          buttonName
         });
         
         if (result.success) {
           console.log('[ScheduleConfirmation] ezLead sent successfully');
           message.success('Vos informations ont été transmises au courtier!');
+          
+          // Clear source tracking parameters
+          localStorage.removeItem('lead_source_page');
+          localStorage.removeItem('lead_source_button');
           
           // Track successful conversion using standard 'Schedule' event
           trackPixelEvent('Schedule', {
