@@ -118,6 +118,14 @@ const Overview = () => {
   };
   const recordName = (rec) =>
     rec?.recordSetHeading?.companyName || rec?.recordSetHeading?.companyNameCode || rec?.companyName || 'Assureur';
+  // Insurer logos are served from the consumer app's own /public/images/winquote folder.
+  // The LMS returns logos as "/uploads/winquote/<CODE>.png"; we reuse the <CODE>.png filename.
+  const logoSrc = (rec) => {
+    const file = rec?.logo
+      ? String(rec.logo).split('/').pop()
+      : (rec?.recordSetHeading?.companyNameCode ? `${rec.recordSetHeading.companyNameCode}.png` : null);
+    return file ? `/images/winquote/${file}` : null;
+  };
   const priceLow = fmtMoney(processed.lowest);
   const priceHigh = fmtMoney(processed.highest);
   const priceRange = priceLow && priceHigh ? `${priceLow}$ - ${priceHigh}$` : (priceLow ? `${priceLow}$` : 'Sur demande');
@@ -262,10 +270,11 @@ const Overview = () => {
                       key={i}
                       style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 8, textAlign: 'center' }}
                     >
-                      {rec.logo ? (
+                      {logoSrc(rec) ? (
                         <img
-                          src={rec.logo}
-                          alt=""
+                          src={logoSrc(rec)}
+                          alt={recordName(rec)}
+                          title={recordName(rec)}
                           style={{ maxWidth: '100%', maxHeight: 28, objectFit: 'contain' }}
                           onError={(e) => { e.currentTarget.style.display = 'none'; }}
                         />
