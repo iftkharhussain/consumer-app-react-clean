@@ -4,7 +4,7 @@ import { InfoCircle, LayersThree01, Users01, CheckDone01, CurrencyDollarCircle, 
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logoutUrl, serverUrl, getQuoteSessionsUrl, activateQuoteSessionUrl } from '../../../apis/sharedApi';
+import { logoutUrl, serverUrl, getQuoteSessionsUrl, activateQuoteSessionUrl, getUserProductsUrl } from '../../../apis/sharedApi';
 import styles from './Sidebar.module.css';
 import Button from '../../../components/button';
 import ProgressCard from '../../../components/progressCard';
@@ -26,6 +26,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 	const [showProgressSection, setShowProgressSection] = useState(true); // Control progress section visibility
 	const [quoteSessions, setQuoteSessions] = useState([]); // Quote sessions for multiple quotes
 	const [loadingSessions, setLoadingSessions] = useState(false);
+	const [userProductSlugs, setUserProductSlugs] = useState([]); // Product slugs the current user actually has
 	const { firstName, lastName, email, type: userType, superAdmin, profilePic } = useSelector((state) => state.app.user_profile);
 	const [isGetQuoteModalOpen, setIsGetQuoteModalOpen] = useState(false);
 	const { sidebar } = useSelector(
@@ -37,10 +38,23 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 	const [openKeys, setOpenKeys] = useState([]);
 	const hasAutoOpened = React.useRef(false);
 	
-	// Fetch quote sessions on mount
+	// Fetch quote sessions + the user's products on mount
 	useEffect(() => {
 		fetchQuoteSessions();
+		fetchUserProducts();
 	}, []);
+
+	// Fetch the products the current user actually has (drives which menu items show)
+	const fetchUserProducts = async () => {
+		try {
+			const response = await setRequest(Types.USER, {}, getUserProductsUrl, Types.GET, dispatch);
+			if (response?.success && Array.isArray(response.products)) {
+				setUserProductSlugs([...new Set(response.products.map(p => p.productSlug).filter(Boolean))]);
+			}
+		} catch (error) {
+			console.error('[SIDEBAR] Error fetching user products:', error);
+		}
+	};
 	
 	// Fetch quote sessions from API
 	const fetchQuoteSessions = async () => {
@@ -210,10 +224,14 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 		console.log('🔍 [SIDEBAR] Building menu with quoteSessions:', quoteSessions.length, quoteSessions);
 		
 		let assuranceAutoChildren = null;
-		
-		if (quoteSessions.length > 1) {
-			console.log('✅ [SIDEBAR] Creating submenu with', quoteSessions.length, 'sessions');
-			assuranceAutoChildren = quoteSessions.map((session, index) => {
+
+		// Only CAR sessions belong under the "Assurance auto" sub-menu — scope by product
+		// so a life (or other) session never shows under car.
+		const carSessions = quoteSessions.filter(s => s.productSlug === 'car-insurance');
+
+		if (carSessions.length > 1) {
+			console.log('✅ [SIDEBAR] Creating submenu with', carSessions.length, 'car sessions');
+			assuranceAutoChildren = carSessions.map((session, index) => {
 				// Extract date and time from session data
 				const createdDate = new Date(session.createdAt);
 				const dateStr = createdDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -556,16 +574,31 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 		// Active behavior: showing Assurance auto, Mes conseillers, and Explore at the top.
 		console.log('🔍 [SIDEBAR] Setting menu, first item has children:', !!menuItemsAdvisor[0].children);
 		console.log('🔍 [SIDEBAR] Menu items:', menuItemsAdvisor.slice(0, 1));
-		setSideMenu(menuItemsAdvisor.filter(item => [
-			'home' 
-		].includes(item.key)));
+		// Show ONLY the products the current user actually has (a synced user_product).
+		// Each product menu item maps to a product slug; items without a slug the user
+		// owns are hidden (e.g. a life-only user won't see "Assurance auto").
+		const MENU_PRODUCT_SLUGS = {
+			home: 'car-insurance',
+			habitation: 'home-insurance',
+			overview: 'life-insurance',
+			mortgage: 'mortgage-insurance',
+			disability: 'disability',
+			'critical-illness': 'critical-illness',
+		};
+		// Non-product items that should always be visible (e.g. My Advisors)
+		const ALWAYS_SHOW_KEYS = ['advisors'];
+		setSideMenu(menuItemsAdvisor.filter(item => {
+			if (ALWAYS_SHOW_KEYS.includes(item.key)) return true;
+			const slug = MENU_PRODUCT_SLUGS[item.key];
+			return slug && userProductSlugs.includes(slug);
+		}));
 		
 		// Auto-open 'home' only once when sessions first appear
 		if (assuranceAutoChildren && !hasAutoOpened.current) {
 			setOpenKeys(['home']);
 			hasAutoOpened.current = true;
 		}
-	}, [userType, leadDefaultPath, quoteSessions]);
+	}, [userType, leadDefaultPath, quoteSessions, userProductSlugs]);
 
 	useEffect(() => {
 		setCollapsed(!sidebar);

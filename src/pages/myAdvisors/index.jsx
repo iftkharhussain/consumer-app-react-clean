@@ -2,14 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { PageContent, AdvisorTypeBadge, PageHeader } from 'components';
-import { Button, Table, Spin, Tooltip } from 'antd';
+import { Button, Table, Spin } from 'antd';
 import { ArrowRightIcon, XIcon, MailIcon, PhoneIcon } from '../../components/icon';
 import { CalendarOutlined } from '@ant-design/icons';
 import { ImageUser } from 'utils/icons';
 import Text from '../../components/text';
 import { Types, requestHelper } from '../../utils/helper';
 import { getAllAdvisorsUrl } from '../../apis/sharedApi';
-import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import styles from './MyAdvisors.module.css';
 
@@ -189,13 +188,6 @@ const MyAdvisors = () => {
             </div>
             <div>
               <div className={styles.advisorName}>{text}</div>
-              {/* Business Hours Badge */}
-              <Tooltip title={getFormattedTodayHours()}>
-                <div className={`${styles.statusBadge} ${!isOpenNow() ? styles.statusBadgeClosed : ''}`}>
-                  <div className={`${styles.statusDot} ${!isOpenNow() ? styles.statusDotClosed : ''}`}></div>
-                  {isOpenNow() ? 'Ouvert' : 'Fermé'}
-                </div>
-              </Tooltip>
             </div>
           </div>
         );
@@ -244,32 +236,6 @@ const MyAdvisors = () => {
         if (record.isEmpty) return null;
         return (
           <span className={styles.contactInfo}>{text}</span>
-        );
-      },
-    },
-    {
-      title: 'Heures d\'ouverture',
-      key: 'officeHours',
-      render: (_, record) => {
-        if (record.isEmpty) return null;
-        return (
-          <div className={styles.officeHoursCell}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={styles.infoIcon}>
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="16" y1="2" x2="16" y2="6"></line>
-              <line x1="8" y1="2" x2="8" y2="6"></line>
-              <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-            <div>
-              <span className={styles.infoText}>{getFormattedTodayHours()}</span>
-              <span 
-                className={styles.infoLink} 
-                onClick={() => setIsScheduleOpen(true)}
-              >
-                Voir l'horaire complet
-              </span>
-            </div>
-          </div>
         );
       },
     },
@@ -346,12 +312,6 @@ const MyAdvisors = () => {
                     <div className={styles.advisorName}>
                       {advisor.isEmpty ? "Vous n'avez actuellement pas de courtier d'assurance" : advisor.name}
                     </div>
-                    {!advisor.isEmpty && (
-                      <div className={`${styles.statusBadge} ${!isOpenNow() ? styles.statusBadgeClosed : ''}`} style={{ marginTop: '4px' }}>
-                        <div className={`${styles.statusDot} ${!isOpenNow() ? styles.statusDotClosed : ''}`}></div>
-                        {isOpenNow() ? 'Ouvert' : 'Fermé'}
-                      </div>
-                    )}
                   </div>
                 </div>
 
