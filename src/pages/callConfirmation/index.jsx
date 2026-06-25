@@ -27,6 +27,7 @@ const CallConfirmation = () => {
   const [orderData, setOrderData] = useState(null);
   const pixelTracked = useRef(false);
   const callTracked = useRef(false);
+  const confirmationEmailSent = useRef(false);
 
   useEffect(() => {
     if (!initialized.current) {

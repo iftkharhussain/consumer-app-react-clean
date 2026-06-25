@@ -10,6 +10,7 @@ import {
 import { PageContent } from 'components';
 import { Types } from '../../utils/helper';
 import styles from './MortgageExpert.module.css';
+import OtherProducts from '../../components/otherProducts';
 
 const { Panel } = Collapse;
 
@@ -241,7 +242,9 @@ const MortgageExpert = () => {
             </Button>
           </div>
         </div>
-        
+
+        <OtherProducts className={styles.fullWidthProducts} currentKey="mortgageBroker" />
+
       </div>
     </PageContent>
   );

@@ -3,7 +3,21 @@ import { PageContent } from 'components';
 import { useNavigate } from 'react-router-dom';
 import { Button, Modal } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import styles from './ThankyouAdvisor.module.css';
+import styles from './thankyouAdvisor.module.css';
+import QuoteModal from '../../components/quoteModal';
+import OtherProducts from '../../components/otherProducts';
+import { isBannerKeyQuoted } from '../../constants/otherProducts';
+import useQuotedProducts from '../../hooks/useQuotedProducts';
+
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return isMobile;
+};
 
 const OTHER_PRODUCTS = [
   {
@@ -36,6 +50,12 @@ const OTHER_PRODUCTS = [
     title: 'Assurance maladies graves',
     desc: "Faites face à l'imprévu.",
     icon: '/images/NORGA-Assurance-Maladie-Grave.svg'
+  },
+  {
+    key: 'mortgageBroker',
+    title: 'Prêt hypothécaire',
+    desc: 'Obtenez le meilleur taux.',
+    icon: '/images/Prêt-Hypothécaire.svg'
   }
 ];
 
@@ -49,22 +69,104 @@ const CheckIcon = () => (
 
 const ThankyouAdvisor = () => {
   const navigate = useNavigate();
-  const scrollContainerRef = useRef(null);
+  const isMobile = useIsMobile();
   const exitScrollContainerRef = useRef(null);
+  const lottieRef = useRef(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isExitPopupVisible, setIsExitPopupVisible] = useState(false);
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
 
-  const scrollLeft = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+  const [exitScrollState, setExitScrollState] = useState({ canScrollLeft: false, canScrollRight: true });
+
+  // Hide exit-popup cards for products the user has already quoted (completed quote).
+  const { quotedProducts } = useQuotedProducts();
+  const visibleExitProducts = OTHER_PRODUCTS.filter((p) => !isBannerKeyQuoted(p.key, quotedProducts));
+
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeftPos = useRef(0);
+
+  const handleMouseDown = (e) => {
+    isDragging.current = true;
+    startX.current = e.pageX - e.currentTarget.offsetLeft;
+    scrollLeftPos.current = e.currentTarget.scrollLeft;
+    e.currentTarget.style.cursor = 'grabbing';
+    e.currentTarget.style.userSelect = 'none';
+  };
+
+  const handleMouseLeave = (e) => {
+    isDragging.current = false;
+    e.currentTarget.style.cursor = 'grab';
+    e.currentTarget.style.userSelect = 'auto';
+  };
+
+  const handleMouseUp = (e) => {
+    isDragging.current = false;
+    e.currentTarget.style.cursor = 'grab';
+    e.currentTarget.style.userSelect = 'auto';
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging.current) return;
+    e.preventDefault();
+    const x = e.pageX - e.currentTarget.offsetLeft;
+    const walk = (x - startX.current) * 1.5;
+    e.currentTarget.scrollLeft = scrollLeftPos.current - walk;
+  };
+
+  useEffect(() => {
+    if (!document.getElementById('lottie-player-script')) {
+      const script = document.createElement('script');
+      script.id = 'lottie-player-script';
+      script.src = "https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js";
+      document.body.appendChild(script);
+    }
+  }, []);
+
+  const checkExitScroll = () => {
+    if (exitScrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = exitScrollContainerRef.current;
+      setExitScrollState({
+        canScrollLeft: scrollLeft > 0,
+        canScrollRight: Math.ceil(scrollLeft + clientWidth) < scrollWidth
+      });
     }
   };
 
-  const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+  useEffect(() => {
+    if (isExitPopupVisible) {
+      setTimeout(checkExitScroll, 100);
     }
+  }, [isExitPopupVisible]);
+
+  // Coins animation: play the intro once (coins fly up from the bottom),
+  // then keep looping only the tail segment so the coins stay up and
+  // animate in place instead of re-launching from the bottom.
+  useEffect(() => {
+    if (!isMobile || !isExitPopupVisible) return;
+    const player = lottieRef.current;
+    if (!player) return;
+
+    const handleComplete = () => {
+      const anim = player.getLottie && player.getLottie();
+      if (!anim || !anim.totalFrames) return;
+      const loopStart = Math.floor(anim.totalFrames * 0.6); // last 40% = coins-up state
+      anim.loop = true;
+      anim.playSegments([loopStart, anim.totalFrames], true);
+    };
+
+    player.addEventListener('complete', handleComplete);
+    return () => player.removeEventListener('complete', handleComplete);
+  }, [isMobile, isExitPopupVisible]);
+
+  const handleExitScrollEvent = (e) => {
+    const container = e.target;
+    const scrollLeft = container.scrollLeft;
+    const cardWidth = 236; // 220px width + 16px gap
+    const index = Math.round(scrollLeft / cardWidth);
+    setActiveCardIndex(index);
+    checkExitScroll();
   };
 
   const exitScrollLeft = () => {
@@ -108,6 +210,10 @@ const ThankyouAdvisor = () => {
               <div className={styles.colText}>
                 <span className={styles.colTitle}>Jean-Luc Tremblay</span>
                 <span className={styles.colSubtitle}>Conseiller en sécurité financière</span>
+                <div className={styles.advisorContactBox}>
+                  <div>Courriel: jeanph@norgax.com</div>
+                  <div>Tél: +1-514-XXX-XXXX</div>
+                </div>
               </div>
             </div>
 
@@ -153,43 +259,8 @@ const ThankyouAdvisor = () => {
           </div>
         </div>
 
-        {/* Products Card */}
-        <div className={styles.otherProductsCard}>
-          <div className={styles.otherProductsHeader}>
-            <h2 className={styles.otherProductsTitle}>Selon votre profil, vous pourriez aussi économiser sur ces produits</h2>
-            <div className={styles.otherProductsNav}>
-              <button className={styles.navButton} aria-label="Previous" onClick={scrollLeft}>
-                <LeftOutlined />
-              </button>
-              <button className={styles.navButton} aria-label="Next" onClick={scrollRight}>
-                <RightOutlined />
-              </button>
-            </div>
-          </div>
-
-          <div className={styles.productsScrollContainer} ref={scrollContainerRef}>
-            {OTHER_PRODUCTS.map((product) => (
-              <div key={product.key} className={`${styles.productCard} ${product.recommended ? styles.recommendedCard : ''}`}>
-                <div className={styles.productCardTop}>
-                  <div className={styles.productIconWrapper}>
-                    <img src={product.icon} alt={product.title} className={styles.productIcon} />
-                  </div>
-                  {product.recommended && (
-                    <div className={styles.recommendedBadge}>RECOMMANDÉ</div>
-                  )}
-                </div>
-                <h3 className={styles.productTitle}>{product.title}</h3>
-                <p className={styles.productDesc}>{product.desc}</p>
-                <Button className={styles.productButton} onClick={() => {
-                  setSelectedProduct(product);
-                  setIsModalVisible(true);
-                }}>
-                  <span>Obtenir une soumission</span>
-                </Button>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Products Card — shared OtherProducts component */}
+        <OtherProducts className={styles.fullWidthProducts} />
 
         <div style={{ textAlign: 'center', marginTop: '24px' }}>
           <Button onClick={() => setIsExitPopupVisible(true)}>
@@ -198,144 +269,166 @@ const ThankyouAdvisor = () => {
         </div>
       </div>
 
-      <Modal
-        open={isModalVisible}
-        visible={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
-        footer={null}
-        width={800}
-        centered
-        className={styles.productModal}
-        closeIcon={
-          <span className={styles.modalCloseIcon}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none" style={{ flexShrink: 0 }}>
-              <path d="M11.25 3.75L3.75 11.25" stroke="#697586" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M3.75 3.75L11.25 11.25" stroke="#697586" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </span>
-        }
-      >
-        {selectedProduct && (
-          <div className={styles.modalContent}>
-            {/* Left Column */}
-            <div className={styles.modalLeft}>
-              <div className={styles.modalHeader}>
-                <div className={styles.modalIconBox}>
-                  <img src={selectedProduct.icon} alt={selectedProduct.title} className={styles.modalProductIcon} />
-                </div>
-                <div className={styles.modalBadge}>{selectedProduct.title}</div>
-              </div>
-              <h2 className={styles.modalTitle}>Délègue le magasinage de ton {selectedProduct.title.toLowerCase()}</h2>
-              <p className={styles.modalDesc}>On compare les différents assureurs pour toi.</p>
-              
-              <Button className={styles.modalActionBtn}>
-                Commencer maintenant
-              </Button>
+      <QuoteModal
+        selectedProduct={selectedProduct}
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+      />
 
-              <div className={styles.modalFeatures}>
-                <div className={styles.featureItem}>
-                  <CheckIcon />
-                  <span>Gratuit et sans engagement</span>
+      {/* Exit Popup — Desktop: centered Modal, Mobile: bottom sheet */}
+      {isMobile ? (
+        /* Mobile Bottom Sheet */
+        isExitPopupVisible && (
+          <div className={styles.bottomSheetOverlay} onClick={() => setIsExitPopupVisible(false)}>
+            <div className={styles.lottieContainer}>
+              <lottie-player
+                ref={lottieRef}
+                src="/animations/coins_explosion_square.json"
+                background="transparent"
+                speed="1"
+                autoplay
+                mode="normal"
+                style={{ width: '100%', height: '100%', maxHeight: '400px' }}
+              ></lottie-player>
+            </div>
+            <div className={styles.bottomSheet} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.bottomSheetHandle} />
+              <button
+                className={styles.bottomSheetClose}
+                onClick={() => setIsExitPopupVisible(false)}
+                aria-label="Fermer"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                  <path d="M11.25 3.75L3.75 11.25" stroke="#697586" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M3.75 3.75L11.25 11.25" stroke="#697586" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+
+              <div className={styles.bottomSheetBody}>
+                <h2 className={styles.exitModalTitle}>
+                  Selon votre profil, vous pourriez{' '}
+                  <span style={{ color: '#1A1ABA' }}>économiser</span>{' '}
+                  sur ces produits.
+                </h2>
+                <p className={styles.exitModalSubtitle}>Obtenez une soumission gratuite en quelques minutes.</p>
+
+                <div className={styles.bottomSheetCardsWrapper}>
+                  <div
+                    className={styles.bottomSheetScrollContainer}
+                    ref={exitScrollContainerRef}
+                    onScroll={handleExitScrollEvent}
+                    onMouseDown={handleMouseDown}
+                    onMouseLeave={handleMouseLeave}
+                    onMouseUp={handleMouseUp}
+                    onMouseMove={handleMouseMove}
+                    style={{ cursor: 'grab' }}
+                  >
+                    {visibleExitProducts.map((product) => (
+                      <div
+                        key={product.key}
+                        className={`${styles.exitProductCard} ${product.recommended ? styles.recommendedCard : ''}`}
+                      >
+                        <div className={styles.productCardTop}>
+                          <div className={styles.productIconWrapper}>
+                            <img src={product.icon} alt={product.title} className={styles.productIcon} />
+                          </div>
+                          {product.recommended && (
+                            <div className={styles.recommendedBadge}>RECOMMANDÉ</div>
+                          )}
+                        </div>
+                        <h3 className={styles.productTitle}>{product.title}</h3>
+                        <p className={styles.productDesc}>{product.desc}</p>
+                        <Button
+                          className={styles.productButton}
+                          onClick={() => {
+                            setSelectedProduct(product);
+                            setIsExitPopupVisible(false);
+                            setIsModalVisible(true);
+                          }}
+                        >
+                          <span>Obtenir une soumission</span>
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className={styles.featureItem}>
-                  <CheckIcon />
-                  <span>Comparaison de plusieurs options</span>
+
+                <div className={styles.carouselDots}>
+                  {visibleExitProducts.map((_, index) => (
+                    <span
+                      key={index}
+                      className={`${styles.dot} ${index === activeCardIndex ? styles.activeDot : ''}`}
+                    />
+                  ))}
                 </div>
               </div>
             </div>
+          </div>
+        )
+      ) : (
+        /* Desktop centered Modal */
+        <Modal
+          open={isExitPopupVisible}
+          onCancel={() => setIsExitPopupVisible(false)}
+          footer={null}
+          width={1020}
+          centered
+          className={styles.exitModal}
+          closeIcon={
+            <span className={styles.modalCloseIcon}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none" style={{ flexShrink: 0 }}>
+                <path d="M11.25 3.75L3.75 11.25" stroke="#697586" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M3.75 3.75L11.25 11.25" stroke="#697586" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </span>
+          }
+        >
+          <div className={styles.exitModalContent}>
+            <div className={styles.exitModalLeft}>
+              <h2 className={styles.exitModalTitle}>Selon votre profil, vous pourriez <span style={{ color: '#1A1ABA' }}>économiser</span> sur ces produits.</h2>
+              <p className={styles.exitModalSubtitle}>Obtenez une soumission gratuite en quelques minutes.</p>
 
-            {/* Right Column */}
-            <div className={styles.modalRight}>
-              <h4 className={styles.partnersTitle}>ASSUREURS ET PARTENAIRES</h4>
-              
-              <div className={styles.partnersGrid}>
-                <div className={styles.marqueeTrack}>
-                  {[
-                    { name: 'Assureur B', icon: '/images/Assurance-Habitation.svg' },
-                    { name: 'Assureur C', icon: '/images/NORGA-Assurance-Vie.svg' },
-                    { name: 'Assureur D', icon: '/images/Assurance-Salaire.svg' },
-                    { name: 'Assureur E', icon: '/images/NORGA-Assurance-Maladie-Grave.svg' },
-                    { name: 'Assureur F', icon: '/images/Assurance-Auto_new.svg' },
-                    { name: 'Assureur B', icon: '/images/Assurance-Habitation.svg' },
-                    { name: 'Assureur C', icon: '/images/NORGA-Assurance-Vie.svg' },
-                    { name: 'Assureur D', icon: '/images/Assurance-Salaire.svg' },
-                    { name: 'Assureur E', icon: '/images/NORGA-Assurance-Maladie-Grave.svg' },
-                    { name: 'Assureur F', icon: '/images/Assurance-Auto_new.svg' }
-                  ].map((partner, idx) => (
-                    <div key={idx} className={styles.partnerCard}>
-                       <img src={partner.icon} alt={partner.name} className={styles.partnerIcon} />
-                       <span>{partner.name}</span>
+              <div className={styles.exitProductsWrapper}>
+                <div className={styles.exitProductsScrollContainer} ref={exitScrollContainerRef} onScroll={handleExitScrollEvent} onMouseDown={handleMouseDown} onMouseLeave={handleMouseLeave} onMouseUp={handleMouseUp} onMouseMove={handleMouseMove} style={{ cursor: 'grab' }}>
+                  {visibleExitProducts.map((product) => (
+                    <div key={product.key} className={`${styles.exitProductCard} ${product.recommended ? styles.recommendedCard : ''}`}>
+                      <div className={styles.productCardTop}>
+                        <div className={styles.productIconWrapper}>
+                          <img src={product.icon} alt={product.title} className={styles.productIcon} />
+                        </div>
+                        {product.recommended && (
+                          <div className={styles.recommendedBadge}>RECOMMANDÉ</div>
+                        )}
+                      </div>
+                      <h3 className={styles.productTitle}>{product.title}</h3>
+                      <p className={styles.productDesc}>{product.desc}</p>
+                      <Button className={styles.productButton} onClick={() => {
+                        setSelectedProduct(product);
+                        setIsExitPopupVisible(false);
+                        setIsModalVisible(true);
+                      }}>
+                        <span>Obtenir une soumission</span>
+                      </Button>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <p className={styles.partnersDesc}>
-                Nous analysons les offres de nos partenaires pour vous présenter les meilleures options selon votre profil.
-              </p>
+              <div className={styles.exitModalNav}>
+                <button className={`${styles.navButton} ${!exitScrollState.canScrollLeft ? styles.navButtonDisabled : ''}`} aria-label="Previous" onClick={exitScrollLeft}>
+                  <LeftOutlined />
+                </button>
+                <button className={`${styles.navButton} ${!exitScrollState.canScrollRight ? styles.navButtonDisabled : ''}`} aria-label="Next" onClick={exitScrollRight}>
+                  <RightOutlined />
+                </button>
+              </div>
+            </div>
+            <div className={styles.exitModalRight}>
+              <img src="/images/illustration_uiuxcoins.svg" alt="Illustration" className={styles.exitModalIllustration} />
             </div>
           </div>
-        )}
-      </Modal>
-      <Modal
-        open={isExitPopupVisible}
-        onCancel={() => setIsExitPopupVisible(false)}
-        footer={null}
-        width={950}
-        centered
-        className={styles.exitModal}
-        closeIcon={
-          <span className={styles.modalCloseIcon}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none" style={{ flexShrink: 0 }}>
-              <path d="M11.25 3.75L3.75 11.25" stroke="#697586" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M3.75 3.75L11.25 11.25" stroke="#697586" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </span>
-        }
-      >
-        <div className={styles.exitModalContent}>
-          <div className={styles.exitModalLeft}>
-            <h2 className={styles.exitModalTitle}>Selon votre profil, vous pourriez économiser sur ces produits.</h2>
-            <p className={styles.exitModalSubtitle}>Obtenez une soumission gratuite en quelques minutes.</p>
-            
-            <div className={styles.exitProductsScrollContainer} ref={exitScrollContainerRef}>
-              {OTHER_PRODUCTS.map((product) => (
-                <div key={product.key} className={`${styles.exitProductCard} ${product.recommended ? styles.recommendedCard : ''}`}>
-                  <div className={styles.productCardTop}>
-                    <div className={styles.productIconWrapper}>
-                      <img src={product.icon} alt={product.title} className={styles.productIcon} />
-                    </div>
-                    {product.recommended && (
-                      <div className={styles.recommendedBadge}>RECOMMANDÉ</div>
-                    )}
-                  </div>
-                  <h3 className={styles.productTitle}>{product.title}</h3>
-                  <p className={styles.productDesc}>{product.desc}</p>
-                  <Button className={styles.productButton} onClick={() => {
-                    setSelectedProduct(product);
-                    setIsExitPopupVisible(false);
-                    setIsModalVisible(true);
-                  }}>
-                    <span>Obtenir une soumission</span>
-                  </Button>
-                </div>
-              ))}
-            </div>
-
-            <div className={styles.exitModalNav}>
-              <button className={styles.navButton} aria-label="Previous" onClick={exitScrollLeft}>
-                <LeftOutlined />
-              </button>
-              <button className={styles.navButton} aria-label="Next" onClick={exitScrollRight}>
-                <RightOutlined />
-              </button>
-            </div>
-          </div>
-          <div className={styles.exitModalRight}>
-            <img src="/images/illustration_uiuxcoins.svg" alt="Illustration" className={styles.exitModalIllustration} />
-          </div>
-        </div>
-      </Modal>
+        </Modal>
+      )}
 
     </PageContent>
   );

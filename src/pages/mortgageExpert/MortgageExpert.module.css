@@ -1,6 +1,11 @@
+.fullWidthProducts {
+  max-width: 100% !important;
+  margin-top: 16px !important;
+}
+
 .mortgageExpertPage {
   width: 100%;
-  max-width: 963px;
+  max-width: 1152px;
   margin: 0 auto;
  
   display: flex;

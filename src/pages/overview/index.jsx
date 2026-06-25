@@ -6,6 +6,7 @@ import { Button, Collapse } from 'antd';
 import { CheckCircleOutlined, CheckCircleFilled } from '@ant-design/icons';
 import { Types } from '../../utils/helper';
 import styles from './Overview.module.css';
+import OtherProducts from '../../components/otherProducts';
 
 const { Panel } = Collapse;
 
@@ -201,7 +202,9 @@ const Overview = () => {
             </Button>
           </div>
         </div>
-        
+
+        <OtherProducts className={styles.fullWidthProducts} currentKey="life" />
+
       </div>
     </PageContent>
   );
