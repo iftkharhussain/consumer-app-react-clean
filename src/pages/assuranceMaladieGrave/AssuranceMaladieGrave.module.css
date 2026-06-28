@@ -1,0 +1,40 @@
+/* ───────────────────────────────────────────────────────────────────────────
+   Assurance Maladie Grave — extra classes not present in the shared
+   AssuranceVie.module.css. Only the AMG-specific "Soumission non disponible"
+   red state lives here; everything else reuses the shared module.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.blockedWrap {
+  display: flex;
+  gap: 12px;
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.blockedIcon {
+  margin-top: 2px;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: #fee2e2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blockedTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #b91c1c;
+  margin: 0 0 2px;
+}
+
+.blockedText {
+  font-size: 12px;
+  color: #ef4444;
+  line-height: 1.6;
+  margin: 0;
+}
