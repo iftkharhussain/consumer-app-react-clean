@@ -1,0 +1,95 @@
+/* ───────────────────────────────────────────────────────────────────────────
+   Assurance Salaire — extra classes not present in the shared AssuranceVie
+   module. Styling for the salary funnel's Oui/Non toggle, the text/number
+   "OK" confirm row in step 1, and the monthly-amount recommendation block.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Yes / No toggle (half-width segmented control) */
+.yesNoGroup {
+  display: flex;
+  width: 50%;
+  background: #f4f5f9;
+  border: 1px solid #e9eaeb;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.yesNo {
+  flex: 1;
+  padding: 8px 0;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  color: #697586;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.yesNo:hover {
+  color: #364152;
+}
+
+.yesNoActive {
+  background: #fff;
+  color: #1a1aba;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.yesNoDivider {
+  width: 1px;
+  align-self: stretch;
+  flex-shrink: 0;
+  background: #e0e2e8;
+}
+
+/* Text / number confirm row (input + OK button) */
+.textRow {
+  display: flex;
+  gap: 8px;
+}
+
+.textRowField {
+  flex: 1;
+}
+
+.okBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: linear-gradient(135deg, #1a1aba, #2525c5);
+  white-space: nowrap;
+}
+
+.okBtn:active {
+  transform: scale(0.98);
+}
+
+.okBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Monthly-amount recommendation block */
+.recoLabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: #697586;
+  margin: 0;
+}
+
+.recoAmount {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1aba;
+  letter-spacing: -0.3px;
+  margin: 2px 0 0;
+}
