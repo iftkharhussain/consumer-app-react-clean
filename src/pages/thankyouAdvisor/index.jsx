@@ -3,7 +3,7 @@ import { PageContent } from 'components';
 import { useNavigate } from 'react-router-dom';
 import { Button, Modal } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import styles from './thankyouAdvisor.module.css';
+import styles from './ThankyouAdvisor.module.css';
 import QuoteModal from '../../components/quoteModal';
 import OtherProducts from '../../components/otherProducts';
 import { isBannerKeyQuoted } from '../../constants/otherProducts';
