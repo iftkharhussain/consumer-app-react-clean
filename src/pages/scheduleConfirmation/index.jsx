@@ -7,7 +7,8 @@ import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { getFormattedTodayHours } from '../../utils/businessHours';
 import { getOrderDetails, checkPendingOrder, sendConfirmationEmail } from '../../services/api/productOrderService';
 import fortusService from '../../services/api/fortusService';
-import { trackPixelEvent } from '../../utils/pixel';
+import { trackPixelEventOnce } from '../../utils/pixel';
+import { trackTikTokEventOnce } from '../../utils/tiktokPixel';
 import { getQuoteDetails } from '../../services/api/quoteService';
 import { buildProtections } from '../../utils/quoteProtections';
 
@@ -183,7 +184,13 @@ const ScheduleConfirmation = () => {
           message.success('Vos informations ont été transmises au courtier!');
           
           // Track successful conversion using standard 'Schedule' event
-          trackPixelEvent('Schedule', {
+          trackPixelEventOnce('Schedule', {
+            insurer: orderData?.selectedQuote?.insurerName,
+            carrierCode: orderData?.selectedQuote?.carrierCode,
+            eventType: eventType,
+            userProductId: userProductId
+          });
+          trackTikTokEventOnce('Schedule', {
             insurer: orderData?.selectedQuote?.insurerName,
             carrierCode: orderData?.selectedQuote?.carrierCode,
             eventType: eventType,

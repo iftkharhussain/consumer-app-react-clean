@@ -16,6 +16,7 @@ import { getCarrierLogo, getCarrierName, isIntactCarrier } from '../../utils/car
 import recalculationService from '../../services/recalculationService';
 import { checkPendingOrder } from '../../services/api/productOrderService';
 import { recalculateQuote } from '../../services/api/quoteService';
+import { trackTikTokEventOnce } from '../../utils/tiktokPixel';
 import styles from './Results.module.css';
 
 const { Panel } = Collapse;
@@ -45,6 +46,12 @@ const Results = () => {
   const [recalculateCount, setRecalculateCount] = useState(0);
   const [showRecalculateLimitModal, setShowRecalculateLimitModal] = useState(false);
   const shouldOpenModalRef = React.useRef(false);
+
+  // Fire TikTok 'Lead' event once per session when the results page loads.
+  // sessionStorage-based guard so a page refresh does NOT re-fire the event.
+  useEffect(() => {
+    trackTikTokEventOnce('Lead');
+  }, []);
 
   // Open CourtikaModal after selectedInsurer state updates
   React.useEffect(() => {
