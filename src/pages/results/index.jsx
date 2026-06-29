@@ -50,7 +50,7 @@ const Results = () => {
   // Fire TikTok 'Lead' event once per session when the results page loads.
   // sessionStorage-based guard so a page refresh does NOT re-fire the event.
   useEffect(() => {
-    trackTikTokEventOnce('Lead');
+    trackTikTokEventOnce('Contact');
   }, []);
 
   // Open CourtikaModal after selectedInsurer state updates
