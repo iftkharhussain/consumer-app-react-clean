@@ -13,7 +13,8 @@ import styles from './CallConfirmation.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
 import { getOrderDetails, checkPendingOrder, sendConfirmationEmail } from '../../services/api/productOrderService';
-import { trackPixelEvent } from '../../utils/pixel';
+import { trackPixelEventOnce } from '../../utils/pixel';
+import { trackTikTokEventOnce } from '../../utils/tiktokPixel';
 import fortusService from '../../services/api/fortusService';
 import { buildProtections } from '../../utils/quoteProtections';
 
@@ -82,7 +83,11 @@ const CallConfirmation = () => {
   // Track conversion on land
   useEffect(() => {
     if (!loading && orderData && !pixelTracked.current) {
-        trackPixelEvent('Schedule', {
+        trackPixelEventOnce('Schedule', {
+            insurer: orderData?.selectedQuote?.insurerName,
+            userProductId: urlUserProductId || orderData?.userProductId
+        });
+        trackTikTokEventOnce('Schedule', {
             insurer: orderData?.selectedQuote?.insurerName,
             userProductId: urlUserProductId || orderData?.userProductId
         });
