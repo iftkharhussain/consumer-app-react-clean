@@ -12,6 +12,7 @@ import {
 } from '@ant-design/icons';
 import { Types } from '../../utils/helper';
 import styles from './Mortgage.module.css';
+import OtherProducts from '../../components/otherProducts';
 
 const { Panel } = Collapse;
 
@@ -329,7 +330,9 @@ const Mortgage = () => {
             </Button>
           </div>
         </div>
-        
+
+        <OtherProducts className={styles.fullWidthProducts} currentKey="mortgage" />
+
       </div>
     </PageContent>
   );

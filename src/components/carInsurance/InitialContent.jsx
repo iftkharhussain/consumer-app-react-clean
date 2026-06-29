@@ -593,8 +593,6 @@ const InitialContent = ({
                 userProductId={userProductId}
                 selectedQuote={selectedInsurer}
                 recalculatedQuote={recalculatedQuote}
-                position="Car Insurance Page"
-                buttonName="Poursuivre"
             />
         </>
     );

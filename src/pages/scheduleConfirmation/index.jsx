@@ -7,7 +7,8 @@ import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { getFormattedTodayHours } from '../../utils/businessHours';
 import { getOrderDetails, checkPendingOrder, sendConfirmationEmail } from '../../services/api/productOrderService';
 import fortusService from '../../services/api/fortusService';
-import { trackPixelEvent } from '../../utils/pixel';
+import { trackPixelEventOnce } from '../../utils/pixel';
+import { trackTikTokEventOnce } from '../../utils/tiktokPixel';
 import { getQuoteDetails } from '../../services/api/quoteService';
 import { buildProtections } from '../../utils/quoteProtections';
 
@@ -170,29 +171,26 @@ const ScheduleConfirmation = () => {
           }
         }
         
-        const position = localStorage.getItem('lead_source_page');
-        const buttonName = localStorage.getItem('lead_source_button');
-
         const result = await fortusService.requestCall({
           userProductId,
           productSlug: 'car-insurance',
           carrierCode, // Pass the lowest price carrier
           emailType: 'meeting',
-          meetingDate,
-          position,
-          buttonName
+          meetingDate
         });
         
         if (result.success) {
           console.log('[ScheduleConfirmation] ezLead sent successfully');
           message.success('Vos informations ont été transmises au courtier!');
           
-          // Clear source tracking parameters
-          localStorage.removeItem('lead_source_page');
-          localStorage.removeItem('lead_source_button');
-          
           // Track successful conversion using standard 'Schedule' event
-          trackPixelEvent('Schedule', {
+          trackPixelEventOnce('Schedule', {
+            insurer: orderData?.selectedQuote?.insurerName,
+            carrierCode: orderData?.selectedQuote?.carrierCode,
+            eventType: eventType,
+            userProductId: userProductId
+          });
+          trackTikTokEventOnce('Schedule', {
             insurer: orderData?.selectedQuote?.insurerName,
             carrierCode: orderData?.selectedQuote?.carrierCode,
             eventType: eventType,

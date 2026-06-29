@@ -6,6 +6,7 @@ import { Button, Collapse } from 'antd';
 import { CheckCircleOutlined, CheckCircleFilled } from '@ant-design/icons';
 import { Types } from '../../utils/helper';
 import styles from './CriticalIllness.module.css';
+import OtherProducts from '../../components/otherProducts';
 
 const { Panel } = Collapse;
 
@@ -206,7 +207,9 @@ const CriticalIllness = () => {
             </Button>
           </div>
         </div>
-        
+
+        <OtherProducts className={styles.fullWidthProducts} currentKey="critical" />
+
       </div>
     </PageContent>
   );

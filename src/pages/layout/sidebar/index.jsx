@@ -557,7 +557,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 		console.log('🔍 [SIDEBAR] Setting menu, first item has children:', !!menuItemsAdvisor[0].children);
 		console.log('🔍 [SIDEBAR] Menu items:', menuItemsAdvisor.slice(0, 1));
 		setSideMenu(menuItemsAdvisor.filter(item => [
-			'home' 
+			'home'
 		].includes(item.key)));
 		
 		// Auto-open 'home' only once when sessions first appear

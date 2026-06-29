@@ -1,6 +1,11 @@
+.fullWidthProducts {
+  max-width: 100% !important;
+  margin-top: 16px !important;
+}
+
 .mortgagePage {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1152px;
   margin: 0 auto;
   
   display: flex;
@@ -168,7 +173,7 @@ letter-spacing: -0.076px;
 }
 
 .twoPersonGrid {
-  grid-template-columns: 420px 1fr !important;
+  grid-template-columns: 1fr 519px !important;
 }
 
 .twoPersonGrid .sideColumn {
@@ -213,7 +218,7 @@ letter-spacing: -0.076px;
 
 
 .onePersonGrid {
-  grid-template-columns: 578px 1fr !important;
+  grid-template-columns: 1fr 361px !important;
   min-height: 366px !important;
 }
 
@@ -241,15 +246,15 @@ letter-spacing: -0.076px;
 
 .onePersonPage,
 .twoPersonPage {
-  max-width: 963px !important;
+  max-width: 1152px !important;
 }
 
 .threePersonPage {
-  max-width: 963px !important;
+  max-width: 1152px !important;
 }
 
 .threePersonGrid {
-  grid-template-columns: 596px 340px !important;
+  grid-template-columns: 1fr 340px !important;
 }
 
 .threePersonPriceCard {

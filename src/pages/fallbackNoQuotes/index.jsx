@@ -126,9 +126,7 @@ const FallbackNoQuotes = () => {
       const result = await fortusService.requestCall({
         userProductId,
         productSlug: 'car-insurance',
-        carrierCode, // Pass the lowest price carrier
-        position: 'Fallback Page',
-        buttonName: 'Oui, continuer avec Courtika'
+        carrierCode // Pass the lowest price carrier
       });
 
       if (result.success) {
@@ -314,8 +312,6 @@ const FallbackNoQuotes = () => {
                     </Button>
                     
                     <Button className={styles.secondaryOutlineButton} size="large" onClick={() => {
-                        localStorage.setItem('lead_source_page', 'Fallback Page');
-                        localStorage.setItem('lead_source_button', "Planifier l'appel plus tard");
                         const params = new URLSearchParams();
                         if (userName) params.append('name', userName);
                         if (userEmail) params.append('email', userEmail);

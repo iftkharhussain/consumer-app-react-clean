@@ -1,6 +1,11 @@
+.fullWidthProducts {
+  max-width: 100% !important;
+  margin-top: 16px !important;
+}
+
 .overviewPage {
   width: 100%;
-  max-width: 963px;
+  max-width: 1152px;
   margin: 0 auto;
   
   display: flex;
@@ -156,7 +161,7 @@ letter-spacing: -0.076px;
 /* Two Columns */
 .twoColGrid {
   display: grid;
-  grid-template-columns: 596px 1fr;
+  grid-template-columns: 1fr 344px;
   gap: 24px;
   width: 100%;
   min-height: 310px;

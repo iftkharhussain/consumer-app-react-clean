@@ -1,0 +1,318 @@
+/* Other Products Section */
+.otherProductsCard {
+  border-radius: 12px;
+  border: 1px solid #e9eaeb;
+  padding: 32px;
+  background: #FFFFFF;
+  margin: 24px auto 0 !important;
+  max-width: 860px;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.otherProductsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.otherProductsTitle {
+  color: #121926;
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: -0.312px;
+  margin: 0;
+}
+
+.otherProductsNav {
+  display: flex;
+  gap: 8px;
+}
+
+.navButton {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #E9EAEB;
+  background: #FFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #535862;
+  transition: all 0.2s;
+}
+
+.navButton:hover {
+  background: #F8FAFC;
+  color: #101828;
+}
+
+.navButtonDisabled {
+  color: #535862 !important;
+  border-color: #E9EAEB !important;
+  cursor: default !important;
+  opacity: 0.5;
+}
+
+.navButtonDisabled:hover {
+  background: #FFF !important;
+  color: #535862 !important;
+}
+
+.productsScrollContainer {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 16px;
+  scrollbar-width: none; /* Firefox */
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+.productsScrollContainer::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.productCard {
+  min-width: 220px;
+  width: 220px;
+  min-height: 213px;
+  height: auto;
+  border-radius: 14px;
+  background: #F8FAFC;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1 1;
+}
+
+.recommendedCard {
+  border-radius: 12px;
+  border: 1.5px solid #1A1ABA;
+}
+
+.productIconWrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #FFF;
+  border: 1px solid #E9EAEB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.productCardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 11px;
+}
+
+.productIcon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.recommendedBadge {
+  background: #EEF;
+  color: #1A1ABA;
+  border: 0.8px solid #1A1ABA;
+  padding: 4px 8px;
+  border-radius: 16px;
+  font-family: Inter, sans-serif;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 15px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.productTitle {
+  color: #121926;
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  margin: 0 0 2px 0;
+  line-height: 17.875px;
+  letter-spacing: -0.076px;
+}
+
+@media (max-width: 986px) {
+  .productTitle {
+    color: #121926;
+    font-family: Inter;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 17.875px;
+    letter-spacing: -0.076px;
+  }
+}
+
+.productDesc {
+  color: #697586;
+  font-family: Inter, sans-serif;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 15.125px;
+  letter-spacing: 0.064px;
+  margin: 0 0 24px 0;
+  flex-grow: 1;
+}
+
+.productButton {
+  background: linear-gradient(to right, #1a1aba, #2525c5) !important;
+  color: #FFF !important;
+  border: none !important;
+  border-radius: 12px !important;
+  height: auto !important;
+  min-height: 40px !important;
+  padding: 9px 12px 7px 12px !important;
+  font-family: Inter !important;
+  font-size: 13px !important;
+  font-style: normal;
+  font-weight: 600 !important;
+  line-height: 18px !important;
+  text-align: center;
+  width: 100% !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  box-shadow: 0 4px 16px rgba(26, 26, 186, 0.3) !important;
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+}
+
+.productButton:hover {
+  background: linear-gradient(to right, #1a1aba, #2525c5) !important;
+  box-shadow: 0 6px 20px rgba(26, 26, 186, 0.4) !important;
+  transform: scale(1.02);
+}
+
+@media (max-width: 986px) {
+  .otherProductsCard {
+    padding: 24px 16px !important;
+  }
+
+  .productButton {
+    display: flex !important;
+    width: 100% !important;
+    min-height: 51.983px !important;
+    height: auto !important;
+    padding: 8.902px 11.014px 7.081px 12px !important;
+    justify-content: center !important;
+    align-items: center !important;
+    color: #FFF !important;
+    text-align: center;
+    font-family: Inter;
+    font-size: 16px !important;
+    font-style: normal;
+    font-weight: 600 !important;
+    line-height: 18px !important;
+    white-space: nowrap !important;
+  }
+  .productsScrollContainer {
+    padding-bottom: 8px;
+    scroll-snap-type: x mandatory;
+    padding-right: 40px;
+  }
+
+  .productCard {
+    min-width: calc(100% - 52px);
+    width: calc(100% - 52px);
+    min-height: unset;
+    height: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-shrink: 0;
+    border-radius: 14px;
+    scroll-snap-align: start;
+  }
+
+  .otherProductsNav {
+    align-self: flex-start;
+  }
+
+  .otherProductsHeader {
+    gap: 20px;
+  }
+
+  .navButton {
+    width: 30px;
+    height: 30px;
+  }
+
+  .otherProductsTitle {
+    color: #121926;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: -0.312px;
+  }
+
+  .productCardTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .productDesc {
+    color: #667085;
+    font-family: Inter, sans-serif;
+    font-size: 11px;
+    margin: 0 0 24px 0;
+    line-height: 1.5;
+    flex-grow: 1;
+  }
+
+  .productIconWrapper {
+    display: flex;
+    width: 35.993px;
+    height: 35.993px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    background: #FFF;
+  }
+
+  .productIcon {
+    width: 19.993px;
+    height: 19.993px;
+  }
+
+  .recommendedBadge {
+    display: flex;
+    padding: 2.268px 8.943px 1.722px 7.995px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 21328500px;
+    background: #EEF;
+    color: #1A1ABA;
+    font-family: Inter;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 15px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+}
+
+
