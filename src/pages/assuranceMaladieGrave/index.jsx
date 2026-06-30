@@ -1,6 +1,6 @@
 /**
  * Assurance Maladie Grave — public critical-illness funnel page
- * (route: /assurance-maladie-grave)
+ * (route: /questions/assurance-maladie-grave)
  *
  * Ported from the Figma "AMG - Complete External form" export, mirroring the
  * sibling assurance-vie port: Tailwind was intentionally NOT added to this CRA
