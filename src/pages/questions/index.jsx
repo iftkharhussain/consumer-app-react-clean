@@ -13,6 +13,7 @@
  *   /questions/mortgage-refinance -> Refinancement hypothécaire
  *   /questions/mortgage-buy       -> Achat d'une propriété
  *   /questions/mortgage-consolidate -> Consolidation de dette
+ *   /questions/external-general   -> Assurance hypothécaire (generic template)
  *
  * An unknown slug renders the empty shell (Header + Footer only).
  */
@@ -29,6 +30,7 @@ const MortgageRenew = React.lazy(() => import('../mortgageRenew/index'));
 const MortgageRefinance = React.lazy(() => import('../mortgageRefinance/index'));
 const MortgageBuy = React.lazy(() => import('../mortgageBuy/index'));
 const MortgageConsolidate = React.lazy(() => import('../mortgageConsolidate/index'));
+const ExternalGeneral = React.lazy(() => import('../externalGeneral/index'));
 
 // slug -> { label (header pill), Form (funnel form, or null for an empty shell) }
 const QUESTIONS = {
@@ -39,6 +41,7 @@ const QUESTIONS = {
   'mortgage-refinance': { label: 'Refinancement hypothécaire', Form: MortgageRefinance },
   'mortgage-buy': { label: "Achat d'une propriété", Form: MortgageBuy },
   'mortgage-consolidate': { label: 'Consolidation de dette', Form: MortgageConsolidate },
+  'external-general': { label: 'Assurance hypothécaire', Form: ExternalGeneral },
 };
 
 export default function QuestionsPage() {

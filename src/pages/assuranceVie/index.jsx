@@ -25,6 +25,7 @@ import {
   PhoneOutlined,
   DownOutlined,
   LockOutlined,
+  PlusOutlined,
 } from '@ant-design/icons';
 import { addPhoneOTPUrl, verifyPhoneOTPUrl } from '../../apis/sharedApi';
 import logo from '../../logo.svg';
@@ -276,12 +277,7 @@ function FormGroup({ children }) {
 
 // ── Tab bar ───────────────────────────────────────────────────────────────────
 
-function TabBar({ active, onChange, enabled }) {
-  const tabs = [
-    { step: 'Étape 1', label: 'De quelle couverture avez-vous besoin ?' },
-    { step: 'Étape 2', label: 'Pour qui est la soumission ?' },
-    { step: 'Étape 3', label: 'Crée ton compte Norga' },
-  ];
+function TabBar({ tabs, active, onChange, enabled }) {
   return (
     <div style={{ marginBottom: 24 }}>
       <div className={styles.tabBar}>
@@ -861,18 +857,18 @@ function ContactTab({ persons, step1, onBack }) {
 
 // ── Mobile progress + slide ───────────────────────────────────────────────────
 
-function MobProgress({ step }) {
-  const labels = ['Couverture', 'Pour qui ?', 'Ton compte'];
+function MobProgress({ step, labels }) {
+  const total = labels.length;
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontSize: 11, fontWeight: 600, color: '#9baab8' }}>Étape {step} sur 3</span>
+        <span style={{ fontSize: 11, fontWeight: 600, color: '#9baab8' }}>Étape {step} sur {total}</span>
         <span style={{ fontSize: 11, fontWeight: 700, color: '#1a1aba' }}>{labels[step - 1]}</span>
       </div>
       <div style={{ display: 'flex', gap: 6 }}>
-        {[1, 2, 3].map((s) => (
-          <div key={s} className={styles.progressTrack}>
-            <div className={styles.progressFill} style={{ width: step >= s ? '100%' : '0%' }} />
+        {labels.map((_, idx) => (
+          <div key={idx} className={styles.progressTrack}>
+            <div className={styles.progressFill} style={{ width: step >= idx + 1 ? '100%' : '0%' }} />
           </div>
         ))}
       </div>
@@ -911,24 +907,59 @@ function isPersonsComplete(persons) {
 // ROOT
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export default function AssuranceVie() {
+// Tab definitions per mode. The internal funnel (reached from /explore) skips the
+// coverage quiz, so it has 2 steps instead of the public funnel's 3.
+const TABS_PUBLIC = [
+  { step: 'Étape 1', label: 'De quelle couverture avez-vous besoin ?' },
+  { step: 'Étape 2', label: 'Pour qui est la soumission ?' },
+  { step: 'Étape 3', label: 'Crée ton compte Norga' },
+];
+const TABS_INTERNAL = [
+  { step: 'Étape 1', label: 'Pour qui est la soumission ?' },
+  { step: 'Étape 2', label: 'Crée ton compte Norga' },
+];
+const MOB_LABELS_PUBLIC = ['Couverture', 'Pour qui ?', 'Ton compte'];
+const MOB_LABELS_INTERNAL = ['Pour qui ?', 'Ton compte'];
+
+/**
+ * @param {object} props
+ * @param {'public'|'internal'} [props.mode='public']
+ *   'public'   — full 3-step marketing funnel (route: /questions/life-insurance)
+ *   'internal' — 2-step quick quote, no coverage quiz (route: /explore/getquote/life-insurance)
+ */
+export default function AssuranceVie({ mode = 'public' }) {
+  const internal = mode === 'internal';
+  const TABS = internal ? TABS_INTERNAL : TABS_PUBLIC;
+  const mobLabels = internal ? MOB_LABELS_INTERNAL : MOB_LABELS_PUBLIC;
+
+  // Step positions shift by one when the coverage quiz is omitted (internal mode).
+  const coverageIdx = internal ? -1 : 0;
+  const personsIdx = internal ? 0 : 1;
+  const contactIdx = internal ? 1 : 2;
+
   const [tab, setTab] = useState(0);
   const [persons, setPersons] = useState([createPerson()]);
   const [step1, setStep1] = useState(createStep1());
 
   const updatePerson = (id, u) => setPersons((p) => p.map((x) => (x.id === id ? u : x)));
   const removePerson = (id) => setPersons((p) => p.filter((x) => x.id !== id));
+  const addPerson = () => setPersons((p) => [...p, createPerson()]);
 
   const suggested = suggestAmount(step1);
 
-  const coverageDone = isCoverageComplete(step1);
+  // Internal mode has no coverage step, so coverage is implicitly "done".
+  const coverageDone = internal ? true : isCoverageComplete(step1);
   const personsDone = isPersonsComplete(persons);
-  const stepEnabled = (i) => (i === 0 ? true : i === 1 ? coverageDone : coverageDone && personsDone);
+  const stepEnabled = (i) => {
+    if (i === personsIdx) return coverageDone;
+    if (i === contactIdx) return coverageDone && personsDone;
+    return true; // first step is always reachable
+  };
   const changeTab = (i) => { if (stepEnabled(i)) setTab(i); };
 
-  function goToTab1() {
+  function goToPersons() {
     setPersons((prev) => prev.map((p) => (p.montant ? p : { ...p, montant: String(suggested) })));
-    setTab(1);
+    setTab(personsIdx);
   }
 
   const personsTab = (
@@ -939,14 +970,27 @@ export default function AssuranceVie() {
           onChange={(u) => updatePerson(p.id, u)}
           onRemove={() => removePerson(p.id)}
           canRemove={persons.length > 1}
-          suggestion={step1.reason ? suggested : undefined}
+          suggestion={!internal && step1.reason ? suggested : undefined}
         />
       ))}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 4 }}>
-        <button type="button" onClick={() => setTab(0)} className={styles.btnGhost}>
-          <LeftOutlined style={{ fontSize: 12 }} /> Retour
-        </button>
-        <button type="button" onClick={() => changeTab(2)} disabled={!personsDone} className={styles.btnPrimary}>
+      <button
+        type="button"
+        onClick={addPerson}
+        style={{
+          width: '100%', padding: 14, borderRadius: 12, border: '1px dashed #d1d5db',
+          background: '#fff', color: '#1a1aba', fontSize: 13, fontWeight: 600, cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+        }}
+      >
+        <PlusOutlined style={{ fontSize: 12 }} /> Ajouter un assuré
+      </button>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: internal ? 'flex-end' : 'space-between', paddingTop: 4 }}>
+        {!internal && (
+          <button type="button" onClick={() => setTab(coverageIdx)} className={styles.btnGhost}>
+            <LeftOutlined style={{ fontSize: 12 }} /> Retour
+          </button>
+        )}
+        <button type="button" onClick={() => changeTab(contactIdx)} disabled={!personsDone} className={styles.btnPrimary}>
           Suivant <RightOutlined style={{ fontSize: 12 }} />
         </button>
       </div>
@@ -955,9 +999,9 @@ export default function AssuranceVie() {
 
   const stepContent = (
     <>
-      {tab === 0 && <CoverageStep answers={step1} onChange={setStep1} onNext={goToTab1} />}
-      {tab === 1 && personsTab}
-      {tab === 2 && <ContactTab persons={persons} step1={step1} onBack={() => setTab(1)} />}
+      {tab === coverageIdx && <CoverageStep answers={step1} onChange={setStep1} onNext={goToPersons} />}
+      {tab === personsIdx && personsTab}
+      {tab === contactIdx && <ContactTab persons={persons} step1={step1} onBack={() => setTab(personsIdx)} />}
     </>
   );
 
@@ -971,7 +1015,7 @@ export default function AssuranceVie() {
               <span className={styles.badge}>Assurance vie</span>
               <h1 className={styles.h1}>Soumission instantanée</h1>
             </div>
-            <TabBar active={tab} onChange={changeTab} enabled={stepEnabled} />
+            <TabBar tabs={TABS} active={tab} onChange={changeTab} enabled={stepEnabled} />
             {stepContent}
           </div>
         </div>
@@ -984,7 +1028,7 @@ export default function AssuranceVie() {
             <img src={logo} alt="Norga" style={{ height: 20, objectFit: 'contain' }} />
             <span style={{ fontSize: 10, color: '#b0bac4', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.12em' }}>Assurance vie</span>
           </div>
-          <MobProgress step={tab + 1} />
+          <MobProgress step={tab + 1} labels={mobLabels} />
         </div>
 
         <div className={styles.mobContent}>
@@ -994,7 +1038,7 @@ export default function AssuranceVie() {
         </div>
 
         <div className={styles.mobDots}>
-          {[0, 1, 2].map((s) => (
+          {TABS.map((_, s) => (
             <div key={s} style={{ width: tab === s ? 20 : 6, height: 6, borderRadius: 999, background: tab === s ? '#1a1aba' : '#d1d5db', transition: 'all 0.3s ease' }} />
           ))}
         </div>

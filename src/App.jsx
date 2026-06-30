@@ -50,6 +50,7 @@ const Advisors = React.lazy(() => import('./pages/myAdvisors/index'));
 const CriticalIllness = React.lazy(() => import('./pages/criticalIllness/index'));
 const MortgageExpert = React.lazy(() => import('./pages/mortgageExpert/index'));
 const QuestionsPage = React.lazy(() => import('./pages/questions/index'));
+const ExploreGetQuote = React.lazy(() => import('./pages/exploreGetQuote/index'));
 
 const PrivateWrapper = ({ auth: { isAuthenticated }, heading, _style }) => {
 	return isAuthenticated === true ? (
@@ -268,6 +269,8 @@ function App(props) {
 						    All /questions/* funnels share the same Header + Footer chrome
 						    (PublicLayout); QuestionsPage maps the slug to its funnel form. */}
 						<Route path="/questions/:slug" element={<Suspense fallback={<div></div>}><QuestionsPage /></Suspense>} />
+						{/* Internal "quick quote" funnel reached from the Explore page's Get Quote buttons. */}
+						<Route path="/explore/getquote/:slug" element={<Suspense fallback={<div></div>}><ExploreGetQuote /></Suspense>} />
 				<Route exact path="/auth/lead-login" element={<Suspense fallback={<div></div>}><LeadLogin /></Suspense>} />
 						<Route exact path="/reset-password/:token" element={isAuth ? <Navigate to={defaultAppPage} /> : <ResetPassword />} />
 						<Route exact path="/forgot-password" element={isAuth ? <Navigate to={defaultAppPage} /> : <ForgotPassword />} />

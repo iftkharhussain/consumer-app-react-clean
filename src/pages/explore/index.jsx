@@ -36,9 +36,11 @@ const Explore = () => {
       setSelectedProduct(isRefinanceAction ? 'REFINANCEMENT HYPOTHÉCAIRE' : product.title);
       setIsCourtikaModal(isCourtikaAction);
       setIsModalOpen(true);
+    } else if (product.slug) {
+      // Standard funnel: open the internal quick-quote form for this product.
+      navigate(`/explore/getquote/${product.slug}`);
     } else {
       console.log(`Navigating to funnel for: ${product.title}`);
-      // Standard funnel navigation would go here
     }
   };
 
@@ -49,6 +51,7 @@ const Explore = () => {
         id: 1,
         icon: <Heart />,
         title: 'Life Insurance',
+        slug: 'life-insurance',
         badgeText: 'Information Required',
         badgeType: 'yellow',
         description: 'Brief Description on Life Insurance',
@@ -60,6 +63,7 @@ const Explore = () => {
         id: 2,
         icon: <Shield01 />,
         title: 'Critical Illness Insurance',
+        slug: 'critical-illness',
         badgeText: 'Ready for quote',
         badgeType: 'green',
         description: 'Brief Description on Life Insurance',
@@ -71,6 +75,7 @@ const Explore = () => {
         id: 3,
         icon: <UserCheck01 />,
         title: 'Disability Insurance',
+        slug: 'disability',
         badgeText: 'Quote Received',
         badgeType: 'blue',
         description: 'Brief Description on Life Insurance',
@@ -82,6 +87,7 @@ const Explore = () => {
         id: 4,
         icon: <Building05 />,
         title: 'Mortgage Insurance',
+        slug: 'mortgage-insurance',
         badgeText: 'Quote Received',
         badgeType: 'blue',
         description: 'Brief Description on Life Insurance',

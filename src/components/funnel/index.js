@@ -7,6 +7,7 @@
 export { default as FunnelForm } from './FunnelForm';
 export { default as CoverageStep } from './CoverageStep';
 export { default as PreferencesStep } from './PreferencesStep';
+export { default as PersonsStep } from './PersonsStep';
 export { default as ContactTab } from './ContactTab';
 export { default as TabBar } from './TabBar';
 export * from './primitives';

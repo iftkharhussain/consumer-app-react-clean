@@ -21,6 +21,7 @@ import React, { useState } from 'react';
 import TabBar from './TabBar';
 import CoverageStep from './CoverageStep';
 import PreferencesStep from './PreferencesStep';
+import PersonsStep, { createPerson, isPersonsComplete } from './PersonsStep';
 import ContactTab from './ContactTab';
 import { MobProgress, MobSlide } from './Mobile';
 import { isValidAmount } from '../../pages/assuranceVie/formValidation';
@@ -45,7 +46,9 @@ function preferencesDefaults(fields) {
 }
 
 function initialAnswers(step) {
-  return step.type === 'preferences' ? preferencesDefaults(step.fields) : {};
+  if (step.type === 'preferences') return preferencesDefaults(step.fields);
+  if (step.type === 'persons') return [createPerson()];
+  return {};
 }
 
 // Normalize either config shape into an ordered steps array. The legacy
@@ -74,6 +77,7 @@ export default function FunnelForm({ config }) {
     const s = steps[i];
     if (s.type === 'quiz') return isQuizComplete(s.quiz, answers[i]);
     if (s.type === 'preferences') return s.fields.every((f) => answers[i][f.key]);
+    if (s.type === 'persons') return isPersonsComplete(answers[i]);
     return true; // contact step — reachable once prior steps are complete
   }
 
@@ -96,6 +100,21 @@ export default function FunnelForm({ config }) {
           onChange={(val) => setStepAnswers(i, val)}
           onNext={onNext}
           onBack={onBack}
+        />
+      );
+    }
+    if (s.type === 'persons') {
+      return (
+        <PersonsStep
+          persons={answers[i]}
+          onChange={(val) => setStepAnswers(i, val)}
+          onNext={onNext}
+          onBack={onBack}
+          personLabel={s.personLabel}
+          addLabel={s.addLabel}
+          maxPersons={s.maxPersons}
+          montantLabel={s.montantLabel}
+          montantTip={s.montantTip}
         />
       );
     }
