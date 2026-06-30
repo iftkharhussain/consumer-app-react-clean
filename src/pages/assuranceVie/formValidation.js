@@ -11,6 +11,21 @@ export const sanitizeName = (s) => (s || '').replace(/[^\p{L}\s'’-]/gu, '');
 // Keep only digits.
 export const sanitizeDigits = (s) => (s || '').replace(/\D/g, '');
 
+// Progressive Canadian phone mask: formats keystrokes into "(514) 123-4567".
+// Drops a leading country code "1" so "1XXXXXXXXXX" / "+1 …" paste cleanly, and
+// caps at 10 digits. Strips all non-digits first, so backspacing always removes
+// a real digit. normalizePhone() re-derives E.164 from this, so the masked value
+// is safe to keep in state and send.
+export const formatCAPhone = (s) => {
+  let d = (s || '').replace(/\D/g, '');
+  if (d.length > 10 && d.startsWith('1')) d = d.slice(1);
+  d = d.slice(0, 10);
+  if (d.length === 0) return '';
+  if (d.length < 4) return `(${d}`;
+  if (d.length < 7) return `(${d.slice(0, 3)}) ${d.slice(3)}`;
+  return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`;
+};
+
 // A real name: starts with a letter, only letters/space/hyphen/apostrophe, and
 // at least 3 characters — 1–2 characters are not a real name.
 export const isValidName = (s) => {

@@ -27,10 +27,10 @@ import {
   LockOutlined,
   PlusOutlined,
 } from '@ant-design/icons';
-import { addPhoneOTPUrl, verifyPhoneOTPUrl, baseUrl } from '../../apis/sharedApi';
+import { addPhoneOTPUrl, verifyPhoneOTPUrl } from '../../apis/sharedApi';
 import logo from '../../logo.svg';
 import ImprovedDatePicker from '../assuranceVie/ImprovedDatePicker';
-import { sanitizeName, sanitizeDigits, isValidName, isValidEmail, isValidAmount } from '../assuranceVie/formValidation';
+import { sanitizeName, sanitizeDigits, isValidName, isValidEmail, isValidAmount, formatCAPhone } from '../assuranceVie/formValidation';
 import styles from '../assuranceVie/AssuranceVie.module.css';
 import local from './AssuranceMaladieGrave.module.css';
 
@@ -40,10 +40,13 @@ const OTP_LENGTH = 6; // Twilio Verify codes are 6 digits
 
 // Funnel submit endpoint. Mirrors consumer-app-questions which posts to the LMS
 // funnels endpoint (overridable via the window global it also uses, or an env var).
+// Posts DIRECTLY to the LMS custom-form lead endpoint (:3024 locally, norga.app in
+// prod) — consumer-api does not proxy this route, so we can't use baseUrl here.
+// The ?auth token is this product's custom-form integration key (LMS → Settings →
+// App Config → Custom Form list). Override the whole URL via env for other envs.
 const FUNNEL_SUBMIT_URL =
-  (typeof window !== 'undefined' && window.FORM_SUBMISSION_API) ||
-  process.env.REACT_APP_FUNNEL_SUBMIT_URL ||
-  `${baseUrl}/api/v1/funnels/submit`;
+  process.env.REACT_APP_CRITICAL_ILLNESS_FORM_POST_URL ||
+  'http://localhost:3024/api/v1/lead/custom-form?auth=d788f4c45a33e708b08a41a28783d264373ac8de';
 
 // ── Phone helpers ─────────────────────────────────────────────────────────────
 
@@ -157,6 +160,7 @@ function Input({ value, onChange, placeholder, type = 'text', prefix, suffix, fi
   const handle = (raw) => {
     if (filter === 'name') return onChange(sanitizeName(raw));
     if (filter === 'digits') return onChange(sanitizeDigits(raw));
+    if (filter === 'phone') return onChange(formatCAPhone(raw));
     return onChange(raw);
   };
   return (
@@ -554,6 +558,8 @@ function ContactTab({ persons, step1, onBack }) {
   const [codeError, setCodeError] = useState('');
   const [loading, setLoading] = useState(false);
   const [formError, setFormError] = useState('');
+  // 2-step SMS verification toggle. OFF = skip OTP and submit directly (test mode).
+  const [otpEnabled, setOtpEnabled] = useState(false);
   const codeRefs = useRef([]);
 
   async function startVerification(rawPhone) {
@@ -568,6 +574,12 @@ function ContactTab({ persons, step1, onBack }) {
       return;
     }
     setLoading(true);
+    // 2-step SMS verification disabled (test): submit the lead directly, skipping OTP.
+    if (!otpEnabled) {
+      setVerifyPhone(normalized);
+      await submitLead(normalized);
+      return;
+    }
     const res = await apiSendOtp(normalized);
     setLoading(false);
     if (res?.success) {
@@ -604,7 +616,7 @@ function ContactTab({ persons, step1, onBack }) {
     apiSendOtp(verifyPhone);
   }
 
-  function buildPayload() {
+  function buildPayload(phoneOverride) {
     const insured = persons.map((p) => ({
       nom: p.nom,
       prenom: p.prenom,
@@ -621,7 +633,7 @@ function ContactTab({ persons, step1, onBack }) {
       product: 'assurance-maladie-grave',
       insuranceType: 'critical-illness',
       // Contact (root level — mirrors the proven funnels/submit contract)
-      phone: verifyPhone,
+      phone: phoneOverride || verifyPhone,
       email,
       fullName,
       // Critical-illness form data
@@ -640,6 +652,30 @@ function ContactTab({ persons, step1, onBack }) {
     };
   }
 
+  // Submit the lead (called after OTP verify, or directly when 2-step is disabled).
+  // The submit may land us logged-in via a cross-app redirect URL; if the funnel
+  // endpoint isn't reachable we still show the confirmation so the user isn't dead-ended.
+  async function submitLead(phoneOverride) {
+    if (mainView === 'login') {
+      setLoading(false);
+      setView('done');
+      return;
+    }
+    try {
+      const data = await apiSubmitLead(buildPayload(phoneOverride));
+      if (data?.redirectUrl) {
+        window.location.href = data.redirectUrl;
+        return;
+      }
+    } catch (err) {
+      // Non-blocking: log and fall through to the confirmation screen.
+      // eslint-disable-next-line no-console
+      console.error('[assurance-maladie-grave] lead submit failed:', err);
+    }
+    setLoading(false);
+    setView('done');
+  }
+
   async function handleConfirm() {
     const code = digits.join('');
     if (code.length < OTP_LENGTH) {
@@ -654,28 +690,7 @@ function ContactTab({ persons, step1, onBack }) {
       setCodeError(verifyRes?.message || 'Code invalide ou expiré.');
       return;
     }
-
-    // Phone verified — submit the lead. The submit may land us logged-in via a
-    // cross-app redirect URL; if the funnel endpoint isn't reachable we still
-    // show the confirmation so the verified user isn't dead-ended.
-    if (mainView === 'login') {
-      setLoading(false);
-      setView('done');
-      return;
-    }
-    try {
-      const data = await apiSubmitLead(buildPayload());
-      if (data?.redirectUrl) {
-        window.location.href = data.redirectUrl;
-        return;
-      }
-    } catch (err) {
-      // Non-blocking: log and fall through to the confirmation screen.
-      // eslint-disable-next-line no-console
-      console.error('[assurance-maladie-grave] lead submit failed:', err);
-    }
-    setLoading(false);
-    setView('done');
+    await submitLead();
   }
 
   // ── Done ──
@@ -760,7 +775,7 @@ function ContactTab({ persons, step1, onBack }) {
           <div style={{ padding: 20 }}>
             <FormGroup>
               <Field label="Numéro de téléphone">
-                <Input type="tel" value={tel} onChange={setTel} placeholder="(514) 000-0000" prefix={<PhoneOutlined style={{ fontSize: 14 }} />} />
+                <Input type="tel" inputMode="tel" filter="phone" value={tel} onChange={setTel} placeholder="(514) 000-0000" prefix={<PhoneOutlined style={{ fontSize: 14 }} />} />
               </Field>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <LockOutlined style={{ color: '#c0cad4', fontSize: 11, flexShrink: 0 }} />
@@ -819,7 +834,7 @@ function ContactTab({ persons, step1, onBack }) {
               <Input type="email" value={email} onChange={setEmail} placeholder="marie@exemple.com" prefix={<MailOutlined style={{ fontSize: 14 }} />} error={!!(email && !isValidEmail(email))} />
             </Field>
             <Field label="Numéro de téléphone">
-              <Input type="tel" value={tel} onChange={setTel} placeholder="(514) 000-0000" prefix={<PhoneOutlined style={{ fontSize: 14 }} />} />
+              <Input type="tel" inputMode="tel" filter="phone" value={tel} onChange={setTel} placeholder="(514) 000-0000" prefix={<PhoneOutlined style={{ fontSize: 14 }} />} />
             </Field>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <LockOutlined style={{ color: '#c0cad4', fontSize: 11, flexShrink: 0 }} />
@@ -827,6 +842,11 @@ function ContactTab({ persons, step1, onBack }) {
             </div>
             {formError && <p className={styles.errorText} style={{ textAlign: 'left' }}>{formError}</p>}
           </FormGroup>
+
+          <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, cursor: 'pointer', fontSize: 12, color: '#697586' }}>
+            <span>Vérification SMS en 2 étapes</span>
+            <input type="checkbox" checked={otpEnabled} onChange={(e) => setOtpEnabled(e.target.checked)} style={{ width: 16, height: 16, cursor: 'pointer' }} />
+          </label>
 
           <button type="button" onClick={() => startVerification(tel)} disabled={loading} className={styles.btnGreen}>
             {loading ? <span className={styles.spinner} /> : <>Obtenir mes soumissions <RightOutlined style={{ fontSize: 16 }} /></>}
