@@ -1,10 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { PageContent } from 'components';
 import { Button, Collapse } from 'antd';
 import { CheckCircleOutlined, CheckCircleFilled } from '@ant-design/icons';
 import { Types } from '../../utils/helper';
+import quoteService from '../../services/api/quoteService';
+import fortusService from '../../services/api/fortusService';
+import { serverUrl } from '../../apis/sharedApi';
+import toast from 'react-hot-toast';
 import styles from './CriticalIllness.module.css';
 
 const { Panel } = Collapse;
@@ -39,6 +43,12 @@ const CriticalIllness = () => {
   const initialized = useRef(false);
   const { firstName } = useSelector((state) => state.app.user_profile);
 
+  const [advisor, setAdvisor] = useState(null);
+  const [submission, setSubmission] = useState(null);
+  const [userProductId, setUserProductId] = useState(null);
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+
   useEffect(() => {
     if (!initialized.current) {
       dispatch({
@@ -53,9 +63,63 @@ const CriticalIllness = () => {
     }
   }, [dispatch]);
 
-  const handleBookCall = () => {
-    console.log('Book call clicked');
+  // Load this user's critical-illness product → real advisor + userProductId.
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const res = await quoteService.getUserProducts();
+        const products = res?.products || [];
+        const product = products.find((p) => p.productSlug === 'critical-illness') || null;
+        if (active && product) {
+          setUserProductId(product.id || null);
+          if (product.advisor) setAdvisor(product.advisor);
+          if (product.submission) setSubmission(product.submission);
+        }
+      } catch (e) {
+        // leave advisor null -> header falls back to generic text
+      }
+    })();
+    return () => { active = false; };
+  }, []);
+
+  const handleBookCall = async () => {
+    if (sent) return;
+    try {
+      setSending(true);
+      const r = await fortusService.requestCall({ productSlug: 'critical-illness', userProductId });
+      if (r?.success) {
+        setSent(true);
+        toast.success('Votre demande a été envoyée. Un conseiller vous contactera.');
+        if (userProductId) fortusService.trackEvent(userProductId, 'call').catch(() => {});
+      } else {
+        toast.error(r?.message || 'Une erreur est survenue.');
+      }
+    } catch (e) {
+      toast.error(e?.response?.data?.message || e.message || 'Une erreur est survenue.');
+    } finally {
+      setSending(false);
+    }
   };
+
+  const advisorName = advisor?.name || 'Votre conseiller';
+  const advisorTitle = 'Conseiller en sécurité financière';
+  const advisorEmail = advisor?.email || '';
+  const advisorPhone = advisor?.phone || '';
+  const advisorAvatar = advisor?.avatar && !String(advisor.avatar).includes('default')
+    ? (String(advisor.avatar).startsWith('http') ? advisor.avatar : `${serverUrl}${advisor.avatar}`)
+    : '/images/user-placeholder.png';
+
+  // Submission-driven values (advisor-only product — no online price for CI).
+  const coverageDisplay = submission?.desiredCoverageAmount
+    ? `${Number(submission.desiredCoverageAmount).toLocaleString('fr-CA')}$`
+    : '—';
+  const illnessDisplay = (() => {
+    const p = submission?.needs?.protection;
+    if (!p) return '—';
+    const n = String(p).match(/\d+/)?.[0];
+    return n ? `${n} maladies` : String(p);
+  })();
 
   const faqItems = [
     {
@@ -100,12 +164,12 @@ const CriticalIllness = () => {
             <CheckCircleFilled /> Gratuit
           </div>
           <div className={styles.advisorProfileBox}>
-            <img src="/images/user-placeholder.png" alt="Advisor" className={styles.advisorAvatarLarge} />
-            <h3 className={styles.advisorNameLarge}>Jean-Phil Dion</h3>
-            <p className={styles.advisorTitleLarge}>Conseiller en sécurité financière</p>
+            <img src={advisorAvatar} alt={advisorName} className={styles.advisorAvatarLarge} />
+            <h3 className={styles.advisorNameLarge}>{advisorName}</h3>
+            <p className={styles.advisorTitleLarge}>{advisorTitle}</p>
             <div className={styles.advisorContactBox}>
-              <div>Courriel: jeanph@norgax.com</div>
-              <div>Tél: +1-514-XXX-XXXX</div>
+              <div>Courriel: {advisorEmail || '—'}</div>
+              <div>Tél: {advisorPhone || '—'}</div>
             </div>
           </div>
           <div className={styles.bannerContent}>
@@ -115,8 +179,8 @@ const CriticalIllness = () => {
             <p className={styles.bannerDesc}>
               En assurance maladie grave, les tarifs ne peuvent pas être offerts en ligne. Vous pouvez soit attendre l'appel du conseiller qui vous contactera dès que possible, ou planifier un moment précis pour vous assurer qu'il vous appelle au bon moment.
             </p>
-            <Button className={styles.bannerButton} onClick={handleBookCall}>
-              Planifier mon appel maintenant
+            <Button className={styles.bannerButton} onClick={handleBookCall} loading={sending} disabled={sending || sent}>
+              {sent ? 'Demande envoyée' : 'Planifier mon appel maintenant'}
             </Button>
           </div>
         </div>
@@ -144,11 +208,11 @@ const CriticalIllness = () => {
             </div>
             <div className={styles.priceRow}>
               <span className={styles.rowLabel}>Montant de couverture</span>
-              <span className={styles.rowValue}>100 000$</span>
+              <span className={styles.rowValue}>{coverageDisplay}</span>
             </div>
             <div className={styles.priceRow}>
               <span className={styles.rowLabel}>Nombre de maladies couvertes</span>
-              <span className={styles.rowValue}>25 maladies</span>
+              <span className={styles.rowValue}>{illnessDisplay}</span>
             </div>
             <div className={styles.priceRow}>
               <span className={styles.rowLabel}>Période de survie</span>
@@ -198,11 +262,11 @@ const CriticalIllness = () => {
           </Collapse>
 
           <div className={styles.faqCta}>
-            <img src="/images/user-placeholder.png" alt="Advisor" className={styles.ctaAvatar} />
+            <img src={advisorAvatar} alt={advisorName} className={styles.ctaAvatar} />
             <h3 className={styles.ctaTitle}>Vous avez encore des questions?</h3>
-            <p className={styles.ctaDesc}>Parlez à votre conseiller Jean-Phil Dion pour qu'il vous aide.</p>
-            <Button className={styles.ctaButton} onClick={handleBookCall}>
-              Planifier mon appel
+            <p className={styles.ctaDesc}>Parlez à votre conseiller {advisorName} pour qu'il vous aide.</p>
+            <Button className={styles.ctaButton} onClick={handleBookCall} loading={sending} disabled={sending || sent}>
+              {sent ? 'Demande envoyée' : 'Planifier mon appel'}
             </Button>
           </div>
         </div>

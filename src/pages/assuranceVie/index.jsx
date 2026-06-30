@@ -628,6 +628,18 @@ function ContactTab({ persons, step1, onBack }) {
       phone: phoneOverride || verifyPhone,
       email,
       fullName,
+      // Flat WinQuote inputs for the primary insured. The LMS custom-form mapper
+      // drops nested arrays (insured[]), so the quote inputs are ALSO sent at root
+      // using the canonical keys the life mapper reads. Values stay in the form's
+      // native French (homme / non / Québec) — the WinQuote model normalizes them.
+      // term/plan is not collected by this form; the LMS defaults it (10-year).
+      gender: selectedPerson?.sexe || '',
+      dateOfBirth: selectedPerson?.dateNaissance || '',
+      smoker: selectedPerson?.fumeur || '',
+      // Fall back to the suggested coverage when the amount field is left empty,
+      // so the WinQuote estimate always has a face amount to work with.
+      desiredCoverageAmount: (selectedPerson?.montant ? Number(String(selectedPerson.montant).replace(/\D/g, '')) : 0) || suggestAmount(step1),
+      province: selectedPerson?.province || '',
       // Life-insurance form data
       insured,
       needs: step1,

@@ -636,6 +636,9 @@ function ContactTab({ persons, step1, onBack }) {
       phone: phoneOverride || verifyPhone,
       email,
       fullName,
+      // Flat coverage amount at root — the LMS custom-form mapper drops nested
+      // arrays (insured[]), so the result page reads the coverage from here.
+      desiredCoverageAmount: selectedPerson?.montant ? Number(String(selectedPerson.montant).replace(/\D/g, '')) : null,
       // Critical-illness form data
       insured,
       needs: step1,

@@ -114,7 +114,8 @@ export const requestHelper = async (url, method, headers, data) => {
         if (!window.location.pathname.startsWith('/join') &&
           !window.location.pathname.startsWith('/reset-password') &&
           !window.location.pathname.startsWith('/forgot-password') &&
-          !window.location.pathname.startsWith('/auth/lead-login')) {
+          !window.location.pathname.startsWith('/auth/lead-login') &&
+          !window.location.pathname.startsWith('/questions')) {
 
           window.location.href = "/login";
         }

@@ -34,11 +34,14 @@ apiClient.interceptors.response.use(
       // Let the component handle the 401 error gracefully
       const isLoginPage = window.location.pathname === '/login';
       const isQuoteApi = error.config?.url?.includes('/quote/');
-      
-      if (!isLoginPage && !isQuoteApi) {
+      // Public funnel forms (/questions/*) must never bounce to login on a 401.
+      const isPublicForm = window.location.pathname.startsWith('/questions');
+
+      if (!isLoginPage && !isQuoteApi && !isPublicForm) {
         // Redirect to login for non-quote APIs
         window.location.href = '/login';
       }
+
     }
 
     // Handle quote limit exceeded

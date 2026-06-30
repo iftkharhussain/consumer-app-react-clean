@@ -9,9 +9,17 @@ import {
   LeftOutlined,
   RightOutlined
 } from '@ant-design/icons';
+import quoteService from '../../services/api/quoteService';
+import fortusService from '../../services/api/fortusService';
+import { serverUrl } from '../../apis/sharedApi';
+import toast from 'react-hot-toast';
 import styles from './Disability.module.css';
 
 const { Panel } = Collapse;
+
+// Map the salaire form's option codes to display labels (advisor-only product).
+const WAITING_LABELS = { '0-30j': '0 à 30 jours', '30-60j': '30 à 60 jours', '60-90j': '60 à 90 jours', '90j+': '90 jours et plus' };
+const BENEFIT_LABELS = { '2ans': '2 ans', '5ans': '5 ans', retraite: "Jusqu'à ma retraite" };
 
 // Reuse the same CustomArrowIcon for consistent FAQ look
 const CustomArrowIcon = ({ rotate = 0, size = '1.2em' }) => (
@@ -123,6 +131,11 @@ const DisabilityPage = () => {
   const scrollContainerRef = useRef(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [advisor, setAdvisor] = useState(null);
+  const [submission, setSubmission] = useState(null);
+  const [userProductId, setUserProductId] = useState(null);
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
@@ -136,26 +149,76 @@ const DisabilityPage = () => {
     }
   };
 
-  const handleBookCall = () => {
-    console.log("Booking call for disability insurance...");
-    // Future integration with booking logic
-  };
-
   useEffect(() => {
     document.title = 'Assurance salaire et invalidité - Norga';
   }, []);
+
+  // Load this user's disability product → real advisor + submission + userProductId.
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const res = await quoteService.getUserProducts();
+        const products = res?.products || [];
+        const product = products.find((p) => p.productSlug === 'disability') || null;
+        if (active && product) {
+          setUserProductId(product.id || null);
+          if (product.advisor) setAdvisor(product.advisor);
+          if (product.submission) setSubmission(product.submission);
+        }
+      } catch (e) {
+        // leave advisor null -> header falls back to generic text
+      }
+    })();
+    return () => { active = false; };
+  }, []);
+
+  const handleBookCall = async () => {
+    if (sent) return;
+    try {
+      setSending(true);
+      const r = await fortusService.requestCall({ productSlug: 'disability', userProductId });
+      if (r?.success) {
+        setSent(true);
+        toast.success('Votre demande a été envoyée. Un conseiller vous contactera.');
+        if (userProductId) fortusService.trackEvent(userProductId, 'call').catch(() => {});
+      } else {
+        toast.error(r?.message || 'Une erreur est survenue.');
+      }
+    } catch (e) {
+      toast.error(e?.response?.data?.message || e.message || 'Une erreur est survenue.');
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const advisorName = advisor?.name || 'Votre conseiller';
+  const advisorTitle = 'Conseiller en sécurité financière';
+  const advisorEmail = advisor?.email || '';
+  const advisorPhone = advisor?.phone || '';
+  const advisorAvatar = advisor?.avatar && !String(advisor.avatar).includes('default')
+    ? (String(advisor.avatar).startsWith('http') ? advisor.avatar : `${serverUrl}${advisor.avatar}`)
+    : '/images/user-placeholder.png';
+
+  // Submission-driven values (advisor-only product — no online price for disability).
+  const needs = submission?.needs || {};
+  const annualIncomeNum = parseFloat(String(needs.revenu || '').replace(/\s/g, '').replace(',', '.')) || 0;
+  const annualIncomeDisplay = annualIncomeNum ? `${annualIncomeNum.toLocaleString('fr-CA')}$` : '—';
+  const monthlyAmountDisplay = annualIncomeNum ? `${Math.round((annualIncomeNum * 0.7) / 12).toLocaleString('fr-CA')}$` : '—';
+  const waitingDisplay = WAITING_LABELS[needs.dureeSansRevenu] || '—';
+  const benefitDisplay = BENEFIT_LABELS[needs.dureePrestations] || '—';
 
   return (
     <div className={styles.disabilityPage}>
       {/* Banner Section */}
       <div className={styles.bannerCard}>
         <div className={styles.advisorProfileBox}>
-          <img src="/images/user-placeholder.png" alt="Advisor" className={styles.advisorAvatarLarge} />
-          <h3 className={styles.advisorNameLarge}>Jean-Phil Dion</h3>
-          <p className={styles.advisorTitleLarge}>Conseiller en sécurité financière</p>
+          <img src={advisorAvatar} alt={advisorName} className={styles.advisorAvatarLarge} />
+          <h3 className={styles.advisorNameLarge}>{advisorName}</h3>
+          <p className={styles.advisorTitleLarge}>{advisorTitle}</p>
           <div className={styles.advisorContactBox}>
-            <div>Courriel: jeanph@norgax.com</div>
-            <div>Tél: +1-514-XXX-XXXX</div>
+            <div>Courriel: {advisorEmail || '—'}</div>
+            <div>Tél: {advisorPhone || '—'}</div>
           </div>
         </div>
         
@@ -171,8 +234,8 @@ const DisabilityPage = () => {
             Vous pouvez soit attendre l'appel du conseiller qui vous contactera dès que possible, 
             ou planifier un moment précis pour vous assurer qu'il vous appelle au bon moment.
           </p>
-          <Button className={styles.bannerButton} onClick={handleBookCall}>
-            Planifier mon appel maintenant
+          <Button className={styles.bannerButton} onClick={handleBookCall} loading={sending} disabled={sending || sent}>
+            {sent ? 'Demande envoyée' : 'Planifier mon appel maintenant'}
           </Button>
         </div>
       </div>
@@ -203,19 +266,19 @@ const DisabilityPage = () => {
             </div>
             <div className={styles.priceRow}>
               <span className={styles.rowLabel}>Revenu annuel protégé</span>
-              <span className={styles.rowValue}>{DISABILITY_DATA.annualIncome}</span>
+              <span className={styles.rowValue}>{annualIncomeDisplay}</span>
             </div>
             <div className={styles.priceRow}>
               <span className={styles.rowLabel}>Montant mensuel assuré</span>
-              <span className={styles.rowValue}>{DISABILITY_DATA.monthlyAmount}</span>
+              <span className={styles.rowValue}>{monthlyAmountDisplay}</span>
             </div>
             <div className={styles.priceRow}>
               <span className={styles.rowLabel}>Délai de carence</span>
-              <span className={styles.rowValue}>{DISABILITY_DATA.waitingPeriod}</span>
+              <span className={styles.rowValue}>{waitingDisplay}</span>
             </div>
             <div className={styles.priceRow}>
               <span className={styles.rowLabel}>Période de prestations</span>
-              <span className={styles.rowValue}>{DISABILITY_DATA.benefitPeriod}</span>
+              <span className={styles.rowValue}>{benefitDisplay}</span>
             </div>
           </div>
         </div>
@@ -263,11 +326,11 @@ const DisabilityPage = () => {
 
         {/* Bottom CTA */}
         <div className={styles.faqCta}>
-          <img src="/images/user-placeholder.png" alt="Advisor" className={styles.ctaAvatar} />
+          <img src={advisorAvatar} alt={advisorName} className={styles.ctaAvatar} />
           <h3 className={styles.ctaTitle}>Vous avez encore des questions?</h3>
-          <p className={styles.ctaDesc}>Parlez à votre conseiller Jean-Phil Dion pour qu'il vous aide.</p>
-          <Button className={styles.ctaButton} onClick={handleBookCall}>
-            Planifier mon appel
+          <p className={styles.ctaDesc}>Parlez à votre conseiller {advisorName} pour qu'il vous aide.</p>
+          <Button className={styles.ctaButton} onClick={handleBookCall} loading={sending} disabled={sending || sent}>
+            {sent ? 'Demande envoyée' : 'Planifier mon appel'}
           </Button>
         </div>
       </div>
