@@ -586,7 +586,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 			'critical-illness': 'critical-illness',
 		};
 		// Non-product items that should always be visible (e.g. My Advisors)
-		const ALWAYS_SHOW_KEYS = ['advisors'];
+		const ALWAYS_SHOW_KEYS = ['advisors', 'explore'];
 		setSideMenu(menuItemsAdvisor.filter(item => {
 			if (ALWAYS_SHOW_KEYS.includes(item.key)) return true;
 			const slug = MENU_PRODUCT_SLUGS[item.key];

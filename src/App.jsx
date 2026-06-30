@@ -49,9 +49,7 @@ const QuoteLimitExceeded = React.lazy(() => import('./pages/quoteLimitExceeded/i
 const Advisors = React.lazy(() => import('./pages/myAdvisors/index'));
 const CriticalIllness = React.lazy(() => import('./pages/criticalIllness/index'));
 const MortgageExpert = React.lazy(() => import('./pages/mortgageExpert/index'));
-const AssuranceVie = React.lazy(() => import('./pages/assuranceVie/index'));
-const AssuranceMaladieGrave = React.lazy(() => import('./pages/assuranceMaladieGrave/index'));
-const AssuranceSalaire = React.lazy(() => import('./pages/assuranceSalaire/index'));
+const QuestionsPage = React.lazy(() => import('./pages/questions/index'));
 
 const PrivateWrapper = ({ auth: { isAuthenticated }, heading, _style }) => {
 	return isAuthenticated === true ? (
@@ -266,10 +264,10 @@ function App(props) {
 							<Route path="/notifications" element={<Suspense fallback={<div></div>}><Notifications /></Suspense>} />
 							<Route path="/settings" element={<Suspense fallback={<div></div>}><Settings /></Suspense>} />
 						</Route>
-						{/* Public routes - no authentication required */}
-						<Route path="/questions/life-insurance" element={<Suspense fallback={<div></div>}><AssuranceVie /></Suspense>} />
-						<Route path="/questions/critical-illness" element={<Suspense fallback={<div></div>}><AssuranceMaladieGrave /></Suspense>} />
-						<Route path="/questions/disability" element={<Suspense fallback={<div></div>}><AssuranceSalaire /></Suspense>} />
+						{/* Public routes - no authentication required.
+						    All /questions/* funnels share the same Header + Footer chrome
+						    (PublicLayout); QuestionsPage maps the slug to its funnel form. */}
+						<Route path="/questions/:slug" element={<Suspense fallback={<div></div>}><QuestionsPage /></Suspense>} />
 				<Route exact path="/auth/lead-login" element={<Suspense fallback={<div></div>}><LeadLogin /></Suspense>} />
 						<Route exact path="/reset-password/:token" element={isAuth ? <Navigate to={defaultAppPage} /> : <ResetPassword />} />
 						<Route exact path="/forgot-password" element={isAuth ? <Navigate to={defaultAppPage} /> : <ForgotPassword />} />
