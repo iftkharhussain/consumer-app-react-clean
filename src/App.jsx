@@ -267,9 +267,9 @@ function App(props) {
 							<Route path="/settings" element={<Suspense fallback={<div></div>}><Settings /></Suspense>} />
 						</Route>
 						{/* Public routes - no authentication required */}
-						<Route path="/questions/assurance-vie" element={<Suspense fallback={<div></div>}><AssuranceVie /></Suspense>} />
-						<Route path="/questions/assurance-maladie-grave" element={<Suspense fallback={<div></div>}><AssuranceMaladieGrave /></Suspense>} />
-						<Route path="/questions/assurance-salaire" element={<Suspense fallback={<div></div>}><AssuranceSalaire /></Suspense>} />
+						<Route path="/questions/life-insurance" element={<Suspense fallback={<div></div>}><AssuranceVie /></Suspense>} />
+						<Route path="/questions/critical-illness" element={<Suspense fallback={<div></div>}><AssuranceMaladieGrave /></Suspense>} />
+						<Route path="/questions/disability" element={<Suspense fallback={<div></div>}><AssuranceSalaire /></Suspense>} />
 				<Route exact path="/auth/lead-login" element={<Suspense fallback={<div></div>}><LeadLogin /></Suspense>} />
 						<Route exact path="/reset-password/:token" element={isAuth ? <Navigate to={defaultAppPage} /> : <ResetPassword />} />
 						<Route exact path="/forgot-password" element={isAuth ? <Navigate to={defaultAppPage} /> : <ForgotPassword />} />

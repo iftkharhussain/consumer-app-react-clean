@@ -1,5 +1,5 @@
 /**
- * Assurance Vie — public life-insurance funnel page (route: /questions/assurance-vie)
+ * Assurance Vie — public life-insurance funnel page (route: /questions/life-insurance)
  *
  * Ported from the Figma "Life insurance - Complete External form" export.
  * Tailwind was intentionally NOT added to this CRA app — the design is

@@ -1,6 +1,6 @@
 /**
  * Assurance Salaire — public income/salary-protection funnel page
- * (route: /questions/assurance-salaire)
+ * (route: /questions/disability)
  *
  * Ported from the Figma "Assurance salaire - Complete External form" export,
  * following the same transformations applied to the sibling assurance-vie page.
