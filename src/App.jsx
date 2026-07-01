@@ -237,6 +237,8 @@ function App(props) {
 							<Route path="/" element={<Suspense fallback={<div></div>}><Results /></Suspense>} />
 					<Route path="/my-advisors" element={<Suspense fallback={<div></div>}><MyAdvisors /></Suspense>} />
 					<Route path="/explore" element={<Suspense fallback={<div></div>}><Explore /></Suspense>} />
+					{/* Internal "quick quote" funnel (logged-in) reached from the Explore page's Get Quote buttons. */}
+					<Route path="/explore/getquote/:slug" element={<Suspense fallback={<div></div>}><ExploreGetQuote /></Suspense>} />
 					<Route path="/boost-savings" element={<Suspense fallback={<div></div>}><BoostSavings /></Suspense>} />
 					<Route path="/question" element={<Suspense fallback={<div></div>}><QuestionPage /></Suspense>} />
 							<Route path="/life-insurance" element={<Suspense fallback={<div></div>}><Overview /></Suspense>} />
@@ -269,8 +271,6 @@ function App(props) {
 						    All /questions/* funnels share the same Header + Footer chrome
 						    (PublicLayout); QuestionsPage maps the slug to its funnel form. */}
 						<Route path="/questions/:slug" element={<Suspense fallback={<div></div>}><QuestionsPage /></Suspense>} />
-						{/* Internal "quick quote" funnel reached from the Explore page's Get Quote buttons. */}
-						<Route path="/explore/getquote/:slug" element={<Suspense fallback={<div></div>}><ExploreGetQuote /></Suspense>} />
 				<Route exact path="/auth/lead-login" element={<Suspense fallback={<div></div>}><LeadLogin /></Suspense>} />
 						<Route exact path="/reset-password/:token" element={isAuth ? <Navigate to={defaultAppPage} /> : <ResetPassword />} />
 						<Route exact path="/forgot-password" element={isAuth ? <Navigate to={defaultAppPage} /> : <ForgotPassword />} />

@@ -258,12 +258,7 @@ function FormGroup({ children }) {
 
 // ── Tab bar ───────────────────────────────────────────────────────────────────
 
-function TabBar({ active, onChange, enabled }) {
-  const tabs = [
-    { step: 'Étape 1', label: 'De quelle couverture avez-vous besoin ?' },
-    { step: 'Étape 2', label: 'Pour qui est la soumission ?' },
-    { step: 'Étape 3', label: 'Crée ton compte Norga' },
-  ];
+function TabBar({ tabs, active, onChange, enabled }) {
   return (
     <div style={{ marginBottom: 24 }}>
       <div className={styles.tabBar}>
@@ -868,16 +863,15 @@ function ContactTab({ persons, step1, onBack }) {
 
 // ── Mobile progress + slide ───────────────────────────────────────────────────
 
-function MobProgress({ step }) {
-  const labels = ['Couverture', 'Pour qui ?', 'Ton compte'];
+function MobProgress({ step, labels = ['Couverture', 'Pour qui ?', 'Ton compte'], total = 3 }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontSize: 11, fontWeight: 600, color: '#9baab8' }}>Étape {step} sur 3</span>
+        <span style={{ fontSize: 11, fontWeight: 600, color: '#9baab8' }}>Étape {step} sur {total}</span>
         <span style={{ fontSize: 11, fontWeight: 700, color: '#1a1aba' }}>{labels[step - 1]}</span>
       </div>
       <div style={{ display: 'flex', gap: 6 }}>
-        {[1, 2, 3].map((s) => (
+        {Array.from({ length: total }, (_, i) => i + 1).map((s) => (
           <div key={s} className={styles.progressTrack}>
             <div className={styles.progressFill} style={{ width: step >= s ? '100%' : '0%' }} />
           </div>
@@ -919,10 +913,33 @@ function isPersonsComplete(persons) {
 // ROOT
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export default function AssuranceMaladieGrave() {
+const TABS_PUBLIC = [
+  { step: 'Étape 1', label: 'De quelle couverture avez-vous besoin ?' },
+  { step: 'Étape 2', label: 'Pour qui est la soumission ?' },
+  { step: 'Étape 3', label: 'Crée ton compte Norga' },
+];
+const TABS_INTERNAL = [
+  { step: 'Étape 1', label: 'De quelle couverture avez-vous besoin ?' },
+  { step: 'Étape 2', label: 'Pour qui est la soumission ?' },
+];
+const MOB_LABELS_PUBLIC = ['Couverture', 'Pour qui ?', 'Ton compte'];
+const MOB_LABELS_INTERNAL = ['Couverture', 'Pour qui ?'];
+
+/**
+ * @param {{ mode?: 'public'|'internal' }} props
+ *   'public'   — full 3-step funnel with account creation (route: /questions/critical-illness)
+ *   'internal' — logged-in quick quote: same coverage + insured steps, no account
+ *                step; ends with a direct submit (route: /explore/getquote/critical-illness)
+ */
+export default function AssuranceMaladieGrave({ mode = 'public' }) {
+  const internal = mode === 'internal';
+  const TABS = internal ? TABS_INTERNAL : TABS_PUBLIC;
+  const mobLabels = internal ? MOB_LABELS_INTERNAL : MOB_LABELS_PUBLIC;
+
   const [tab, setTab] = useState(0);
   const [persons, setPersons] = useState([createPerson()]);
   const [step1, setStep1] = useState(createStep1());
+  const [submitted, setSubmitted] = useState(false);
 
   const updatePerson = (id, u) => setPersons((p) => p.map((x) => (x.id === id ? u : x)));
   const removePerson = (id) => setPersons((p) => p.filter((x) => x.id !== id));
@@ -956,9 +973,31 @@ export default function AssuranceMaladieGrave() {
         <button type="button" onClick={() => setTab(0)} className={styles.btnGhost}>
           <LeftOutlined style={{ fontSize: 12 }} /> Retour
         </button>
-        <button type="button" onClick={() => changeTab(2)} disabled={!personsDone} className={styles.btnPrimary}>
-          Suivant <RightOutlined style={{ fontSize: 12 }} />
-        </button>
+        {internal ? (
+          <button type="button" onClick={() => setSubmitted(true)} disabled={!personsDone} className={styles.btnPrimary}>
+            Obtenir ma soumission <RightOutlined style={{ fontSize: 12 }} />
+          </button>
+        ) : (
+          <button type="button" onClick={() => changeTab(2)} disabled={!personsDone} className={styles.btnPrimary}>
+            Suivant <RightOutlined style={{ fontSize: 12 }} />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+
+  // Internal confirmation shown after "Obtenir ma soumission" (user already
+  // logged in — no OTP/account step). UI-only for now; wire real submit later.
+  const submittedView = (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '64px 0', gap: 24, textAlign: 'center' }}>
+      <div style={{ width: 56, height: 56, borderRadius: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(26,26,186,0.25)', background: 'linear-gradient(135deg, #1a1aba, #2525c5)' }}>
+        <CheckOutlined style={{ color: '#fff', fontSize: 26 }} />
+      </div>
+      <div>
+        <h2 style={{ fontSize: 18, fontWeight: 700, color: '#121926', margin: '0 0 8px', letterSpacing: '-0.3px' }}>Demande envoyée !</h2>
+        <p style={{ fontSize: 14, color: '#535862', lineHeight: 1.6, margin: 0 }}>
+          Votre soumission a été transmise. Un conseiller Norga vous contactera sous peu.
+        </p>
       </div>
     </div>
   );
@@ -967,9 +1006,11 @@ export default function AssuranceMaladieGrave() {
     <>
       {tab === 0 && <CoverageStep answers={step1} onChange={setStep1} onNext={goToTab1} />}
       {tab === 1 && personsTab}
-      {tab === 2 && <ContactTab persons={persons} step1={step1} onBack={() => setTab(1)} />}
+      {!internal && tab === 2 && <ContactTab persons={persons} step1={step1} onBack={() => setTab(1)} />}
     </>
   );
+
+  const content = internal && submitted ? submittedView : stepContent;
 
   return (
     <div className={styles.root}>
@@ -981,8 +1022,8 @@ export default function AssuranceMaladieGrave() {
               <span className={styles.badge}>Assurance maladie grave</span>
               <h1 className={styles.h1}>Soumission instantanée</h1>
             </div>
-            <TabBar active={tab} onChange={changeTab} enabled={stepEnabled} />
-            {stepContent}
+            <TabBar tabs={TABS} active={tab} onChange={changeTab} enabled={stepEnabled} />
+            {content}
           </div>
         </div>
       </div>
@@ -994,17 +1035,17 @@ export default function AssuranceMaladieGrave() {
             <img src={logo} alt="Norga" style={{ height: 20, objectFit: 'contain' }} />
             <span style={{ fontSize: 10, color: '#b0bac4', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.12em' }}>Assurance maladie grave</span>
           </div>
-          <MobProgress step={tab + 1} />
+          <MobProgress step={tab + 1} labels={mobLabels} total={TABS.length} />
         </div>
 
         <div className={styles.mobContent}>
           <MobSlide key={tab} dir={tab === 0 ? 'right' : 'left'}>
-            {stepContent}
+            {content}
           </MobSlide>
         </div>
 
         <div className={styles.mobDots}>
-          {[0, 1, 2].map((s) => (
+          {TABS.map((_, s) => (
             <div key={s} style={{ width: tab === s ? 20 : 6, height: 6, borderRadius: 999, background: tab === s ? '#1a1aba' : '#d1d5db', transition: 'all 0.3s ease' }} />
           ))}
         </div>
