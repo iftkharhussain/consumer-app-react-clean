@@ -16,6 +16,7 @@ import { useParams } from 'react-router-dom';
 const AssuranceVie = React.lazy(() => import('../assuranceVie/index'));
 const AssuranceMaladieGrave = React.lazy(() => import('../assuranceMaladieGrave/index'));
 const AssuranceSalaire = React.lazy(() => import('../assuranceSalaire/index'));
+const MortgageInsurance = React.lazy(() => import('../mortgageInsurance/index'));
 
 // slug -> internal funnel form. Add the other products here as they're built.
 // Forms are rendered with mode="internal"; a form that doesn't support the prop
@@ -25,7 +26,7 @@ const FORMS = {
   'life-insurance': AssuranceVie,
   'critical-illness': AssuranceMaladieGrave,
   'disability': AssuranceSalaire,
-  // 'mortgage-insurance': ...,
+  'mortgage-insurance': MortgageInsurance,
   
 };
 

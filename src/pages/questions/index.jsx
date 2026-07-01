@@ -31,6 +31,7 @@ const MortgageRefinance = React.lazy(() => import('../mortgageRefinance/index'))
 const MortgageBuy = React.lazy(() => import('../mortgageBuy/index'));
 const MortgageConsolidate = React.lazy(() => import('../mortgageConsolidate/index'));
 const ExternalGeneral = React.lazy(() => import('../externalGeneral/index'));
+const MortgageInsurance = React.lazy(() => import('../mortgageInsurance/index'));
 
 // slug -> { label (header pill), Form (funnel form, or null for an empty shell) }
 const QUESTIONS = {
@@ -42,6 +43,7 @@ const QUESTIONS = {
   'mortgage-buy': { label: "Achat d'une propriété", Form: MortgageBuy },
   'mortgage-consolidate': { label: 'Consolidation de dette', Form: MortgageConsolidate },
   'external-general': { label: 'Assurance hypothécaire', Form: ExternalGeneral },
+  'mortgage-insurance': { label: 'Assurance hypothécaire', Form: MortgageInsurance },
 };
 
 export default function QuestionsPage() {

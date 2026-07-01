@@ -40,7 +40,7 @@ export function isPersonsComplete(persons) {
   );
 }
 
-function PersonCard({ person, index, personLabel, montantLabel, montantTip, onChange, onRemove, canRemove }) {
+function PersonCard({ person, index, personLabel, montantLabel, montantTip, suggestion, onChange, onRemove, canRemove }) {
   const set = (f) => (v) => onChange({ ...person, [f]: v });
 
   return (
@@ -87,6 +87,12 @@ function PersonCard({ person, index, personLabel, montantLabel, montantTip, onCh
         </FormGroup>
 
         <FormGroup>
+          {suggestion > 0 && (
+            <p style={{ fontSize: 12, color: '#697586', lineHeight: 1.6, margin: 0 }}>
+              Selon vos réponses, nous vous suggérons une couverture de{' '}
+              <strong style={{ color: '#1a1aba' }}>{suggestion.toLocaleString('fr-CA')} $</strong>.
+            </p>
+          )}
           <Field label={montantLabel} tip={montantTip}>
             <div style={{ width: '100%' }}>
               <Input type="text" inputMode="numeric" value={person.montant} onChange={set('montant')} placeholder="250 000" prefix="$" filter="digits" />
@@ -102,6 +108,7 @@ export default function PersonsStep({
   persons, onChange, onNext, onBack,
   personLabel = 'Assuré', addLabel, maxPersons = 2,
   montantLabel = "Montant d'assurance souhaité", montantTip = DEFAULT_MONTANT_TIP,
+  suggestion, nextLabel = 'Suivant',
 }) {
   const list = persons && persons.length ? persons : [createPerson()];
   const complete = isPersonsComplete(list);
@@ -115,7 +122,7 @@ export default function PersonsStep({
       {list.map((p, i) => (
         <PersonCard
           key={p.id} person={p} index={i} personLabel={personLabel}
-          montantLabel={montantLabel} montantTip={montantTip}
+          montantLabel={montantLabel} montantTip={montantTip} suggestion={suggestion}
           onChange={(u) => updatePerson(p.id, u)}
           onRemove={() => removePerson(p.id)}
           canRemove={list.length > 1}
@@ -135,7 +142,7 @@ export default function PersonsStep({
           </button>
         ) : <span />}
         <button type="button" onClick={onNext} disabled={!complete} className={styles.btnPrimary}>
-          Suivant <RightOutlined style={{ fontSize: 12 }} />
+          {nextLabel} <RightOutlined style={{ fontSize: 12 }} />
         </button>
       </div>
     </div>

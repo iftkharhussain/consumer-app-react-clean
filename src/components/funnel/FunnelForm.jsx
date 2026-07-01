@@ -1,23 +1,29 @@
 /**
  * FunnelForm — the reusable, config-driven shell for every public /questions/*
- * form. Supports any number of steps (typically 2 or 3); no per-product forking.
+ * form, and its logged-in /explore/getquote/* variant. No per-product forking.
  *
  * Config (two interchangeable shapes):
  *
  *   // A) explicit steps array
  *   { badge, title, mobileLabel, tabs, mobLabels,
- *     steps: [ {type:'quiz',...}, {type:'preferences',...}, {type:'contact',...} ] }
+ *     steps: [ {type:'quiz',...}, {type:'persons',...}, {type:'contact',...} ] }
  *
  *   // B) legacy per-step keys (step2 optional — omit it for a 2-step funnel)
  *   { badge, title, mobileLabel, tabs, mobLabels,
- *     step1: { quiz, doneMessage? },
- *     step2?: { quiz, doneMessage? } | { type:'preferences', ... },
- *     contact?: { collectName? } }
+ *     step1: {...}, step2?: {...}, contact?: { collectName? } }
  *
- * `tabs` / `mobLabels` length must match the number of steps.
+ * A `persons` step may carry `suggestionFrom(allAnswers) => number` — a coverage
+ * amount derived from earlier answers, shown as a recommendation and pre-filled
+ * into each insured's montant when the step is first reached.
+ *
+ * mode:
+ *   'public'   — full funnel ending in the account (contact) step.
+ *   'internal' — logged-in quick quote: the contact step is dropped and the last
+ *                remaining step submits directly (route: /explore/getquote/:slug).
  */
 
 import React, { useState } from 'react';
+import { CheckOutlined } from '@ant-design/icons';
 import TabBar from './TabBar';
 import CoverageStep from './CoverageStep';
 import PreferencesStep from './PreferencesStep';
@@ -63,15 +69,26 @@ function resolveSteps(config) {
   return steps;
 }
 
-export default function FunnelForm({ config }) {
-  const { badge, title, mobileLabel, tabs, mobLabels } = config;
-  const steps = resolveSteps(config);
+export default function FunnelForm({ config, mode = 'public' }) {
+  const internal = mode === 'internal';
+  const { badge, title, mobileLabel } = config;
+
+  // Internal (logged-in) funnels drop the account/contact step.
+  const allSteps = resolveSteps(config);
+  const steps = internal ? allSteps.filter((s) => s.type !== 'contact') : allSteps;
+  const tabs = (config.tabs || []).slice(0, steps.length);
+  const mobLabels = (config.mobLabels || []).slice(0, steps.length);
   const total = steps.length;
 
   const [tab, setTab] = useState(0);
   const [answers, setAnswers] = useState(() => steps.map(initialAnswers));
+  const [submitted, setSubmitted] = useState(false);
 
   const setStepAnswers = (i, val) => setAnswers((prev) => prev.map((a, idx) => (idx === i ? val : a)));
+
+  // Merge object-shaped (quiz/preferences) answers so a suggestion can read them.
+  const mergedAnswers = () => answers.reduce((acc, a) => (Array.isArray(a) ? acc : { ...acc, ...a }), {});
+  const suggestionFor = (s) => (s.suggestionFrom ? s.suggestionFrom(mergedAnswers()) : undefined);
 
   function stepDone(i) {
     const s = steps[i];
@@ -85,10 +102,24 @@ export default function FunnelForm({ config }) {
   const stepEnabled = (i) => steps.slice(0, i).every((_, idx) => stepDone(idx));
   const changeTab = (i) => { if (stepEnabled(i)) setTab(i); };
 
+  // Advance to step i, pre-filling a persons step's montant from its suggestion.
+  function advanceTo(i) {
+    const s = steps[i];
+    if (s && s.type === 'persons' && s.suggestionFrom) {
+      const sug = suggestionFor(s);
+      if (sug > 0) {
+        setStepAnswers(i, (answers[i] || []).map((p) => (p.montant ? p : { ...p, montant: String(sug) })));
+      }
+    }
+    changeTab(i);
+  }
+
   function renderStep(i) {
     const s = steps[i];
-    const onNext = () => changeTab(i + 1);
+    const isFinal = i === steps.length - 1;
     const onBack = i > 0 ? () => setTab(i - 1) : undefined;
+    // In internal mode the final step submits instead of advancing to the account.
+    const onNext = internal && isFinal ? () => setSubmitted(true) : () => advanceTo(i + 1);
 
     if (s.type === 'preferences') {
       return (
@@ -115,6 +146,8 @@ export default function FunnelForm({ config }) {
           maxPersons={s.maxPersons}
           montantLabel={s.montantLabel}
           montantTip={s.montantTip}
+          suggestion={suggestionFor(s)}
+          nextLabel={internal && isFinal ? 'Obtenir ma soumission' : 'Suivant'}
         />
       );
     }
@@ -123,7 +156,7 @@ export default function FunnelForm({ config }) {
         <ContactTab
           onBack={onBack}
           collectName={s.collectName}
-          backLabel={`Retour à l'étape ${i}`}
+          backLabel={s.backLabel || `Retour à l'étape ${i}`}
         />
       );
     }
@@ -139,7 +172,23 @@ export default function FunnelForm({ config }) {
     );
   }
 
-  const stepContent = renderStep(tab);
+  // Internal confirmation after "Obtenir ma soumission" (user already logged in —
+  // no account/OTP step). UI-only for now; wire the real submit here later.
+  const submittedView = (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '64px 0', gap: 24, textAlign: 'center' }}>
+      <div style={{ width: 56, height: 56, borderRadius: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(26,26,186,0.25)', background: 'linear-gradient(135deg, #1a1aba, #2525c5)' }}>
+        <CheckOutlined style={{ color: '#fff', fontSize: 26 }} />
+      </div>
+      <div>
+        <h2 style={{ fontSize: 18, fontWeight: 700, color: '#121926', margin: '0 0 8px', letterSpacing: '-0.3px' }}>Demande envoyée !</h2>
+        <p style={{ fontSize: 14, color: '#535862', lineHeight: 1.6, margin: 0 }}>
+          Votre soumission a été transmise. Un conseiller Norga vous contactera sous peu.
+        </p>
+      </div>
+    </div>
+  );
+
+  const content = internal && submitted ? submittedView : renderStep(tab);
 
   return (
     <div className={styles.root}>
@@ -152,7 +201,7 @@ export default function FunnelForm({ config }) {
               <h1 className={styles.h1}>{title}</h1>
             </div>
             <TabBar tabs={tabs} active={tab} onChange={changeTab} enabled={stepEnabled} />
-            {stepContent}
+            {content}
           </div>
         </div>
       </div>
@@ -171,7 +220,7 @@ export default function FunnelForm({ config }) {
 
         <div className={styles.mobContent}>
           <MobSlide key={tab} dir={tab === 0 ? 'right' : 'left'}>
-            {stepContent}
+            {content}
           </MobSlide>
         </div>
 
