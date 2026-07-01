@@ -985,27 +985,35 @@ export default function AssuranceVie({ mode = 'public' }) {
           suggestion={!internal && step1.reason ? suggested : undefined}
         />
       ))}
-      <button
-        type="button"
-        onClick={addPerson}
-        style={{
-          width: '100%', padding: 14, borderRadius: 12, border: '1px dashed #d1d5db',
-          background: '#fff', color: '#1a1aba', fontSize: 13, fontWeight: 600, cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-        }}
-      >
-        <PlusOutlined style={{ fontSize: 12 }} /> Ajouter un assuré
-      </button>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: internal ? 'flex-end' : 'space-between', paddingTop: 4 }}>
-        {!internal && (
+      {/* Add-insured is hidden in the internal short form (single insured). */}
+      {!internal && (
+        <button
+          type="button"
+          onClick={addPerson}
+          style={{
+            width: '100%', padding: 14, borderRadius: 12, border: '1px dashed #d1d5db',
+            background: '#fff', color: '#1a1aba', fontSize: 13, fontWeight: 600, cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+          }}
+        >
+          <PlusOutlined style={{ fontSize: 12 }} /> Ajouter un assuré
+        </button>
+      )}
+      {internal ? (
+        // Internal short form: a single big green CTA on step 1 (no back/coverage).
+        <button type="button" onClick={() => changeTab(contactIdx)} disabled={!personsDone} className={styles.btnGreen}>
+          Suivant <RightOutlined style={{ fontSize: 16 }} />
+        </button>
+      ) : (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 4 }}>
           <button type="button" onClick={() => setTab(coverageIdx)} className={styles.btnGhost}>
             <LeftOutlined style={{ fontSize: 12 }} /> Retour
           </button>
-        )}
-        <button type="button" onClick={() => changeTab(contactIdx)} disabled={!personsDone} className={styles.btnPrimary}>
-          Suivant <RightOutlined style={{ fontSize: 12 }} />
-        </button>
-      </div>
+          <button type="button" onClick={() => changeTab(contactIdx)} disabled={!personsDone} className={styles.btnPrimary}>
+            Suivant <RightOutlined style={{ fontSize: 12 }} />
+          </button>
+        </div>
+      )}
     </div>
   );
 
