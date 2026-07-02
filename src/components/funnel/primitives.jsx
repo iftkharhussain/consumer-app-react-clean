@@ -11,7 +11,7 @@
 import React, { useState, useRef } from 'react';
 import { InfoCircleOutlined, DownOutlined } from '@ant-design/icons';
 import ImprovedDatePicker from '../../pages/assuranceVie/ImprovedDatePicker';
-import { sanitizeName, sanitizeDigits } from '../../pages/assuranceVie/formValidation';
+import { sanitizeName, sanitizeDigits, formatCAPhone } from '../../pages/assuranceVie/formValidation';
 import styles from '../../pages/assuranceVie/AssuranceVie.module.css';
 import local from '../../pages/assuranceSalaire/AssuranceSalaire.module.css';
 
@@ -58,6 +58,7 @@ export function Input({ value, onChange, placeholder, type = 'text', prefix, suf
   const handle = (raw) => {
     if (filter === 'name') return onChange(sanitizeName(raw));
     if (filter === 'digits') return onChange(sanitizeDigits(raw));
+    if (filter === 'phone') return onChange(formatCAPhone(raw));
     return onChange(raw);
   };
   return (

@@ -53,7 +53,7 @@ function preferencesDefaults(fields) {
 
 function initialAnswers(step) {
   if (step.type === 'preferences') return preferencesDefaults(step.fields);
-  if (step.type === 'persons') return [createPerson()];
+  if (step.type === 'persons') return [createPerson(step.defaultMontant)];
   return {};
 }
 
@@ -73,11 +73,20 @@ export default function FunnelForm({ config, mode = 'public' }) {
   const internal = mode === 'internal';
   const { badge, title, mobileLabel } = config;
 
-  // Internal (logged-in) funnels drop the account/contact step.
+  // Internal (logged-in) funnels drop one step: the account by default, or the
+  // coverage quiz for a "short form" (e.g. life insurance keeps its account step).
+  const dropType = config.internalDrops === 'coverage' ? 'quiz' : 'contact';
+  const shortInternal = internal && dropType === 'quiz';
   const allSteps = resolveSteps(config);
-  const steps = internal ? allSteps.filter((s) => s.type !== 'contact') : allSteps;
-  const tabs = (config.tabs || []).slice(0, steps.length);
-  const mobLabels = (config.mobLabels || []).slice(0, steps.length);
+
+  // Indices of the steps that survive the internal drop (all steps in public mode).
+  const keptIdx = allSteps.map((_, i) => i).filter((i) => !internal || allSteps[i].type !== dropType);
+  const steps = keptIdx.map((i) => allSteps[i]);
+  // Align tabs / mobile labels to the surviving steps, renumbering "Étape N".
+  const allTabs = config.tabs || [];
+  const allMobLabels = config.mobLabels || [];
+  const tabs = keptIdx.map((i, n) => ({ ...(allTabs[i] || {}), step: `Étape ${n + 1}` }));
+  const mobLabels = keptIdx.map((i) => allMobLabels[i]).filter((x) => x !== undefined);
   const total = steps.length;
 
   const [tab, setTab] = useState(0);
@@ -92,7 +101,7 @@ export default function FunnelForm({ config, mode = 'public' }) {
 
   function stepDone(i) {
     const s = steps[i];
-    if (s.type === 'quiz') return isQuizComplete(s.quiz, answers[i]);
+    if (s.type === 'quiz') return isQuizComplete(s.quiz, answers[i]) && !(s.blockIf && s.blockIf(answers[i]));
     if (s.type === 'preferences') return s.fields.every((f) => answers[i][f.key]);
     if (s.type === 'persons') return isPersonsComplete(answers[i]);
     return true; // contact step — reachable once prior steps are complete
@@ -142,21 +151,36 @@ export default function FunnelForm({ config, mode = 'public' }) {
           onNext={onNext}
           onBack={onBack}
           personLabel={s.personLabel}
+          firstPersonLabel={s.firstPersonLabel}
           addLabel={s.addLabel}
           maxPersons={s.maxPersons}
+          defaultMontant={s.defaultMontant}
           montantLabel={s.montantLabel}
           montantTip={s.montantTip}
+          montantSuffix={s.montantSuffix}
+          extraFields={s.extraFields}
+          reco={s.reco}
           suggestion={suggestionFor(s)}
+          hideAdd={shortInternal}
+          greenNext={shortInternal}
           nextLabel={internal && isFinal ? 'Obtenir ma soumission' : 'Suivant'}
         />
       );
     }
     if (s.type === 'contact') {
+      const personsIdx = steps.findIndex((st) => st.type === 'persons');
       return (
         <ContactTab
           onBack={onBack}
           collectName={s.collectName}
           backLabel={s.backLabel || `Retour à l'étape ${i}`}
+          api={s.api}
+          otp={s.otp}
+          logLabel={s.logLabel}
+          buildPayload={s.buildPayload}
+          persons={personsIdx >= 0 ? answers[personsIdx] : undefined}
+          answers={mergedAnswers()}
+          selectPersonLabel={s.selectPersonLabel}
         />
       );
     }
@@ -168,6 +192,9 @@ export default function FunnelForm({ config, mode = 'public' }) {
         onNext={onNext}
         onBack={onBack}
         doneMessage={s.doneMessage}
+        blockIf={s.blockIf}
+        blockedTitle={s.blockedTitle}
+        blockedText={s.blockedText}
       />
     );
   }

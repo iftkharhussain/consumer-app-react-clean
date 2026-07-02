@@ -1,22 +1,31 @@
 /**
  * Account / contact step (Étape 3) — shared across every funnel form.
  *
- * UI/UX ONLY: there is no backend wiring yet. "Recevoir un code SMS" simply
- * advances to the (visual) OTP screen, and "Confirmer" advances to the done
- * screen. Hook real OTP send/verify + lead submit in here later.
+ * By default this is UI-only (the mortgage funnels): "Recevoir un code SMS"
+ * advances to the visual OTP screen and "Confirmer" advances to done.
+ *
+ * When `api` is true (the insurance funnels) it does the real work: sends/
+ * verifies the OTP (or submits directly when `otp` is false) and POSTs the lead
+ * via `buildPayload`. Extra props (`persons`, `answers`, `selectedPerson`) feed
+ * that payload and the "which insured is the account for?" selector.
  */
 
 import React, { useState, useRef } from 'react';
 import {
   RightOutlined, LeftOutlined, CheckOutlined,
-  MailOutlined, PhoneOutlined, LockOutlined,
+  MailOutlined, PhoneOutlined, LockOutlined, DownOutlined,
 } from '@ant-design/icons';
 import { Field, FormGroup, OTPInputs, Input } from './primitives';
 import { OTP_LENGTH, normalizePhone, prettyPhone } from './funnelUtils';
+import { apiSendOtp, apiVerifyOtp, apiSubmitLead } from './funnelApi';
 import { isValidEmail, isValidName } from '../../pages/assuranceVie/formValidation';
 import styles from '../../pages/assuranceVie/AssuranceVie.module.css';
 
-export default function ContactTab({ onBack, collectName = false, backLabel = "Retour à l'étape 2" }) {
+export default function ContactTab({
+  onBack, collectName = false, backLabel = "Retour à l'étape 2",
+  api = false, persons, answers, buildPayload, otp = false, logLabel = 'funnel',
+  selectPersonLabel = 'Pour quel assuré créez-vous le compte ?',
+}) {
   const [mainView, setMainView] = useState('signup'); // 'signup' | 'login'
   const [nom, setNom] = useState('');
   const [prenom, setPrenom] = useState('');
@@ -27,10 +36,32 @@ export default function ContactTab({ onBack, collectName = false, backLabel = "R
   const [digits, setDigits] = useState(Array(OTP_LENGTH).fill(''));
   const [codeError, setCodeError] = useState('');
   const [formError, setFormError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [selectedPersonIdx, setSelectedPersonIdx] = useState(0);
   const codeRefs = useRef([]);
 
-  // UI-only: validate locally, then show the OTP screen. No SMS is sent.
-  function startVerification(rawPhone) {
+  const hasTwoPersons = !!(persons && persons.length > 1);
+  const selectedPerson = (persons && persons[selectedPersonIdx]) || (persons && persons[0]);
+
+  // Submit the lead (api mode) — after OTP verify, or directly when otp is off.
+  async function submitLead(phoneOverride) {
+    if (mainView === 'login') { setLoading(false); setView('done'); return; }
+    try {
+      const payload = buildPayload
+        ? buildPayload({ email, phone: phoneOverride || verifyPhone, persons, answers, selectedPerson })
+        : {};
+      const data = await apiSubmitLead(payload);
+      if (data?.redirectUrl) { window.location.href = data.redirectUrl; return; }
+    } catch (err) {
+      // Non-blocking: log and fall through to the confirmation screen.
+      // eslint-disable-next-line no-console
+      console.error(`[${logLabel}] lead submit failed:`, err);
+    }
+    setLoading(false);
+    setView('done');
+  }
+
+  async function startVerification(rawPhone) {
     setFormError('');
     if (mainView === 'signup' && !isValidEmail(email)) {
       setFormError('Veuillez entrer une adresse courriel valide.');
@@ -41,9 +72,32 @@ export default function ContactTab({ onBack, collectName = false, backLabel = "R
       setFormError('Veuillez entrer un numéro de téléphone valide.');
       return;
     }
-    setVerifyPhone(normalized);
-    setDigits(Array(OTP_LENGTH).fill(''));
-    setView('verify');
+
+    // UI-only: just reveal the OTP screen, no SMS sent.
+    if (!api) {
+      setVerifyPhone(normalized);
+      setDigits(Array(OTP_LENGTH).fill(''));
+      setView('verify');
+      return;
+    }
+
+    // API mode.
+    setLoading(true);
+    if (!otp) {
+      // 2-step SMS verification off: submit the lead directly, skipping OTP.
+      setVerifyPhone(normalized);
+      await submitLead(normalized);
+      return;
+    }
+    const res = await apiSendOtp(normalized);
+    setLoading(false);
+    if (res?.success) {
+      setVerifyPhone(normalized);
+      setDigits(Array(OTP_LENGTH).fill(''));
+      setView('verify');
+    } else {
+      setFormError(res?.message || "Échec de l'envoi du code. Réessayez.");
+    }
   }
 
   function handleDigit(i, val) {
@@ -68,17 +122,26 @@ export default function ContactTab({ onBack, collectName = false, backLabel = "R
     setDigits(Array(OTP_LENGTH).fill(''));
     setCodeError('');
     codeRefs.current[0]?.focus();
+    if (api) apiSendOtp(verifyPhone);
   }
 
-  // UI-only: any 6-digit code advances to the done screen.
-  function handleConfirm() {
+  async function handleConfirm() {
     const code = digits.join('');
     if (code.length < OTP_LENGTH) {
       setCodeError(`Veuillez entrer les ${OTP_LENGTH} chiffres.`);
       return;
     }
     setCodeError('');
-    setView('done');
+    // UI-only: any 6-digit code advances to the done screen.
+    if (!api) { setView('done'); return; }
+    setLoading(true);
+    const verifyRes = await apiVerifyOtp(code, verifyPhone);
+    if (!verifyRes?.success) {
+      setLoading(false);
+      setCodeError(verifyRes?.message || 'Code invalide ou expiré.');
+      return;
+    }
+    await submitLead();
   }
 
   // ── Done ──
@@ -135,8 +198,8 @@ export default function ContactTab({ onBack, collectName = false, backLabel = "R
           <button type="button" onClick={() => setView('form')} className={styles.btnOutline}>
             <LeftOutlined style={{ fontSize: 12 }} /> Retour
           </button>
-          <button type="button" onClick={handleConfirm} className={styles.btnPrimary}>
-            {isLogin ? 'Confirmer' : 'Confirmer mon identité'} <RightOutlined style={{ fontSize: 12 }} />
+          <button type="button" onClick={handleConfirm} disabled={loading} className={styles.btnPrimary}>
+            {loading ? <span className={styles.spinner} /> : <>{isLogin ? 'Confirmer' : 'Confirmer mon identité'} <RightOutlined style={{ fontSize: 12 }} /></>}
           </button>
         </div>
       </div>
@@ -163,7 +226,7 @@ export default function ContactTab({ onBack, collectName = false, backLabel = "R
           <div style={{ padding: 20 }}>
             <FormGroup>
               <Field label="Numéro de téléphone">
-                <Input type="tel" value={tel} onChange={setTel} placeholder="(514) 000-0000" prefix={<PhoneOutlined style={{ fontSize: 14 }} />} />
+                <Input type="tel" inputMode="tel" filter="phone" value={tel} onChange={setTel} placeholder="(514) 000-0000" prefix={<PhoneOutlined style={{ fontSize: 14 }} />} />
               </Field>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <LockOutlined style={{ color: '#c0cad4', fontSize: 11, flexShrink: 0 }} />
@@ -171,8 +234,8 @@ export default function ContactTab({ onBack, collectName = false, backLabel = "R
               </div>
               {formError && <p className={styles.errorText} style={{ textAlign: 'left' }}>{formError}</p>}
             </FormGroup>
-            <button type="button" onClick={() => startVerification(tel)} className={styles.btnGreen} style={{ marginTop: 12 }}>
-              Recevoir un code SMS <RightOutlined style={{ fontSize: 16 }} />
+            <button type="button" onClick={() => startVerification(tel)} disabled={loading} className={styles.btnGreen} style={{ marginTop: 12 }}>
+              {loading ? <span className={styles.spinner} /> : <>Recevoir un code SMS <RightOutlined style={{ fontSize: 16 }} /></>}
             </button>
           </div>
         </div>
@@ -214,11 +277,25 @@ export default function ContactTab({ onBack, collectName = false, backLabel = "R
                 </Field>
               </div>
             )}
+            {hasTwoPersons && (
+              <Field label={selectPersonLabel}>
+                <div style={{ position: 'relative' }}>
+                  <select value={selectedPersonIdx} onChange={(e) => setSelectedPersonIdx(Number(e.target.value))} className={styles.select}>
+                    {persons.map((p, i) => (
+                      <option key={p.id} value={i}>
+                        {p.prenom && p.nom ? `${p.prenom} ${p.nom}` : i === 0 ? 'Assuré principal' : `Assuré ${i + 1}`}
+                      </option>
+                    ))}
+                  </select>
+                  <DownOutlined className={styles.selectChevron} style={{ fontSize: 11 }} />
+                </div>
+              </Field>
+            )}
             <Field label="Adresse courriel" error={email && !isValidEmail(email) ? 'Entrez une adresse courriel valide' : ''}>
               <Input type="email" value={email} onChange={setEmail} placeholder="marie@exemple.com" prefix={<MailOutlined style={{ fontSize: 14 }} />} error={!!(email && !isValidEmail(email))} />
             </Field>
             <Field label="Numéro de téléphone">
-              <Input type="tel" value={tel} onChange={setTel} placeholder="(514) 000-0000" prefix={<PhoneOutlined style={{ fontSize: 14 }} />} />
+              <Input type="tel" inputMode="tel" filter="phone" value={tel} onChange={setTel} placeholder="(514) 000-0000" prefix={<PhoneOutlined style={{ fontSize: 14 }} />} />
             </Field>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <LockOutlined style={{ color: '#c0cad4', fontSize: 11, flexShrink: 0 }} />
@@ -227,8 +304,8 @@ export default function ContactTab({ onBack, collectName = false, backLabel = "R
             {formError && <p className={styles.errorText} style={{ textAlign: 'left' }}>{formError}</p>}
           </FormGroup>
 
-          <button type="button" onClick={() => startVerification(tel)} className={styles.btnGreen}>
-            Obtenir mes soumissions <RightOutlined style={{ fontSize: 16 }} />
+          <button type="button" onClick={() => startVerification(tel)} disabled={loading} className={styles.btnGreen}>
+            {loading ? <span className={styles.spinner} /> : <>Obtenir mes soumissions <RightOutlined style={{ fontSize: 16 }} /></>}
           </button>
         </div>
       </div>

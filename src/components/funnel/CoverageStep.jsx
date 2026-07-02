@@ -15,8 +15,8 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { RightOutlined, LeftOutlined, CheckOutlined } from '@ant-design/icons';
-import { Input, Select, YesNoToggle, InfoTooltip } from './primitives';
+import { RightOutlined, LeftOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { Input, Select, YesNoToggle, PillToggle, InfoTooltip } from './primitives';
 import { isValidAmount } from '../../pages/assuranceVie/formValidation';
 import styles from '../../pages/assuranceVie/AssuranceVie.module.css';
 import local from '../../pages/assuranceSalaire/AssuranceSalaire.module.css';
@@ -44,22 +44,25 @@ function isAnswered(q, answers) {
   return !!v;
 }
 
-export default function CoverageStep({ quiz, answers, onChange, onNext, onBack, doneMessage }) {
+export default function CoverageStep({ quiz, answers, onChange, onNext, onBack, doneMessage, blockIf, blockedTitle, blockedText }) {
   const [draft, setDraft] = useState('');
   const [monthYear, setMonthYear] = useState({ month: '', year: '' });
   const [multiDraft, setMultiDraft] = useState([]);
 
+  // A disqualifying answer (e.g. "already diagnosed") halts the funnel here.
+  const isBlocked = blockIf ? blockIf(answers) : false;
+
   const sequence = quiz.filter((q) => !q.showIf || q.showIf(answers));
   const required = sequence.filter((q) => !q.optional);
   const firstRequiredUnanswered = required.find((q) => !isAnswered(q, answers));
-  const isDone = !firstRequiredUnanswered;
+  const isDone = !isBlocked && !firstRequiredUnanswered;
 
   // While required questions remain, show the first one. Once they're all done,
   // surface a trailing optional question (if any) so it can still be filled.
-  const currentKey = !isDone
+  const currentKey = firstRequiredUnanswered
     ? firstRequiredUnanswered.key
     : (sequence.find((q) => q.optional)?.key ?? null);
-  const currentQ = sequence.find((q) => q.key === currentKey);
+  const currentQ = isBlocked ? null : sequence.find((q) => q.key === currentKey);
 
   // Summary lists answered, non-optional questions (an optional one stays inline).
   const answered = sequence.filter((q) => !q.optional && isAnswered(q, answers));
@@ -109,7 +112,7 @@ export default function CoverageStep({ quiz, answers, onChange, onNext, onBack, 
   function displayValue(q) {
     const raw = answers[q.key];
     if (q.formatSummary) return q.formatSummary(raw, answers);
-    if (q.inputType === 'choice') return q.options?.find((o) => o.value === raw)?.label ?? raw;
+    if (q.inputType === 'choice' || q.inputType === 'pill') return q.options?.find((o) => o.value === raw)?.label ?? raw;
     if (q.inputType === 'multiselect') {
       const arr = Array.isArray(raw) ? raw : [];
       return arr.map((v) => q.options?.find((o) => o.value === v)?.label ?? v).join(', ');
@@ -140,6 +143,20 @@ export default function CoverageStep({ quiz, answers, onChange, onNext, onBack, 
           </div>
         )}
 
+        {isBlocked && (
+          <div style={{ padding: answered.length > 0 ? '16px 20px 20px' : '20px', borderTop: answered.length > 0 ? '1px solid #f0f2f5' : 'none' }}>
+            <div style={{ display: 'flex', gap: 12, background: '#fef2f2', border: '1px solid #fee2e2', borderRadius: 10, padding: '14px 16px' }}>
+              <div style={{ marginTop: 2, flexShrink: 0, width: 20, height: 20, borderRadius: 999, background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <CloseOutlined style={{ fontSize: 11, color: '#ef4444' }} />
+              </div>
+              <div>
+                <p style={{ fontSize: 13, fontWeight: 600, color: '#b91c1c', margin: '0 0 2px' }}>{blockedTitle || 'Soumission non disponible'}</p>
+                <p style={{ fontSize: 12, color: '#ef4444', lineHeight: 1.6, margin: 0 }}>{blockedText}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {currentQ && (
           <div style={{ padding: answered.length > 0 ? '16px 20px 20px' : '20px', borderTop: answered.length > 0 ? '1px solid #f0f2f5' : 'none' }}>
             <div style={{ marginBottom: 12 }}>
@@ -154,6 +171,10 @@ export default function CoverageStep({ quiz, answers, onChange, onNext, onBack, 
 
             {currentQ.inputType === 'yesno' ? (
               <YesNoToggle value={answers[currentQ.key]} onChange={(v) => pick(currentQ, v)} />
+            ) : currentQ.inputType === 'pill' ? (
+              <div style={{ width: currentQ.width || '50%' }}>
+                <PillToggle value={answers[currentQ.key]} onChange={(v) => pick(currentQ, v)} options={currentQ.options} />
+              </div>
             ) : currentQ.inputType === 'multiselect' ? (
               <>
                 <div className={currentQ.columns === 1 ? styles.choiceGrid1 : styles.choiceGrid2}>

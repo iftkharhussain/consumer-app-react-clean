@@ -578,8 +578,11 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  font-family: 'Inter';
   font-size: 11px;
+  font-style: normal;
   font-weight: 600;
+  line-height: 16.5px;
   margin-bottom: 6px;
 }
 

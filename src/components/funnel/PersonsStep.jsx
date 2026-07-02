@@ -13,9 +13,10 @@
 
 import React from 'react';
 import { PlusOutlined, CloseOutlined, RightOutlined, LeftOutlined } from '@ant-design/icons';
-import { Field, FormGroup, Input, DateInput, BoxSelect, PillToggle, Select } from './primitives';
+import { Field, FormGroup, Input, DateInput, BoxSelect, PillToggle, Select, YesNoToggle } from './primitives';
 import { isValidName, isValidAmount } from '../../pages/assuranceVie/formValidation';
 import styles from '../../pages/assuranceVie/AssuranceVie.module.css';
+import local from '../../pages/assuranceSalaire/AssuranceSalaire.module.css';
 
 const PROVINCES = [
   'Québec', 'Ontario', 'Alberta', 'Colombie-Britannique', 'Manitoba',
@@ -27,10 +28,10 @@ const PROVINCES = [
 const FUMEUR_TIP = <span>Inclut cigarettes, vapoteuse, tabac à pipe, cigares, chicha, etc.</span>;
 const DEFAULT_MONTANT_TIP = <span>Choisissez un montant adapté à vos besoins (solde hypothécaire, dettes, etc.).</span>;
 
-export function createPerson() {
+export function createPerson(montant = '') {
   return {
     id: Math.random().toString(36).slice(2),
-    nom: '', prenom: '', dateNaissance: '', sexe: '', fumeur: 'non', province: 'Québec', montant: '',
+    nom: '', prenom: '', dateNaissance: '', sexe: '', fumeur: 'non', province: 'Québec', montant: montant || '',
   };
 }
 
@@ -40,14 +41,15 @@ export function isPersonsComplete(persons) {
   );
 }
 
-function PersonCard({ person, index, personLabel, montantLabel, montantTip, suggestion, onChange, onRemove, canRemove }) {
+function PersonCard({ person, index, personLabel, firstPersonLabel, montantLabel, montantTip, montantSuffix, extraFields, reco, suggestion, onChange, onRemove, canRemove }) {
   const set = (f) => (v) => onChange({ ...person, [f]: v });
+  const header = index === 0 && firstPersonLabel ? firstPersonLabel : `${personLabel} ${index + 1}`;
 
   return (
     <div className={styles.card}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: '1px solid #f0f2f5' }}>
         <span style={{ fontSize: 13, fontWeight: 600, color: '#364152', letterSpacing: '-0.1px' }}>
-          {`${personLabel} ${index + 1}`}
+          {header}
         </span>
         {canRemove && (
           <button type="button" onClick={onRemove} style={{ color: '#c0cad4', background: 'none', border: 'none', cursor: 'pointer', padding: 4, lineHeight: 1 }}>
@@ -84,18 +86,35 @@ function PersonCard({ person, index, personLabel, montantLabel, montantTip, sugg
               <Select value={person.province} onChange={set('province')} options={PROVINCES} />
             </Field>
           </div>
+
+          {(extraFields || []).map((f) => (
+            <Field key={f.key} label={f.label} tip={f.tip}>
+              {f.inputType === 'yesno' ? (
+                <YesNoToggle value={person[f.key]} onChange={set(f.key)} />
+              ) : f.inputType === 'pill' ? (
+                <PillToggle value={person[f.key]} onChange={set(f.key)} options={f.options} />
+              ) : (
+                <Input value={person[f.key] || ''} onChange={set(f.key)} placeholder={f.placeholder} />
+              )}
+            </Field>
+          ))}
         </FormGroup>
 
         <FormGroup>
-          {suggestion > 0 && (
+          {reco && suggestion > 0 ? (
+            <div>
+              <p className={local.recoLabel}>{reco.label}</p>
+              <p className={local.recoAmount}>{reco.format(suggestion)}</p>
+            </div>
+          ) : suggestion > 0 ? (
             <p style={{ fontSize: 12, color: '#697586', lineHeight: 1.6, margin: 0 }}>
               Selon vos réponses, nous vous suggérons une couverture de{' '}
               <strong style={{ color: '#1a1aba' }}>{suggestion.toLocaleString('fr-CA')} $</strong>.
             </p>
-          )}
+          ) : null}
           <Field label={montantLabel} tip={montantTip}>
             <div style={{ width: '100%' }}>
-              <Input type="text" inputMode="numeric" value={person.montant} onChange={set('montant')} placeholder="250 000" prefix="$" filter="digits" />
+              <Input type="text" inputMode="numeric" value={person.montant} onChange={set('montant')} placeholder="250 000" prefix="$" suffix={montantSuffix} filter="digits" />
             </div>
           </Field>
         </FormGroup>
@@ -106,45 +125,54 @@ function PersonCard({ person, index, personLabel, montantLabel, montantTip, sugg
 
 export default function PersonsStep({
   persons, onChange, onNext, onBack,
-  personLabel = 'Assuré', addLabel, maxPersons = 2,
+  personLabel = 'Assuré', firstPersonLabel, addLabel, maxPersons = 2,
   montantLabel = "Montant d'assurance souhaité", montantTip = DEFAULT_MONTANT_TIP,
-  suggestion, nextLabel = 'Suivant',
+  montantSuffix, extraFields, reco, suggestion, defaultMontant,
+  hideAdd = false, greenNext = false, nextLabel = 'Suivant',
 }) {
-  const list = persons && persons.length ? persons : [createPerson()];
+  const list = persons && persons.length ? persons : [createPerson(defaultMontant)];
   const complete = isPersonsComplete(list);
 
   const updatePerson = (id, u) => onChange(list.map((x) => (x.id === id ? u : x)));
   const removePerson = (id) => onChange(list.filter((x) => x.id !== id));
-  const addPerson = () => { if (list.length < maxPersons) onChange([...list, createPerson()]); };
+  const addPerson = () => { if (list.length < maxPersons) onChange([...list, createPerson(defaultMontant)]); };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       {list.map((p, i) => (
         <PersonCard
-          key={p.id} person={p} index={i} personLabel={personLabel}
-          montantLabel={montantLabel} montantTip={montantTip} suggestion={suggestion}
+          key={p.id} person={p} index={i} personLabel={personLabel} firstPersonLabel={firstPersonLabel}
+          montantLabel={montantLabel} montantTip={montantTip} montantSuffix={montantSuffix}
+          extraFields={extraFields} reco={reco} suggestion={suggestion}
           onChange={(u) => updatePerson(p.id, u)}
           onRemove={() => removePerson(p.id)}
           canRemove={list.length > 1}
         />
       ))}
 
-      {list.length < maxPersons && (
+      {!hideAdd && list.length < maxPersons && (
         <button type="button" onClick={addPerson} className={styles.addBtn}>
           <PlusOutlined style={{ fontSize: 12 }} /> {addLabel || `Ajouter un ${personLabel.toLowerCase()}`}
         </button>
       )}
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 4 }}>
-        {onBack ? (
-          <button type="button" onClick={onBack} className={styles.btnGhost}>
-            <LeftOutlined style={{ fontSize: 12 }} /> Retour
-          </button>
-        ) : <span />}
-        <button type="button" onClick={onNext} disabled={!complete} className={styles.btnPrimary}>
-          {nextLabel} <RightOutlined style={{ fontSize: 12 }} />
+      {greenNext ? (
+        // Short-form (internal) step 1: a single big green CTA, no back button.
+        <button type="button" onClick={onNext} disabled={!complete} className={styles.btnGreen}>
+          {nextLabel} <RightOutlined style={{ fontSize: 16 }} />
         </button>
-      </div>
+      ) : (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 4 }}>
+          {onBack ? (
+            <button type="button" onClick={onBack} className={styles.btnGhost}>
+              <LeftOutlined style={{ fontSize: 12 }} /> Retour
+            </button>
+          ) : <span />}
+          <button type="button" onClick={onNext} disabled={!complete} className={styles.btnPrimary}>
+            {nextLabel} <RightOutlined style={{ fontSize: 12 }} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
