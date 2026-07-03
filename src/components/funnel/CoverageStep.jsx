@@ -184,7 +184,7 @@ export default function CoverageStep({ quiz, answers, onChange, onNext, onBack, 
                       <button
                         key={o.value} type="button" onClick={() => toggleMulti(o.value)}
                         className={styles.choice}
-                        style={sel ? { borderColor: '#1a1aba', background: '#f5f6ff' } : undefined}
+                        style={sel ? { borderColor: '#1A1ABA', background: '#F0F0FF', color: '#1A1ABA' } : undefined}
                       >
                         <span style={{ width: 18, height: 18, borderRadius: 4, border: `1.5px solid ${sel ? '#1a1aba' : '#cdd5df'}`, background: sel ? '#1a1aba' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                           {sel && <CheckOutlined style={{ color: '#fff', fontSize: 11 }} />}
