@@ -586,7 +586,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 			'critical-illness': 'critical-illness',
 		};
 		// Non-product items that should always be visible (e.g. My Advisors)
-		const ALWAYS_SHOW_KEYS = ['advisors', 'explore'];
+		const ALWAYS_SHOW_KEYS = ['advisors', 'explore','home', 'overview' , 'disability', 'critical-illness'];
 		setSideMenu(menuItemsAdvisor.filter(item => {
 			if (ALWAYS_SHOW_KEYS.includes(item.key)) return true;
 			const slug = MENU_PRODUCT_SLUGS[item.key];
@@ -595,7 +595,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 		
 		// Auto-open 'home' only once when sessions first appear
 		if (assuranceAutoChildren && !hasAutoOpened.current) {
-			setOpenKeys(['home']);
+			setOpenKeys(['home' ]);
 			hasAutoOpened.current = true;
 		}
 	}, [userType, leadDefaultPath, quoteSessions, userProductSlugs]);

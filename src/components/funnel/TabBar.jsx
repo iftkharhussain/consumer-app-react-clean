@@ -4,8 +4,7 @@
  */
 
 import React from 'react';
-import { LockOutlined } from '@ant-design/icons';
-import styles from '../../pages/assuranceVie/AssuranceVie.module.css';
+import styles from './funnel.module.css';
 
 export default function TabBar({ tabs, active, onChange, enabled }) {
   return (
@@ -22,15 +21,21 @@ export default function TabBar({ tabs, active, onChange, enabled }) {
               <span className={styles.tabStep} style={{ color: isActive ? '#1a1aba' : '#9baab8' }}>
                 <span className={styles.tabNum} style={{ background: isActive ? '#1a1aba' : '#c8cdd6' }}>{i + 1}</span>
                 {t.step}
-                {isDisabled && <LockOutlined style={{ fontSize: 10, color: '#b0bac4' }} />}
               </span>
               <span className={styles.tabLabel} style={{ color: isActive ? '#121926' : '#9baab8' }}>
                 {t.label}
               </span>
               {isActive && (
                 <span className={styles.tabArrow}>
-                  <svg width="16" height="8" viewBox="0 0 16 8" fill="none">
-                    <path d="M0 0 L8 8 L16 0Z" fill="#ffffff" />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="8" viewBox="0 0 16 8" fill="none">
+                    <g clipPath="url(#clip0_93_797)">
+                      <path d="M0 0L8 8L16 0H0Z" fill="white" />
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_93_797">
+                        <rect width="16" height="8" fill="white" />
+                      </clipPath>
+                    </defs>
                   </svg>
                 </span>
               )}

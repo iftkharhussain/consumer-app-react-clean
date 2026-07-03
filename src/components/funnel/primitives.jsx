@@ -3,17 +3,17 @@
  * public /questions/* funnel form. Extracted (verbatim styling) from the
  * original per-product pages so new forms don't redeclare these locally.
  *
- * Styling is reused from the existing CSS modules (not duplicated):
- *   - styles : pages/assuranceVie/AssuranceVie.module.css  (shared funnel look)
- *   - local  : pages/assuranceSalaire/AssuranceSalaire.module.css (Yes/No, OK row)
+ * Styling comes from the single shared stylesheet funnel.module.css. `styles`
+ * and `local` both point at it (the `local` alias is kept only so the Yes/No,
+ * OK-row and reco class names read the same as before).
  */
 
 import React, { useState, useRef } from 'react';
 import { InfoCircleOutlined, DownOutlined } from '@ant-design/icons';
 import ImprovedDatePicker from '../../pages/assuranceVie/ImprovedDatePicker';
 import { sanitizeName, sanitizeDigits, formatCAPhone } from '../../pages/assuranceVie/formValidation';
-import styles from '../../pages/assuranceVie/AssuranceVie.module.css';
-import local from '../../pages/assuranceSalaire/AssuranceSalaire.module.css';
+import styles from './funnel.module.css';
+import local from './funnel.module.css';
 
 // ── Info tooltip ──────────────────────────────────────────────────────────────
 

@@ -19,7 +19,7 @@ import { Field, FormGroup, OTPInputs, Input } from './primitives';
 import { OTP_LENGTH, normalizePhone, prettyPhone } from './funnelUtils';
 import { apiSendOtp, apiVerifyOtp, apiSubmitLead } from './funnelApi';
 import { isValidEmail, isValidName } from '../../pages/assuranceVie/formValidation';
-import styles from '../../pages/assuranceVie/AssuranceVie.module.css';
+import styles from './funnel.module.css';
 
 export default function ContactTab({
   onBack, collectName = false, backLabel = "Retour à l'étape 2",

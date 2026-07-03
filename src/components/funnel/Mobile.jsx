@@ -3,7 +3,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import styles from '../../pages/assuranceVie/AssuranceVie.module.css';
+import styles from './funnel.module.css';
 
 export function MobProgress({ step, total = 3, labels }) {
   return (

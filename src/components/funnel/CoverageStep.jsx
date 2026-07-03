@@ -18,8 +18,8 @@ import React, { useState, useEffect } from 'react';
 import { RightOutlined, LeftOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Input, Select, YesNoToggle, PillToggle, InfoTooltip } from './primitives';
 import { isValidAmount } from '../../pages/assuranceVie/formValidation';
-import styles from '../../pages/assuranceVie/AssuranceVie.module.css';
-import local from '../../pages/assuranceSalaire/AssuranceSalaire.module.css';
+import styles from './funnel.module.css';
+import local from './funnel.module.css';
 
 const DEFAULT_DONE = "Vos besoins sont bien définis. Passez à l'étape suivante.";
 
@@ -131,9 +131,9 @@ export default function CoverageStep({ quiz, answers, onChange, onNext, onBack, 
           <div style={{ padding: '16px 20px 0', display: 'flex', flexDirection: 'column' }}>
             {answered.map((q, i) => (
               <div key={q.key} style={{ padding: '10px 0', borderTop: i === 0 ? 'none' : '1px solid #f0f2f5' }}>
-                <span style={{ fontSize: 12, color: '#9baab8', display: 'block', marginBottom: 2 }}>{q.summaryLabel || q.label}</span>
+                <span style={{ fontFamily: 'Inter', fontSize: 12, fontStyle: 'normal', fontWeight: 400, lineHeight: '18px', color: '#9baab8', display: 'block', marginBottom: 2 }}>{q.summaryLabel || q.label}</span>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
-                  <span style={{ fontSize: 12, fontWeight: 600, color: '#364152' }}>{displayValue(q)}</span>
+                  <span style={{ fontFamily: 'Inter', fontSize: 12, fontStyle: 'normal', fontWeight: 600, lineHeight: '18px', color: '#364152' }}>{displayValue(q)}</span>
                   <button type="button" onClick={() => editQ(q.key)} className={styles.linkBtn} style={{ fontSize: 11 }}>
                     Modifier
                   </button>
@@ -158,10 +158,10 @@ export default function CoverageStep({ quiz, answers, onChange, onNext, onBack, 
         )}
 
         {currentQ && (
-          <div style={{ padding: answered.length > 0 ? '16px 20px 20px' : '20px', borderTop: answered.length > 0 ? '1px solid #f0f2f5' : 'none' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', alignSelf: 'stretch', padding: answered.length > 0 ? '16px 20px 20px' : '20px', borderTop: answered.length > 0 ? '1px solid #f0f2f5' : 'none' }}>
             <div style={{ marginBottom: 12 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <p style={{ fontSize: 14, fontWeight: 600, color: '#121926', letterSpacing: '-0.15px', margin: 0 }}>{currentQ.label}</p>
+                <p style={{ fontFamily: 'Inter', fontSize: 14, fontStyle: 'normal', fontWeight: 600, lineHeight: '21px', color: '#121926', letterSpacing: '-0.15px', margin: 0 }}>{currentQ.label}</p>
                 {currentQ.tip && <InfoTooltip content={currentQ.tip} />}
               </div>
               {currentQ.description && (

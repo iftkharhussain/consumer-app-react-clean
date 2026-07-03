@@ -32,7 +32,7 @@ import ContactTab from './ContactTab';
 import { MobProgress, MobSlide } from './Mobile';
 import { isValidAmount } from '../../pages/assuranceVie/formValidation';
 import logo from '../../logo.svg';
-import styles from '../../pages/assuranceVie/AssuranceVie.module.css';
+import styles from './funnel.module.css';
 
 // A quiz step is complete when every required (non-optional) visible question is
 // answered. Numeric questions must hold a valid amount; multi-selects need ≥1.

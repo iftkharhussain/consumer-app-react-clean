@@ -823,12 +823,15 @@
   align-items: center;
   padding: 4px 10px;
   border-radius: 999px;
+  font-family: 'Inter';
   font-size: 11px;
+  font-style: normal;
   font-weight: 700;
-  letter-spacing: 0.3px;
-  color: var(--blue);
-  border: 1px solid rgba(26, 26, 186, 0.2);
-  background: linear-gradient(135deg, #ebebff, #f0f0ff);
+  line-height: 16.5px;
+  letter-spacing: 0.275px;
+  color: #1A1ABA;
+  border: 1px solid rgba(26, 26, 186, 0.20);
+  background: linear-gradient(135deg, #EBEBFF 0%, #F0F0FF 100%);
 }
 
 .h1 {

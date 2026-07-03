@@ -15,8 +15,8 @@ import React from 'react';
 import { PlusOutlined, CloseOutlined, RightOutlined, LeftOutlined } from '@ant-design/icons';
 import { Field, FormGroup, Input, DateInput, BoxSelect, PillToggle, Select, YesNoToggle } from './primitives';
 import { isValidName, isValidAmount } from '../../pages/assuranceVie/formValidation';
-import styles from '../../pages/assuranceVie/AssuranceVie.module.css';
-import local from '../../pages/assuranceSalaire/AssuranceSalaire.module.css';
+import styles from './funnel.module.css';
+import local from './funnel.module.css';
 
 const PROVINCES = [
   'Québec', 'Ontario', 'Alberta', 'Colombie-Britannique', 'Manitoba',

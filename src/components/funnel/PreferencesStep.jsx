@@ -11,7 +11,7 @@
 import React from 'react';
 import { RightOutlined, LeftOutlined } from '@ant-design/icons';
 import { Field, PillToggle } from './primitives';
-import styles from '../../pages/assuranceVie/AssuranceVie.module.css';
+import styles from './funnel.module.css';
 
 export default function PreferencesStep({ title, subtitle, fields, values, onChange, onNext, onBack, toggleWidth = 480 }) {
   const set = (key) => (v) => onChange({ ...values, [key]: v });
