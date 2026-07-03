@@ -16,6 +16,7 @@ import {
   MailOutlined, PhoneOutlined, LockOutlined, DownOutlined,
 } from '@ant-design/icons';
 import { Field, FormGroup, OTPInputs, Input } from './primitives';
+<<<<<<< HEAD
 import { OTP_LENGTH, normalizePhone, prettyPhone } from './funnelUtils';
 import { apiSendOtp, apiVerifyOtp, apiSubmitLead } from './funnelApi';
 import { isValidEmail, isValidName } from '../../pages/assuranceVie/formValidation';
@@ -26,6 +27,16 @@ export default function ContactTab({
   api = false, persons, answers, buildPayload, otp = false, logLabel = 'funnel',
   selectPersonLabel = 'Pour quel assuré créez-vous le compte ?',
 }) {
+=======
+import { OTP_LENGTH, normalizePhone, prettyPhone, apiSendOtp, apiVerifyOtp, submitFunnelLead } from './funnelUtils';
+import { isValidEmail, isValidName } from '../../pages/assuranceVie/formValidation';
+import styles from '../../pages/assuranceVie/AssuranceVie.module.css';
+
+export default function ContactTab({ onBack, collectName = false, backLabel = "Retour à l'étape 2", postUrl, buildPayload }) {
+  // When a submit config is provided (postUrl + buildPayload), this step does the
+  // real OTP + lead submit. Otherwise it stays UI-only (the other funnels).
+  const wired = !!(postUrl && buildPayload);
+>>>>>>> c173ffa (feat: Enhance funnel forms with age and amount guardrails)
   const [mainView, setMainView] = useState('signup'); // 'signup' | 'login'
   const [nom, setNom] = useState('');
   const [prenom, setPrenom] = useState('');
@@ -37,6 +48,7 @@ export default function ContactTab({
   const [codeError, setCodeError] = useState('');
   const [formError, setFormError] = useState('');
   const [loading, setLoading] = useState(false);
+<<<<<<< HEAD
   const [selectedPersonIdx, setSelectedPersonIdx] = useState(0);
   const codeRefs = useRef([]);
 
@@ -56,11 +68,32 @@ export default function ContactTab({
       // Non-blocking: log and fall through to the confirmation screen.
       // eslint-disable-next-line no-console
       console.error(`[${logLabel}] lead submit failed:`, err);
+=======
+  // 2-step SMS verification toggle. OFF = skip OTP and submit directly (test mode).
+  const [otpEnabled, setOtpEnabled] = useState(false);
+  const codeRefs = useRef([]);
+
+  // Build the payload and POST it; on success the LMS returns a redirect URL that
+  // logs the user in and lands them on the product result page.
+  async function doSubmit(phone) {
+    if (mainView === 'login') { setLoading(false); setView('done'); return; }
+    try {
+      const data = await submitFunnelLead(postUrl, buildPayload({ email, phone, nom, prenom }));
+      if (data?.redirectUrl) { window.location.href = data.redirectUrl; return; }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('[funnel] lead submit failed:', err);
+>>>>>>> c173ffa (feat: Enhance funnel forms with age and amount guardrails)
     }
     setLoading(false);
     setView('done');
   }
 
+<<<<<<< HEAD
+=======
+  // Validate locally, then (if wired) send a real OTP or submit directly. UI-only
+  // funnels just advance to the visual OTP screen.
+>>>>>>> c173ffa (feat: Enhance funnel forms with age and amount guardrails)
   async function startVerification(rawPhone) {
     setFormError('');
     if (mainView === 'signup' && !isValidEmail(email)) {
@@ -72,6 +105,7 @@ export default function ContactTab({
       setFormError('Veuillez entrer un numéro de téléphone valide.');
       return;
     }
+<<<<<<< HEAD
 
     // UI-only: just reveal the OTP screen, no SMS sent.
     if (!api) {
@@ -98,6 +132,17 @@ export default function ContactTab({
     } else {
       setFormError(res?.message || "Échec de l'envoi du code. Réessayez.");
     }
+=======
+    setVerifyPhone(normalized);
+    if (!wired) { setDigits(Array(OTP_LENGTH).fill('')); setView('verify'); return; }
+    // 2-step SMS verification disabled (test): submit the lead directly, skip OTP.
+    if (!otpEnabled) { setLoading(true); await doSubmit(normalized); return; }
+    setLoading(true);
+    const res = await apiSendOtp(normalized);
+    setLoading(false);
+    if (res?.success) { setDigits(Array(OTP_LENGTH).fill('')); setView('verify'); }
+    else setFormError(res?.message || "Échec de l'envoi du code. Réessayez.");
+>>>>>>> c173ffa (feat: Enhance funnel forms with age and amount guardrails)
   }
 
   function handleDigit(i, val) {
@@ -132,8 +177,12 @@ export default function ContactTab({
       return;
     }
     setCodeError('');
+<<<<<<< HEAD
     // UI-only: any 6-digit code advances to the done screen.
     if (!api) { setView('done'); return; }
+=======
+    if (!wired) { setView('done'); return; }
+>>>>>>> c173ffa (feat: Enhance funnel forms with age and amount guardrails)
     setLoading(true);
     const verifyRes = await apiVerifyOtp(code, verifyPhone);
     if (!verifyRes?.success) {
@@ -141,7 +190,11 @@ export default function ContactTab({
       setCodeError(verifyRes?.message || 'Code invalide ou expiré.');
       return;
     }
+<<<<<<< HEAD
     await submitLead();
+=======
+    await doSubmit(verifyPhone);
+>>>>>>> c173ffa (feat: Enhance funnel forms with age and amount guardrails)
   }
 
   // ── Done ──
@@ -199,7 +252,11 @@ export default function ContactTab({
             <LeftOutlined style={{ fontSize: 12 }} /> Retour
           </button>
           <button type="button" onClick={handleConfirm} disabled={loading} className={styles.btnPrimary}>
+<<<<<<< HEAD
             {loading ? <span className={styles.spinner} /> : <>{isLogin ? 'Confirmer' : 'Confirmer mon identité'} <RightOutlined style={{ fontSize: 12 }} /></>}
+=======
+            {isLogin ? 'Confirmer' : 'Confirmer mon identité'} <RightOutlined style={{ fontSize: 12 }} />
+>>>>>>> c173ffa (feat: Enhance funnel forms with age and amount guardrails)
           </button>
         </div>
       </div>
@@ -235,7 +292,11 @@ export default function ContactTab({
               {formError && <p className={styles.errorText} style={{ textAlign: 'left' }}>{formError}</p>}
             </FormGroup>
             <button type="button" onClick={() => startVerification(tel)} disabled={loading} className={styles.btnGreen} style={{ marginTop: 12 }}>
+<<<<<<< HEAD
               {loading ? <span className={styles.spinner} /> : <>Recevoir un code SMS <RightOutlined style={{ fontSize: 16 }} /></>}
+=======
+              Recevoir un code SMS <RightOutlined style={{ fontSize: 16 }} />
+>>>>>>> c173ffa (feat: Enhance funnel forms with age and amount guardrails)
             </button>
           </div>
         </div>
@@ -304,6 +365,16 @@ export default function ContactTab({
             {formError && <p className={styles.errorText} style={{ textAlign: 'left' }}>{formError}</p>}
           </FormGroup>
 
+<<<<<<< HEAD
+=======
+          {wired && (
+            <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, cursor: 'pointer', fontSize: 12, color: '#697586' }}>
+              <span>Vérification SMS en 2 étapes</span>
+              <input type="checkbox" checked={otpEnabled} onChange={(e) => setOtpEnabled(e.target.checked)} style={{ width: 16, height: 16, cursor: 'pointer' }} />
+            </label>
+          )}
+
+>>>>>>> c173ffa (feat: Enhance funnel forms with age and amount guardrails)
           <button type="button" onClick={() => startVerification(tel)} disabled={loading} className={styles.btnGreen}>
             {loading ? <span className={styles.spinner} /> : <>Obtenir mes soumissions <RightOutlined style={{ fontSize: 16 }} /></>}
           </button>

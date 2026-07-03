@@ -103,7 +103,7 @@ export default function FunnelForm({ config, mode = 'public' }) {
     const s = steps[i];
     if (s.type === 'quiz') return isQuizComplete(s.quiz, answers[i]) && !(s.blockIf && s.blockIf(answers[i]));
     if (s.type === 'preferences') return s.fields.every((f) => answers[i][f.key]);
-    if (s.type === 'persons') return isPersonsComplete(answers[i]);
+    if (s.type === 'persons') return isPersonsComplete(answers[i], { minAge: s.minAge, maxAge: s.maxAge, minMontant: s.minMontant });
     return true; // contact step — reachable once prior steps are complete
   }
 
@@ -161,19 +161,34 @@ export default function FunnelForm({ config, mode = 'public' }) {
           extraFields={s.extraFields}
           reco={s.reco}
           suggestion={suggestionFor(s)}
+<<<<<<< HEAD
           hideAdd={shortInternal}
           greenNext={shortInternal}
+=======
+          minAge={s.minAge}
+          maxAge={s.maxAge}
+          minMontant={s.minMontant}
+>>>>>>> c173ffa (feat: Enhance funnel forms with age and amount guardrails)
           nextLabel={internal && isFinal ? 'Obtenir ma soumission' : 'Suivant'}
         />
       );
     }
     if (s.type === 'contact') {
+<<<<<<< HEAD
       const personsIdx = steps.findIndex((st) => st.type === 'persons');
+=======
+      // Thread the collected data + submit config into the account step so it can
+      // build the payload and POST. Funnels without config.submit stay UI-only.
+      const personsIdx = steps.findIndex((st) => st.type === 'persons');
+      const persons = personsIdx >= 0 ? answers[personsIdx] : [];
+      const submit = config.submit;
+>>>>>>> c173ffa (feat: Enhance funnel forms with age and amount guardrails)
       return (
         <ContactTab
           onBack={onBack}
           collectName={s.collectName}
           backLabel={s.backLabel || `Retour à l'étape ${i}`}
+<<<<<<< HEAD
           api={s.api}
           otp={s.otp}
           logLabel={s.logLabel}
@@ -181,6 +196,10 @@ export default function FunnelForm({ config, mode = 'public' }) {
           persons={personsIdx >= 0 ? answers[personsIdx] : undefined}
           answers={mergedAnswers()}
           selectPersonLabel={s.selectPersonLabel}
+=======
+          postUrl={submit?.postUrl}
+          buildPayload={submit ? (contact) => submit.buildPayload({ answers: mergedAnswers(), persons, contact }) : undefined}
+>>>>>>> c173ffa (feat: Enhance funnel forms with age and amount guardrails)
         />
       );
     }

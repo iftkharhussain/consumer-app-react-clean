@@ -11,53 +11,34 @@ import {
   UsergroupAddOutlined 
 } from '@ant-design/icons';
 import { Types } from '../../utils/helper';
+import quoteService from '../../services/api/quoteService';
+import fortusService from '../../services/api/fortusService';
+import { serverUrl } from '../../apis/sharedApi';
+import toast from 'react-hot-toast';
 import styles from './Mortgage.module.css';
 
 const { Panel } = Collapse;
 
-/**
- * MORTGAGE DATA CONFIGURATION
- * This object controls the UI based on the number of insured persons.
- * In a real scenario, this would come from your API.
- */
-const MORTGAGE_DATA = {
-  1: {
-    title: "Prix estimé",
-    totalPrice: "24.33$ - 27.14$",
-    persons: [
-      { name: "Edward", price: "24.33 - 27.14" }
-    ],
-    protection: "Temporaire 10 ans",
-    coverage: "400 000$",
-    disability: "À déterminer",
-    isPersonalized: false,
-    note: "💡Important: Parlez à votre conseiller, il pourrait vous offrir un meilleur prix avec une stratégie personnalisée"
-  },
-  2: {
-    title: "Prix total estimé",
-    totalPrice: "43.02$ - 54.31$",
-    persons: [
-      { name: "Edward", price: "32.00 - 36.35" },
-      { name: "Marie", price: "11.02 - 17.96" }
-    ],
-    protection: "Temporaire 10 ans",
-    coverage: "600 000$",
-    disability: "À déterminer",
-    isPersonalized: false,
-    note: "💡Important: Parlez à votre conseiller, il pourrait vous offrir un meilleur prix avec un produit combiné"
-  },
-  3: {
-    isPersonalized: true,
-    persons: [
-      { name: "Edward" },
-      { name: "Marie" },
-      { name: "Julia" }
-    ],
-    protection: "À déterminer",
-    coverage: "À déterminer",
-    disability: "À déterminer"
-  }
+const NOTE_ONE = "💡Important: Parlez à votre conseiller, il pourrait vous offrir un meilleur prix avec une stratégie personnalisée";
+const NOTE_TWO = "💡Important: Parlez à votre conseiller, il pourrait vous offrir un meilleur prix avec un produit combiné";
+
+// Format a WinQuote money value (number or "12.34"/"Not available") -> "12.34" | null.
+const fmtMoney = (v) => {
+  if (v === undefined || v === null || v === 'Not available') return null;
+  const n = typeof v === 'number' ? v : parseFloat(String(v).replace(/[$,\s]/g, ''));
+  return Number.isNaN(n) ? null : n.toLocaleString('fr-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 };
+const num = (v) => {
+  const n = typeof v === 'number' ? v : parseFloat(String(v ?? '').replace(/[$,\s]/g, ''));
+  return Number.isNaN(n) ? 0 : n;
+};
+const planLabel = (plan) => {
+  if (!plan) return null;
+  if (plan === 'wholelife') return 'À vie';
+  const years = String(plan).replace(/\D/g, '');
+  return years ? `Temporaire ${years} ans` : String(plan);
+};
+const personName = (p) => (p?.prenom || p?.nom || '').trim();
 
 const PersonalizedIcon = () => (
   <img src="/images/icon-people.svg" alt="People" style={{ width: 22, height: 18, flexShrink: 0 }} />
@@ -98,11 +79,13 @@ const Mortgage = () => {
   const dispatch = useDispatch();
   const initialized = useRef(false);
   const { firstName } = useSelector((state) => state.app.user_profile);
-  
-  // Controls the view: 1, 2, or 3 (for 3+ persons)
-  const [numPersons, setNumPersons] = useState(1);
-  
-  const currentData = MORTGAGE_DATA[numPersons > 2 ? 3 : numPersons];
+
+  const [advisor, setAdvisor] = useState(null);
+  const [submission, setSubmission] = useState(null);
+  const [userProductId, setUserProductId] = useState(null);
+  const [quote, setQuote] = useState(null);
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
   useEffect(() => {
     if (!initialized.current) {
@@ -118,9 +101,110 @@ const Mortgage = () => {
     }
   }, [dispatch]);
 
-  const handleBookCall = () => {
-    console.log('Book call clicked');
+  // Load this user's mortgage-insurance product → advisor + submission (borrowers).
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const res = await quoteService.getUserProducts();
+        const product = (res?.products || []).find((p) => p.productSlug === 'mortgage-insurance');
+        if (active && product) {
+          setUserProductId(product.id || null);
+          if (product.advisor) setAdvisor(product.advisor);
+          if (product.submission) setSubmission(product.submission);
+        }
+      } catch (e) { /* fall back to generic advisor + placeholders */ }
+    })();
+    return () => { active = false; };
+  }, []);
+
+  // Fetch the WinQuote price for 1-2 borrowers (3+ is advisor-only, no online price).
+  const borrowerCount = Number(submission?.borrowers) || (submission?.insured || []).length || 1;
+  useEffect(() => {
+    if (!submission || borrowerCount > 2) return;
+    let active = true;
+    (async () => {
+      try {
+        const res = await quoteService.fetchQuote('mortgage-insurance');
+        if (active && res?.success && res?.quote) setQuote(res.quote);
+      } catch (e) { /* leave quote null -> "Sur demande" */ }
+    })();
+    return () => { active = false; };
+  }, [submission, borrowerCount]);
+
+  const handleBookCall = async () => {
+    if (sent) return;
+    try {
+      setSending(true);
+      const r = await fortusService.requestCall({ productSlug: 'mortgage-insurance', userProductId });
+      if (r?.success) {
+        setSent(true);
+        toast.success('Votre demande a été envoyée. Un conseiller vous contactera.');
+        if (userProductId) fortusService.trackEvent(userProductId, 'call').catch(() => {});
+      } else {
+        toast.error(r?.message || 'Une erreur est survenue.');
+      }
+    } catch (e) {
+      toast.error(e?.response?.data?.message || e.message || 'Une erreur est survenue.');
+    } finally {
+      setSending(false);
+    }
   };
+
+  // ── Build the view data (mirrors the old MORTGAGE_DATA shape) ──
+  const insured = submission?.insured || [];
+  const numPersons = borrowerCount;
+  const processed = quote?.processed || {};
+  const bq = Array.isArray(quote?.borrowerQuotes) ? quote.borrowerQuotes : [];
+  const coverageDisplay = fmtMoney(submission?.desiredCoverageAmount)
+    ? `${fmtMoney(submission.desiredCoverageAmount)}$`
+    : (fmtMoney(processed.faceAmount) ? `${fmtMoney(processed.faceAmount)}$` : 'À déterminer');
+  const protectionDisplay = planLabel(processed.plan) || 'À déterminer';
+  const range = (low, high) => {
+    const l = fmtMoney(low); const h = fmtMoney(high);
+    return l && h ? `${l} - ${h}` : (l || null);
+  };
+
+  let currentData;
+  if (numPersons > 2) {
+    currentData = {
+      isPersonalized: true,
+      persons: insured.map((p, i) => ({ name: personName(p) || `Emprunteur ${i + 1}` })),
+      protection: 'À déterminer', coverage: 'À déterminer', disability: 'À déterminer',
+    };
+  } else if (numPersons === 2) {
+    const totalLow = num(bq[0]?.lowest) + num(bq[1]?.lowest);
+    const totalHigh = num(bq[0]?.highest) + num(bq[1]?.highest);
+    const total = fmtMoney(totalLow) && fmtMoney(totalHigh) ? `${fmtMoney(totalLow)}$ - ${fmtMoney(totalHigh)}$` : 'Sur demande';
+    currentData = {
+      title: 'Prix total estimé',
+      totalPrice: total,
+      persons: [0, 1].map((i) => ({
+        name: personName(insured[i]) || `Emprunteur ${i + 1}`,
+        price: range(bq[i]?.lowest, bq[i]?.highest) || 'Sur demande',
+      })),
+      protection: protectionDisplay, coverage: coverageDisplay, disability: 'À déterminer',
+      isPersonalized: false, note: NOTE_TWO,
+    };
+  } else {
+    const single = range(processed.lowest, processed.highest);
+    currentData = {
+      title: 'Prix estimé',
+      totalPrice: single ? `${single}$` : 'Sur demande',
+      persons: [{ name: personName(insured[0]) || 'Emprunteur', price: single || 'Sur demande' }],
+      protection: protectionDisplay, coverage: coverageDisplay, disability: 'À déterminer',
+      isPersonalized: false, note: NOTE_ONE,
+    };
+  }
+
+  // Advisor display values (assigned to this lead), with safe fallbacks.
+  const advisorName = advisor?.name || 'Votre conseiller';
+  const advisorTitle = 'Conseiller en sécurité financière';
+  const advisorEmail = advisor?.email || '';
+  const advisorPhone = advisor?.phone || '';
+  const advisorAvatar = advisor?.avatar && !String(advisor.avatar).includes('default')
+    ? (String(advisor.avatar).startsWith('http') ? advisor.avatar : `${serverUrl}${advisor.avatar}`)
+    : '/images/user-placeholder.png';
 
   const faqItems = [
     {
@@ -142,13 +226,6 @@ const Mortgage = () => {
 
   return (
     <PageContent pageType="overview">
-      {/* Dev Toggle - Remove this once connected to API */}
-      <div style={{ marginBottom: 20, display: 'flex', gap: 10 }}>
-        <Button onClick={() => setNumPersons(1)} type={numPersons === 1 ? "primary" : "default"}>1 Personne</Button>
-        <Button onClick={() => setNumPersons(2)} type={numPersons === 2 ? "primary" : "default"}>2 Personnes</Button>
-        <Button onClick={() => setNumPersons(3)} type={numPersons === 3 ? "primary" : "default"}>3+ Personnes</Button>
-      </div>
-
       <div className={`${styles.mortgagePage} ${numPersons === 1 ? styles.onePersonPage : ''} ${numPersons === 2 ? styles.twoPersonPage : ''} ${numPersons === 3 ? styles.threePersonPage : ''}`}>
         
         {/* Banner Card */}
@@ -157,12 +234,12 @@ const Mortgage = () => {
             <CheckCircleFilled /> Gratuit
           </div>
           <div className={styles.advisorProfileBox}>
-            <img src="/images/user-placeholder.png" alt="Advisor" className={styles.advisorAvatarLarge} />
-            <h3 className={styles.advisorNameLarge}>Jean-Phil Dion</h3>
-            <p className={styles.advisorTitleLarge}>Conseiller en sécurité financière</p>
+            <img src={advisorAvatar} alt={advisorName} className={styles.advisorAvatarLarge} />
+            <h3 className={styles.advisorNameLarge}>{advisorName}</h3>
+            <p className={styles.advisorTitleLarge}>{advisorTitle}</p>
             <div className={styles.advisorContactBox}>
-              <div>Courriel: jeanph@norgax.com</div>
-              <div>Tél: +1-514-XXX-XXXX</div>
+              <div>Courriel: {advisorEmail || '—'}</div>
+              <div>Tél: {advisorPhone || '—'}</div>
             </div>
           </div>
           <div className={styles.bannerContent}>
@@ -179,8 +256,8 @@ const Mortgage = () => {
             <p className={styles.bannerDesc}>
               Planifiez maintenant pour être rappelé au meilleur moment. Ensemble, vous établirez la meilleure stratégie pour économiser le plus possible.
             </p>
-            <Button className={styles.bannerButton} onClick={handleBookCall}>
-              Planifier mon appel maintenant
+            <Button className={styles.bannerButton} onClick={handleBookCall} loading={sending} disabled={sending || sent}>
+              {sent ? 'Demande envoyée' : 'Planifier mon appel maintenant'}
             </Button>
           </div>
         </div>
@@ -213,9 +290,9 @@ const Mortgage = () => {
                 
                 {numPersons === 2 && (
                    <div className={styles.namePillContainer}>
-                      <span className={styles.namePill}>Edward</span>
+                      <span className={styles.namePill}>{currentData.persons[0]?.name}</span>
                       <span className={styles.namePlus}>+</span>
-                      <span className={styles.namePill}>Marie</span>
+                      <span className={styles.namePill}>{currentData.persons[1]?.name}</span>
                    </div>
                 )}
 
@@ -321,11 +398,11 @@ const Mortgage = () => {
           </Collapse>
 
           <div className={styles.faqCta}>
-            <img src="/images/user-placeholder.png" alt="Advisor" className={styles.ctaAvatar} />
+            <img src={advisorAvatar} alt={advisorName} className={styles.ctaAvatar} />
             <h3 className={styles.ctaTitle}>Vous avez encore des questions?</h3>
-            <p className={styles.ctaDesc}>Parlez à votre conseiller Jean-Phil Dion pour qu'il vous aide.</p>
-            <Button className={styles.ctaButton} onClick={handleBookCall}>
-              Planifier mon appel
+            <p className={styles.ctaDesc}>Parlez à votre conseiller {advisorName} pour qu'il vous aide.</p>
+            <Button className={styles.ctaButton} onClick={handleBookCall} loading={sending} disabled={sending || sent}>
+              {sent ? 'Demande envoyée' : 'Planifier mon appel'}
             </Button>
           </div>
         </div>

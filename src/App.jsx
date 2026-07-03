@@ -257,6 +257,7 @@ function App(props) {
 							<Route path="/thankyou-advisor" element={<Suspense fallback={<div></div>}><ThankyouAdvisor /></Suspense>} />
 							<Route path="/critical-illness" element={<Suspense fallback={<div></div>}><CriticalIllness /></Suspense>} />
 							<Route path="/mortgage" element={<Suspense fallback={<div></div>}><MortgageExpert /></Suspense>} />
+							<Route path="/mortgage-renew" element={<Suspense fallback={<div></div>}><MortgageExpert /></Suspense>} />
 
 							<Route path="/question-public" element={<Suspense fallback={<div></div>}><QuestionPage /></Suspense>} />
 							<Route path="/logout" element={<Logout />} />

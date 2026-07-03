@@ -35,15 +35,51 @@ export function createPerson(montant = '') {
   };
 }
 
-export function isPersonsComplete(persons) {
+// Age in whole years from a YYYY-MM-DD date of birth (null if unparseable).
+export function ageFromDob(dob) {
+  if (!dob) return null;
+  const d = new Date(dob);
+  if (Number.isNaN(d.getTime())) return null;
+  const now = new Date();
+  let age = now.getFullYear() - d.getFullYear();
+  const m = now.getMonth() - d.getMonth();
+  if (m < 0 || (m === 0 && now.getDate() < d.getDate())) age -= 1;
+  return age;
+}
+
+// Guardrail errors (empty string = valid). Config-driven so only funnels that set
+// minAge/maxAge/minMontant enforce them — keeps un-quotable values out of WinQuote.
+export function dobGuardError(dob, { minAge, maxAge } = {}) {
+  if (!dob) return '';
+  const age = ageFromDob(dob);
+  if (age === null) return '';
+  if (minAge != null && age < minAge) return `L'assuré doit avoir au moins ${minAge} ans.`;
+  if (maxAge != null && age > maxAge) return `L'estimation en ligne n'est pas disponible au-delà de ${maxAge} ans — parlez à votre conseiller.`;
+  return '';
+}
+export function montantGuardError(montant, { minMontant } = {}) {
+  if (!montant || minMontant == null || !isValidAmount(montant)) return '';
+  const n = Number(String(montant).replace(/\D/g, ''));
+  return n < minMontant ? `Le montant minimum est de ${minMontant.toLocaleString('fr-CA')} $.` : '';
+}
+
+export function isPersonsComplete(persons, guards = {}) {
   return (persons || []).every(
-    (p) => isValidName(p.nom) && isValidName(p.prenom) && p.dateNaissance && p.sexe && isValidAmount(p.montant),
+    (p) => isValidName(p.nom) && isValidName(p.prenom) && p.dateNaissance && p.sexe && isValidAmount(p.montant)
+      && !dobGuardError(p.dateNaissance, guards) && !montantGuardError(p.montant, guards),
   );
 }
 
+<<<<<<< HEAD
 function PersonCard({ person, index, personLabel, firstPersonLabel, montantLabel, montantTip, montantSuffix, extraFields, reco, suggestion, onChange, onRemove, canRemove }) {
   const set = (f) => (v) => onChange({ ...person, [f]: v });
   const header = index === 0 && firstPersonLabel ? firstPersonLabel : `${personLabel} ${index + 1}`;
+=======
+function PersonCard({ person, index, personLabel, montantLabel, montantTip, suggestion, guards, onChange, onRemove, canRemove }) {
+  const set = (f) => (v) => onChange({ ...person, [f]: v });
+  const dobErr = dobGuardError(person.dateNaissance, guards);
+  const montantErr = montantGuardError(person.montant, guards);
+>>>>>>> c173ffa (feat: Enhance funnel forms with age and amount guardrails)
 
   return (
     <div className={styles.card}>
@@ -70,7 +106,7 @@ function PersonCard({ person, index, personLabel, firstPersonLabel, montantLabel
           </div>
 
           <div className={styles.gridResp2}>
-            <Field label="Date de naissance">
+            <Field label="Date de naissance" error={dobErr}>
               <DateInput value={person.dateNaissance} onChange={set('dateNaissance')} />
             </Field>
             <Field label="Sexe à la naissance">
@@ -111,10 +147,17 @@ function PersonCard({ person, index, personLabel, firstPersonLabel, montantLabel
               Selon vos réponses, nous vous suggérons une couverture de{' '}
               <strong style={{ color: '#1a1aba' }}>{suggestion.toLocaleString('fr-CA')} $</strong>.
             </p>
+<<<<<<< HEAD
           ) : null}
           <Field label={montantLabel} tip={montantTip}>
             <div style={{ width: '100%' }}>
               <Input type="text" inputMode="numeric" value={person.montant} onChange={set('montant')} placeholder="250 000" prefix="$" suffix={montantSuffix} filter="digits" />
+=======
+          )}
+          <Field label={montantLabel} tip={montantTip} error={montantErr}>
+            <div style={{ width: '100%' }}>
+              <Input type="text" inputMode="numeric" value={person.montant} onChange={set('montant')} placeholder="250 000" prefix="$" filter="digits" error={!!montantErr} />
+>>>>>>> c173ffa (feat: Enhance funnel forms with age and amount guardrails)
             </div>
           </Field>
         </FormGroup>
@@ -127,11 +170,20 @@ export default function PersonsStep({
   persons, onChange, onNext, onBack,
   personLabel = 'Assuré', firstPersonLabel, addLabel, maxPersons = 2,
   montantLabel = "Montant d'assurance souhaité", montantTip = DEFAULT_MONTANT_TIP,
+<<<<<<< HEAD
   montantSuffix, extraFields, reco, suggestion, defaultMontant,
   hideAdd = false, greenNext = false, nextLabel = 'Suivant',
 }) {
   const list = persons && persons.length ? persons : [createPerson(defaultMontant)];
   const complete = isPersonsComplete(list);
+=======
+  suggestion, nextLabel = 'Suivant',
+  minAge, maxAge, minMontant,
+}) {
+  const guards = { minAge, maxAge, minMontant };
+  const list = persons && persons.length ? persons : [createPerson()];
+  const complete = isPersonsComplete(list, guards);
+>>>>>>> c173ffa (feat: Enhance funnel forms with age and amount guardrails)
 
   const updatePerson = (id, u) => onChange(list.map((x) => (x.id === id ? u : x)));
   const removePerson = (id) => onChange(list.filter((x) => x.id !== id));
@@ -141,9 +193,14 @@ export default function PersonsStep({
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       {list.map((p, i) => (
         <PersonCard
+<<<<<<< HEAD
           key={p.id} person={p} index={i} personLabel={personLabel} firstPersonLabel={firstPersonLabel}
           montantLabel={montantLabel} montantTip={montantTip} montantSuffix={montantSuffix}
           extraFields={extraFields} reco={reco} suggestion={suggestion}
+=======
+          key={p.id} person={p} index={i} personLabel={personLabel}
+          montantLabel={montantLabel} montantTip={montantTip} suggestion={suggestion} guards={guards}
+>>>>>>> c173ffa (feat: Enhance funnel forms with age and amount guardrails)
           onChange={(u) => updatePerson(p.id, u)}
           onRemove={() => removePerson(p.id)}
           canRemove={list.length > 1}
