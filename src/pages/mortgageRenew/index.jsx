@@ -97,9 +97,44 @@ const mortgageRenewConfig = {
     ],
   },
 
-  // ── Étape 3 — Créez votre compte Norga (account screen, UI only) ──
+  // ── Étape 3 — Créez votre compte Norga (account screen) ──
   // mortgage-renew has no person cards, so the name is collected here.
   contact: { collectName: true },
+
+  // Backend wiring: POST to the LMS mortgage-renew custom-form endpoint. Mortgage
+  // broker product — NO automated quote; the result page shows a manually-updated
+  // rate. Override the URL via env for other environments.
+  submit: {
+    postUrl:
+      process.env.REACT_APP_MORTGAGE_RENEW_FORM_POST_URL ||
+      'http://localhost:3024/api/v1/lead/custom-form?auth=REPLACE_WITH_MORTGAGE_RENEW_TOKEN',
+    buildPayload: ({ answers, contact }) => {
+      const num = (v) => (v ? Number(String(v).replace(/\D/g, '')) : null);
+      return {
+        event_id: `norga_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`,
+        product: 'renouvellement-hypothecaire',
+        insuranceType: 'mortgage-renew',
+        phone: contact.phone,
+        email: contact.email,
+        fullName: [contact.prenom, contact.nom].filter(Boolean).join(' ').trim(),
+        // Mortgage-renewal context (no online price — advisor + manual rate page).
+        needs: {
+          habiter: answers.habiter,
+          valeurPropriete: num(answers.valeurPropriete),
+          soldeHypotheque: num(answers.soldeHypotheque),
+          dateRenouvellement: answers.dateRenouvellement,
+          optionInteret: answers.optionInteret,
+          typeTaux: answers.typeTaux,
+          duree: answers.duree,
+        },
+        consentChecked: true,
+        verification: { channel: 'sms', verifiedAt: new Date().toISOString(), isTestNumber: false },
+        submittedAt: new Date().toISOString(),
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
+        locale: 'fr',
+      };
+    },
+  },
 };
 
 export default function MortgageRenew() {

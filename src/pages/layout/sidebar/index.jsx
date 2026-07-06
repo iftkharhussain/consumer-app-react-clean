@@ -335,7 +335,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 			},
 			{
 				key: 'mortgage-expert',
-				selectPaths: ['/mortgage'],
+				selectPaths: ['/mortgage', '/mortgage-renew'],
 				icon: (
 					<Link to='/mortgage'>
 						<img src="/images/Prêt-Hypothécaire.svg" className={styles.sidebarIcon} alt="" />
@@ -582,6 +582,7 @@ const Sidebar = ({ collapsed: propsCollapsed, setCollapsed: propsSetCollapsed, o
 			habitation: 'home-insurance',
 			overview: 'life-insurance',
 			mortgage: 'mortgage-insurance',
+			'mortgage-expert': 'mortgage-renew',
 			disability: 'disability',
 			'critical-illness': 'critical-illness',
 		};

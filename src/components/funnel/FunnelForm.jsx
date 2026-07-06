@@ -102,7 +102,7 @@ export default function FunnelForm({ config, mode = 'public' }) {
     const s = steps[i];
     if (s.type === 'quiz') return isQuizComplete(s.quiz, answers[i]) && !(s.blockIf && s.blockIf(answers[i]));
     if (s.type === 'preferences') return s.fields.every((f) => answers[i][f.key]);
-    if (s.type === 'persons') return isPersonsComplete(answers[i]);
+    if (s.type === 'persons') return isPersonsComplete(answers[i], { minAge: s.minAge, maxAge: s.maxAge, minMontant: s.minMontant });
     return true; // contact step — reachable once prior steps are complete
   }
 
@@ -162,12 +162,25 @@ export default function FunnelForm({ config, mode = 'public' }) {
           suggestion={suggestionFor(s)}
           hideAdd={shortInternal}
           greenNext={shortInternal}
+          minAge={s.minAge}
+          maxAge={s.maxAge}
+          minMontant={s.minMontant}
           nextLabel={internal && isFinal ? 'Obtenir ma soumission' : 'Suivant'}
         />
       );
     }
     if (s.type === 'contact') {
       const personsIdx = steps.findIndex((st) => st.type === 'persons');
+      const personsList = personsIdx >= 0 ? answers[personsIdx] : undefined;
+      // Backend-wired funnels declare config.submit = { postUrl, buildPayload }.
+      // Bridge its ({ answers, persons, contact }) shape onto ContactTab's payload
+      // callback; forms without config.submit keep their existing s.buildPayload.
+      const submit = config.submit;
+      const buildPayload = submit
+        ? ({ email, phone, nom, prenom }) => submit.buildPayload({
+          answers: mergedAnswers(), persons: personsList || [], contact: { email, phone, nom, prenom },
+        })
+        : s.buildPayload;
       return (
         <ContactTab
           onBack={onBack}
@@ -176,8 +189,9 @@ export default function FunnelForm({ config, mode = 'public' }) {
           api={s.api}
           otp={s.otp}
           logLabel={s.logLabel}
-          buildPayload={s.buildPayload}
-          persons={personsIdx >= 0 ? answers[personsIdx] : undefined}
+          postUrl={submit?.postUrl}
+          buildPayload={buildPayload}
+          persons={personsList}
           answers={mergedAnswers()}
           selectPersonLabel={s.selectPersonLabel}
         />

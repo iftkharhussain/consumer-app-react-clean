@@ -13,6 +13,7 @@
  *   /questions/mortgage-refinance -> Refinancement hypothécaire
  *   /questions/mortgage-buy       -> Achat d'une propriété
  *   /questions/mortgage-consolidate -> Consolidation de dette
+ *   /questions/mortgage-insurance -> Assurance hypothécaire
  *
  * An unknown slug renders the empty shell (Header + Footer only).
  */

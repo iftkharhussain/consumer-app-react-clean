@@ -13,7 +13,7 @@
 import React, { useState, useRef } from 'react';
 import { CheckOutlined } from '@ant-design/icons';
 import { Field, FormGroup, OTPInputs, Input, ChevronRight, ChevronLeft, ChevronDown } from './primitives';
-import { OTP_LENGTH, normalizePhone, prettyPhone } from './funnelUtils';
+import { OTP_LENGTH, normalizePhone, prettyPhone, submitFunnelLead } from './funnelUtils';
 import { apiSendOtp, apiVerifyOtp, apiSubmitLead } from './funnelApi';
 import { isValidEmail, isValidName } from '../../pages/assuranceVie/formValidation';
 import styles from './funnel.module.css';
@@ -21,7 +21,7 @@ import styles from './funnel.module.css';
 export default function ContactTab({
   onBack, collectName = false, backLabel = "Retour à l'étape 2",
   api = false, persons, answers, buildPayload, otp = false, logLabel = 'funnel',
-  selectPersonLabel = 'Pour quel assuré créez-vous le compte ?',
+  postUrl, selectPersonLabel = 'Pour quel assuré créez-vous le compte ?',
 }) {
   const [mainView, setMainView] = useState('signup'); // 'signup' | 'login'
   const [nom, setNom] = useState('');
@@ -45,9 +45,11 @@ export default function ContactTab({
     if (mainView === 'login') { setLoading(false); setView('done'); return; }
     try {
       const payload = buildPayload
-        ? buildPayload({ email, phone: phoneOverride || verifyPhone, persons, answers, selectedPerson })
+        ? buildPayload({ email, phone: phoneOverride || verifyPhone, nom, prenom, persons, answers, selectedPerson })
         : {};
-      const data = await apiSubmitLead(payload);
+      // Backend-wired funnels POST to their own endpoint (config.submit.postUrl);
+      // the others go through the shared lead API.
+      const data = postUrl ? await submitFunnelLead(postUrl, payload) : await apiSubmitLead(payload);
       if (data?.redirectUrl) { window.location.href = data.redirectUrl; return; }
     } catch (err) {
       // Non-blocking: log and fall through to the confirmation screen.
@@ -129,8 +131,14 @@ export default function ContactTab({
       return;
     }
     setCodeError('');
-    // UI-only: any 6-digit code advances to the done screen.
-    if (!api) { setView('done'); return; }
+    // UI-only funnels: any code advances to done. Backend-wired ones (postUrl,
+    // e.g. the mortgage funnels) POST the real lead on confirm — same screens,
+    // just a real submit instead of a demo advance.
+    if (!api) {
+      if (postUrl) { setLoading(true); await submitLead(); return; }
+      setView('done');
+      return;
+    }
     setLoading(true);
     const verifyRes = await apiVerifyOtp(code, verifyPhone);
     if (!verifyRes?.success) {

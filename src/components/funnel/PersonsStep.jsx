@@ -35,15 +35,46 @@ export function createPerson(montant = '') {
   };
 }
 
-export function isPersonsComplete(persons) {
+// Age in whole years from a YYYY-MM-DD date of birth (null if unparseable).
+export function ageFromDob(dob) {
+  if (!dob) return null;
+  const d = new Date(dob);
+  if (Number.isNaN(d.getTime())) return null;
+  const now = new Date();
+  let age = now.getFullYear() - d.getFullYear();
+  const m = now.getMonth() - d.getMonth();
+  if (m < 0 || (m === 0 && now.getDate() < d.getDate())) age -= 1;
+  return age;
+}
+
+// Guardrail errors (empty string = valid). Config-driven so only funnels that set
+// minAge/maxAge/minMontant enforce them — keeps un-quotable values out of WinQuote.
+export function dobGuardError(dob, { minAge, maxAge } = {}) {
+  if (!dob) return '';
+  const age = ageFromDob(dob);
+  if (age === null) return '';
+  if (minAge != null && age < minAge) return `L'assuré doit avoir au moins ${minAge} ans.`;
+  if (maxAge != null && age > maxAge) return `L'estimation en ligne n'est pas disponible au-delà de ${maxAge} ans — parlez à votre conseiller.`;
+  return '';
+}
+export function montantGuardError(montant, { minMontant } = {}) {
+  if (!montant || minMontant == null || !isValidAmount(montant)) return '';
+  const n = Number(String(montant).replace(/\D/g, ''));
+  return n < minMontant ? `Le montant minimum est de ${minMontant.toLocaleString('fr-CA')} $.` : '';
+}
+
+export function isPersonsComplete(persons, guards = {}) {
   return (persons || []).every(
-    (p) => isValidName(p.nom) && isValidName(p.prenom) && p.dateNaissance && p.sexe && isValidAmount(p.montant),
+    (p) => isValidName(p.nom) && isValidName(p.prenom) && p.dateNaissance && p.sexe && isValidAmount(p.montant)
+      && !dobGuardError(p.dateNaissance, guards) && !montantGuardError(p.montant, guards),
   );
 }
 
-function PersonCard({ person, index, personLabel, firstPersonLabel, montantLabel, montantTip, montantSuffix, extraFields, reco, suggestion, onChange, onRemove, canRemove }) {
+function PersonCard({ person, index, personLabel, firstPersonLabel, montantLabel, montantTip, montantSuffix, extraFields, reco, suggestion, guards, onChange, onRemove, canRemove }) {
   const set = (f) => (v) => onChange({ ...person, [f]: v });
   const header = index === 0 && firstPersonLabel ? firstPersonLabel : `${personLabel} ${index + 1}`;
+  const dobErr = dobGuardError(person.dateNaissance, guards);
+  const montantErr = montantGuardError(person.montant, guards);
 
   return (
     <div className={styles.card}>
@@ -70,7 +101,7 @@ function PersonCard({ person, index, personLabel, firstPersonLabel, montantLabel
           </div>
 
           <div className={styles.gridResp2}>
-            <Field label="Date de naissance">
+            <Field label="Date de naissance" error={dobErr}>
               <DateInput value={person.dateNaissance} onChange={set('dateNaissance')} />
             </Field>
             <Field label="Sexe à la naissance">
@@ -112,9 +143,9 @@ function PersonCard({ person, index, personLabel, firstPersonLabel, montantLabel
               <strong style={{ color: '#1a1aba' }}>{suggestion.toLocaleString('fr-CA')} $</strong>.
             </p>
           ) : null}
-          <Field label={montantLabel} tip={montantTip}>
+          <Field label={montantLabel} tip={montantTip} error={montantErr}>
             <div style={{ width: '100%', maxWidth: 298 }}>
-              <Input type="text" inputMode="numeric" value={person.montant} onChange={set('montant')} placeholder="250 000" prefix="$" suffix={montantSuffix} filter="digits" />
+              <Input type="text" inputMode="numeric" value={person.montant} onChange={set('montant')} placeholder="250 000" prefix="$" suffix={montantSuffix} filter="digits" error={!!montantErr} />
             </div>
           </Field>
         </FormGroup>
@@ -129,9 +160,11 @@ export default function PersonsStep({
   montantLabel = "Montant d'assurance souhaité", montantTip = DEFAULT_MONTANT_TIP,
   montantSuffix, extraFields, reco, suggestion, defaultMontant,
   hideAdd = false, greenNext = false, nextLabel = 'Suivant',
+  minAge, maxAge, minMontant,
 }) {
+  const guards = { minAge, maxAge, minMontant };
   const list = persons && persons.length ? persons : [createPerson(defaultMontant)];
-  const complete = isPersonsComplete(list);
+  const complete = isPersonsComplete(list, guards);
 
   const updatePerson = (id, u) => onChange(list.map((x) => (x.id === id ? u : x)));
   const removePerson = (id) => onChange(list.filter((x) => x.id !== id));
@@ -143,7 +176,7 @@ export default function PersonsStep({
         <PersonCard
           key={p.id} person={p} index={i} personLabel={personLabel} firstPersonLabel={firstPersonLabel}
           montantLabel={montantLabel} montantTip={montantTip} montantSuffix={montantSuffix}
-          extraFields={extraFields} reco={reco} suggestion={suggestion}
+          extraFields={extraFields} reco={reco} suggestion={suggestion} guards={guards}
           onChange={(u) => updatePerson(p.id, u)}
           onRemove={() => removePerson(p.id)}
           canRemove={list.length > 1}

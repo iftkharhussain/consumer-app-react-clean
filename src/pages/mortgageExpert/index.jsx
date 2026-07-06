@@ -9,7 +9,14 @@ import {
 } from '@ant-design/icons';
 import { PageContent } from 'components';
 import { Types } from '../../utils/helper';
+import quoteService from '../../services/api/quoteService';
+import fortusService from '../../services/api/fortusService';
+import { serverUrl } from '../../apis/sharedApi';
+import toast from 'react-hot-toast';
 import styles from './MortgageExpert.module.css';
+
+// Mortgage-broker product slugs that share this rate page (not mortgage-insurance).
+const BROKER_SLUGS = ['mortgage-renew', 'mortgage-refinance', 'mortgage-buy', 'mortgage-consolidate'];
 
 const { Panel } = Collapse;
 
@@ -87,6 +94,11 @@ const MortgageExpert = () => {
   const { firstName } = useSelector((state) => state.app.user_profile);
   const [activeTab, setActiveTab] = useState("5 ans");
   const [activeFaq, setActiveFaq] = useState([]);
+  const [advisor, setAdvisor] = useState(null);
+  const [productSlug, setProductSlug] = useState('mortgage-renew');
+  const [userProductId, setUserProductId] = useState(null);
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
   useEffect(() => {
     if (!initialized.current) {
@@ -102,9 +114,49 @@ const MortgageExpert = () => {
     }
   }, [dispatch]);
 
-  const handleBookCall = () => {
-    console.log("Booking call with mortgage broker...");
+  // Load this user's mortgage-broker product → real advisor (broker).
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const res = await quoteService.getUserProducts();
+        const product = (res?.products || []).find((p) => BROKER_SLUGS.includes(p.productSlug));
+        if (active && product) {
+          setProductSlug(product.productSlug);
+          setUserProductId(product.id || null);
+          if (product.advisor) setAdvisor(product.advisor);
+        }
+      } catch (e) { /* fall back to generic broker text */ }
+    })();
+    return () => { active = false; };
+  }, []);
+
+  const handleBookCall = async () => {
+    if (sent) return;
+    try {
+      setSending(true);
+      const r = await fortusService.requestCall({ productSlug, userProductId });
+      if (r?.success) {
+        setSent(true);
+        toast.success('Votre demande a été envoyée. Un conseiller vous contactera.');
+        if (userProductId) fortusService.trackEvent(userProductId, 'call').catch(() => {});
+      } else {
+        toast.error(r?.message || 'Une erreur est survenue.');
+      }
+    } catch (e) {
+      toast.error(e?.response?.data?.message || e.message || 'Une erreur est survenue.');
+    } finally {
+      setSending(false);
+    }
   };
+
+  const advisorName = advisor?.name || 'Votre courtier';
+  const advisorTitle = 'Courtier hypothécaire';
+  const advisorEmail = advisor?.email || '';
+  const advisorPhone = advisor?.phone || '';
+  const advisorAvatar = advisor?.avatar && !String(advisor.avatar).includes('default')
+    ? (String(advisor.avatar).startsWith('http') ? advisor.avatar : `${serverUrl}${advisor.avatar}`)
+    : '/images/user-placeholder.png';
 
   const currentRates = MORTGAGE_RATES[activeTab];
 
@@ -116,12 +168,12 @@ const MortgageExpert = () => {
         <div className={styles.bannerCard}>
           <div className={styles.advisorProfileBox}>
             {/* Using a different avatar as in the image */}
-            <img src="/images/user-placeholder.png" alt="Advisor" className={styles.advisorAvatarLarge} />
-            <h3 className={styles.advisorNameLarge}>Jean-Phil Dion</h3>
-            <p className={styles.advisorTitleLarge}>Courtier hypothécaire</p>
+            <img src={advisorAvatar} alt={advisorName} className={styles.advisorAvatarLarge} />
+            <h3 className={styles.advisorNameLarge}>{advisorName}</h3>
+            <p className={styles.advisorTitleLarge}>{advisorTitle}</p>
             <div className={styles.advisorContactBox}>
-              <div>Courriel: jeanph@norgax.com</div>
-              <div>Tél: +1-514-XXX-XXXX</div>
+              <div>Courriel: {advisorEmail || '—'}</div>
+              <div>Tél: {advisorPhone || '—'}</div>
             </div>
           </div>
           
@@ -136,8 +188,8 @@ const MortgageExpert = () => {
             <p className={styles.bannerDesc}>
               Nos experts sont toujours là pour bâtir avec vous une stratégie hypothécaire personnalisée, confirmer votre taux instantané, recueillir vos questions personnelles et financières, puis ajuster la soumission avec précision selon vos besoins.
             </p>
-            <Button className={styles.bannerButton} onClick={handleBookCall}>
-              Planifier un appel avec votre courtier
+            <Button className={styles.bannerButton} onClick={handleBookCall} loading={sending} disabled={sending || sent}>
+              {sent ? 'Demande envoyée' : 'Planifier un appel avec votre courtier'}
             </Button>
           </div>
         </div>
@@ -233,11 +285,11 @@ const MortgageExpert = () => {
           </Collapse>
 
           <div className={styles.faqCta}>
-            <img src="/images/user-placeholder.png" alt="Advisor" className={styles.ctaAvatar} />
+            <img src={advisorAvatar} alt={advisorName} className={styles.ctaAvatar} />
             <h3 className={styles.ctaTitle}>Vous avez encore des questions?</h3>
-            <p className={styles.ctaDesc}>Parlez à votre courtier Jean-Phil Dion pour qu'il vous aide.</p>
-            <Button className={styles.ctaButton} onClick={handleBookCall}>
-              Planifier mon appel
+            <p className={styles.ctaDesc}>Parlez à votre courtier {advisorName} pour qu'il vous aide.</p>
+            <Button className={styles.ctaButton} onClick={handleBookCall} loading={sending} disabled={sending || sent}>
+              {sent ? 'Demande envoyée' : 'Planifier mon appel'}
             </Button>
           </div>
         </div>
