@@ -31,8 +31,8 @@ export default function Footer() {
   return (
     <footer className={styles.footer}>
       {/* Decorative wave that sits on the page background above the blue block. */}
-      <svg className={styles.wave} viewBox="0 0 1440 48" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 48 L0 24 C 240 0 480 48 720 32 C 960 16 1200 0 1440 24 L 1440 48 Z" />
+      <svg className={styles.wave} viewBox="0 -16 1440 84" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+        <path d="M1440 47.5411C1369.24 43.2952 1308.53 16.0927 1238.36 4.77331C1109.65 -15.9917 981.473 36.8062 852.165 51.9244C709.538 68.607 566.348 39.2557 423.908 20.562C281.475 1.86827 134.1 -10.577 0 47.5411L0 68L1440 68Z" />
       </svg>
 
       <div className={styles.footerInner}>
@@ -52,11 +52,13 @@ export default function Footer() {
       </div>
 
       <div className={styles.footerLegal}>
-        Norga inc.,
+        Norga Inc.
         <br />
         distributeur des produits financiers iA groupe financier
         <br />
-        123-100, rue Robinson S, 2e étage, Granby (Québec) J2G 7L4
+        122-100, rue Robinson S, 2e étage
+        <br />
+        Granby (Québec) J2G 7L4
       </div>
     </footer>
   );

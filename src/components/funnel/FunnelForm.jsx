@@ -31,7 +31,6 @@ import PersonsStep, { createPerson, isPersonsComplete } from './PersonsStep';
 import ContactTab from './ContactTab';
 import { MobProgress, MobSlide } from './Mobile';
 import { isValidAmount } from '../../pages/assuranceVie/formValidation';
-import logo from '../../logo.svg';
 import styles from './funnel.module.css';
 
 // A quiz step is complete when every required (non-optional) visible question is
@@ -237,7 +236,7 @@ export default function FunnelForm({ config, mode = 'public' }) {
       <div className={styles.mobile}>
         <div className={styles.mobHeader}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <img src={logo} alt="Norga" style={{ height: 20, objectFit: 'contain' }} />
+            <img src="/images/norga-blue-logo.png" alt="Norga" style={{ height: 20, objectFit: 'contain' }} />
             <span style={{ fontSize: 10, color: '#b0bac4', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
               {mobileLabel || badge}
             </span>

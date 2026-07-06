@@ -5,15 +5,15 @@
 
 .improved-date-picker {
     position: relative;
-    background: linear-gradient(to bottom right, #ffffff, #fafbff);
-    border: 1.5px solid #ededed;
-    height: 40px;
+    background: #FFF;
+    border: 1px solid #E9EAEB;
+    height: 42px;
     border-radius: 10px;
-    box-shadow: none;
+    box-shadow: 0 2px 4px 0 rgba(26, 26, 186, 0.06);
     display: flex;
     align-items: center;
     padding: 0 12px;
-    gap: 10px;
+    gap: 8px;
     transition: all 0.3s ease;
 }
 
@@ -65,11 +65,10 @@
 }
 
 .calendar-separator {
-    height: 24px;
-    width: 1.5px;
-    background: linear-gradient(to bottom, transparent, #e5e7eb, transparent);
+    height: 18px;
+    width: 1px;
+    background: #E0E3EA;
     flex-shrink: 0;
-    opacity: 0.6;
 }
 
 .date-inputs-container {
@@ -80,20 +79,22 @@
 }
 
 .date-input-field-wrapper {
-    flex: 1;
+    flex: 0 0 auto;
     position: relative;
 }
 
 .date-input-field-wrapper.year {
-    flex: 1.5;
+    flex: 0 0 auto;
 }
 
 .date-input-field {
-    width: 100%;
+    width: 26px;
     font-family: 'Inter', sans-serif;
+    font-style: normal;
     font-weight: 500;
-    font-size: 16px;
-    color: #3c40c7;
+    font-size: 13px;
+    line-height: normal;
+    color: #B0BAC4;
     border: none !important;
     outline: none !important;
     background: transparent !important;
@@ -105,12 +106,16 @@
 }
 
 .date-input-field::placeholder {
-    color: #9ca3af;
-    font-weight: 400;
+    color: #B0BAC4;
+    font-weight: 500;
+}
+
+.date-input-field-wrapper.year .date-input-field {
+    width: 42px;
 }
 
 .date-input-divider {
-    color: #d1d5db;
+    color: #B0BAC4;
     font-size: 16px;
     font-weight: 300;
     user-select: none;

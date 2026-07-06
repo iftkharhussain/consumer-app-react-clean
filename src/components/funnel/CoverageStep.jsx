@@ -15,8 +15,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { RightOutlined, LeftOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import { Input, Select, YesNoToggle, PillToggle, InfoTooltip } from './primitives';
+import { Input, Select, YesNoToggle, PillToggle, InfoTooltip, ChevronRight, ChevronLeft } from './primitives';
 import { isValidAmount } from '../../pages/assuranceVie/formValidation';
 import styles from './funnel.module.css';
 import local from './funnel.module.css';
@@ -95,6 +94,12 @@ export default function CoverageStep({ quiz, answers, onChange, onNext, onBack, 
 
   function confirmText(q) {
     if (!draft.trim()) return;
+    // Blur the focused input before it unmounts (e.g. when this was the last
+    // question and the done banner replaces it) so the mobile keyboard/caret
+    // doesn't linger over the "done" message.
+    if (typeof document !== 'undefined' && document.activeElement && document.activeElement.blur) {
+      document.activeElement.blur();
+    }
     onChange({ ...answers, [q.key]: draft.trim() });
   }
 
@@ -119,6 +124,7 @@ export default function CoverageStep({ quiz, answers, onChange, onNext, onBack, 
     }
     if (q.inputType === 'yesno') return raw === 'oui' ? 'Oui' : 'Non';
     if (q.prefix) return `${q.prefix} ${raw}`;
+    if (q.suffix) return `${raw} ${q.suffix}`;
     return raw;
   }
 
@@ -130,7 +136,7 @@ export default function CoverageStep({ quiz, answers, onChange, onNext, onBack, 
         {answered.length > 0 && (
           <div style={{ padding: '16px 20px 0', display: 'flex', flexDirection: 'column' }}>
             {answered.map((q, i) => (
-              <div key={q.key} style={{ padding: '10px 0', borderTop: i === 0 ? 'none' : '1px solid #f0f2f5' }}>
+              <div key={q.key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', padding: '10px 0', borderTop: i === 0 ? 'none' : '1px solid #f0f2f5' }}>
                 <span style={{ fontFamily: 'Inter', fontSize: 12, fontStyle: 'normal', fontWeight: 400, lineHeight: '18px', color: '#9baab8', display: 'block', marginBottom: 2 }}>{q.summaryLabel || q.label}</span>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
                   <span style={{ fontFamily: 'Inter', fontSize: 12, fontStyle: 'normal', fontWeight: 600, lineHeight: '18px', color: '#364152' }}>{displayValue(q)}</span>
@@ -144,14 +150,17 @@ export default function CoverageStep({ quiz, answers, onChange, onNext, onBack, 
         )}
 
         {isBlocked && (
-          <div style={{ padding: answered.length > 0 ? '16px 20px 20px' : '20px', borderTop: answered.length > 0 ? '1px solid #f0f2f5' : 'none' }}>
-            <div style={{ display: 'flex', gap: 12, background: '#fef2f2', border: '1px solid #fee2e2', borderRadius: 10, padding: '14px 16px' }}>
-              <div style={{ marginTop: 2, flexShrink: 0, width: 20, height: 20, borderRadius: 999, background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <CloseOutlined style={{ fontSize: 11, color: '#ef4444' }} />
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', alignSelf: 'stretch', padding: '16px 20px 20px 20px', borderTop: '1px solid #F0F2F5' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', alignSelf: 'stretch', gap: 12, background: '#FEF2F2', border: '1px solid #FFE2E2', borderRadius: 10, padding: '14px 16px' }}>
+              <div style={{ marginTop: 2, flexShrink: 0, width: 20, height: 20, borderRadius: 33554400, background: '#FFE2E2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 11 11" fill="none" style={{ flexShrink: 0 }}>
+                  <path d="M8.25 2.75L2.75 8.25" stroke="#FB2C36" strokeWidth="0.916667" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M2.75 2.75L8.25 8.25" stroke="#FB2C36" strokeWidth="0.916667" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               </div>
               <div>
-                <p style={{ fontSize: 13, fontWeight: 600, color: '#b91c1c', margin: '0 0 2px' }}>{blockedTitle || 'Soumission non disponible'}</p>
-                <p style={{ fontSize: 12, color: '#ef4444', lineHeight: 1.6, margin: 0 }}>{blockedText}</p>
+                <p style={{ fontFamily: 'Inter', fontSize: 13, fontStyle: 'normal', fontWeight: 600, lineHeight: '19.5px', color: '#C10007', margin: '0 0 2px' }}>{blockedTitle || 'Soumission non disponible'}</p>
+                <p style={{ fontFamily: 'Inter', fontSize: 12, fontStyle: 'normal', fontWeight: 400, lineHeight: '19.5px', color: '#FB2C36', margin: 0 }}>{blockedText}</p>
               </div>
             </div>
           </div>
@@ -165,7 +174,7 @@ export default function CoverageStep({ quiz, answers, onChange, onNext, onBack, 
                 {currentQ.tip && <InfoTooltip content={currentQ.tip} />}
               </div>
               {currentQ.description && (
-                <p style={{ fontSize: 13, color: '#9baab8', margin: '4px 0 0', lineHeight: 1.5 }}>{currentQ.description}</p>
+                <p style={{ fontFamily: 'Inter', fontSize: 12, fontStyle: 'normal', fontWeight: 400, lineHeight: '18px', color: '#9baab8', margin: '4px 0 0' }}>{currentQ.description}</p>
               )}
             </div>
 
@@ -186,8 +195,12 @@ export default function CoverageStep({ quiz, answers, onChange, onNext, onBack, 
                         className={styles.choice}
                         style={sel ? { borderColor: '#1A1ABA', background: '#F0F0FF', color: '#1A1ABA' } : undefined}
                       >
-                        <span style={{ width: 18, height: 18, borderRadius: 4, border: `1.5px solid ${sel ? '#1a1aba' : '#cdd5df'}`, background: sel ? '#1a1aba' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                          {sel && <CheckOutlined style={{ color: '#fff', fontSize: 11 }} />}
+                        <span style={{ boxSizing: 'border-box', width: 16, height: 16, borderRadius: 4, border: `2px solid ${sel ? '#1A1ABA' : '#cdd5df'}`, background: sel ? '#1A1ABA' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          {sel && (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9" fill="none" style={{ flexShrink: 0 }}>
+                              <path d="M7.5 2.25L3.375 6.375L1.5 4.5" stroke="white" strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          )}
                         </span>
                         {o.label}
                       </button>
@@ -200,21 +213,25 @@ export default function CoverageStep({ quiz, answers, onChange, onNext, onBack, 
                     disabled={!multiDraft.length} className={styles.btnPrimary}
                     style={!multiDraft.length ? { opacity: 0.5 } : undefined}
                   >
-                    Continuer <RightOutlined style={{ fontSize: 12 }} />
+                    Continuer <ChevronRight />
                   </button>
                 </div>
               </>
             ) : currentQ.optional && (currentQ.inputType === 'text' || currentQ.inputType === 'number') ? (
-              <Input
-                type="text"
-                inputMode={currentQ.inputType === 'number' ? 'numeric' : undefined}
-                value={answers[currentQ.key] || ''}
-                onChange={(v) => setLive(currentQ, v)}
-                placeholder={currentQ.placeholder}
-                prefix={currentQ.prefix}
-                suffix={currentQ.suffix}
-                filter={currentQ.inputType === 'number' ? 'digits' : undefined}
-              />
+              <div className={local.textRow}>
+                <div className={local.textRowField}>
+                  <Input
+                    type="text"
+                    inputMode={currentQ.inputType === 'number' ? 'numeric' : undefined}
+                    value={answers[currentQ.key] || ''}
+                    onChange={(v) => setLive(currentQ, v)}
+                    placeholder={currentQ.placeholder}
+                    prefix={currentQ.prefix}
+                    suffix={currentQ.suffix}
+                    filter={currentQ.inputType === 'number' ? 'digits' : undefined}
+                  />
+                </div>
+              </div>
             ) : currentQ.inputType === 'text' || currentQ.inputType === 'number' ? (
               <div className={local.textRow}>
                 <div className={local.textRowField}>
@@ -230,7 +247,9 @@ export default function CoverageStep({ quiz, answers, onChange, onNext, onBack, 
                   />
                 </div>
                 <button type="button" onClick={() => confirmText(currentQ)} disabled={!draft.trim()} className={local.okBtn}>
-                  <CheckOutlined style={{ fontSize: 14 }} />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
+                    <path d="M11.6667 3.5L5.25001 9.91667L2.33334 7" stroke="white" strokeWidth="1.16667" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                 </button>
               </div>
             ) : currentQ.inputType === 'monthYear' ? (
@@ -265,10 +284,12 @@ export default function CoverageStep({ quiz, answers, onChange, onNext, onBack, 
 
         {isDone && !currentQ && (
           <div style={{ padding: '16px 20px 20px', borderTop: answered.length > 0 ? '1px solid #f0f2f5' : 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ width: 20, height: 20, borderRadius: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, background: 'linear-gradient(135deg, #3FC099, #35a882)' }}>
-              <CheckOutlined style={{ color: '#fff', fontSize: 11 }} />
+            <span style={{ width: 20, height: 20, borderRadius: 33554400, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, background: 'linear-gradient(135deg, #3FC099 0%, #35A882 100%)' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 11 11" fill="none" style={{ flexShrink: 0 }}>
+                <path d="M9.16659 2.75L4.12492 7.79167L1.83325 5.5" stroke="white" strokeWidth="0.916667" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </span>
-            <span style={{ fontSize: 13, color: '#697586' }}>{doneMessage || DEFAULT_DONE}</span>
+            <span style={{ fontFamily: 'Inter', fontSize: 13, fontStyle: 'normal', fontWeight: 400, lineHeight: '19.5px', color: '#697586' }}>{doneMessage || DEFAULT_DONE}</span>
           </div>
         )}
       </div>
@@ -277,12 +298,12 @@ export default function CoverageStep({ quiz, answers, onChange, onNext, onBack, 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 4 }}>
           {onBack ? (
             <button type="button" onClick={onBack} className={styles.btnGhost}>
-              <LeftOutlined style={{ fontSize: 12 }} /> Retour
+              <ChevronLeft /> Retour
             </button>
           ) : <span />}
           {isDone && (
             <button type="button" onClick={onNext} className={styles.btnPrimary}>
-              Suivant <RightOutlined style={{ fontSize: 12 }} />
+              Suivant <ChevronRight />
             </button>
           )}
         </div>

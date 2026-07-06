@@ -89,11 +89,7 @@ const assuranceMaladieGraveConfig = {
         {
           key: 'diagnosed',
           label: "Avez-vous été diagnostiqué d'une maladie grave dans les 2 dernières années ?",
-          inputType: 'pill',
-          options: [
-            { value: 'non', label: 'Non' },
-            { value: 'oui', label: 'Oui' },
-          ],
+          inputType: 'yesno',
         },
         {
           key: 'protection',

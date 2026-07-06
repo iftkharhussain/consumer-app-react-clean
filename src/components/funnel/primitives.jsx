@@ -9,11 +9,38 @@
  */
 
 import React, { useState, useRef } from 'react';
-import { InfoCircleOutlined, DownOutlined } from '@ant-design/icons';
 import ImprovedDatePicker from '../../pages/assuranceVie/ImprovedDatePicker';
 import { sanitizeName, sanitizeDigits, formatCAPhone } from '../../pages/assuranceVie/formValidation';
 import styles from './funnel.module.css';
 import local from './funnel.module.css';
+
+// ── Chevron-right icon (shared by every "Suivant"/"Continuer" button) ─────────
+// stroke: currentColor → white on the blue/green CTAs, inherits on outline ones.
+export function ChevronRight({ size = 14 }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
+      <path d="M5.25 10.5L8.75 7L5.25 3.5" stroke="currentColor" strokeWidth="1.16667" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+// Chevron-left icon (shared by every "Retour" button). stroke: currentColor.
+export function ChevronLeft({ size = 13 }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 13 13" fill="none" style={{ flexShrink: 0 }}>
+      <path d="M8.125 9.75L4.875 6.5L8.125 3.25" stroke="currentColor" strokeWidth="1.08333" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+// Chevron-down icon for dropdown selects (the right-aligned indicator).
+export function ChevronDown({ className }) {
+  return (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="7" height="4" viewBox="0 0 7 4" fill="none">
+      <path d="M0.5 0.5L3.5 3.5L6.5 0.5" stroke="#9BAAB8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 // ── Info tooltip ──────────────────────────────────────────────────────────────
 
@@ -37,7 +64,18 @@ export function InfoTooltip({ content }) {
         onBlur={() => setTimeout(() => setOpen(false), 150)}
         className={styles.tipBtn}
       >
-        <InfoCircleOutlined style={{ fontSize: 13 }} />
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none" style={{ display: 'block' }}>
+          <g clipPath="url(#clip0_25_8032)">
+            <path d="M6.50004 11.9166C9.49158 11.9166 11.9167 9.49152 11.9167 6.49998C11.9167 3.50844 9.49158 1.08331 6.50004 1.08331C3.5085 1.08331 1.08337 3.50844 1.08337 6.49998C1.08337 9.49152 3.5085 11.9166 6.50004 11.9166Z" stroke="#1A1ABA" strokeOpacity="0.5" strokeWidth="1.08333" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M6.5 8.66667V6.5" stroke="#1A1ABA" strokeOpacity="0.5" strokeWidth="1.08333" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M6.5 4.33331H6.50542" stroke="#1A1ABA" strokeOpacity="0.5" strokeWidth="1.08333" strokeLinecap="round" strokeLinejoin="round" />
+          </g>
+          <defs>
+            <clipPath id="clip0_25_8032">
+              <rect width="13" height="13" fill="white" />
+            </clipPath>
+          </defs>
+        </svg>
       </button>
       {open && (
         <div
@@ -84,7 +122,7 @@ export function Select({ value, onChange, options }) {
       <select value={value} onChange={(e) => onChange(e.target.value)} className={styles.select}>
         {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
       </select>
-      <DownOutlined className={styles.selectChevron} style={{ fontSize: 11 }} />
+      <ChevronDown className={styles.selectChevron} />
     </div>
   );
 }

@@ -6,10 +6,10 @@
  * Stores/emits the date as a "YYYY-MM-DD" string (or null when cleared).
  */
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { DayPicker } from 'react-day-picker';
 import { fr } from 'date-fns/locale';
 import dayjs from 'dayjs';
-import { CalendarOutlined } from '@ant-design/icons';
 import 'react-day-picker/dist/style.css';
 import './ImprovedDatePicker.css';
 
@@ -41,6 +41,36 @@ const ImprovedDatePicker = ({
     const dayDropdownRef = useRef(null);
     const monthDropdownRef = useRef(null);
     const yearDropdownRef = useRef(null);
+    const pickerBarRef = useRef(null);
+
+    // Popups are portaled to <body> (so the card's overflow:hidden can't clip
+    // them); we compute their on-screen position from the trigger's rect.
+    const [calPos, setCalPos] = useState(null);
+    const [dayPos, setDayPos] = useState(null);
+    const [monthPos, setMonthPos] = useState(null);
+    const [yearPos, setYearPos] = useState(null);
+
+    // Keep the open popup pinned to its trigger while the page scrolls/resizes.
+    useEffect(() => {
+        const anyOpen = showCalendar || showDayDropdown || showMonthDropdown || showYearDropdown;
+        if (!anyOpen) return;
+        const update = () => {
+            if (pickerBarRef.current) {
+                const r = pickerBarRef.current.getBoundingClientRect();
+                setCalPos({ top: r.bottom + 8, left: r.left, width: r.width });
+            }
+            if (dayRef.current) { const r = dayRef.current.getBoundingClientRect(); setDayPos({ top: r.bottom + 4, left: r.left }); }
+            if (monthRef.current) { const r = monthRef.current.getBoundingClientRect(); setMonthPos({ top: r.bottom + 4, left: r.left }); }
+            if (yearRef.current) { const r = yearRef.current.getBoundingClientRect(); setYearPos({ top: r.bottom + 4, left: r.left }); }
+        };
+        update();
+        window.addEventListener('scroll', update, true);
+        window.addEventListener('resize', update);
+        return () => {
+            window.removeEventListener('scroll', update, true);
+            window.removeEventListener('resize', update);
+        };
+    }, [showCalendar, showDayDropdown, showMonthDropdown, showYearDropdown]);
 
     const mois = [
         { value: '01', label: 'Janvier' },
@@ -214,17 +244,33 @@ const ImprovedDatePicker = ({
 
     return (
         <div className={`improved-date-picker-wrapper ${className}`} style={style}>
-            <div className="improved-date-picker">
+            <div className="improved-date-picker" ref={pickerBarRef}>
                 {pickerMode !== 'month' && (
                     <>
                         <button
                             type="button"
-                            onClick={() => setShowCalendar(!showCalendar)}
+                            onClick={() => {
+                                if (!showCalendar && pickerBarRef.current) {
+                                    const r = pickerBarRef.current.getBoundingClientRect();
+                                    setCalPos({ top: r.bottom + 8, left: r.left, width: r.width });
+                                }
+                                setShowCalendar(!showCalendar);
+                            }}
                             className="calendar-toggle-btn"
                             title="Calendrier"
                         >
                             <div className="calendar-icon-bg" />
-                            <CalendarOutlined style={{ color: '#3c40c7', fontSize: '16px', position: 'relative' }} />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ position: 'relative', flexShrink: 0 }}>
+                                <path d="M13.6667 2.83331H4.33333C3.59695 2.83331 3 3.43027 3 4.16665V13.5C3 14.2364 3.59695 14.8333 4.33333 14.8333H13.6667C14.403 14.8333 15 14.2364 15 13.5V4.16665C15 3.43027 14.403 2.83331 13.6667 2.83331Z" fill="url(#paint0_linear_25_8000)" />
+                                <path d="M3 6.83331H15M13.6667 2.83331H4.33333C3.59695 2.83331 3 3.43027 3 4.16665V13.5C3 14.2364 3.59695 14.8333 4.33333 14.8333H13.6667C14.403 14.8333 15 14.2364 15 13.5V4.16665C15 3.43027 14.403 2.83331 13.6667 2.83331Z" stroke="#1A1ABA" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M6.33337 1.5V4.16667M11.6667 1.5V4.16667" stroke="#1A1ABA" strokeWidth="1.8" strokeLinecap="round" />
+                                <defs>
+                                    <linearGradient id="paint0_linear_25_8000" x1="3" y1="2.83331" x2="15" y2="14.8333" gradientUnits="userSpaceOnUse">
+                                        <stop stopColor="#F0F0FF" stopOpacity="0.4" />
+                                        <stop offset="1" stopColor="#E0E0FF" stopOpacity="0.6" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
                         </button>
                         <div className="calendar-separator" />
                     </>
@@ -241,19 +287,20 @@ const ImprovedDatePicker = ({
                                     value={day}
                                     onChange={handleDayChange}
                                     onKeyDown={handleDayKeyDown}
-                                    onFocus={() => { setShowDayDropdown(true); setShowMonthDropdown(false); setShowYearDropdown(false); }}
+                                    onFocus={(e) => { const r = e.currentTarget.getBoundingClientRect(); setDayPos({ top: r.bottom + 4, left: r.left }); setShowDayDropdown(true); setShowMonthDropdown(false); setShowYearDropdown(false); }}
                                     placeholder="JJ"
                                     maxLength={2}
                                     className="date-input-field"
                                 />
-                                {showDayDropdown && (
-                                    <div ref={dayDropdownRef} className="date-dropdown dropdown-day">
+                                {showDayDropdown && dayPos && createPortal(
+                                    <div ref={dayDropdownRef} className="date-dropdown dropdown-day" style={{ position: 'fixed', top: dayPos.top, left: dayPos.left, marginTop: 0 }}>
                                         {days.map((d) => (
                                             <button key={d} type="button" onClick={() => handleSelectValue('day', d)} className="dropdown-option">
                                                 {d}
                                             </button>
                                         ))}
-                                    </div>
+                                    </div>,
+                                    document.body,
                                 )}
                             </div>
                             <span className="date-input-divider">/</span>
@@ -268,19 +315,20 @@ const ImprovedDatePicker = ({
                             value={month}
                             onChange={handleMonthChange}
                             onKeyDown={handleMonthKeyDown}
-                            onFocus={() => { setShowMonthDropdown(true); setShowDayDropdown(false); setShowYearDropdown(false); }}
+                            onFocus={(e) => { const r = e.currentTarget.getBoundingClientRect(); setMonthPos({ top: r.bottom + 4, left: r.left }); setShowMonthDropdown(true); setShowDayDropdown(false); setShowYearDropdown(false); }}
                             placeholder="MM"
                             maxLength={2}
                             className="date-input-field"
                         />
-                        {showMonthDropdown && (
-                            <div ref={monthDropdownRef} className="date-dropdown dropdown-month">
+                        {showMonthDropdown && monthPos && createPortal(
+                            <div ref={monthDropdownRef} className="date-dropdown dropdown-month" style={{ position: 'fixed', top: monthPos.top, left: monthPos.left, marginTop: 0 }}>
                                 {mois.map((m) => (
                                     <button key={m.value} type="button" onClick={() => handleSelectValue('month', m.value)} className="dropdown-option">
                                         {m.label}
                                     </button>
                                 ))}
-                            </div>
+                            </div>,
+                            document.body,
                         )}
                     </div>
 
@@ -294,26 +342,27 @@ const ImprovedDatePicker = ({
                             value={year}
                             onChange={handleYearChange}
                             onKeyDown={handleYearKeyDown}
-                            onFocus={() => { setShowYearDropdown(true); setShowDayDropdown(false); setShowMonthDropdown(false); }}
+                            onFocus={(e) => { const r = e.currentTarget.getBoundingClientRect(); setYearPos({ top: r.bottom + 4, left: r.left }); setShowYearDropdown(true); setShowDayDropdown(false); setShowMonthDropdown(false); }}
                             placeholder="AAAA"
                             maxLength={4}
                             className="date-input-field"
                         />
-                        {showYearDropdown && (
-                            <div ref={yearDropdownRef} className="date-dropdown dropdown-year">
+                        {showYearDropdown && yearPos && createPortal(
+                            <div ref={yearDropdownRef} className="date-dropdown dropdown-year" style={{ position: 'fixed', top: yearPos.top, left: yearPos.left, right: 'auto', marginTop: 0 }}>
                                 {years.map((y) => (
                                     <button key={y} type="button" onClick={() => handleSelectValue('year', y.toString())} className="dropdown-option">
                                         {y}
                                     </button>
                                 ))}
-                            </div>
+                            </div>,
+                            document.body,
                         )}
                     </div>
                 </div>
             </div>
 
-            {showCalendar && pickerMode !== 'month' && (
-                <div ref={calendarRef} className="calendar-popup">
+            {showCalendar && pickerMode !== 'month' && calPos && createPortal(
+                <div ref={calendarRef} className="calendar-popup" style={{ position: 'fixed', top: calPos.top, left: calPos.left, marginTop: 0 }}>
                     <DayPicker
                         mode="single"
                         selected={internalValue}
@@ -324,7 +373,8 @@ const ImprovedDatePicker = ({
                         captionLayout="dropdown"
                         defaultMonth={getCalendarDefaultMonth()}
                     />
-                </div>
+                </div>,
+                document.body,
             )}
         </div>
     );

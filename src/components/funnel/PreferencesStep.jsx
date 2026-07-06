@@ -9,11 +9,10 @@
  */
 
 import React from 'react';
-import { RightOutlined, LeftOutlined } from '@ant-design/icons';
-import { Field, PillToggle } from './primitives';
+import { Field, PillToggle, ChevronRight, ChevronLeft } from './primitives';
 import styles from './funnel.module.css';
 
-export default function PreferencesStep({ title, subtitle, fields, values, onChange, onNext, onBack, toggleWidth = 480 }) {
+export default function PreferencesStep({ title, subtitle, fields, values, onChange, onNext, onBack }) {
   const set = (key) => (v) => onChange({ ...values, [key]: v });
 
   return (
@@ -26,7 +25,7 @@ export default function PreferencesStep({ title, subtitle, fields, values, onCha
         <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
           {fields.map((f) => (
             <Field key={f.key} label={f.label} tip={f.tip}>
-              <div style={{ maxWidth: toggleWidth, width: '100%' }}>
+              <div style={{ width: '100%' }}>
                 <PillToggle value={values[f.key]} onChange={set(f.key)} options={f.options} />
               </div>
             </Field>
@@ -36,10 +35,10 @@ export default function PreferencesStep({ title, subtitle, fields, values, onCha
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 4 }}>
         <button type="button" onClick={onBack} className={styles.btnGhost}>
-          <LeftOutlined style={{ fontSize: 12 }} /> Retour
+          <ChevronLeft /> Retour
         </button>
         <button type="button" onClick={onNext} className={styles.btnPrimary}>
-          Suivant <RightOutlined style={{ fontSize: 12 }} />
+          Suivant <ChevronRight />
         </button>
       </div>
     </div>

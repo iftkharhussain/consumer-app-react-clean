@@ -12,8 +12,8 @@
  */
 
 import React from 'react';
-import { PlusOutlined, CloseOutlined, RightOutlined, LeftOutlined } from '@ant-design/icons';
-import { Field, FormGroup, Input, DateInput, BoxSelect, PillToggle, Select, YesNoToggle } from './primitives';
+import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
+import { Field, FormGroup, Input, DateInput, BoxSelect, PillToggle, Select, YesNoToggle, ChevronRight, ChevronLeft } from './primitives';
 import { isValidName, isValidAmount } from '../../pages/assuranceVie/formValidation';
 import styles from './funnel.module.css';
 import local from './funnel.module.css';
@@ -48,7 +48,7 @@ function PersonCard({ person, index, personLabel, firstPersonLabel, montantLabel
   return (
     <div className={styles.card}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: '1px solid #f0f2f5' }}>
-        <span style={{ fontSize: 13, fontWeight: 600, color: '#364152', letterSpacing: '-0.1px' }}>
+        <span style={{ fontFamily: 'Inter', fontSize: 13, fontStyle: 'normal', fontWeight: 600, lineHeight: '19.5px', color: '#364152', letterSpacing: '-0.1px' }}>
           {header}
         </span>
         {canRemove && (
@@ -113,7 +113,7 @@ function PersonCard({ person, index, personLabel, firstPersonLabel, montantLabel
             </p>
           ) : null}
           <Field label={montantLabel} tip={montantTip}>
-            <div style={{ width: '100%' }}>
+            <div style={{ width: '100%', maxWidth: 298 }}>
               <Input type="text" inputMode="numeric" value={person.montant} onChange={set('montant')} placeholder="250 000" prefix="$" suffix={montantSuffix} filter="digits" />
             </div>
           </Field>
@@ -159,17 +159,17 @@ export default function PersonsStep({
       {greenNext ? (
         // Short-form (internal) step 1: a single big green CTA, no back button.
         <button type="button" onClick={onNext} disabled={!complete} className={styles.btnGreen}>
-          {nextLabel} <RightOutlined style={{ fontSize: 16 }} />
+          {nextLabel} <ChevronRight size={16} />
         </button>
       ) : (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 4 }}>
           {onBack ? (
             <button type="button" onClick={onBack} className={styles.btnGhost}>
-              <LeftOutlined style={{ fontSize: 12 }} /> Retour
+              <ChevronLeft /> Retour
             </button>
           ) : <span />}
           <button type="button" onClick={onNext} disabled={!complete} className={styles.btnPrimary}>
-            {nextLabel} <RightOutlined style={{ fontSize: 12 }} />
+            {nextLabel} <ChevronRight />
           </button>
         </div>
       )}
