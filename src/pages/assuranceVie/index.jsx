@@ -58,7 +58,8 @@ function buildViePayload({ email, phone, persons, answers, selectedPerson }) {
     montant: p.montant ? Number(String(p.montant).replace(/\D/g, '')) : null,
   }));
   const event_id = `norga_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
-  const fullName = [selectedPerson?.prenom, selectedPerson?.nom].filter(Boolean).join(' ').trim();
+  const primary = selectedPerson || (persons && persons[0]) || {};
+  const fullName = [primary?.prenom, primary?.nom].filter(Boolean).join(' ').trim();
   return {
     event_id,
     product: 'assurance-vie',
@@ -66,6 +67,14 @@ function buildViePayload({ email, phone, persons, answers, selectedPerson }) {
     phone,
     email,
     fullName,
+    // Flat WinQuote inputs for the primary insured at ROOT. The custom-form mapper
+    // can't capture arrays of plain objects (insured[] only yields {index}), and the
+    // LMS life mapper reads these keys at root — so the quote needs them here.
+    gender: primary?.sexe || '',
+    dateOfBirth: primary?.dateNaissance || '',
+    smoker: primary?.fumeur || '',
+    desiredCoverageAmount: primary?.montant ? Number(String(primary.montant).replace(/\D/g, '')) : null,
+    province: primary?.province || '',
     insured,
     needs: answers,
     consentChecked: true,
