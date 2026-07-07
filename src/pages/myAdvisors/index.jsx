@@ -7,10 +7,25 @@ import { ArrowRightIcon, XIcon, MailIcon, PhoneIcon } from '../../components/ico
 import { CalendarOutlined } from '@ant-design/icons';
 import { ImageUser } from 'utils/icons';
 import Text from '../../components/text';
-import { Types, requestHelper } from '../../utils/helper';
-import { getAllAdvisorsUrl } from '../../apis/sharedApi';
+import { Types } from '../../utils/helper';
+import quoteService from '../../services/api/quoteService';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import styles from './MyAdvisors.module.css';
+
+// Which advisor "cabinet" bucket each product belongs to. Deterministic (avoids the
+// fragile substring matching — every insurance slug contains the word "insurance").
+const SLUG_BUCKET = {
+  'car-insurance': 'insurance',
+  'home-insurance': 'insurance',
+  'mortgage-renew': 'mortgage',
+  'mortgage-refinance': 'mortgage',
+  'mortgage-buy': 'mortgage',
+  'mortgage-consolidate': 'mortgage',
+  'life-insurance': 'financial',
+  'critical-illness': 'financial',
+  'disability': 'financial',
+  'mortgage-insurance': 'financial',
+};
 
 const MyAdvisors = () => {
   const { t } = useTranslation();
@@ -65,64 +80,46 @@ const MyAdvisors = () => {
       
       try {
         setLoading(true);
-        const url = `${getAllAdvisorsUrl}?email=${userProfile.email}`;
-        const response = await requestHelper(url, 'GET');
-        
-        if (!response || !response.ok) {
-          throw new Error(`HTTP error! status: ${response?.status}`);
-        }
+        // Source advisors from the user's own products (reliable productSlug + advisor),
+        // then bucket each into one of the 3 cabinets via SLUG_BUCKET.
+        const res = await quoteService.getUserProducts();
+        const products = (res?.products || []).filter(p => p.advisor);
 
-        const responseData = await response.json();
-        const rawAdvisors = (responseData?.success && responseData.data) ? responseData.data : [];
-        
-        // Map real data to the 3 mandatory categories
         const finalDisplayData = MANDATORY_CATEGORIES.map(cat => {
-          // Find a real advisor that matches this category
-          // We check the category name/slug AND the advisor's profession (type)
-          const realAdvisor = rawAdvisors.find(item => {
-            const categoryName = (item.categoryName || '').toLowerCase();
-            const categorySlug = (item.categorySlug || '').toLowerCase();
-            const advisorType = (item.advisor?.type || '').toLowerCase();
-            
-            return cat.matchKeywords.some(keyword => 
-              categoryName.includes(keyword) || 
-              categorySlug.includes(keyword) || 
-              advisorType.includes(keyword)
-            );
-          });
+          const match = products.find(p => SLUG_BUCKET[p.productSlug] === cat.key);
+          const adv = match?.advisor;
 
-          if (realAdvisor) {
+          if (adv) {
             return {
-              key: realAdvisor.advisor?._id || cat.key,
-              name: realAdvisor.advisor?.name,
+              key: adv._id || cat.key,
+              name: adv.name,
               license: 'Active',
               type: cat.type,
               specialties: cat.specialties,
-              email: realAdvisor.advisor?.email,
-              phone: realAdvisor.advisor?.phone,
-              calendarLink: realAdvisor.advisor?.calendarLink || '',
-              avatar: realAdvisor.advisor.avatar && !realAdvisor.advisor.avatar.includes('default') ? (
-                <img src={realAdvisor.advisor.avatar} alt={realAdvisor.advisor.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+              email: adv.email,
+              phone: adv.phone,
+              calendarLink: adv.calendarLink || '',
+              avatar: adv.avatar && !String(adv.avatar).includes('default') ? (
+                <img src={adv.avatar} alt={adv.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
               ) : null,
               isEmpty: false
             };
-          } else {
-            // Return empty row for this category
-            return {
-              key: `empty-${cat.key}`,
-              name: null,
-              license: null,
-              type: cat.type,
-              specialties: cat.specialties,
-              email: null,
-              phone: null,
-              avatar: null,
-              isEmpty: true
-            };
           }
+          // Empty row for a cabinet the user has no advisor in.
+          return {
+            key: `empty-${cat.key}`,
+            name: null,
+            license: null,
+            type: cat.type,
+            specialties: cat.specialties,
+            email: null,
+            phone: null,
+            avatar: null,
+            isEmpty: true
+          };
         });
 
-        // Only show advisors that are NOT empty (hide unassigned categories)
+        // Only show cabinets that actually have an advisor (hide unassigned ones).
         setAdvisorsData(finalDisplayData.filter(item => !item.isEmpty));
       } catch (error) {
         console.error('Error fetching advisors:', error);
