@@ -1,0 +1,64 @@
+/* CheckboxSelectField Styles */
+.car-funnel .checkbox-select-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.car-funnel .checkbox-select-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 232px;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 10px;
+    border: 1.5px solid #ededed;
+    background: #FFFFFF;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    /* Button resets */
+    font-family: inherit;
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.car-funnel .checkbox-select-box:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.car-funnel .checkbox-select-box:hover {
+    border-color: #1A1ABA;
+}
+
+.car-funnel .checkbox-select-box.selected {
+    border: 1.5px solid #1A1ABA !important;
+    background: #1A1ABA !important;
+}
+
+.car-funnel .checkbox-select-box.selected .checkbox-select-label {
+    color: #FFFFFF !important;
+}
+
+.car-funnel .checkbox-select-label {
+    color: #181D27;
+    font-family: var(--font-family);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    transition: color 0.2s ease;
+}
+
+
+
+.car-funnel .checkbox-select-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0;
+}

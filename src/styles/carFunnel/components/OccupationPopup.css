@@ -1,0 +1,57 @@
+/* OccupationPopup Component Styles */
+
+.car-funnel .occupation-popup .ant-modal-content {
+    border-radius: var(--radius-lg);
+}
+
+.car-funnel .occupation-popup .ant-modal-body {
+    padding: 32px 24px;
+}
+
+.car-funnel .occupation-popup__content {
+    display: flex;
+    flex-direction: column;
+}
+
+.car-funnel .occupation-popup__title {
+    color: var(--color-text-primary);
+    font-family: var(--font-family);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    text-align: left;
+    margin: 0 0 8px;
+}
+
+.car-funnel .occupation-popup__text {
+    color: var(--color-text-primary);
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-relaxed);
+    text-align: left;
+    margin: 0 0 24px;
+}
+
+/* Make the occupation options span the full width of the popup
+   (overrides the fixed-width boxes used elsewhere). */
+.car-funnel .occupation-popup .checkbox-select-container {
+    flex-direction: column;
+}
+
+.car-funnel .occupation-popup .checkbox-select-box {
+    width: 100%;
+}
+
+.car-funnel .occupation-popup__actions {
+    margin-top: 8px;
+}
+
+.car-funnel .occupation-popup__actions .primary-button {
+    width: 100%;
+}
+
+.car-funnel .occupation-popup__close-icon {
+    width: 8px;
+    height: 8px;
+}

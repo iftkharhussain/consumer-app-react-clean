@@ -1,0 +1,51 @@
+/* DriverHeader Component Styles */
+
+.car-funnel .driver-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+    border-bottom: 1.5px solid var(--color-border);
+    padding-bottom: 1.7rem;
+    margin-left: -2rem;
+    margin-right: -2rem;
+    padding-left: 1.7rem;
+    padding-right: 1.7rem;
+    margin-top: -2rem;
+    padding-top: 1.7rem;
+}
+
+.car-funnel .driver-header__icon {
+    width: 41px;
+    height: 41px;
+}
+
+.car-funnel .driver-header__info {
+    display: flex;
+    flex-direction: column;
+}
+
+.car-funnel .driver-header__label {
+    font-family: var(--font-family);
+    line-height: var(--line-height-relaxed);
+}
+
+.car-funnel .driver-header__label--primary {
+    color: var(--color-primary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+}
+
+.car-funnel .driver-header__label--secondary {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+}
+
+.car-funnel .driver-header__name {
+    color: var(--color-primary);
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-relaxed);
+}

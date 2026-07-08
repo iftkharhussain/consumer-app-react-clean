@@ -1,0 +1,73 @@
+/* CustomTooltip Component Styles */
+
+.car-funnel .custom-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.car-funnel .custom-tooltip__wrapper {
+    position: absolute;
+    z-index: var(--z-tooltip);
+    left: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-normal), visibility var(--transition-normal);
+    pointer-events: none;
+    width: 462px;
+}
+
+.car-funnel .custom-tooltip__wrapper--visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.car-funnel .custom-tooltip__wrapper--top {
+    bottom: calc(100% + 18px);
+}
+
+.car-funnel .custom-tooltip__wrapper--bottom {
+    top: calc(100% + 18px);
+}
+
+.car-funnel .custom-tooltip__content {
+    min-height: 29px;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    background: var(--color-background-tooltip);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #050505;
+    font-family: var(--font-family);
+    font-size: var(--font-size-xs);
+    font-style: normal;
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-normal);
+    border: 1.5px solid #7d7dd5;
+    text-align: center;
+}
+
+.car-funnel .custom-tooltip__arrow {
+    position: absolute;
+    left: 30px;
+    transform: translateX(-50%) rotate(135deg);
+    width: 15px;
+    height: 15px;
+    background: var(--color-background-tooltip);
+    border: 1.5px solid #7d7dd5;
+    border-right: 0;
+    border-top: 0;
+}
+
+.car-funnel .custom-tooltip__arrow--top {
+    bottom: -7px;
+}
+
+.car-funnel .custom-tooltip__arrow--bottom {
+    top: -7px;
+}
+
+.car-funnel .custom-tooltip__highlight {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-semibold);
+}

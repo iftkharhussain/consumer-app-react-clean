@@ -1,0 +1,64 @@
+/* ImageSelectField Styles */
+.car-funnel .image-select-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.car-funnel .image-select-box {
+    width: 89.85px;
+    height: 110px;
+    border-radius: 8px;
+    border: 1.5px solid #ededed;
+    background: #FFFFFF;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    /* Button resets */
+    font-family: inherit;
+    padding: 0;
+}
+
+.car-funnel .image-select-box:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.car-funnel .image-select-box:hover {
+    border-color: #1A1ABA;
+}
+
+.car-funnel .image-select-box.selected {
+    border: 1.5px solid #1A1ABA !important;
+    background: #1a1aba0d !important;
+}
+
+.car-funnel .image-select-image-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.car-funnel .image-select-image {
+    object-fit: contain;
+}
+
+
+
+.car-funnel .image-select-label {
+    color: #000;
+    text-align: center;
+    font-family: var(--font-family);
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: var(--Line-height-text-sm, 20px);
+    margin-bottom: 16px;
+}

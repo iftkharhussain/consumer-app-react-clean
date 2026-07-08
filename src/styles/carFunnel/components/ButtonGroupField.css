@@ -1,0 +1,242 @@
+/* ButtonGroupField Component Styles */
+
+.car-funnel .button-group-field {
+    width: 100%;
+}
+
+.car-funnel .button-group-field--last {
+    margin-bottom: 0 !important;
+}
+
+/* Switch Variant */
+.car-funnel .button-group-field--switch {
+    margin-bottom: 24px;
+}
+
+.car-funnel .button-group-field__switch-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.car-funnel .button-group-field__switch-label {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    font-family: var(--font-family);
+    flex: 1;
+}
+
+.car-funnel .button-group-field__switch-label--warning {
+    color: var(--color-error);
+}
+
+.car-funnel .button-group-field__switch-buttons {
+    flex-shrink: 0;
+}
+
+/* Rich Label */
+.car-funnel .button-group-rich-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+
+.car-funnel .button-group-rich-label__text {
+    width: 70%;
+}
+
+.car-funnel .button-group-rich-label__blue {
+    color: var(--color-primary);
+    font-family: var(--font-family);
+    font-size: var(--font-size-xs);
+    font-style: normal;
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
+}
+
+.car-funnel .button-group-rich-label__normal {
+    color: var(--color-text-primary);
+    font-family: var(--font-family);
+    font-size: var(--font-size-xs);
+    font-style: normal;
+    font-weight: var(--font-weight-light);
+    line-height: var(--line-height-tight);
+}
+
+.car-funnel .button-group-rich-label__image-container {
+    max-width: 131px;
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.car-funnel .button-group-rich-label__image {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Standard Label Helpers */
+.car-funnel .button-group-label--warning {
+    color: var(--color-error);
+}
+
+.car-funnel .button-group-help-text {
+    color: var(--color-text-secondary);
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    font-style: normal;
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-relaxed);
+    margin-top: 4px;
+}
+
+/* Coverage Selection Details Card */
+.car-funnel .coverage-details-card {
+    border-radius: var(--radius-lg);
+    border: 1.5px solid #ededed;
+    background: var(--color-background);
+    box-shadow: var(--shadow-sm);
+    padding: 8px 37px;
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+.car-funnel .coverage-details-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 16px 0;
+}
+
+.car-funnel .coverage-details-row__image-container {
+    flex-shrink: 0;
+    margin-top: 4px;
+    width: 95px;
+    display: flex;
+    justify-content: center;
+}
+
+.car-funnel .coverage-details-row__image {
+    object-fit: contain;
+}
+
+.car-funnel .coverage-details-row__content {
+    flex: 1;
+}
+
+.car-funnel .coverage-details-row__title {
+    color: var(--color-text-primary);
+    font-family: var(--font-family);
+    font-size: var(--font-size-xs);
+    font-style: normal;
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    margin-bottom: 8px;
+}
+
+.car-funnel .coverage-details-row__description {
+    color: var(--color-text-primary);
+    font-family: var(--font-family);
+    font-size: var(--font-size-xs);
+    font-style: normal;
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-tight);
+}
+
+.car-funnel .coverage-details-row__description--with-expand {
+    margin-bottom: 12px;
+}
+
+/* Expandables */
+.car-funnel .coverage-expandable {
+    margin-bottom: 8px;
+}
+
+.car-funnel .coverage-expandable__trigger {
+    color: var(--color-primary);
+    font-family: var(--font-family);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-tight);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.car-funnel .coverage-expandable__icon {
+    width: 6px;
+    height: 6px;
+    margin-left: 6px;
+    transition: transform 0.2s;
+}
+
+.car-funnel .coverage-expandable__icon--expanded {
+    transform: rotate(270deg);
+}
+
+.car-funnel .coverage-expandable__icon--collapsed {
+    transform: rotate(180deg);
+}
+
+.car-funnel .coverage-expandable__text {
+    color: var(--color-text-secondary);
+    font-family: var(--font-family);
+    font-size: 10px;
+    font-style: normal;
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-tight);
+    margin-top: 4px;
+}
+
+/* Plus Divider */
+.car-funnel .coverage-plus-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 4px 0;
+    margin: 0 -10px;
+}
+
+.car-funnel .coverage-plus-divider__line {
+    position: absolute;
+    width: 100%;
+    height: 0.5px;
+    background: var(--color-border-dark);
+    z-index: 0;
+}
+
+.car-funnel .coverage-plus-divider__icon-container {
+    z-index: 1;
+    background: var(--color-background);
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.car-funnel .coverage-plus-divider__icon {
+    width: 10px;
+    height: auto;
+}
+
+/* Utility Helpers */
+.car-funnel .ant-form-item-no-margin {
+    margin-bottom: 0 !important;
+}
+
+.car-funnel .ant-form-item-standard-margin {
+    margin-bottom: 24px !important;
+}
+
+/* Coverage Selection Variant specific styles */
+.car-funnel .button-group-field--coverage-selection .radio-button-option {
+    font-size: 13px;
+}

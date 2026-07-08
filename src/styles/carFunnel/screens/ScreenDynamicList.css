@@ -1,0 +1,135 @@
+/* ScreenDynamicList Component Styles */
+
+.car-funnel .screen-dynamic-list {
+    width: 542px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Completed Driver Items (displayed when adding additional drivers) */
+.car-funnel .completed-driver-card {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 27px;
+    margin-bottom: 12px;
+    border-radius: var(--radius-xl);
+    border: 1.5px solid var(--color-border);
+    background: var(--color-background);
+    box-shadow: none;
+}
+
+.car-funnel .completed-driver-card__left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.car-funnel .completed-driver-card__icon {
+    width: 41px;
+    height: 41px;
+}
+
+.car-funnel .completed-driver-card__label {
+    font-family: var(--font-family);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    display: block;
+    line-height: var(--line-height-relaxed);
+}
+
+.car-funnel .completed-driver-card__name {
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+    line-height: var(--line-height-relaxed);
+}
+
+.car-funnel .completed-driver-card__check {
+    font-size: 24px;
+    color: var(--color-success);
+}
+
+/* Card titles within ScreenDynamicList */
+.car-funnel .dynamic-list-card-title {
+    display: block;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    font-family: var(--font-family);
+}
+
+.car-funnel .dynamic-list-card-title--with-subtitle {
+    margin-bottom: 8px;
+}
+
+.car-funnel .dynamic-list-card-subtitle {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-light);
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
+}
+
+/* Form and Dynamic Items */
+.car-funnel .dynamic-list-form {
+    width: 100%;
+    max-width: 542px;
+    margin-top: 16px;
+}
+
+.car-funnel .dynamic-list-item {
+    position: relative;
+    padding: 24px;
+    margin-bottom: 16px;
+    background: var(--color-background);
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: none;
+}
+
+.car-funnel .dynamic-list-item__remove-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    color: var(--color-text-secondary);
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+}
+
+.car-funnel .dynamic-list-item__remove-btn .anticon {
+    font-size: 12px;
+}
+
+.car-funnel .dynamic-list-item__title {
+    display: block;
+    margin-bottom: 16px;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-md);
+    color: var(--color-primary);
+    font-family: var(--font-family);
+}
+
+.car-funnel .dynamic-list-item__help-text {
+    display: block;
+    margin-top: 12px;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    font-family: var(--font-family);
+}
+
+/* Buttons Container */
+.car-funnel .dynamic-list-buttons {
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
+    width: 542px;
+    justify-content: flex-end;
+}

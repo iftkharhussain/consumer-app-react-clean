@@ -1,0 +1,57 @@
+/* MaxModal Component Styles (shared between MaxDriversModal & MaxVehiclesModal) */
+
+.car-funnel .max-modal .ant-modal-content {
+    border-radius: var(--radius-lg);
+}
+
+.car-funnel .max-modal__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.car-funnel .max-modal__image-wrapper {
+    width: 322px;
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: center;
+}
+
+.car-funnel .max-modal__image {
+    width: 257px;
+    margin-top: 24px;
+}
+
+.car-funnel .max-modal__text {
+    color: var(--color-text-primary);
+    text-align: center;
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    font-style: normal;
+    font-weight: var(--font-weight-medium);
+    margin-bottom: 24px;
+    line-height: var(--line-height-relaxed);
+    max-width: 450px;
+}
+
+.car-funnel .max-modal__phone {
+    color: var(--color-primary);
+    text-align: center;
+    font-family: var(--font-family);
+    font-size: var(--font-size-md);
+    font-style: normal;
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-relaxed);
+    text-decoration: none;
+    margin-top: 24px;
+    display: block;
+}
+
+.car-funnel .max-modal__phone:hover {
+    text-decoration: underline;
+}
+
+.car-funnel .max-modal__close-icon {
+    width: 8px;
+    height: 8px;
+}

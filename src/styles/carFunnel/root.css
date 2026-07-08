@@ -1,0 +1,131 @@
+.car-funnel {
+  --font-sans: 'PP Neue Montreal', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.car-funnel *,
+.car-funnel *::before,
+.car-funnel *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.car-funnel {
+  font-family: var(--font-sans);
+  background-color: #F7F7F7;
+  color: #1f1f1f;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* Shield from the host app's global `input, button, select { font-family: Inter }`
+   (src/index.css) so the car funnel's controls use its own font — matching the
+   standalone external form. */
+.car-funnel input,
+.car-funnel button,
+.car-funnel select,
+.car-funnel textarea,
+.car-funnel optgroup {
+  font-family: var(--font-sans);
+}
+
+/* Remove the antd standard Form.Item bottom margin (spacing handled elsewhere). */
+.car-funnel .ant-form-item-standard-margin {
+  margin-bottom: 0;
+}
+
+.car-funnel #root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ant Design Overrides */
+.car-funnel .ant-layout {
+  background: transparent;
+}
+
+/* Force PP Neue Montreal on all Ant Design components */
+.car-funnel .ant-select,
+.car-funnel .ant-select-selector,
+.car-funnel .ant-select-item,
+.car-funnel .ant-input,
+.car-funnel .ant-input-affix-wrapper,
+.car-funnel .ant-picker,
+.car-funnel .ant-picker-input,
+.car-funnel .ant-input-number,
+.car-funnel .ant-form-item-label > label,
+.car-funnel .ant-btn {
+  font-family: 'PP Neue Montreal', sans-serif !important;
+}
+
+/* Specific Input Overrides for exact design specs */
+.car-funnel .ant-select-selector,
+.car-funnel .ant-input,
+.car-funnel .ant-picker,
+.car-funnel .ant-input-number,
+.car-funnel .ant-input-affix-wrapper {
+  border: 1.5px solid #ededed !important;
+  box-shadow: none !important;
+  font-size: 14px; /* Removed !important to allow mobile 16px override */
+}
+
+.car-funnel .ant-select:hover .ant-select-selector,
+.car-funnel .ant-select-focused .ant-select-selector,
+.car-funnel .ant-input:hover,
+.car-funnel .ant-input:focus,
+.car-funnel .ant-input-focused,
+.car-funnel .ant-picker:hover,
+.car-funnel .ant-picker-focused,
+.car-funnel .ant-input-number:hover,
+.car-funnel .ant-input-number-focused,
+.car-funnel .ant-input-affix-wrapper:hover,
+.car-funnel .ant-input-affix-wrapper:focus,
+.car-funnel .ant-input-affix-wrapper-focused {
+  border-color: #ededed !important;
+  box-shadow: none !important;
+}
+
+/* Selected value color for inputs and dropdowns - #1A1ABA */
+.car-funnel .ant-input,
+.car-funnel .ant-input-number-input,
+.car-funnel .ant-picker-input>input {
+  color: #1A1ABA !important;
+}
+
+.car-funnel .ant-select-selection-item {
+  color: #1A1ABA !important;
+}
+
+/* OTP Input styling */
+.car-funnel .ant-otp {
+  gap: 12px !important;
+}
+
+.car-funnel .ant-otp .ant-input {
+  width: 56px !important;
+  height: 56px !important;
+  font-size: 24px !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  border-radius: 8px !important;
+  border: 1.5px solid #ededed !important;
+  color: #1A1ABA !important;
+}
+
+.car-funnel .ant-otp .ant-input:focus {
+  border-color: #1A1ABA !important;
+  box-shadow: none !important;
+}
+
+/* Label Styles */
+.car-funnel .ant-form-item-label>label {
+  font-family: 'PP Neue Montreal', sans-serif !important;
+  font-weight: 500 !important;
+  line-height: 20px !important;
+  height: auto !important;
+  /* Fix: Prevent 40px height from large form size */
+  /* leading-trim and text-edge are not fully supported standard CSS properties yet, 
+       but we can include them if the browser supports or ignore. */
+}

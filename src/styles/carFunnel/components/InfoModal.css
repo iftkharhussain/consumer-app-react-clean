@@ -1,0 +1,44 @@
+/* InfoModal Component Styles */
+
+.car-funnel .info-modal .ant-modal-content {
+    border-radius: var(--radius-lg);
+}
+
+.car-funnel .info-modal .ant-modal-body {
+    padding: 32px 24px;
+}
+
+.car-funnel .info-modal__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.car-funnel .info-modal__image-wrapper {
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: center;
+}
+
+.car-funnel .info-modal__image {
+    width: 228px;
+    height: 158px;
+    object-fit: contain;
+}
+
+.car-funnel .info-modal__text {
+    color: var(--color-text-primary);
+    text-align: center;
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    font-style: normal;
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-relaxed);
+    max-width: 450px;
+    margin: 0;
+}
+
+.car-funnel .info-modal__close-icon {
+    width: 8px;
+    height: 8px;
+}

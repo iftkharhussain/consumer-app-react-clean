@@ -1,0 +1,45 @@
+/* ManufacturerGrid Component Styles */
+
+.car-funnel .manufacturer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    width: 100%;
+}
+
+.car-funnel .manufacturer-card {
+    border-radius: 8px !important;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    aspect-ratio: 1;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 1.5px solid #ededed !important;
+}
+
+.car-funnel .manufacturer-card--selected {
+    border: 1.5px solid #1A1ABA !important;
+    background-color: #FFFFFF !important;
+}
+
+.car-funnel .manufacturer-card .ant-card-body {
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.car-funnel .manufacturer-card__label {
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm, 14px);
+    font-weight: var(--font-weight-bold, 600);
+    color: var(--color-text-primary, #000);
+    text-align: center;
+}
+
+.car-funnel .manufacturer-card--selected .manufacturer-card__label {
+    color: var(--color-primary, #1A1ABA);
+}

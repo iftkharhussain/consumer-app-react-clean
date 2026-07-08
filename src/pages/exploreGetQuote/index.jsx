@@ -17,6 +17,8 @@ const AssuranceVie = React.lazy(() => import('../assuranceVie/index'));
 const AssuranceMaladieGrave = React.lazy(() => import('../assuranceMaladieGrave/index'));
 const AssuranceSalaire = React.lazy(() => import('../assuranceSalaire/index'));
 const MortgageInsurance = React.lazy(() => import('../mortgageInsurance/index'));
+// Ported auto-insurance funnel — self-contained module in src/**/carFunnel.
+const CarInsuranceFunnel = React.lazy(() => import('../../components/carFunnel/CarInsuranceFunnel'));
 
 // slug -> internal funnel form. Add the other products here as they're built.
 // Forms are rendered with mode="internal"; a form that doesn't support the prop
@@ -27,7 +29,7 @@ const FORMS = {
   'critical-illness': AssuranceMaladieGrave,
   'disability': AssuranceSalaire,
   'mortgage-insurance': MortgageInsurance,
-  
+  'car-insurance': CarInsuranceFunnel,
 };
 
 export default function ExploreGetQuote() {

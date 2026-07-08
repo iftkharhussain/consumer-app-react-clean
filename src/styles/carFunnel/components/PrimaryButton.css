@@ -1,0 +1,63 @@
+/* PrimaryButton Component Styles */
+
+.car-funnel .primary-button {
+    display: flex;
+    min-width: 223px;
+    height: 43px;
+    padding: 8px 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: 10px;
+    border: 1.5px solid var(--color-primary);
+    background: var(--color-primary);
+    box-shadow: none;
+    color: var(--color-text-white);
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    font-style: normal;
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-relaxed);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.car-funnel .primary-button:hover {
+    background: #3D3DD4;
+    border-color: #3D3DD4;
+}
+
+.car-funnel .primary-button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.car-funnel .primary-button:disabled {
+    background: var(--color-text-secondary);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.car-funnel .primary-button__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.car-funnel .primary-button__icon {
+    /* width: 5px; */
+    height: auto;
+    flex-shrink: 0;
+    margin-left: 8px;
+    margin-top: 1px;
+    transition: transform 0.2s ease;
+}
+
+.car-funnel .primary-button:hover .primary-button__icon {
+    transform: translateX(3px);
+}
+
+.car-funnel .primary-button--full-width {
+    width: 100%;
+    min-width: unset;
+}

@@ -1,0 +1,86 @@
+/* Global Utility Classes */
+
+.car-funnel .full-width {
+    width: 100% !important;
+}
+
+.car-funnel .display-none {
+    display: none !important;
+}
+
+.car-funnel .display-block {
+    display: block !important;
+}
+
+/* Ant Design Form Item Helpers */
+.car-funnel .ant-form-item-no-margin {
+    margin-bottom: 0 !important;
+}
+
+
+.car-funnel .ant-form-item-label-bold label {
+    font-weight: 600 !important;
+}
+
+/* Margin/Padding Utilities */
+.car-funnel .mt-4 {
+    margin-top: 4px !important;
+}
+
+.car-funnel .mt-8 {
+    margin-top: 8px !important;
+}
+
+.car-funnel .mt-16 {
+    margin-top: 16px !important;
+}
+
+.car-funnel .mt-24 {
+    margin-top: 24px !important;
+}
+
+.car-funnel .mb-0 {
+    margin-bottom: 0 !important;
+}
+
+.car-funnel .mb-4 {
+    margin-bottom: 4px !important;
+}
+
+.car-funnel .mb-8 {
+    margin-bottom: 8px !important;
+}
+
+.car-funnel .mb-12 {
+    margin-bottom: 12px !important;
+}
+
+.car-funnel .mb-16 {
+    margin-bottom: 16px !important;
+}
+
+.car-funnel .mb-24 {
+    margin-bottom: 24px !important;
+}
+
+/* Text Utils */
+.car-funnel .text-center {
+    text-align: center !important;
+}
+
+.car-funnel .text-right {
+    text-align: right !important;
+}
+
+.car-funnel .text-justify {
+    text-align: justify !important;
+}
+
+/* Interactive Utils */
+.car-funnel .opacity-50 {
+    opacity: 0.5 !important;
+}
+
+.car-funnel .pointer-events-none {
+    pointer-events: none !important;
+}

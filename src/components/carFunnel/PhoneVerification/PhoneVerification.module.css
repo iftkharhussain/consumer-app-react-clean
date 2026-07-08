@@ -1,0 +1,416 @@
+/* Phone Verification Component Styles */
+
+.phoneVerification {
+  font-family: var(--font-family, 'Inter', sans-serif);
+  max-width: 672px; /* Tailwind max-w-2xl */
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: none;
+  padding: 32px;
+}
+
+/* Icon */
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.iconCircle {
+  background: rgba(63, 192, 152, 0.1);
+  border-radius: 50%;
+  padding: 12px;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Header */
+.headerCenter {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.title {
+  color: #3FC098 !important;
+  text-align: center !important;
+  font-family: var(--font-family-body, sans-serif) !important;
+  font-size: 24px !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  line-height: 32px !important;
+  letter-spacing: 0.07px !important;
+  margin-bottom: 4px !important;
+}
+
+.subtitle {
+  color: #364153 !important;
+  text-align: center !important;
+  font-family: var(--font-family-body);
+
+  font-size: 16px !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  line-height: 24px !important;
+  letter-spacing: -0.312px !important;
+  margin: 0 !important;
+}
+
+.phoneNotice {
+  font-size: 16px;
+  color: #101828;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.resendNotice {
+  text-align: center;
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 24px;
+}
+
+/* Form layout */
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.fieldLabel {
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+  color: #101828;
+  margin-bottom: 8px;
+}
+
+/* Inputs */
+/* Custom Dropdown Styles */
+.customDropdown {
+  position: relative;
+  width: 100%;
+  font-family: 'Inter', sans-serif;
+}
+
+.dropdownButton {
+  width: 100%;
+  height: 40px;
+  background: white;
+  border: 1.5px solid #ededed;
+  border-radius: 8px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  color: #1A1ABA;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.dropdownButton:hover {
+  border-color: #ededed;
+}
+
+.dropdownButton:disabled {
+  background: #F9FAFB;
+  cursor: not-allowed;
+  color: #9B9B9B;
+}
+
+.dropdownButton:focus {
+  border-color: #ededed;
+}
+
+.dropdownButtonActive {
+  border-color: #ededed;
+}
+
+.dropdownArrow {
+  color: #1A1ABA;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  stroke-width: 2; /* Make it a bit bolder like the image */
+}
+
+.dropdownArrowOpen {
+  transform: rotate(180deg);
+}
+
+.dropdownOptions {
+  position: absolute;
+  bottom: calc(100% + 8px); /* Open upwards by default to match image */
+  left: 0;
+  width: 100%;
+  background: white;
+  border: 1.5px solid #ededed;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  list-style: none;
+  padding: 8px;
+  margin: 0;
+  z-index: 1000;
+  max-height: 250px;
+  overflow-y: auto;
+  animation: slideUp 0.2s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdownOptions li {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #364153;
+  border-radius: 8px;
+  transition: all 0.2s;
+  margin-bottom: 2px;
+}
+
+.dropdownOptions li:last-child {
+  margin-bottom: 0;
+}
+
+.dropdownOptions li:hover {
+  background: #F9FAFB;
+  color: #1A1ABA;
+}
+
+.dropdownOptionSelected {
+  background: #F3F4F6;
+  color: #1A1ABA !important;
+  font-weight: 500;
+}
+
+/* Custom Scrollbar */
+.dropdownOptions::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dropdownOptions::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dropdownOptions::-webkit-scrollbar-thumb {
+  background: #E5E7EB;
+  border-radius: 10px;
+}
+
+.dropdownOptions::-webkit-scrollbar-thumb:hover {
+  background: #D1D5DB;
+}
+
+.prefixSelect:focus, .phoneInput:focus, .emailInput:focus {
+  border-color: #ededed;
+  box-shadow: none;
+}
+
+.prefixSelect:hover, .phoneInput:hover, .emailInput:hover {
+  border-color: #ededed;
+}
+
+.phoneInputRow {
+  position: relative;
+  display: flex;
+}
+
+.phonePrefix {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 60px;
+  height: 40px;
+  background: #F9FAFB;
+  border: 1.5px solid #ededed;
+  border-radius: 8px 0 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1A1ABA;
+  font-weight: 500;
+  z-index: 10;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  pointer-events: none; /* So clicks pass to the input if clicking prefix */
+}
+
+.phoneInput {
+  flex: 1;
+  width: 100%;
+  padding: 12px 16px 12px 72px; /* Offset to not overlap prefix content but align with box */
+  border: 1.5px solid #ededed;
+  border-radius: 8px; /* The input itself is the full box border */
+  font-size: 14px;
+  outline: none;
+  transition: none;
+  height: 40px;
+  font-family: 'Inter', sans-serif;
+  background: white;
+  color: #1A1ABA;
+}
+
+.phoneInput:focus {
+  border-color: #ededed; /* Keep same border color on focus as requested */
+}
+
+.emailInput {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid #ededed;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  height: 40px;
+  font-family: 'Inter', sans-serif;
+}
+
+.emailInput:focus {
+  border-color: #1A1ABA;
+}
+
+
+
+/* OTP Input */
+.otpInput {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid #ededed;
+  border-radius: 8px;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-align: center;
+  outline: none;
+  transition: all 0.2s;
+  height: 58px;
+}
+
+.otpInput:focus {
+  border-color: #ededed;
+  box-shadow: none;
+}
+
+/* Submit Button */
+.submitButton {
+  width: 100%;
+  background: #1A1ABA;
+  color: white;
+  font-weight: 600;
+  font-size: 18px;
+  padding: 16px 20px;
+  border-radius: 8px;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 16px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-body);
+}
+
+.submitButton:hover:not(:disabled) {
+  background: #1515a0;
+  box-shadow: none;
+}
+
+.submitButton:active:not(:disabled) {
+  background: #111188;
+}
+
+.submitButton:disabled {
+  background: #d1d5db;
+  color: #6b7280;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Security Notice */
+.securityNotice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #4a5565;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.errorMessage {
+  background-color: #fef2f2;
+  border: 1.5px solid #fca5a5;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #ef4444;
+  text-align: center;
+}
+
+
+
+
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.loadingTitle {
+  margin-top: 24px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1A1ABA;
+}
+
+.loadingSubtitle {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #666;
+}
+
+.resendLink {
+  color: #1A1ABA;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.resendLink:hover {
+  color: #1515a0;
+}
+
+@media (max-width: 480px) {
+  .submitButton {
+    font-size: 13px !important;
+  }
+  
+  .securityNotice {
+    font-size: 9px !important;
+  }
+}

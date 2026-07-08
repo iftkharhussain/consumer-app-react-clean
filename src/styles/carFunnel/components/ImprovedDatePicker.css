@@ -1,0 +1,225 @@
+.car-funnel .improved-date-picker-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.car-funnel .improved-date-picker {
+    position: relative;
+    background: linear-gradient(to bottom right, #ffffff, #fafbff);
+    border: 1.5px solid #ededed;
+    height: 40px;
+    border-radius: 10px;
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.car-funnel .improved-date-picker:hover {
+    border-color: #ededed;
+    box-shadow: none;
+}
+
+.car-funnel .improved-date-picker:focus-within {
+    border-color: #ededed;
+    box-shadow: none;
+    z-index: 10;
+}
+
+.car-funnel .calendar-toggle-btn {
+    position: relative;
+    overflow: hidden;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    background: transparent;
+    border: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.car-funnel .calendar-toggle-btn:hover {
+    transform: scale(1.1);
+}
+
+.car-funnel .calendar-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+.car-funnel .calendar-icon-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom right, #3c40c7, #4b4ff5);
+    border-radius: 6px;
+    opacity: 0.1;
+    transition: opacity 0.3s ease;
+}
+
+.car-funnel .calendar-separator {
+    height: 24px;
+    width: 1.5px;
+    background: linear-gradient(to bottom, transparent, #e5e7eb, transparent);
+    flex-shrink: 0;
+    opacity: 0.6;
+}
+
+.car-funnel .date-inputs-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.car-funnel .date-input-field-wrapper {
+    flex: 1;
+    position: relative;
+}
+
+.car-funnel .date-input-field-wrapper.year {
+    flex: 1.5;
+}
+
+.car-funnel .date-input-field {
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: #3c40c7;
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    text-align: center;
+    transition: all 0.2s ease;
+    padding: 0;
+    height: auto;
+    box-shadow: none !important;
+}
+
+.car-funnel .date-input-field::placeholder {
+    color: #9ca3af;
+    font-weight: 400;
+}
+
+.car-funnel .date-input-divider {
+    color: #d1d5db;
+    font-size: 16px;
+    font-weight: 300;
+    user-select: none;
+}
+
+/* Dropdowns */
+.car-funnel .date-dropdown {
+    position: absolute;
+    top: 100%;
+    margin-top: 8px;
+    background: #ffffff;
+    border: 1.5px solid #ededed;
+    border-radius: 8px;
+    box-shadow: none;
+    z-index: 9999;
+    overflow-y: auto;
+    max-height: 200px;
+}
+
+.car-funnel .dropdown-day {
+    width: 100px;
+    left: 0;
+}
+
+.car-funnel .dropdown-month {
+    width: 140px;
+    left: 0;
+}
+
+.car-funnel .dropdown-year {
+    width: 100px;
+    right: 0;
+}
+
+.car-funnel .dropdown-option {
+    width: 100%;
+    padding: 6px 12px;
+    text-align: left;
+    font-size: 16px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #3c40c7;
+    transition: background-color 0.15s ease;
+}
+
+.car-funnel .dropdown-option:hover {
+    background-color: #f0f0ff;
+}
+
+/* Calendar Popup */
+.car-funnel .calendar-popup {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 8px;
+    background: #ffffff;
+    border: 1.5px solid #ededed;
+    border-radius: 12px;
+    box-shadow: none;
+    z-index: 9999;
+    padding: 12px;
+}
+
+/* react-day-picker custom styles handled in component or here */
+.car-funnel .rdp {
+    margin: 0;
+    --rdp-accent-color: #3c40c7 !important;
+    --rdp-background-color: #f0f0ff !important;
+    --rdp-outline: 2px solid #3c40c7 !important;
+}
+
+/* Selection background */
+.car-funnel .rdp-day_selected, 
+.car-funnel .rdp-day_selected:focus-visible, 
+.car-funnel .rdp-day_selected:hover {
+    background-color: #3c40c7 !important;
+    color: white !important;
+}
+
+/* Today's date indicator */
+.car-funnel .rdp-day_today:not(.rdp-day_selected) {
+    color: #3c40c7 !important;
+    font-weight: bold;
+}
+
+/* Any interactive blue states */
+.car-funnel .rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+    background-color: #f0f0ff !important;
+    color: #3c40c7 !important;
+}
+
+
+
+/* Scrollbar styling */
+.car-funnel .date-dropdown::-webkit-scrollbar {
+    width: 6px;
+}
+
+.car-funnel .date-dropdown::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 3px;
+}
+
+.car-funnel .date-dropdown::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 3px;
+}
+
+.car-funnel .date-dropdown::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}

@@ -1,0 +1,858 @@
+/* Responsive styles for mobile devices (under 768px) */
+
+/* Date range container - base styles */
+.car-funnel .date-range-container {
+  display: flex;
+  gap: 16px;
+}
+
+/* Mobile-specific layout adjustments */
+@media screen and (max-width: 768px) {
+
+  .car-funnel .transition-wrapper-key {
+    width: 100%;
+  }
+
+  /* Date range fields - stack vertically on mobile */
+  .car-funnel .date-range-container {
+    flex-direction: column;
+    gap: 0px;
+  }
+
+  /* Step title labels on mobile */
+  .car-funnel .step-title-label {
+    font-size: 12px;
+    font-weight: 300;
+  }
+
+  /* Main Layout - Reduce padding and ensure full width on mobile */
+  .car-funnel .ant-layout-content {
+    padding: 16px;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  /* Title and subtitle adjustments */
+  .car-funnel h1 {
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  .car-funnel h2 {
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+  /* Form container - Full width on mobile */
+  .car-funnel .ant-card {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 12px;
+    margin: 0;
+  }
+
+  .car-funnel .action-card .ant-card-body {
+    padding: 16px;
+  }
+
+  .car-funnel .add-vehicle-alternative-link {
+    margin-bottom: 8px;
+    visibility: none;
+  }
+
+  /* Screen containers - Full width on mobile */
+  .car-funnel .screen-container {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Main content wrapper - Reduce margin-bottom on mobile */
+  .car-funnel .main-content-wrapper {
+    margin-bottom: 2rem;
+  }
+
+  /* Vehicle/Driver headers - Adjust negative margins on mobile */
+  .car-funnel .vehicle-driver-header {
+    margin-top: 2px;
+    margin-left: -16px;
+    margin-right: -16px;
+    padding: 0 30px 15px;
+  }
+
+  /* Button containers - Full width stacking on mobile */
+  .car-funnel .form-buttons-container,
+  .car-funnel .summary-buttons-container {
+    flex-direction: column-reverse;
+    width: 100%;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .car-funnel .form-buttons-container button,
+  .car-funnel .summary-buttons-container button {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Custom tooltip positioning on mobile */
+  .car-funnel .custom-tooltip-wrapper {
+    right: 0;
+  }
+
+  /* Phone country code height on mobile */
+  .car-funnel .phone-country-code {
+    height: 43.4px;
+  }
+
+  /* Email security box background on mobile */
+  .car-funnel .email-security-box {
+    background: #FFF;
+    padding: 16px 24px;
+  }
+
+  /* Contact name and phone wrapper */
+  .car-funnel .contact-name-phone-wrapper {
+    padding: 0px;
+  }
+
+  /* Phone form wrapper - remove form item margin */
+  .car-funnel .phone-form-wrapper .ant-form-item {
+    margin-bottom: 0;
+  }
+
+  /* Driver header profile - adjust spacing on mobile */
+  .car-funnel .driver-header-profile {
+    margin: -1rem -1rem 2rem;
+    gap: 1rem;
+    padding: 10px 10px 27px 10px;
+  }
+
+  /* Non à tous button */
+  .car-funnel .btn-no-to-all {
+    height: 32px;
+  }
+
+  /* Consent cards - removed mobile-specific vertical stacking override to maintain desktop's horizontal layout */
+  .car-funnel .consent-card-new {
+    min-height: unset;
+  }
+  
+  .car-funnel .consent-checkbox-label {
+    display: inline;
+    color: #BCBCBC;
+    font-family: var(--font-family-body);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+  }
+
+  /* Form fields - Stack better on mobile */
+  .car-funnel .ant-form-item {
+    margin-bottom: 20px;
+  }
+
+  .car-funnel .ant-form-item-label {
+    padding-bottom: 6px;
+  }
+
+  .car-funnel .back-screen-btn-wrapper {
+    top: -30px
+  }
+
+
+  .car-funnel .ant-form-item-label>label {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  /* Field Row - Keep side-by-side on mobile instead of stacking */
+  .car-funnel .field-row {
+    flex-direction: row !important;
+    gap: 12px !important;
+  }
+
+  .car-funnel .field-row__item {
+    width: calc(50% - 6px) !important;
+    flex: 1 !important;
+  }
+
+  /* Input fields - Full width and better touch targets */
+  .car-funnel .ant-input,
+  .car-funnel .ant-input-number,
+  .car-funnel .ant-picker,
+  .car-funnel .ant-select-selector {
+    height: 44px;
+    font-size: 16px !important;
+    padding: 3px 10px;
+  }
+
+  .car-funnel .ant-select-selector {
+    max-width: 100%;
+  }
+
+  .car-funnel .ant-picker {
+    width: 100%;
+    max-width: 235px;
+    padding-left: 44px;
+  }
+
+  /* Input with suffix - fixed small width on mobile */
+  .car-funnel .input-with-suffix-field {
+    width: 70px !important;
+    flex: 0 0 70px !important;
+  }
+
+  .car-funnel .input-with-suffix-text {
+    display: inline !important;
+  }
+
+  /* Calendar icon in date pickers */
+  .car-funnel .date-picker-calendar-icon {
+    width: 20px;
+    height: auto;
+  }
+
+  /* Dropdown styles */
+  .car-funnel .ant-select-dropdown {
+    max-width: calc(100vw - 32px);
+  }
+
+  /* Radio & Checkbox buttons - Stack vertically and handle long labels */
+  .car-funnel .radio-button-option,
+  .car-funnel .ant-radio-button-wrapper,
+  .car-funnel .checkbox-select-box {
+    width: 100% !important;
+    min-height: 40px !important;
+    height: auto !important;
+    padding: 0 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+    flex: none !important;
+    position: relative !important;
+  }
+
+  .car-funnel .radio-button-option__icon {
+    position: absolute !important;
+    right: 16px !important;
+  }
+
+  .car-funnel .checkbox-select-box {
+    justify-content: space-between !important;
+  }
+
+  /* Radio groups (default) – stack vertically on mobile */
+  .car-funnel .radio-button-group {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  /* 2-option compact groups (Oui/Non) – keep in a single row */
+  .car-funnel .radio-button-group--compact {
+    flex-direction: row !important;
+    gap: 0 !important;
+  }
+
+  .car-funnel .radio-button-group--compact .radio-button-option {
+    flex: 1 1 0% !important;
+    width: auto !important;
+    justify-content: center !important;
+  }
+
+  /* Switch variant groups – always one row, no gap */
+  .car-funnel .radio-button-group--switch {
+    flex-direction: row !important;
+    gap: 0 !important;
+  }
+
+  .car-funnel .radio-button-group--switch .radio-button-option {
+    flex: 1 !important;
+    width: auto !important;
+    justify-content: center !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    padding: 0 12px !important;
+  }
+
+  /* Radio groups with MORE than 2 options – 1 button per row grid on mobile */
+  .car-funnel .radio-button-group.has-multiple-options {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    flex-direction: unset !important;
+    gap: 10px !important;
+  }
+
+  /* Inside that 2-col grid every button fills its cell */
+  .car-funnel .radio-button-group.has-multiple-options .radio-button-option {
+    width: 100% !important;
+    flex: unset !important;
+    justify-content: space-between !important;
+    text-align: left !important;
+    gap: 8px !important;
+  }
+
+  /* Radio icon stays on the RIGHT — keep default order, just shrink-protect it */
+  .car-funnel .radio-button-option .radio-button-option__icon {
+    flex-shrink: 0 !important;
+  }
+
+  /* For 2-option (full-width column) buttons — left-align text, icon stays right */
+  .car-funnel .radio-button-group:not(.has-multiple-options) .radio-button-option {
+    justify-content: space-between !important;
+    text-align: left !important;
+    gap: 8px !important;
+    min-height: 32px !important;
+  }
+
+  /* Ant Design radio groups */
+  .car-funnel .ant-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .car-funnel .ant-radio-button-wrapper {
+    height: 44px;
+    line-height: 42px;
+    font-size: 14px;
+    text-align: center;
+    width: 100%;
+  }
+
+  /* Primary and Secondary buttons - Full width on mobile with consistent height */
+  .car-funnel .btn-primary,
+  .car-funnel .btn-primary.ant-btn,
+  .car-funnel .btn-secondary {
+    width: 100%;
+    max-width: 100%;
+    height: 48px;
+    font-size: 16px;
+    margin-top: 8px;
+    padding: 12px 16px;
+  }
+
+  /* Back button adjustments */
+  .car-funnel .back-button {
+    margin-bottom: 16px;
+    margin-top: 6px;
+  }
+
+  /* Vehicle/Driver card header */
+  .car-funnel .vehicle-header,
+  .car-funnel .driver-header {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  /* Icon adjustments */
+  .car-funnel .vehicle-icon,
+  .car-funnel .driver-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Help tooltip icon */
+  .car-funnel .help-icon {
+    margin-left: 4px;
+  }
+
+  /* Top Navigation - Progress stepper */
+  .car-funnel .progress-container {
+    padding: 12px 0;
+    overflow-x: auto;
+  }
+
+  .car-funnel .step-item {
+    min-width: 80px;
+  }
+
+  .car-funnel .nav-step__title {
+    font-size: 10px;
+    display: none;
+    /* Hide step titles on very small screens to avoid overlap */
+  }
+
+  /* Alternative link (e.g., "Trouver l'auto avec le NIV") */
+  .car-funnel .alternative-link {
+    font-size: 14px;
+    text-align: center;
+    padding: 12px 0;
+  }
+
+  /* Modal adjustments for mobile */
+  .car-funnel .ant-modal {
+    max-width: calc(100vw - 32px);
+    margin: 16px;
+  }
+
+  .car-funnel .ant-modal-content {
+    border-radius: 12px;
+  }
+
+  .car-funnel .ant-modal-body {
+    padding: 20px;
+  }
+
+  /* Input suffix styling on mobile */
+  .car-funnel .ant-input-group-addon {
+    font-size: 14px;
+    padding: 0 8px;
+  }
+
+  /* Date picker popup */
+  .car-funnel .ant-picker-dropdown {
+    max-width: calc(100vw - 32px);
+  }
+
+  /* Ensure proper spacing for form sections */
+  .car-funnel .form-section {
+    margin-bottom: 24px;
+  }
+
+  /* Header text adjustments */
+  .car-funnel .header-text {
+    font-size: 14px;
+    line-height: 20px;
+    padding: 12px;
+  }
+
+  /* Multiple select dropdown tags */
+  .car-funnel .ant-select-multiple .ant-select-selection-item {
+    font-size: 14px;
+    padding: 1px 10px
+  }
+
+  /* OTP Input on mobile */
+  .car-funnel .ant-otp {
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .car-funnel .ant-otp .ant-input {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+
+  /* Consent text wrapper */
+  .car-funnel .consent-text-wrapper {
+    padding: 32px;
+  }
+
+  /* Verification screen - remove top margin on mobile */
+  .car-funnel .screen-container-verification {
+    margin-top: 0px;
+  }
+
+  /* Screen title wrapper - add padding on mobile for verification screen */
+  .car-funnel .screen-title-wrapper {
+    padding: 0 24px;
+  }
+
+  .car-funnel .screen-title-wrapper h1 {
+    font-size: 20px !important;
+    line-height: 28px !important;
+  }
+
+  .car-funnel .screen-title-wrapper p {
+    font-size: 14px !important;
+    line-height: 20px !important;
+  }
+
+  /* Phone verification country code (+1) */
+  .car-funnel .phone-verification-country-code {
+    height: 44px;
+  }
+
+  /* Image select field - 2 per row on small mobile, 3 per row on larger mobile */
+  .car-funnel .image-select-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    width: 100%;
+  }
+
+  @media (min-width: 480px) {
+    .car-funnel .image-select-container {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .car-funnel .image-select-box {
+    width: 100% !important;   /* override inline boxStyle width (e.g. 113.067px) */
+    height: 120px !important;
+    min-width: unset !important;
+  }
+
+  /* Screen Regular - Mobile adjustments */
+  /* Screen Regular - Mobile adjustments moved to consolidated block above */
+
+  .car-funnel .form-buttons-container {
+    justify-content: center;
+  }
+
+  .car-funnel .btn-no-to-all-wrapper {
+    justify-content: flex-end;
+  }
+
+  /* Screen Summary - Mobile adjustments */
+  .car-funnel .screen-summary {
+    width: 100%;
+    padding: 0 0px;
+  }
+
+  .car-funnel .summary-item-card {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+  }
+
+  .car-funnel .summary-item-card__left {
+    margin-bottom: 16px;
+    width: 100%;
+  }
+
+  .car-funnel .summary-item-card__right {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 24px;
+    border-top: 1.5px solid var(--color-border);
+    padding-top: 12px;
+  }
+
+  .car-funnel .summary-item-card__check {
+    margin-left: auto;
+  }
+
+  .car-funnel .summary-item-card__name {
+    font-size: 15px;
+    display: block;
+    line-height: 1.4;
+  }
+
+  /* Screen Contact - Mobile adjustments */
+  .car-funnel .screen-contact {
+    width: 100%;
+    padding: 0px;
+  }
+
+  /* Screen Dynamic List - Mobile adjustments to match other screens */
+  .car-funnel .screen-dynamic-list {
+    width: 100%;
+    padding: 0px; /* Remove extra padding to match ScreenRegular */
+  }
+
+  .car-funnel .dynamic-list-form,
+  .car-funnel .dynamic-list-buttons,
+  .car-funnel .dynamic-list-actions {
+    width: 100% !important;
+    max-width: none !important;
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .car-funnel .completed-driver-card {
+    padding: 12px 16px;
+  }
+
+  /* Screen Verification - Mobile adjustments */
+  .car-funnel .screen-verification {
+    width: 100%;
+    padding: 0px;
+  }
+
+  /* Top Navigation - Mobile refinements */
+  .car-funnel .top-navigation {
+    width: 100%;
+    max-width: none;
+    margin: 0 auto 2rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .car-funnel .top-navigation__back-container {
+    position: static !important;
+    margin: 0 !important;
+    height: auto;
+    display: flex;
+    align-items: center;
+  }
+
+  .car-funnel .top-navigation__back-container .back-button {
+    margin: 0 !important;
+    padding: 4px 8px !important;
+  }
+
+  .car-funnel .top-navigation__back-container .back-button__text {
+    display: none;
+  }
+
+  .car-funnel .top-navigation__progress-container {
+    flex: 1;
+  }
+
+  /* Button Group Field - Switch Variant (Mobile) */
+  .car-funnel .button-group-field__switch-container {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .car-funnel .button-group-field__switch-label {
+    flex: 1;
+    margin-bottom: 0;
+  }
+
+  .car-funnel .button-group-field__switch-buttons {
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  .car-funnel .button-group-field__switch-buttons .radio-button-group {
+    width: 100%;
+    display: flex;
+  }
+
+  .car-funnel .button-group-field__switch-buttons .radio-button-option {
+    flex: 1;
+    width: auto !important;
+  }
+
+  /* Button Group Field - Coverage details */
+  .car-funnel .coverage-details-card {
+    padding: 8px 16px;
+  }
+
+  /* Radio Button Group - Mobile refinements already covered above but adding specific overrides if needed */
+  .car-funnel .radio-button-group--grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* Primary & Secondary Buttons - Mobile adjustments */
+  .car-funnel .primary-button,
+  .car-funnel .secondary-button {
+    width: 100%;
+    min-width: unset;
+  }
+
+  /* Manufacturer Grid - Mobile adjustments */
+  .car-funnel .manufacturer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Header Actions - Mobile adjustments */
+  .car-funnel .header-actions {
+    display: none;
+  }
+
+  /* Help Modal - Mobile adjustments */
+  .car-funnel .help-modal .ant-modal-content {
+    border-radius: 20px 20px 20px 20px;
+  }
+
+  .car-funnel .help-modal .ant-modal-body {
+    padding: 24px 16px;
+  }
+
+  .car-funnel .help-modal__title {
+    font-size: var(--font-size-md);
+  }
+
+  /* Info Modal - Mobile adjustments */
+  .car-funnel .info-modal .ant-modal-body {
+    padding: 24px 16px;
+  }
+
+  .car-funnel .info-modal__image {
+    width: 180px;
+    height: auto;
+  }
+
+  .car-funnel .info-modal__text {
+    font-size: var(--font-size-xs);
+  }
+
+  /* Save Quote Modal - Mobile adjustments */
+  .car-funnel .save-quote-modal .ant-modal-body {
+    padding: 24px 16px;
+  }
+
+  .car-funnel .save-quote-modal__title {
+    font-size: var(--font-size-md);
+  }
+
+  /* Driver Header - Mobile adjustments */
+  .car-funnel .driver-header {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  /* Custom Tooltip - Mobile adjustments */
+  .car-funnel .custom-tooltip {
+    width: 100%;
+  }
+
+  .car-funnel .custom-tooltip__wrapper {
+    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .car-funnel .custom-tooltip__arrow {
+    left: 50%;
+  }
+
+  .car-funnel ._phoneCountryCode_hytkd_137 {
+    height: 44px;
+  }
+}
+
+
+/* 600px Breakpoint for Manufacturer Grid & Phone Verification */
+@media (max-width: 600px) {
+  .car-funnel .manufacturer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Phone Verification - Mobile adjustments */
+  .car-funnel .phone-verification-container {
+    padding: 0 16px;
+  }
+
+  .car-funnel .phone-verification-submit-btn {
+    height: 52px;
+    font-size: 15px;
+  }
+}
+
+/* 480px Breakpoint for Dynamic List Form & Checkbox Select */
+@media screen and (max-width: 480px) {
+  .car-funnel .dynamic-list-item {
+    padding: 16px;
+  }
+
+  .car-funnel .checkbox-select-box {
+    max-width: 100%;
+    min-width: 100%;
+  }
+
+  .car-funnel .date-range-field-item {
+    width: 100%;
+  }
+
+  .car-funnel .ant-layout-content {
+    padding: 12px;
+  }
+
+  .car-funnel h1 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .car-funnel .dynamic-list-field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Further reduce button group spacing */
+  .car-funnel .ant-radio-group {
+    gap: 8px;
+  }
+
+  /* Smaller OTP inputs on very small screens */
+  .car-funnel .ant-otp .ant-input {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  /* Progress steps - even more compact */
+  .car-funnel .step-item {
+    min-width: 60px;
+  }
+
+  .car-funnel .step-circle {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+  }
+
+  /* Sticky Suivant Button on Mobile - Only for Coverage Page */
+  .car-funnel .screen-coverage .form-buttons-container {
+    /* position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: white !important;
+    padding: 16px !important;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1) !important;
+    z-index: 1001 !important; */
+    width: 100% !important;
+  }
+
+  .car-funnel .screen-coverage .form-buttons-container .primary-button {
+    margin-top: 0 !important;
+    height: 48px !important;
+    font-size: 16px !important;
+  }
+
+  /* Add padding to prevent sticky button from covering content on coverage page */
+  .car-funnel .screen-coverage {
+    padding-bottom: 90px !important;
+  }
+
+  /* Coverage Details Card - Mobile (Stack icon and text) */
+  .car-funnel .coverage-details-card {
+    padding: 24px !important;
+  }
+
+  .car-funnel .coverage-details-row {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 16px !important;
+  }
+
+  .car-funnel .coverage-details-row__description,
+  .car-funnel .coverage-details-row__content {
+    text-align: left !important;
+    width: 100% !important;
+  }
+
+  .car-funnel .coverage-details-row__image-container {
+    margin-top: 0 !important;
+    margin-bottom: 8px !important;
+  }
+
+  .car-funnel .coverage-details-row__title {
+    font-size: 16px !important;
+    line-height: 1.4 !important;
+  }
+
+  .car-funnel .coverage-details-row__description {
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+  }
+
+  .car-funnel .coverage-expandable__trigger {
+    justify-content: flex-start !important;
+    text-align: left !important;
+  }
+
+  .car-funnel .coverage-expandable__text {
+    text-align: left !important;
+  }
+
+  .car-funnel .coverage-plus-divider {
+    margin: 16px -24px !important;
+  }
+}

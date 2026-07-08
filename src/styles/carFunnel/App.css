@@ -1,0 +1,252 @@
+/* App specific styles */
+
+/* Google Maps Autocomplete Dropdown Styling */
+.car-funnel .pac-container {
+  z-index: 10000 !important;
+  margin-top: 8px !important;
+  border-radius: 8px !important;
+  border: 1.5px solid #ededed !important;
+  box-shadow: none !important;
+  background: white !important;
+  font-family: var(--font-family-body), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
+.car-funnel .pac-item {
+  padding: 6px 16px !important;
+  font-size: 14px !important;
+  color: #333 !important;
+  border: none !important;
+  border-bottom: 1.5px solid #f0f0f0 !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.car-funnel .pac-item:last-child {
+  border-bottom: none !important;
+}
+
+.car-funnel .pac-item:hover {
+  background-color: #f5f5f5 !important;
+}
+
+.car-funnel .pac-item.pac-selected {
+  background-color: #e6f7ff !important;
+}
+
+.car-funnel .pac-item-query {
+  font-weight: 500 !important;
+  color: #000 !important;
+}
+
+.car-funnel .pac-item-query .pac-matched {
+  font-weight: 600 !important;
+}
+
+.car-funnel .pac-icon {
+  width: 18px !important;
+  height: 18px !important;
+  margin-right: 12px !important;
+}
+
+/* Remove margin bottom from last form item */
+.car-funnel .ant-form-item-last {
+  margin-bottom: 0 !important;
+}
+
+/* Hide required asterisk mark */
+.car-funnel .ant-form-item .ant-form-item-label>label.ant-form-item-required::before {
+  display: none !important;
+}
+
+/* Style for input suffix (addon after) */
+.car-funnel .ant-input-group-addon {
+  border: none;
+  background: transparent;
+  padding: 0 12px;
+}
+
+/* InputSuffix component styling */
+.car-funnel .input-suffix {
+  color: #9B9B9B;
+  font-family: var(--font-family-body);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+/* Custom dropdown arrow icon */
+.car-funnel .ant-select-arrow {
+  width: 12px;
+  height: 6px;
+  transition: transform 0.3s ease;
+}
+
+.car-funnel .ant-select-arrow .anticon {
+  display: none;
+}
+
+.car-funnel .ant-select-arrow::after {
+  content: '';
+  display: block;
+  width: 12px;
+  height: 6px;
+  background-image: url('./assets/arrow-down.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* Rotate arrow when dropdown is open */
+.car-funnel .ant-select-open .ant-select-arrow {
+  transform: rotate(180deg);
+}
+
+/* Blue border on hover and focus for all form inputs */
+.car-funnel .ant-input:hover,
+.car-funnel .ant-input:focus,
+.car-funnel .ant-input-focused,
+.car-funnel .ant-input-affix-wrapper:hover,
+.car-funnel .ant-input-affix-wrapper:focus,
+.car-funnel .ant-input-affix-wrapper-focused,
+.car-funnel .ant-select:not(.ant-select-disabled):hover .ant-select-selector,
+.car-funnel .ant-select-focused .ant-select-selector,
+.car-funnel .ant-picker:hover,
+.car-funnel .ant-picker-focused,
+.car-funnel .ant-input-number:hover,
+.car-funnel .ant-input-number-focused {
+  border-color: #1A1ABA !important;
+  border-width: 1.5px !important;
+}
+
+/* Focus shadow effect */
+.car-funnel .ant-input:focus,
+.car-funnel .ant-input-focused,
+.car-funnel .ant-input-affix-wrapper:focus,
+.car-funnel .ant-input-affix-wrapper-focused,
+.car-funnel .ant-select-focused .ant-select-selector,
+.car-funnel .ant-picker-focused,
+.car-funnel .ant-input-number-focused {
+  border-color: #1A1ABA !important;
+  box-shadow: 0 0 0 2px rgba(26, 26, 186, 0.1) !important;
+}
+
+/* Remove red border from all form inputs on validation error - keep UI consistent */
+.car-funnel .ant-form-item-has-error .ant-input,
+.car-funnel .ant-form-item-has-error .ant-input:hover,
+.car-funnel .ant-form-item-has-error .ant-input:focus,
+.car-funnel .ant-form-item-has-error .ant-input-affix-wrapper,
+.car-funnel .ant-form-item-has-error .ant-input-affix-wrapper:hover,
+.car-funnel .ant-form-item-has-error .ant-input-affix-wrapper:focus,
+.car-funnel .ant-form-item-has-error .ant-select .ant-select-selector,
+.car-funnel .ant-form-item-has-error .ant-select:hover .ant-select-selector,
+.car-funnel .ant-form-item-has-error .ant-select-focused .ant-select-selector,
+.car-funnel .ant-form-item-has-error .ant-picker,
+.car-funnel .ant-form-item-has-error .ant-picker:hover,
+.car-funnel .ant-form-item-has-error .ant-picker-focused,
+.car-funnel .ant-form-item-has-error .ant-input-number,
+.car-funnel .ant-form-item-has-error .ant-input-number:hover,
+.car-funnel .ant-form-item-has-error .ant-input-number-focused {
+  border-color: #1A1ABA !important;
+  box-shadow: none !important;
+}
+
+.car-funnel .ant-select-selector {
+  border-color: #ededed !important;
+}
+
+/* Screen transition animations */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeSlideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+}
+
+
+.car-funnel .screen-enter {
+  animation: fadeSlideIn 0.3s ease-out forwards;
+}
+
+.car-funnel .screen-exit {
+  animation: fadeSlideOut 0.3s ease-out forwards;
+}
+
+/* Button styles */
+.car-funnel .btn-primary,
+.car-funnel .btn-primary.ant-btn {
+  display: flex;
+  min-width: 223px;
+  height: 43px;
+  padding: 8px 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 10px;
+  background: #1A1ABA;
+ 
+  box-shadow: none;
+  color: #FFF;
+  font-family: var(--font-family-body);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+  transition: all 0.2s ease;
+}
+
+/* Global Modal Styling */
+.car-funnel .ant-modal-content {
+  padding: 0 !important;
+}
+
+.car-funnel .confirm-remove-modal .ant-modal-content {
+  padding: 22px !important;
+}
+
+.car-funnel .btn-secondary {
+  display: flex;
+  min-width: 223px;
+  height: 43px;
+  padding: 12.5px 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  border-radius: 10px;
+  border: 1.5px solid #ededed;
+  background: #FFF;
+  color: #1A1ABA;
+  font-family: var(--font-family-body);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+  transition: all 0.2s ease;
+}
+
+.car-funnel #manual_street,
+.car-funnel .ant-input-disabled {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.car-funnel .ant-input-affix-wrapper .ant-input {
+  box-shadow: none !important;
+  border: none !important;
+}

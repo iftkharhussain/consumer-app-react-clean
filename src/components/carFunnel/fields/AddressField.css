@@ -1,0 +1,31 @@
+.car-funnel .address-field__manual-link {
+    color: var(--color-text-secondary) !important;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color var(--transition-normal);
+}
+
+.car-funnel .address-field__manual-link:hover {
+    color: var(--color-primary) !important;
+    text-decoration: underline !important;
+}
+
+.car-funnel .address-field__manual-title {
+    margin: 0;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+    font-family: var(--font-family);
+    color: var(--color-text-primary);
+}
+
+/* Fix height of address input (uses affix-wrapper due to prefix icon) */
+.car-funnel .ant-form-item .ant-input-affix-wrapper {
+    height: 48px !important;
+    line-height: 48px !important;
+    font-size: 16px !important;
+}
+
+.car-funnel .ant-form-item .ant-input-affix-wrapper .ant-input {
+    height: auto !important;
+}

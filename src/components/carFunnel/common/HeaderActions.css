@@ -1,0 +1,58 @@
+/* Nav funnel container - portal target for Webflow integration */
+.car-funnel .nav-funnel {
+    position: fixed;
+    top: 16px;
+    right: 24px;
+    z-index: 1000;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.car-funnel .header-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    padding: 8px 0;
+    background: transparent;
+    position: relative;
+    z-index: 10001;
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+
+.car-funnel .header-action-item {
+    display: flex;
+    align-items: center;
+    gap: 8.41px;
+    cursor: pointer;
+}
+
+.car-funnel .header-action-icon {
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0;
+    aspect-ratio: 1 / 1;
+}
+
+.car-funnel .header-action-text {
+    color: #1A1ABA;
+    font-family: var(--font-family-body);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    text-decoration: none;
+    transition: text-decoration 0.2s ease;
+}
+
+.car-funnel .header-action-item:hover .header-action-text {
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    text-decoration-skip-ink: none;
+    text-decoration-thickness: auto;
+    text-underline-offset: auto;
+    text-underline-position: from-font;
+}

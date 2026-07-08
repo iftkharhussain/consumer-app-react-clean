@@ -1,0 +1,125 @@
+/* TopNavigation Component Styles */
+
+.car-funnel .top-navigation {
+    width: 100%;
+    max-width: 1016px;
+    position: relative;
+    margin: 0 auto 6rem;
+}
+
+
+.car-funnel .top-navigation__back-container {
+    position: absolute;
+    left: -150px;
+    top: -4px;
+}
+
+.car-funnel .top-navigation__progress-container {
+    width: 100%;
+    position: relative;
+}
+
+
+.car-funnel .top-navigation__track {
+    position: absolute;
+    top: 8.8px;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background-color: var(--color-border, #ededed);
+    border-radius: 4px;
+    z-index: 0;
+}
+
+.car-funnel .top-navigation__bar {
+    position: absolute;
+    top: 8.8px;
+    left: 0;
+    height: 8px;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.car-funnel .top-navigation__bar--locked {
+    background-color: #9B9BDB;
+    z-index: 1;
+}
+
+.car-funnel .top-navigation__bar--active {
+    background-color: var(--color-primary, #1A1ABA);
+    z-index: 2;
+}
+
+.car-funnel .top-navigation__steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+}
+
+/* Step Component */
+.car-funnel .nav-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    width: 24px;
+}
+
+.car-funnel .nav-step__circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    z-index: 2;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.car-funnel .nav-step__circle--finish {
+    background-color: var(--color-primary, #1A1ABA);
+    color: white;
+}
+
+.car-funnel .nav-step__circle--process {
+    background-color: #1A1ABA;
+    border: 4px solid #1A1ABA;
+}
+
+.car-funnel .nav-step__circle--wait {
+    background-color: transparent;
+}
+
+.car-funnel .nav-step__tick {
+    width: 11.997px;
+    height: 10.504px;
+    flex-shrink: 0;
+}
+
+.car-funnel .nav-step__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--color-border, #ededed);
+}
+
+.car-funnel .nav-step__icon {
+    width: 24px;
+    height: 24px;
+}
+
+.car-funnel .nav-step__title {
+    position: absolute;
+    top: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: var(--font-size-sm, 14px);
+    font-weight: var(--font-weight-medium, 500);
+    color: var(--color-text-primary, #000);
+    white-space: nowrap;
+    font-family: var(--font-family);
+}

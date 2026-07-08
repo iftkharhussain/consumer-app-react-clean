@@ -1,0 +1,49 @@
+/* BackButton Component Styles */
+
+.car-funnel .back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-primary) !important;
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    line-height: var(--line-height-normal);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    padding: 6px 10px;
+    margin-bottom: var(--spacing-4);
+    transition: all var(--transition-normal);
+    text-decoration: none;
+    height: auto;
+}
+
+.car-funnel .back-button:hover {
+    color: rgb(26, 26, 186) !important;
+    background: rgb(236 240 253) !important;
+    text-decoration: none;
+}
+
+.car-funnel .back-button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.car-funnel .back-button__icon {
+    height: 11px;
+    width: auto;
+    transition: transform 0.2s ease;
+}
+
+.car-funnel .back-button:hover .back-button__icon {
+    transform: translateX(-3px);
+}
+
+.car-funnel .back-button__text {
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-primary) !important;
+}

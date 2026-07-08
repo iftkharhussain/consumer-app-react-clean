@@ -1,0 +1,8 @@
+/* ScreenVerification Component Styles */
+
+.car-funnel .screen-verification {
+    width: 542px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

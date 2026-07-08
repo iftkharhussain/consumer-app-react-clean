@@ -1,0 +1,247 @@
+/* ScreenContact Component Styles */
+
+.car-funnel .screen-contact {
+    width: 542px;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Contact Form Card */
+.car-funnel .contact-form-card {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: none;
+    border: 1.5px solid #ededed;
+    padding: 20px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.car-funnel .contact-form-card .ant-form-item {
+    margin-bottom: 0;
+}
+
+/* Common input styles */
+.car-funnel .contact-form-card .ant-input,
+.car-funnel .contact-form-card .ant-input-affix-wrapper {
+    height: 40px; /* Slightly taller for mobile */
+    border-radius: 8px;
+    border: 1.5px solid #ededed;
+    font-size: 16px !important;
+    box-shadow: none;
+}
+
+.car-funnel .contact-form-card .ant-input:focus,
+.car-funnel .contact-form-card .ant-input-focused {
+    border-color: #1A1ABA;
+    box-shadow: 0 0 0 2px rgba(26, 26, 186, 0.1);
+}
+
+/* Phone Field specific overrides */
+.car-funnel .contact-form-card .phone-field-wrapper {
+    position: relative;
+    display: flex;
+}
+
+.car-funnel .contact-form-card .phone-country-code {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 40px;
+    background: #F9FAFB;
+    border: 1.5px solid #ededed;
+    border-radius: 8px 0 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #374151;
+    font-weight: 500;
+    z-index: 1000;
+    line-height: normal;
+    font-size: 16px;
+    font-family: var(--font-family-body);
+}
+
+.car-funnel .contact-form-card .phone-field-wrapper:focus-within .phone-country-code {
+    border-color: #1A1ABA;
+    box-shadow: 0 0 0 2px rgba(26, 26, 186, 0.1);
+}
+
+.car-funnel .contact-form-card .phone-input-item .ant-input:focus {
+    border-color: #1A1ABA !important;
+    box-shadow: 0 0 0 2px rgba(26, 26, 186, 0.1) !important;
+}
+
+.car-funnel .contact-form-card .phone-input-item {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.car-funnel .contact-form-card .phone-input-item .ant-input {
+    padding-left: 72px !important;
+    height: 40px !important;
+    border-radius: 8px !important;
+}
+
+/* Consent Sections */
+.car-funnel .consent-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.car-funnel .consent-card-new {
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1.5px solid #ededed;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    box-shadow: none;
+    min-height: 80px;
+    overflow: hidden;
+}
+
+.car-funnel .consent-checkbox-wrapper {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 64px;
+    height: auto;
+    align-self: stretch !important;
+    flex-shrink: 0;
+}
+
+.car-funnel .consent-checkbox-wrapper .ant-checkbox {
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.car-funnel .consent-checkbox-wrapper .ant-checkbox-inner {
+   width: 20px;
+    height: 20px;
+    border: 2px solid #1A1ABA;
+    border-radius: 4px;
+}
+
+.car-funnel .consent-checkbox-wrapper .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #1A1ABA;
+    border-color: #1A1ABA;
+}
+
+/* Precise centering for 12x12 checkbox checkmark */
+.car-funnel .consent-checkbox-wrapper .ant-checkbox-inner::after {
+       width: 4px !important;
+    height: 9.5px !important;
+    border-width: 2px !important;
+    left: 30% !important;
+    top: 45% !important;
+    border-top: 0 !important;
+    border-left: 0 !important;
+}
+
+.car-funnel .consent-divider {
+    width: 1.5px;
+    background: #ededed;
+    align-self: stretch;
+}
+
+.car-funnel .consent-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+}
+
+.car-funnel .consent-title-wrap {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 8px;
+    align-items: flex-start;
+}
+
+.car-funnel .consent-icon {
+    width: 24px;
+    height: 28px;
+    flex-shrink: 0;
+}
+
+.car-funnel .consent-title {
+    color: #1A1ABA;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.car-funnel .consent-text {
+    color: #6B7280;
+    font-size: 12px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.car-funnel .consent-error-msg {
+    color: #ef4444;
+    font-size: 14px;
+    margin-top: 4px;
+    text-align: center;
+}
+
+/* Submit Button */
+.car-funnel .btn-submit-new {
+    width: 100%;
+    background: #3FC098;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    height: 56px;
+    border-radius: 8px;
+    border: 1.5px solid #ededed;
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.car-funnel .btn-submit-new:hover {
+    background: #35a885;
+    transform: scale(1.02);
+    box-shadow: none;
+}
+
+.car-funnel .btn-submit-new:active {
+    background: #2d9470;
+    transform: scale(0.98);
+}
+
+.car-funnel .btn-submit-new .arrow {
+    height: 12px;
+    width: auto;
+    transition: transform 0.2s ease;
+}
+
+.car-funnel .btn-submit-new:hover .arrow {
+    transform: translateX(4px);
+}
+
+.car-funnel .submit-disclaimer {
+    margin-top: 16px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #6B7280;
+    text-align: center;
+    padding: 0 10px;
+}

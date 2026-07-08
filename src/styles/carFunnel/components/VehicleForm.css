@@ -1,0 +1,67 @@
+/* VehicleForm Component Styles */
+
+.car-funnel .vehicle-form-container {
+    width: 100%;
+    max-width: 542px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.car-funnel .vehicle-form-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+    border-bottom: 1.5px solid var(--color-border, #ededed);
+    padding-bottom: 2rem;
+}
+
+.car-funnel .vehicle-form-icon {
+    width: 64px;
+    height: auto;
+}
+
+.car-funnel .vehicle-form-title {
+    font-size: 1.1rem;
+    color: var(--color-primary, #1d26c2);
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-bold);
+}
+
+.car-funnel .vehicle-form-divider {
+    margin: 0 0 24px 0 !important;
+    color: var(--color-text-secondary, #9B9B9B);
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm, 14px);
+    font-style: normal;
+    font-weight: var(--font-weight-medium, 500);
+    line-height: var(--line-height-relaxed, 20px);
+}
+
+.car-funnel .vehicle-form-niv-link {
+    color: var(--color-primary, #1A1ABA);
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm, 14px);
+    font-weight: var(--font-weight-medium, 500);
+    line-height: 32px;
+    text-decoration: underline;
+}
+
+.car-funnel .vehicle-form-niv-link:hover {
+    opacity: 0.8;
+}
+
+.car-funnel .vehicle-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: 2rem;
+}
+
+.car-funnel .vehicle-form-question-icon {
+    color: #bfbfbf;
+    margin-left: 4px;
+    width: 16px;
+    height: 19px;
+}

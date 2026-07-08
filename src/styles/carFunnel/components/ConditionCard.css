@@ -1,0 +1,39 @@
+/* ConditionCard Component Styles */
+
+.car-funnel .condition-card {
+    border-radius: 12px !important;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 12px;
+    border: 1.5px solid #ededed !important;
+    background-color: white !important;
+}
+
+.car-funnel .condition-card--selected {
+    border: 1.5px solid #1A1ABA !important;
+    background-color: #FFFFFF !important;
+}
+
+.car-funnel .condition-card .ant-card-body {
+    padding: 20px;
+}
+
+.car-funnel .condition-card__label {
+    font-family: var(--font-family);
+    font-size: 18px;
+    font-weight: var(--font-weight-bold, 700);
+    color: var(--color-text-primary, #000);
+    margin-bottom: 8px;
+}
+
+.car-funnel .condition-card--selected .condition-card__label {
+    color: var(--color-primary, #1A1ABA);
+}
+
+.car-funnel .condition-card__description {
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm, 14px);
+    font-weight: var(--font-weight-medium, 500);
+    color: var(--color-text-secondary, #666);
+    line-height: var(--line-height-relaxed, 20px);
+}

@@ -1,0 +1,30 @@
+.car-funnel .input-with-suffix-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.car-funnel .input-with-suffix-field {
+  flex: 0 0 auto;
+  width: 65px;
+  height: 40px;
+  padding: 8px 11px;
+  font-size: 16px !important;
+}
+
+.car-funnel .input-with-suffix-field::placeholder {
+  color: #D4D4D8;
+}
+
+.car-funnel .input-with-suffix-field:hover,
+.car-funnel .input-with-suffix-field:focus {
+  border-color: #2626D9;
+}
+
+.car-funnel .input-with-suffix-text {
+  color: #9b9b9b;
+  font-family: var(--font-family-body);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}

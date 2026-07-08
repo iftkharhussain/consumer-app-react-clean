@@ -1,0 +1,13 @@
+/* HelpIcon Component Styles */
+
+.car-funnel .help-icon {
+    width: 16px;
+    height: 19px;
+    margin-left: 8px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.car-funnel .help-icon:hover {
+    opacity: 0.8;
+}

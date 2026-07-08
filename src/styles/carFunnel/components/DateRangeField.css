@@ -1,0 +1,35 @@
+/* DateRangeField Component Styles */
+
+.car-funnel .date-range-field {
+    margin-bottom: 24px;
+}
+
+.car-funnel .date-range-field--last {
+    margin-bottom: 0;
+}
+
+.car-funnel .date-range-field__label {
+    color: var(--color-text-primary);
+    font-family: var(--font-family);
+    font-size: 15px;
+    font-weight: var(--font-weight-medium);
+    margin-bottom: 8px;
+}
+
+.car-funnel .date-range-container {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+}
+
+.car-funnel .date-range-field__item {
+    flex: 1;
+}
+
+.car-funnel .date-range-field__sub-label {
+    color: var(--color-text-secondary);
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    margin-bottom: 4px;
+}

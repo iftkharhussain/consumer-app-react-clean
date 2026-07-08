@@ -1,0 +1,83 @@
+/* CompletedVehicleCard Component Styles */
+
+.car-funnel .completed-vehicle-card {
+    border-radius: var(--radius-xl);
+    border: 1.5px solid #ededed;
+    margin-bottom: var(--spacing-4);
+    cursor: default;
+}
+
+.car-funnel .completed-vehicle-card--clickable {
+    cursor: pointer;
+}
+
+.car-funnel .completed-vehicle-card .ant-card-body {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+}
+
+.car-funnel .completed-vehicle-card__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-lg);
+    background-color: #E8F4F8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.car-funnel .completed-vehicle-card__info {
+    flex: 1;
+}
+
+.car-funnel .completed-vehicle-card__label {
+    font-family: var(--font-family);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    display: block;
+    line-height: var(--line-height-relaxed);
+}
+
+/* Vehicle Info Styles */
+.car-funnel .completed-vehicle-card__vehicle-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.car-funnel .completed-vehicle-card__vehicle-main {
+    display: flex;
+    align-items: baseline;
+    line-height: var(--line-height-relaxed);
+}
+
+.car-funnel .completed-vehicle-card__manufacturer {
+    font-family: var(--font-family);
+    font-size: 12px;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+}
+
+.car-funnel .completed-vehicle-card__year {
+    font-family: var(--font-family);
+    font-size: 14px;
+    font-weight: var(--font-weight-regular);
+    color: var(--color-primary);
+}
+
+.car-funnel .completed-vehicle-card__model {
+    font-family: var(--font-family);
+    font-size: 12px;
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+}
+
+.car-funnel .completed-vehicle-card__check {
+    font-size: 24px;
+    color: #52C41A;
+}

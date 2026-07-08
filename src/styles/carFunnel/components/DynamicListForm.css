@@ -1,0 +1,145 @@
+/* DynamicListForm Component Styles */
+
+.car-funnel .dynamic-list-form-container {
+    width: 100%;
+    max-width: 542px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.car-funnel .dynamic-list-driver-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+    border-bottom: 1.5px solid var(--color-border);
+    padding-bottom: 1.7rem;
+    margin-left: -2rem;
+    margin-right: -2rem;
+    padding-left: 1.7rem;
+    padding-right: 1.7rem;
+    margin-top: -2rem;
+    padding-top: 1.7rem;
+}
+
+.car-funnel .dynamic-list-driver-icon {
+    width: 41px;
+    height: 41px;
+}
+
+.car-funnel .dynamic-list-driver-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.car-funnel .dynamic-list-driver-label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-relaxed);
+}
+
+.car-funnel .dynamic-list-driver-name {
+    font-size: var(--font-size-md);
+    color: var(--color-primary);
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-relaxed);
+}
+
+.car-funnel .dynamic-list-section-title-container {
+    margin-bottom: 8px;
+}
+
+.car-funnel .dynamic-list-section-title {
+    font-family: var(--font-family);
+    font-size: 18px;
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-normal);
+    color: var(--color-primary);
+}
+
+.car-funnel .dynamic-list-section-subtitle {
+    font-family: var(--font-family);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
+    color: var(--color-text-secondary);
+}
+
+.car-funnel .dynamic-list-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.car-funnel .dynamic-list-item-title {
+    font-family: var(--font-family);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+}
+
+.car-funnel .dynamic-list-remove-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.car-funnel .dynamic-list-remove-icon {
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+}
+
+.car-funnel .dynamic-list-field-group-label {
+    display: block;
+    margin-bottom: 8px;
+    font-family: var(--font-family);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+.car-funnel .dynamic-list-field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.car-funnel .dynamic-list-field-sublabel {
+    display: block;
+    margin-bottom: 4px;
+    font-family: var(--font-family);
+    font-size: var(--font-size-xs);
+    color: #999;
+}
+
+.car-funnel .dynamic-list-field-footer-text {
+    font-family: var(--font-family);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
+    color: var(--color-text-secondary);
+    margin-top: 8px;
+    display: block;
+}
+
+.car-funnel .dynamic-list-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+}
+
+.car-funnel .dynamic-list-field-limited-width {
+    max-width: 220px;
+}

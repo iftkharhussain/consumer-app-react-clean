@@ -1,0 +1,123 @@
+/* CSS Custom Properties (Design Tokens) */
+.car-funnel {
+    /* ==================== COLORS ==================== */
+
+    /* Primary Colors */
+    --color-primary: #1A1ABA;
+    --color-primary-light: #F0F4FF;
+    --color-primary-hover: #1515A0;
+
+    /* Success Colors */
+    --color-success: #3FC098;
+    --color-success-dark: #10B981;
+
+    /* Text Colors */
+    --color-text-primary: #000;
+    --color-text-secondary: #9B9B9B;
+    --color-text-muted: #9C9C9C;
+    --color-text-light: #BCBCBC;
+    --color-text-white: #FFF;
+
+    /* Border Colors */
+    --color-border: #ededed;
+    --color-border-dark: #ededed;
+    --color-border-input: #ededed;
+
+    /* Background Colors */
+    --color-background: #FFF;
+    --color-background-hover: #F0F4FF;
+    --color-background-light: #e1e1f1;
+    --color-background-tooltip: #e1e1f1;
+
+    /* State Colors */
+    --color-error: #FF0000;
+    --color-warning: #FF0000;
+
+    /* ==================== TYPOGRAPHY ==================== */
+
+    /* Font Families */
+    --font-family-header: 'PP Object Sans', sans-serif;
+    --font-family-body: 'PP Neue Montreal', sans-serif;
+    --font-family: var(--font-family-body);
+
+    /* Font Sizes */
+    --font-size-h1: 96px;
+    --font-size-h2: 48px;
+    --font-size-h3: 32px;
+    --font-size-h4: 24px;
+    --font-size-body: 20px;
+
+    --font-size-xs: 12px;
+    --font-size-sm: 14px;
+    --font-size-md: 16px;
+    --font-size-lg: 20px;
+    --font-size-xl: 24px;
+    --font-size-2xl: 32px;
+
+    /* Font Weights */
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-heavy: 900;
+
+    /* Line Heights */
+    --line-height-h1: 104px;
+    --line-height-h2: 60px;
+    --line-height-h3: 42px;
+    --line-height-h4: 32px;
+    --line-height-body: 28px;
+
+    --line-height-tight: 16px;
+    --line-height-normal: 18px;
+    --line-height-relaxed: 20px;
+    --line-height-loose: 24px;
+
+    /* ==================== SPACING ==================== */
+
+    --spacing-0: 0;
+    --spacing-1: 4px;
+    --spacing-2: 8px;
+    --spacing-3: 12px;
+    --spacing-4: 16px;
+    --spacing-5: 20px;
+    --spacing-6: 24px;
+    --spacing-8: 32px;
+    --spacing-10: 40px;
+    --spacing-12: 48px;
+
+    /* ==================== BORDER RADIUS ==================== */
+
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --radius-xl: 12px;
+    --radius-full: 9999px;
+
+    /* ==================== SHADOWS ==================== */
+
+    --shadow-xs: none;
+    --shadow-sm: none;
+    --shadow-md: none;
+    --shadow-lg: none;
+    --shadow-primary: none;
+
+    /* ==================== LAYOUT ==================== */
+
+    --max-width-content: 542px;
+    --max-width-layout: 835px;
+    --max-width-full: 1200px;
+
+    /* ==================== TRANSITIONS ==================== */
+
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.2s ease;
+    --transition-slow: 0.3s ease;
+
+    /* ==================== Z-INDEX ==================== */
+
+    --z-dropdown: 100;
+    --z-modal: 1000;
+    --z-tooltip: 1000;
+}

@@ -1,0 +1,46 @@
+/* ActionCard Component Styles */
+
+.car-funnel .action-card {
+    width: 100%;
+    max-width: var(--max-width-content);
+    margin-bottom: 0;
+    border-radius: var(--radius-lg);
+    border: 1.5px solid #ededed;
+    background: var(--color-background);
+    box-shadow: var(--shadow-lg);
+    overflow: visible;
+}
+
+/* Remove default Ant Design Card styles */
+.car-funnel .action-card.ant-card {
+    border: 1.5px solid #ededed;
+}
+
+.car-funnel .action-card .ant-card-body {
+    padding: 2rem;
+}
+
+.car-funnel .action-card--compact .ant-card-body {
+    padding: 1.1rem 2rem;
+}
+
+/* Card header with icon and title */
+.car-funnel .action-card__header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+}
+
+.car-funnel .action-card__header-icon {
+    font-size: 2rem;
+    color: var(--color-success-dark);
+}
+
+.car-funnel .action-card__header-title {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--color-primary);
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-bold);
+}

@@ -1,0 +1,69 @@
+/* PhoneField Component Styles */
+
+.car-funnel .phone-field-wrapper {
+    display: flex;
+    position: relative;
+}
+
+.car-funnel .phone-country-code {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 60px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px 0 0 8px;
+    border: 1.5px solid #ededed;
+    background: #F9FAFB;
+    flex-shrink: 0;
+    z-index: 10;
+    color: #1A1ABA;
+    font-family: var(--font-family);
+    font-size: 14px;
+    font-weight: 500;
+    pointer-events: none;
+}
+
+.car-funnel .phone-input-item {
+    margin-bottom: 0 !important;
+    flex: 1;
+    width: 100%;
+}
+
+.car-funnel .phone-input {
+    width: 100%;
+    height: 40px;
+    padding-left: 72px; /* Standardized offset for prefix */
+    border-radius: 8px;
+    border: 1.5px solid #ededed;
+    font-family: var(--font-family);
+    font-size: 14px;
+    background: white;
+    color: #1A1ABA;
+    outline: none;
+}
+
+.car-funnel .phone-input:hover, .car-funnel .phone-input:focus {
+    border-color: #1A1ABA;
+    box-shadow: 0 0 0 2px rgba(26, 26, 186, 0.1);
+}
+
+.car-funnel .phone-field-wrapper:focus-within .phone-country-code {
+    border-color: #1A1ABA;
+}
+
+.car-funnel .phone-country-code {
+    border-right: 1.5px solid #ededed;
+}
+
+.car-funnel .phone-field-wrapper:focus-within .phone-country-code {
+    border-color: #1A1ABA;
+    border-right-color: #1A1ABA;
+    box-shadow: 0 0 0 2px rgba(26, 26, 186, 0.1);
+}
+
+.car-funnel .phone-field-no-margin {
+    margin-bottom: 0 !important;
+}

@@ -1,0 +1,27 @@
+/* FieldRenderer Component Styles */
+
+.car-funnel .field-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--field-row-gap, 16px);
+    /* margin-bottom: var(--field-row-mb, 16px); */
+}
+
+.car-funnel .field-row--last {
+    margin-bottom: 0;
+}
+
+.car-funnel .field-row__item {
+    flex: var(--field-item-flex, 1);
+}
+
+/* Fallback/Default for unknown screen types */
+.car-funnel .dynamic-renderer-fallback {
+    padding: 24px;
+    text-align: center;
+}
+
+.car-funnel .dynamic-renderer-fallback p {
+    color: var(--color-text-secondary);
+    font-family: var(--font-family);
+}

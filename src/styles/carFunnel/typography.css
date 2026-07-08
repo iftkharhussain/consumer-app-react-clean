@@ -1,0 +1,199 @@
+/* Base Typography Styles */
+
+/* Reset default margins */
+.car-funnel h1,
+.car-funnel h2,
+.car-funnel h3,
+.car-funnel h4,
+.car-funnel h5,
+.car-funnel h6,
+.car-funnel p {
+    margin: 0;
+}
+
+/* Base text styles */
+.car-funnel {
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-body);
+    color: var(--color-text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Heading styles */
+.car-funnel h1,
+.car-funnel .h1,
+.car-funnel .heading-xl {
+    font-family: var(--font-family-header);
+    font-size: var(--font-size-h1);
+    font-weight: var(--font-weight-heavy);
+    line-height: var(--line-height-h1);
+}
+
+.car-funnel h2,
+.car-funnel .h2,
+.car-funnel .heading-lg {
+    font-family: var(--font-family-header);
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-heavy);
+    line-height: var(--line-height-h2);
+}
+
+.car-funnel h3,
+.car-funnel .h3,
+.car-funnel .heading-md {
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-h3);
+}
+
+.car-funnel h4,
+.car-funnel .h4,
+.car-funnel .heading-sm {
+    font-family: var(--font-family-header);
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-h4);
+}
+
+/* Specific text styles from brief */
+.car-funnel .text-bold {
+    font-family: var(--font-family-body);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+}
+
+.car-funnel .text-regular {
+    font-family: var(--font-family-body);
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+}
+
+.car-funnel .text-link {
+    font-family: var(--font-family-body);
+    font-weight: var(--font-weight-bold);
+    font-style: italic;
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+    text-decoration: underline;
+    color: var(--color-primary);
+    cursor: pointer;
+}
+
+/* Legacy Utility Classes (Updated to use new scales) */
+.car-funnel .text-lg {
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-body);
+}
+
+.car-funnel .text-md {
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-relaxed);
+}
+
+.car-funnel .text-sm {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+}
+
+.car-funnel .text-xs {
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-tight);
+}
+
+/* Text color modifiers */
+.car-funnel .text-primary {
+    color: var(--color-primary);
+}
+
+.car-funnel .text-secondary {
+    color: var(--color-text-secondary);
+}
+
+.car-funnel .text-muted {
+    color: var(--color-text-muted);
+}
+
+.car-funnel .text-success {
+    color: var(--color-success);
+}
+
+.car-funnel .text-error {
+    color: var(--color-error);
+}
+
+.car-funnel .text-white {
+    color: var(--color-text-white);
+}
+
+/* Text weight modifiers */
+.car-funnel .font-light {
+    font-weight: var(--font-weight-light);
+}
+
+.car-funnel .font-regular {
+    font-weight: var(--font-weight-regular);
+}
+
+.car-funnel .font-medium {
+    font-weight: var(--font-weight-medium);
+}
+
+.car-funnel .font-semibold {
+    font-weight: var(--font-weight-semibold);
+}
+
+.car-funnel .font-bold {
+    font-weight: var(--font-weight-bold);
+}
+
+.car-funnel .font-heavy {
+    font-weight: var(--font-weight-heavy);
+}
+
+/* Text alignment */
+.car-funnel .text-left {
+    text-align: left;
+}
+
+.car-funnel .text-center {
+    text-align: center;
+}
+
+.car-funnel .text-right {
+    text-align: right;
+}
+
+.car-funnel .text-justify {
+    text-align: justify;
+}
+
+/* Label styles */
+.car-funnel .label {
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-primary);
+    display: block;
+    margin-bottom: var(--spacing-2);
+}
+
+/* Help/Error text */
+.car-funnel .help-text {
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+}
+
+.car-funnel .error-text {
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-error);
+}
