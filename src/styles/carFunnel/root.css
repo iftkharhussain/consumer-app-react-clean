@@ -30,9 +30,27 @@
   font-family: var(--font-sans);
 }
 
-/* Remove the antd standard Form.Item bottom margin (spacing handled elsewhere). */
+/* Extra top spacing on standard-margin form items (matches the external rhythm). */
 .car-funnel .ant-form-item-standard-margin {
-  margin-bottom: 0;
+  margin-top: 24px;
+}
+
+.car-funnel .ant-input-outlined {
+  padding: 8px 11px;
+}
+
+/* Tighten ONLY the driver name row (Prénom / Nom de famille) — targeted via the
+   Prénom placeholder so it affects nothing else (shared classes stay untouched). */
+.car-funnel .field-row:has(input[placeholder="Prénom"]) .ant-form-item-standard-margin {
+  margin-top: 0;
+  margin-bottom: 8px !important;
+}
+
+/* Let the car funnel fill the app content wrapper edge-to-edge — drop the shared
+   layout's padding ONLY on the car page (via :has), so the wrapper's #F8FAFC
+   background doesn't show around the funnel. Other internal pages keep padding. */
+.main-body-wrapper:has(.car-funnel) {
+  padding: 0 !important;
 }
 
 .car-funnel #root {

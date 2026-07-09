@@ -171,7 +171,7 @@ export const ButtonGroupField = ({ field, form, isLastField = false }) => {
                                     <div className="coverage-plus-divider__line" />
                                     <div className="coverage-plus-divider__icon-container">
                                         <img
-                                            src={getAssetPath('/images/plus.svg')}
+                                            src={getAssetPath('/images/car-plus.svg')}
                                             alt="+"
                                             className="coverage-plus-divider__icon"
                                         />

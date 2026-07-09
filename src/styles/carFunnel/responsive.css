@@ -162,7 +162,7 @@
 
 
   .car-funnel .ant-form-item-label>label {
-    font-size: 16px;
+    font-size: 15px;
     line-height: 20px;
   }
 
@@ -854,5 +854,33 @@
 
   .car-funnel .coverage-plus-divider {
     margin: 16px -24px !important;
+  }
+}
+
+/* Back link: icon-only, inline to the left of the nav step at <=1428px — the same
+   layout mobile uses (the desktop absolute left:-150px goes off-screen here).
+   Desktop (>1428px) keeps the full "Précédent" text + absolute positioning. */
+@media (max-width: 1428px) {
+  .car-funnel .top-navigation {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .car-funnel .top-navigation__back-container {
+    position: static !important;
+    margin: 0 !important;
+    height: auto;
+    display: flex;
+    align-items: center;
+  }
+  .car-funnel .top-navigation__back-container .back-button {
+    margin: 0 !important;
+    padding: 4px 8px !important;
+  }
+  .car-funnel .top-navigation__back-container .back-button__text {
+    display: none;
+  }
+  .car-funnel .top-navigation__progress-container {
+    flex: 1;
   }
 }

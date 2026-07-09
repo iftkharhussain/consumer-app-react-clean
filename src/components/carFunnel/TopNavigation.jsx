@@ -17,7 +17,7 @@ const Step = ({ title, status, isLast }) => {
 			<div className={circleClass}>
 				{status === 'finish' && (
 					<img
-						src={getAssetPath('/images/tick.svg')}
+						src={getAssetPath('/images/car-tick.svg')}
 						alt="Done"
 						className="nav-step__tick"
 					/>
