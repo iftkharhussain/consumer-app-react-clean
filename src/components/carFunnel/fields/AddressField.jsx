@@ -471,10 +471,10 @@ export const AddressField = ({ field, isLastField = false, form, onChange }) => 
                         onChange={(e) => {
                             const v = e.target.value;
                             setInputValue(v);
-                            // UI/UX mock mode: Canada Post is stubbed, so auto-fill a dummy
-                            // valid Québec postal code + components as the user types, so any
-                            // typed address passes validation and can proceed.
-                            if (USE_MOCK_DATA && v) {
+                            // Mock only when Canada Post AddressComplete (window.pca) isn't
+                            // loaded. Now that the pca script + key are in index.html, the real
+                            // autocomplete handles populate; this dummy fill is the fallback.
+                            if (USE_MOCK_DATA && !window.pca && v) {
                                 const mockUpdate = {
                                     [field.name]: v,
                                     postalCode: 'H3C 0S5',

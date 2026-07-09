@@ -674,3 +674,19 @@
 .infoLink:hover {
   text-decoration: underline;
 }
+
+/* Blink the relevant row/card when arriving from Explore's "Speak with an advisor". */
+@keyframes advisorRowBlink {
+  0%, 100% { background-color: transparent; }
+  50% { background-color: rgba(245, 158, 11, 0.22); }
+}
+@keyframes advisorCardBlink {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+  50% { box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.6); }
+}
+.highlightRow > td {
+  animation: advisorRowBlink 1s ease-in-out 3;
+}
+.advisorCard.highlightRow {
+  animation: advisorCardBlink 1s ease-in-out 3;
+}

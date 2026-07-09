@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { PageContent, AdvisorTypeBadge, PageHeader } from 'components';
@@ -33,6 +34,10 @@ const MyAdvisors = () => {
   const initialized = useRef(false);
   const userProfile = useSelector(state => state.app?.user_profile);
   
+  // When arriving from Explore's "Speak with an advisor", blink that cabinet's row.
+  const location = useLocation();
+  const highlightBucket = location.state?.highlightBucket || null;
+
   const [advisorsData, setAdvisorsData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
@@ -92,6 +97,7 @@ const MyAdvisors = () => {
           if (adv) {
             return {
               key: adv._id || cat.key,
+              bucket: cat.key,
               name: adv.name,
               license: 'Active',
               type: cat.type,
@@ -272,12 +278,12 @@ const MyAdvisors = () => {
           {loading ? (
             <div style={{ padding: '50px', textAlign: 'center' }}><Spin size="large" /></div>
           ) : (
-            <Table 
+            <Table
               columns={columns}
               dataSource={advisorsData}
               pagination={false}
               className={styles.advisorsTable}
-              rowClassName={styles.tableRow}
+              rowClassName={(record) => `${styles.tableRow} ${record.bucket && record.bucket === highlightBucket ? styles.highlightRow : ''}`}
             />
           )}
         </div>
@@ -286,7 +292,7 @@ const MyAdvisors = () => {
         {!loading && (
           <div className={styles.mobileCards}>
             {advisorsData.map((advisor, index) => (
-              <div key={index} className={styles.advisorCard}>
+              <div key={index} className={`${styles.advisorCard} ${advisor.bucket && advisor.bucket === highlightBucket ? styles.highlightRow : ''}`}>
                 <div className={styles.cardHeader}>
                   <div className={styles.avatar}>
                     {advisor.isEmpty ? (

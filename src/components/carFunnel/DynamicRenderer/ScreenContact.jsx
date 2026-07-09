@@ -50,38 +50,22 @@ export const ScreenContact = ({ screen, onNavigate }) => {
     const drivers = useAppSelector(selectDrivers);
     const savedContactData = useAppSelector(selectContactData);
 
-    // Pre-fill form with saved contact data or first driver's name
+    // Pre-fill the contact name from the first driver into the store (the name/
+    // email/phone inputs were removed — this is the logged-in funnel).
     useEffect(() => {
         const firstDriver = drivers[0];
         const firstDriverData = firstDriver?.['1-driver1'] || {};
 
-        // Build full name from firstName + lastName (new structure)
         let fullName = '';
         if (firstDriverData.firstName || firstDriverData.lastName) {
             fullName = `${firstDriverData.firstName || ''} ${firstDriverData.lastName || ''}`.trim();
         } else if (firstDriverData.fullName) {
-            // Fallback to fullName for backwards compatibility
             fullName = firstDriverData.fullName;
         }
-
-        // Set initial values: prioritize saved contact data, then first driver name
-        const initialValues = {
-            fullName: savedContactData.fullName || fullName,
-            phone: savedContactData.phone || '',
-            email: savedContactData.email || '',
-        };
-
-        // Only update form if values have actually changed in the store 
-        // compared to what's currently in the form (prevents cursor jumping)
-        const currentValues = form.getFieldsValue();
-        if (
-            initialValues.fullName !== currentValues.fullName ||
-            initialValues.phone !== currentValues.phone ||
-            initialValues.email !== currentValues.email
-        ) {
-            form.setFieldsValue(initialValues);
+        if (fullName && !savedContactData.fullName) {
+            dispatch(setContactData({ fullName }));
         }
-        
+
         // Sync consent states from store if they exist
         if (savedContactData.consentChecked !== undefined) {
             setConsentChecked(savedContactData.consentChecked);
@@ -89,7 +73,7 @@ export const ScreenContact = ({ screen, onNavigate }) => {
         if (savedContactData.creditCheckConsent !== undefined) {
             setCreditCheckConsent(savedContactData.creditCheckConsent);
         }
-    }, [drivers, savedContactData, form]);
+    }, [drivers, savedContactData, dispatch]);
 
     const handleValuesChange = (changedValues, allValues) => {
         // Save to contact store immediately on change
@@ -97,43 +81,33 @@ export const ScreenContact = ({ screen, onNavigate }) => {
     };
 
     const proceedWithSubmit = (creditConsent) => {
-        const values = form.getFieldsValue();
-
-        // Save to contact store with final consent values
+        // Persist the consent choices (the contact name was pre-filled from the
+        // first driver into the store by the effect above).
         dispatch(setContactData({
-            ...values,
             consentChecked,
             creditCheckConsent: creditConsent,
         }));
 
         if (screen.nextScreen) {
-            onNavigate(screen.nextScreen, values);
+            onNavigate(screen.nextScreen, {});
         }
     };
 
-    const handleSubmit = async () => {
-        try {
-            const values = await form.validateFields();
-
-            // Check if first consent is checked
-            if (!consentChecked) {
-                setConsentError(true);
-                return;
-            }
-
-            setConsentError(false);
-
-            // If credit check consent is not checked, show modal
-            if (!creditCheckConsent) {
-                setShowCreditCheckModal(true);
-                return;
-            }
-
-            // If both consents are checked, proceed
-            proceedWithSubmit(true);
-        } catch (error) {
-            console.error('Validation failed:', error);
+    const handleSubmit = () => {
+        // Name/email/phone inputs were removed; only the consents are required here.
+        if (!consentChecked) {
+            setConsentError(true);
+            return;
         }
+        setConsentError(false);
+
+        // If credit check consent is not checked, show modal
+        if (!creditCheckConsent) {
+            setShowCreditCheckModal(true);
+            return;
+        }
+
+        proceedWithSubmit(true);
     };
 
     const handleCreditCheckYes = () => {
@@ -158,61 +132,8 @@ export const ScreenContact = ({ screen, onNavigate }) => {
 
     return (
         <div className="screen-container screen-contact">
-            {/* Form Fields Card */}
-            <div className="contact-form-card">
-                <Form 
-                    form={form} 
-                    layout="vertical" 
-                    onValuesChange={handleValuesChange}
-                    style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
-                >
-                    <Form.Item
-                        name="fullName"
-                        rules={[{ required: true, message: '*Requis' }]}
-                    >
-                        <Input
-                            placeholder="Nom complet"
-                            className="contact-input"
-                        />
-                    </Form.Item>
-                    
-                    <Form.Item style={{ marginBottom: 0 }}>
-                        <div className="phone-field-wrapper">
-                            <div className="phone-country-code" style={{ color: '#1A1ABA' }}>+1</div>
-                            <Form.Item
-                                name="phone"
-                                noStyle
-                                rules={[{ required: true, message: '*Requis' }]}
-                                getValueFromEvent={(e) => formatPhoneNumber(e.target.value)}
-                                normalize={(value) => formatPhoneNumber(value)}
-                            >
-                                <Input
-                                    type="tel"
-                                    inputMode="tel"
-                                    placeholder="(450) 000-0000"
-                                    maxLength={14}
-                                    className="contact-input phone-input"
-                                    style={{ paddingLeft: '68px' }}
-                                />
-                            </Form.Item>
-                        </div>
-                    </Form.Item>
-
-                    <Form.Item
-                        name="email"
-                        style={{ marginBottom: 0 }}
-                        rules={[
-                            { required: true, message: '*Requis' },
-                            { type: 'email', message: 'Veuillez entrer un courriel valide' }
-                        ]}
-                    >
-                        <Input
-                            placeholder="Courriel"
-                            className="contact-input"
-                        />
-                    </Form.Item>
-                </Form>
-            </div>
+            {/* Name / email / phone inputs removed — this is the logged-in funnel,
+                so the account/first driver already provides those. */}
 
             {/* Consent Sections */}
             <div className="consent-sections">
