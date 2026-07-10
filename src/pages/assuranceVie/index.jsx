@@ -8,9 +8,11 @@
  * the coverage quiz + suggested-amount logic, insured cards, and the real
  * funnels/submit payload (product 'assurance-vie').
  *
- * Internal short form: drops the coverage quiz (internalDrops: 'coverage') and
- * keeps the account step, with no "+ add insured" button and a big green CTA on
- * step 1 — handled by FunnelForm for shortInternal persons steps.
+ * Internal short form: drops BOTH the coverage quiz (internalDrops: 'coverage') and
+ * the account/OTP step (the user is already logged in). It shows just the insured
+ * step — no "+ add insured" button, a big green CTA — then submits with the logged-in
+ * profile contact to the life custom-form endpoint and follows the LMS redirect to the
+ * quote result. Wiring lives in FunnelForm's submitInternal().
  */
 
 import React from 'react';
@@ -164,6 +166,14 @@ const assuranceVieConfig = {
       maxPersons: 10,
       montantLabel: "Montant d'assurance souhaité",
       montantTip: MONTANT_TIP,
+      // WinQuote carriers won't return any product below $25,000 face amount — block
+      // sub-minimum entries so the quote never comes back empty ("Sur demande").
+      minMontant: 25000,
+      // Quotable age band at the $25k floor: carriers return products for ~18–74 and
+      // nothing at 75+ (or for young children at this coverage). Guard both ends so the
+      // online estimate never comes back empty — over-74 is routed to an advisor.
+      minAge: 18,
+      maxAge: 74,
       // Suggested coverage only once the reason is known (never in the short form).
       suggestionFrom: (a) => (a.reason ? suggestAmount(a) : 0),
     },
@@ -176,6 +186,11 @@ const assuranceVieConfig = {
       otp: true, // life sends the SMS verification code
       logLabel: 'assurance-vie',
       buildPayload: buildViePayload,
+      // Post to the LIFE custom-form endpoint (its own token) rather than the shared
+      // window.FORM_SUBMISSION_API — which the car funnel points at its own endpoint.
+      postUrl:
+        process.env.REACT_APP_LIFE_FORM_POST_URL ||
+        'http://localhost:3024/api/v1/lead/custom-form?auth=e8659bcfade113f081575a0b47af777ee3c0c321',
     },
   ],
 };

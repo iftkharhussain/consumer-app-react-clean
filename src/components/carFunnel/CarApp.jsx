@@ -30,6 +30,7 @@ import {
   addDriver,
   removeVehicle,
   removeDriver,
+  setContactData,
 } from 'store/carFunnel';
 import 'styles/carFunnel/App.css';
 
@@ -37,8 +38,18 @@ import 'styles/carFunnel/App.css';
 const MAX_VEHICLES = 2;
 const MAX_DRIVERS = 3;
 
-function App() {
+function App({ initialContact }) {
   const dispatch = useDispatch();
+
+  // Seed the funnel's contact store with the logged-in user's details (the on-screen
+  // name/email/phone step was removed). The custom-form submit then links the lead to
+  // the existing account by email/phone — no new account is created.
+  useEffect(() => {
+    if (initialContact && (initialContact.email || initialContact.phone || initialContact.fullName)) {
+      dispatch(setContactData(initialContact));
+    }
+    // eslint-disable-next-line
+  }, []);
 
   // Get data from Redux store
   const reduxVehicles = useSelector(selectVehicles);

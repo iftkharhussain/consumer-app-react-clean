@@ -21,6 +21,12 @@
     href="https://ws1.postescanada-canadapost.ca/css/addresscomplete-2.50.min.css?key=ny15-jx69-hb71-fd37" />
   <script type="text/javascript"
     src="https://ws1.postescanada-canadapost.ca/js/addresscomplete-2.50.min.js?key=ny15-jx69-hb71-fd37"></script>
+  <!-- Car funnel globals (vehicle lookup API + car-insurance custom-form submit endpoint).
+       Read at module-load by src/services/carFunnel & PhoneVerification. -->
+  <script>
+    window.API_URL = window.API_URL || 'http://localhost:3025/api';
+    window.FORM_SUBMISSION_API = window.FORM_SUBMISSION_API || 'http://localhost:3024/api/v1/lead/custom-form?auth=496e9b4fb652d3f85bb4c3d1c1e3a58179ead15f';
+  </script>
   <link rel="apple-touch-icon" href="%PUBLIC_URL%/favicon.png" />
   <link rel="icon" href="%PUBLIC_URL%/favicon.png" />
   <!--

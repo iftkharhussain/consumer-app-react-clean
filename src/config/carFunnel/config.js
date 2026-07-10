@@ -8,7 +8,7 @@
  * backend is wired, and fill in the API URLs below (or via env).
  */
 
-export const USE_MOCK_DATA = true;
+export const USE_MOCK_DATA = false;
 
 // API endpoints — only used when USE_MOCK_DATA is false.
 export const API_URL = process.env.REACT_APP_CAR_API_URL || 'http://localhost:3025/api';

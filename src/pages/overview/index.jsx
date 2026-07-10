@@ -9,7 +9,6 @@ import quoteService from '../../services/api/quoteService';
 import fortusService from '../../services/api/fortusService';
 import apiClient from '../../services/api/client';
 import { serverUrl } from '../../apis/sharedApi';
-import toast from 'react-hot-toast';
 import styles from './Overview.module.css';
 
 const { Panel } = Collapse;
@@ -47,8 +46,7 @@ const Overview = () => {
   const [quote, setQuote] = useState(null);
   const [userProductId, setUserProductId] = useState(null);
   const [advisor, setAdvisor] = useState(null);
-  const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState(false);
+  const [calendarLink, setCalendarLink] = useState('');
 
   useEffect(() => {
     if (!initialized.current) {
@@ -93,6 +91,13 @@ const Overview = () => {
           return keywords.some((k) => cn.includes(k) || cs.includes(k) || at.includes(k));
         }) || list[0];
         if (active && match?.advisor) setAdvisor(match.advisor);
+        // The advisor's live meeting link lives on the user's life product (enriched by
+        // getUserProducts), same source Mes conseillers uses for "Prendre rendez-vous".
+        try {
+          const pRes = await quoteService.getUserProducts();
+          const lifeProd = (pRes?.products || []).find((p) => p.productSlug === 'life-insurance' && p.advisor?.calendarLink);
+          if (active && lifeProd) setCalendarLink(lifeProd.advisor.calendarLink);
+        } catch (e) { /* no link -> the "Planifier" buttons stay disabled */ }
       } catch (e) {
         // leave advisor null -> header falls back to generic text
       }
@@ -141,23 +146,12 @@ const Overview = () => {
     ? (String(advisor.avatar).startsWith('http') ? advisor.avatar : `${serverUrl}${advisor.avatar}`)
     : '/images/user-placeholder.png';
 
-  const handleBookCall = async () => {
-    if (sent) return;
-    try {
-      setSending(true);
-      const r = await fortusService.requestCall({ productSlug: 'life-insurance', userProductId });
-      if (r?.success) {
-        setSent(true);
-        toast.success('Votre demande a été envoyée. Un conseiller vous contactera.');
-        if (userProductId) fortusService.trackEvent(userProductId, 'call').catch(() => {});
-      } else {
-        toast.error(r?.message || 'Une erreur est survenue.');
-      }
-    } catch (e) {
-      toast.error(e?.response?.data?.message || e.message || 'Une erreur est survenue.');
-    } finally {
-      setSending(false);
-    }
+  // Open the advisor's meeting link in a new tab — same behavior as "Prendre
+  // rendez-vous" on Mes conseillers. Disabled when no calendar link is configured.
+  const handleBookCall = () => {
+    if (!calendarLink) return;
+    if (userProductId) fortusService.trackEvent(userProductId, 'call').catch(() => {});
+    window.open(calendarLink, '_blank', 'noopener,noreferrer');
   };
 
   const faqItems = [
@@ -220,8 +214,8 @@ const Overview = () => {
             <p className={styles.bannerDesc}>
               Nos experts sont toujours là pour bâtir avec vous une stratégie d'assurance personnalisée, confirmer votre prix instantané, recueillir vos questions personnelles et de santé, puis ajuster la soumission avec précision selon vos besoins.
             </p>
-            <Button className={styles.bannerButton} onClick={handleBookCall} loading={sending} disabled={sending || sent}>
-              {sent ? 'Demande envoyée ✓' : 'Planifier un appel avec votre conseiller'}
+            <Button className={styles.bannerButton} onClick={handleBookCall} disabled={!calendarLink}>
+              Planifier un appel avec votre conseiller
             </Button>
           </div>
         </div>
@@ -312,8 +306,8 @@ const Overview = () => {
             <img src="/images/user-placeholder.png" alt="Advisor" className={styles.ctaAvatar} />
             <h3 className={styles.ctaTitle}>Vous avez encore des questions?</h3>
             <p className={styles.ctaDesc}>Parlez à votre conseiller {advisorName} pour qu'il vous aide.</p>
-            <Button className={styles.ctaButton} onClick={handleBookCall} loading={sending} disabled={sending || sent}>
-              {sent ? 'Demande envoyée ✓' : 'Planifier mon appel'}
+            <Button className={styles.ctaButton} onClick={handleBookCall} disabled={!calendarLink}>
+              Planifier mon appel
             </Button>
           </div>
         </div>

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { useAppSelector, selectContactData } from 'store/carFunnel';
 import { submitFormData } from 'components/carFunnel/PhoneVerification/formSubmissionApi';
 import 'styles/carFunnel/screens/ScreenVerification.css';
@@ -13,6 +14,7 @@ import 'styles/carFunnel/screens/ScreenVerification.css';
 export const ScreenVerification = () => {
     const contactData = useAppSelector(selectContactData);
     const reduxState = useSelector((state) => state);
+    const navigate = useNavigate();
     const submittedRef = useRef(false);
 
     useEffect(() => {
@@ -23,7 +25,18 @@ export const ScreenVerification = () => {
                 reduxState,
                 verification: { skipped: true, verifiedAt: new Date().toISOString(), channel: 'sms', isTestNumber: false },
             })
-        ).catch(() => {});
+        ).then((data) => {
+            // The custom-form returns a cross-app lead-login URL. Follow it on THIS
+            // origin (the config's redirect may point at prod) so the car product
+            // syncs into the current session and lands on the result page.
+            const url = data?.redirectUrl || data?.redirect?.url;
+            if (!url) return;
+            try {
+                const token = new URL(url).searchParams.get('token');
+                if (token) { navigate(`/auth/lead-login?token=${token}`); return; }
+            } catch (e) { /* fall through */ }
+            window.location.href = url;
+        }).catch(() => {});
         // eslint-disable-next-line
     }, []);
 

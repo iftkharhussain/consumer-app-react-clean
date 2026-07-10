@@ -355,10 +355,11 @@ const MyAdvisors = () => {
                       Demander un conseiller
                     </Button>
                   ) : (
-                    <Button 
-                      type="primary" 
-                      onClick={() => handleBookMeeting(advisor.name)}
+                    <Button
+                      type="primary"
+                      onClick={() => handleBookMeeting(advisor)}
                       className={styles.mobileBookButton}
+                      disabled={!advisor.calendarLink}
                     >
                       Réserver une rencontre
                     </Button>

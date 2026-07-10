@@ -23,7 +23,9 @@
  */
 
 import React, { useState } from 'react';
-import { CheckOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
+import { CheckOutlined, LoadingOutlined } from '@ant-design/icons';
+import { submitFunnelLead } from './funnelUtils';
 import TabBar from './TabBar';
 import CoverageStep from './CoverageStep';
 import PreferencesStep from './PreferencesStep';
@@ -72,14 +74,18 @@ export default function FunnelForm({ config, mode = 'public' }) {
   const internal = mode === 'internal';
   const { badge, title, mobileLabel } = config;
 
-  // Internal (logged-in) funnels drop one step: the account by default, or the
-  // coverage quiz for a "short form" (e.g. life insurance keeps its account step).
-  const dropType = config.internalDrops === 'coverage' ? 'quiz' : 'contact';
-  const shortInternal = internal && dropType === 'quiz';
+  // Internal (logged-in) funnels always drop the account/contact step — the user is
+  // already authenticated, so we submit with their profile contact instead. "Short
+  // form" funnels (internalDrops: 'coverage') also drop the coverage quiz, leaving
+  // just the insured step before the submit.
+  const dropTypes = internal
+    ? (config.internalDrops === 'coverage' ? ['contact', 'quiz'] : ['contact'])
+    : [];
+  const shortInternal = internal && config.internalDrops === 'coverage';
   const allSteps = resolveSteps(config);
 
   // Indices of the steps that survive the internal drop (all steps in public mode).
-  const keptIdx = allSteps.map((_, i) => i).filter((i) => !internal || allSteps[i].type !== dropType);
+  const keptIdx = allSteps.map((_, i) => i).filter((i) => !dropTypes.includes(allSteps[i].type));
   const steps = keptIdx.map((i) => allSteps[i]);
   // Align tabs / mobile labels to the surviving steps, renumbering "Étape N".
   const allTabs = config.tabs || [];
@@ -91,6 +97,9 @@ export default function FunnelForm({ config, mode = 'public' }) {
   const [tab, setTab] = useState(0);
   const [answers, setAnswers] = useState(() => steps.map(initialAnswers));
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  // Logged-in user (internal mode) — supplies the contact for the account-less submit.
+  const userProfile = useSelector((state) => state.app?.user_profile) || {};
 
   const setStepAnswers = (i, val) => setAnswers((prev) => prev.map((a, idx) => (idx === i ? val : a)));
 
@@ -122,12 +131,44 @@ export default function FunnelForm({ config, mode = 'public' }) {
     changeTab(i);
   }
 
+  // Internal (logged-in) submit: build the funnel payload from the insured step plus
+  // the logged-in profile contact and POST it to the funnel's own custom-form endpoint,
+  // then follow the LMS redirect (/auth/lead-login?token=…) to the quote result — the
+  // same path the public ContactTab takes after OTP, minus the account/OTP step.
+  async function submitInternal() {
+    setSubmitted(true);
+    const contactStep = allSteps.find((st) => st.type === 'contact');
+    const postUrl = contactStep?.postUrl || config.submit?.postUrl;
+    const personsIdx = steps.findIndex((st) => st.type === 'persons');
+    const personsList = personsIdx >= 0 ? answers[personsIdx] : [];
+    const email = userProfile.email || '';
+    const phone = userProfile.phone || userProfile.phoneNumber || '';
+    const build = contactStep?.buildPayload
+      ? (args) => contactStep.buildPayload(args)
+      : (config.submit
+        ? ({ email: e, phone: p }) => config.submit.buildPayload({
+          answers: mergedAnswers(), persons: personsList, contact: { email: e, phone: p },
+        })
+        : null);
+    if (!postUrl || !build) return; // not wired for this funnel — keep the confirmation view
+    const payload = build({ email, phone, persons: personsList, answers: mergedAnswers(), selectedPerson: personsList[0] });
+    setSubmitting(true);
+    try {
+      const data = await submitFunnelLead(postUrl, payload);
+      if (data?.redirectUrl) { window.location.href = data.redirectUrl; return; }
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('[funnel:internal] submit failed:', err);
+    }
+    setSubmitting(false);
+  }
+
   function renderStep(i) {
     const s = steps[i];
     const isFinal = i === steps.length - 1;
     const onBack = i > 0 ? () => setTab(i - 1) : undefined;
     // In internal mode the final step submits instead of advancing to the account.
-    const onNext = internal && isFinal ? () => setSubmitted(true) : () => advanceTo(i + 1);
+    const onNext = internal && isFinal ? submitInternal : () => advanceTo(i + 1);
 
     if (s.type === 'preferences') {
       return (
@@ -212,17 +253,24 @@ export default function FunnelForm({ config, mode = 'public' }) {
     );
   }
 
-  // Internal confirmation after "Obtenir ma soumission" (user already logged in —
-  // no account/OTP step). UI-only for now; wire the real submit here later.
+  // Internal confirmation after "Obtenir ma soumission" (user already logged in — no
+  // account/OTP step). While submitting we show a loader; on success the browser is
+  // redirected to the quote result, so this view is only seen briefly or if submit fails.
   const submittedView = (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '64px 0', gap: 24, textAlign: 'center' }}>
       <div style={{ width: 56, height: 56, borderRadius: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(26,26,186,0.25)', background: 'linear-gradient(135deg, #1a1aba, #2525c5)' }}>
-        <CheckOutlined style={{ color: '#fff', fontSize: 26 }} />
+        {submitting
+          ? <LoadingOutlined style={{ color: '#fff', fontSize: 26 }} spin />
+          : <CheckOutlined style={{ color: '#fff', fontSize: 26 }} />}
       </div>
       <div>
-        <h2 style={{ fontSize: 18, fontWeight: 700, color: '#121926', margin: '0 0 8px', letterSpacing: '-0.3px' }}>Demande envoyée !</h2>
+        <h2 style={{ fontSize: 18, fontWeight: 700, color: '#121926', margin: '0 0 8px', letterSpacing: '-0.3px' }}>
+          {submitting ? 'Préparation de votre soumission…' : 'Demande envoyée !'}
+        </h2>
         <p style={{ fontSize: 14, color: '#535862', lineHeight: 1.6, margin: 0 }}>
-          Votre soumission a été transmise. Un conseiller Norga vous contactera sous peu.
+          {submitting
+            ? 'Un instant, nous calculons votre soumission.'
+            : 'Votre soumission a été transmise. Un conseiller Norga vous contactera sous peu.'}
         </p>
       </div>
     </div>

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useEffect } from 'react';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { store } from 'store/carFunnel';
 import CarApp from './CarApp';
 
@@ -25,6 +25,15 @@ import arrowDownUrl from 'styles/carFunnel/assets/arrow-down.svg';
  * skip the account/verification screens).
  */
 export default function CarInsuranceFunnel({ mode }) {
+  // Read from the APP store (this component is above the nested car-funnel Provider),
+  // so the funnel can submit the lead against the logged-in account.
+  const up = useSelector((s) => s.app?.user_profile) || {};
+  const initialContact = {
+    fullName: [up.firstName, up.lastName].filter(Boolean).join(' ').trim() || up.fullName || '',
+    email: up.email || '',
+    phone: up.phone || '',
+  };
+
   useEffect(() => {
     // Custom antd select-arrow image, scoped to the car funnel only.
     const style = document.createElement('style');
@@ -37,7 +46,7 @@ export default function CarInsuranceFunnel({ mode }) {
   return (
     <Provider store={store}>
       <div className="car-funnel">
-        <CarApp mode={mode} />
+        <CarApp mode={mode} initialContact={initialContact} />
       </div>
     </Provider>
   );

@@ -18,6 +18,9 @@ const ADVISOR_BUCKET = {
   'disability': 'financial',
   'mortgage-insurance': 'financial',
   'mortgage-renew': 'mortgage',
+  // Car & home advisors sit in the "Cabinet en assurance de dommages" (Courtika) row.
+  'car-insurance': 'insurance',
+  'home-insurance': 'insurance',
 };
 
 const Explore = () => {
@@ -77,17 +80,14 @@ const Explore = () => {
     // The main button calls back with the click event; extra buttons pass their label.
     const label = typeof actionLabel === 'string' ? actionLabel : product.buttonText;
 
-    if (label === 'Speak with Courtika') {
-      setSelectedProduct(product.title);
-      setIsCourtikaModal(true);
-      setIsModalOpen(true);
+    if (label === 'Speak with Courtika' || label === 'Speak with an advisor') {
+      // Go to "Mes conseillers" and blink the relevant cabinet's row (Courtika for
+      // car/home; the financial/mortgage cabinet for the other products).
+      navigate('/my-advisors', { state: { highlightBucket: ADVISOR_BUCKET[product.slug] } });
     } else if (label === 'Refinance') {
       setSelectedProduct('REFINANCEMENT HYPOTHÉCAIRE');
       setIsCourtikaModal(false);
       setIsModalOpen(true);
-    } else if (label === 'Speak with an advisor') {
-      // Go to "Mes conseillers" and blink the relevant cabinet's row.
-      navigate('/my-advisors', { state: { highlightBucket: ADVISOR_BUCKET[product.slug] } });
     } else if (product.slug) {
       // Get Quote / Buy / Renew -> open the internal quick-quote form for this product.
       navigate(`/explore/getquote/${product.slug}`);
