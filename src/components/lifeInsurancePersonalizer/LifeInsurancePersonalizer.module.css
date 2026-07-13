@@ -1,0 +1,261 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  padding: 16px;
+}
+
+.modalContent {
+  background: #FFF;
+  border: 1px solid #e9eaeb;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 520px;
+  position: relative;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 28px;
+  border-bottom: 1px solid #f2f4f7;
+}
+
+.title {
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 27px;
+  letter-spacing: -0.44px;
+  color: #121926;
+  margin: 0;
+}
+
+.closeButton {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16777200px;
+  border: 1px solid #E9EAEB;
+  background: #F8FAFC;
+  color: #667085;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.closeButton:hover {
+  background: #f2f4f7;
+  color: #344054;
+}
+
+.closeIcon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.body {
+  padding: 24px 28px;
+}
+
+.field {
+  margin-bottom: 24px;
+}
+
+.field:last-child {
+  margin-bottom: 0;
+}
+
+.fieldLabel {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 19.5px;
+  color: #121926;
+  margin-bottom: 12px;
+}
+
+/* Coverage type pills */
+.pillGroup {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.pill {
+  display: inline-flex;
+  height: 34px;
+  padding: 7px 12px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  color: #535862;
+  text-align: center;
+  border-radius: 16777200px;
+  border: 1px solid #E9EAEB;
+  background: #FFF;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+/* Hovering an option previews the selected (blue) treatment. */
+.pill:hover {
+  border: 1px solid #1A1ABA;
+  background: rgba(26, 26, 186, 0.08);
+}
+
+/* The clicked/selected option turns blue. */
+.pillActive {
+  color: #1A1ABA;
+  border: 1px solid #1A1ABA;
+  background: rgba(26, 26, 186, 0.08);
+}
+
+/* Coverage amount input */
+.amountInputWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f9fafb;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  padding: 12px 16px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.amountInputWrapper:focus-within {
+  border-color: #1a1aba;
+  box-shadow: 0 0 0 3px rgba(26, 26, 186, 0.12);
+}
+
+.currencySymbol {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #98a2b3;
+}
+
+.amountInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #101828;
+  padding: 0;
+}
+
+/* Payment frequency toggle */
+.frequencyGroup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.frequencyOption {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #475467;
+  background: #FFF;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.frequencyOption:hover {
+  border-color: #1a1aba;
+}
+
+.frequencyActive {
+  color: #1a1aba;
+  background: #eef0ff;
+  border-color: #1a1aba;
+  font-weight: 600;
+}
+
+/* Footer actions */
+.footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 20px 28px 24px;
+  border-top: 1px solid #f2f4f7;
+}
+
+.cancelButton {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #344054;
+  background: #FFF;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.cancelButton:hover {
+  background: #f9fafb;
+}
+
+.applyButton {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #FFF;
+  background: #1a1aba;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.10), 0 1px 2px -1px rgba(0, 0, 0, 0.10);
+}
+
+.applyButton:hover {
+  background: #15159a;
+}
+
+@media (max-width: 480px) {
+  .pillGroup {
+    gap: 8px;
+  }
+}
