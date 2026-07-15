@@ -136,6 +136,20 @@ export const recalculateQuote = async (userProductId, protections) => {
   return response.data;
 };
 
+/**
+ * Re-price the user's life quote with a new term (plan) and/or coverage amount from
+ * the "Personnaliser" popup. Persists and returns the updated quote.
+ * @param {{ plan?: string, faceAmount?: number }} params
+ */
+export const personalizeLifeQuote = async ({ plan, faceAmount }) => {
+  const response = await apiClient.post('/api/quote/personalize-life', {
+    plan,
+    faceAmount,
+    productSlug: 'life-insurance'
+  });
+  return response.data;
+};
+
 export default {
   fetchQuote,
   requestQuote,
@@ -147,5 +161,7 @@ export default {
   checkQuoteStatus,
   getQuotesByLead,
   // Recalculate
-  recalculateQuote
+  recalculateQuote,
+  // Life personalizer
+  personalizeLifeQuote
 };

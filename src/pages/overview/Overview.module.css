@@ -190,6 +190,27 @@ letter-spacing: -0.076px;
   font-size: 20px;
 }
 
+/* "Personnaliser" link in the Prix estimé header — pushed to the far right,
+   styled as a plain text link (not a button). */
+.personalizerLink {
+  margin-left: auto;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #2121DD;
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: -0.1px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.personalizerLink:hover {
+  color: #1a1aba;
+}
+
 /* Price Box */
 .priceWrapper {
   text-align: center;

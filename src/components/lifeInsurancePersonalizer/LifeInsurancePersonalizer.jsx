@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './LifeInsurancePersonalizer.module.css';
 
 const COVERAGE_TYPES = [
@@ -23,6 +23,16 @@ const LifeInsurancePersonalizer = ({
   const [coverageType, setCoverageType] = useState(initialCoverageType);
   const [coverageAmount, setCoverageAmount] = useState(initialCoverageAmount);
   const [frequency, setFrequency] = useState(initialFrequency);
+
+  // Sync the fields to the current quote each time the popup opens (the initial props
+  // arrive after the quote loads, so the first-mount useState values would be stale).
+  useEffect(() => {
+    if (isOpen) {
+      setCoverageType(initialCoverageType);
+      setCoverageAmount(initialCoverageAmount);
+      setFrequency(initialFrequency);
+    }
+  }, [isOpen, initialCoverageType, initialCoverageAmount, initialFrequency]);
 
   if (!isOpen) return null;
 

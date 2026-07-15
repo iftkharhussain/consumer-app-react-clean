@@ -9,6 +9,7 @@ import quoteService from '../../services/api/quoteService';
 import fortusService from '../../services/api/fortusService';
 import apiClient from '../../services/api/client';
 import { serverUrl } from '../../apis/sharedApi';
+import LifeInsurancePersonalizer from '../../components/lifeInsurancePersonalizer';
 import styles from './Overview.module.css';
 
 const { Panel } = Collapse;
@@ -37,6 +38,20 @@ const CustomInfoIcon = () => (
   <img src="/images/info1.svg" alt="Info" style={{ width: 16, height: 16, cursor: 'pointer', flexShrink: 0 }} />
 );
 
+// Personalizer coverage-type labels -> WinQuote plan codes (see backend PLAN_MAP).
+const COVERAGE_TYPE_TO_PLAN = {
+  'Temporaire 10 ans': '10year',
+  'Temporaire 15 ans': '15year',
+  'Temporaire 20 ans': '20year',
+  'Temporaire 25 ans': '25year',
+  'Temporaire 30 ans': '30year',
+  'Permanent': 'wholelife',
+};
+// Reverse: WinQuote plan code -> personalizer label (to pre-select the current term).
+const PLAN_TO_COVERAGE_TYPE = Object.fromEntries(
+  Object.entries(COVERAGE_TYPE_TO_PLAN).map(([label, plan]) => [plan, label])
+);
+
 const Overview = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -47,6 +62,9 @@ const Overview = () => {
   const [userProductId, setUserProductId] = useState(null);
   const [advisor, setAdvisor] = useState(null);
   const [calendarLink, setCalendarLink] = useState('');
+  const [isPersonalizerOpen, setIsPersonalizerOpen] = useState(false);
+  const [frequency, setFrequency] = useState('Mensuel');
+  const [personalizing, setPersonalizing] = useState(false);
 
   useEffect(() => {
     if (!initialized.current) {
@@ -131,9 +149,19 @@ const Overview = () => {
       : (rec?.recordSetHeading?.companyNameCode ? `${rec.recordSetHeading.companyNameCode}.png` : null);
     return file ? `/images/winquote/${file}` : null;
   };
-  const priceLow = fmtMoney(processed.lowest);
-  const priceHigh = fmtMoney(processed.highest);
-  const priceRange = priceLow && priceHigh ? `${priceLow}$ - ${priceHigh}$` : (priceLow ? `${priceLow}$` : 'Sur demande');
+  // WinQuote returns MONTHLY premiums; "Annuel" is simply ×12 for display.
+  const freqMult = frequency === 'Annuel' ? 12 : 1;
+  const fmtPremium = (v) => {
+    const s = fmtMoney(v);
+    if (s === null) return null;
+    const n = parseFloat(String(v).replace(/[$,\s]/g, '')) * freqMult;
+    return n.toLocaleString('fr-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
+  const priceLow = fmtPremium(processed.lowest);
+  const priceHigh = fmtPremium(processed.highest);
+  const priceRange = personalizing
+    ? '…'
+    : (priceLow && priceHigh ? `${priceLow}$ - ${priceHigh}$` : (priceLow ? `${priceLow}$` : 'Sur demande'));
   const protectionType = planLabel(processed.plan) || 'Sur demande';
   const coverageAmount = fmtMoney(processed.faceAmount) ? `${fmtMoney(processed.faceAmount)}$` : '—';
 
@@ -152,6 +180,26 @@ const Overview = () => {
     if (!calendarLink) return;
     if (userProductId) fortusService.trackEvent(userProductId, 'call').catch(() => {});
     window.open(calendarLink, '_blank', 'noopener,noreferrer');
+  };
+
+  // Apply the personalizer selection: re-price the life quote with the chosen term
+  // (plan) + coverage amount via WinQuote, and reflect the payment frequency (display).
+  const handlePersonalizerApply = async ({ coverageType, coverageAmount: amount, frequency: freq }) => {
+    setFrequency(freq || 'Mensuel');
+    setIsPersonalizerOpen(false);
+    const plan = COVERAGE_TYPE_TO_PLAN[coverageType] || '10year';
+    setPersonalizing(true);
+    try {
+      const res = await quoteService.personalizeLifeQuote({ plan, faceAmount: amount });
+      if (res?.success && res?.quote) {
+        setQuote(res.quote);
+        if (res.userProductId) setUserProductId(res.userProductId);
+      }
+    } catch (e) {
+      // keep the previous quote on failure
+    } finally {
+      setPersonalizing(false);
+    }
   };
 
   const faqItems = [
@@ -227,6 +275,13 @@ const Overview = () => {
             <div className={styles.cardHeader}>
               <CheckCircleOutlined className={styles.checkIcon} />
               <span>Prix estimé</span>
+              <button
+                type="button"
+                className={styles.personalizerLink}
+                onClick={() => setIsPersonalizerOpen(true)}
+              >
+                Personnaliser
+              </button>
             </div>
             
             <div className={styles.priceWrapper}>
@@ -242,7 +297,7 @@ const Overview = () => {
             </div>
             <div className={styles.priceRow}>
               <span className={styles.rowLabel}>Fréquence de paiement</span>
-              <span className={styles.rowValue}>Mensuel</span>
+              <span className={styles.rowValue}>{frequency}</span>
             </div>
             <div className={styles.priceRow}>
               <span className={styles.rowLabel}>Couverture</span>
@@ -311,8 +366,17 @@ const Overview = () => {
             </Button>
           </div>
         </div>
-        
+
       </div>
+
+      <LifeInsurancePersonalizer
+        isOpen={isPersonalizerOpen}
+        onClose={() => setIsPersonalizerOpen(false)}
+        initialCoverageType={PLAN_TO_COVERAGE_TYPE[processed.plan] || 'Temporaire 10 ans'}
+        initialCoverageAmount={processed.faceAmount ? Number(processed.faceAmount) : 500000}
+        initialFrequency={frequency}
+        onApply={handlePersonalizerApply}
+      />
     </PageContent>
   );
 };

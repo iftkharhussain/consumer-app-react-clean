@@ -4,7 +4,6 @@ import PageHeader from '../../components/pageHeader';
 import InsuranceCard from '../../components/insuranceCard';
 import { Home05, UserCheck01, Car01, Heart, Building05, Shield01, ChevronDown, ChevronUp } from '../../utils/icons';
 import { ExploreModal } from '../../components/courtikaModal';
-import LifeInsurancePersonalizer from '../../components/lifeInsurancePersonalizer';
 import quoteService from '../../services/api/quoteService';
 import styles from './Explore.module.css';
 
@@ -40,7 +39,6 @@ const Explore = () => {
 
   // Life insurance personalizer popup (Type de couverture / montant / fréquence).
   // Lives here for now since the dedicated life-insurance page isn't accessible yet.
-  const [isPersonalizerOpen, setIsPersonalizerOpen] = useState(false);
 
   // Product slugs the user already has a quote/lead for (drives the CTA per card).
   const [ownedSlugs, setOwnedSlugs] = useState(() => new Set());
@@ -203,17 +201,6 @@ const Explore = () => {
       
       <div className={styles.content}>
 
-        {/* Temporary entry point for the life-insurance personalizer popup, until the
-            dedicated life-insurance page is available. */}
-        <button
-          type="button"
-          className={styles.personalizerButton}
-          onClick={() => setIsPersonalizerOpen(true)}
-        >
-          <Heart />
-          Life Insurance Personalizer
-        </button>
-
         {/* Render categories with collapsible sections */}
         {Object.entries(insuranceCategories).map(([categoryName, products]) => (
           <div key={categoryName} className={styles.categorySection}>
@@ -253,15 +240,6 @@ const Explore = () => {
         onStart={() => navigate('/explore-form', { state: { product: selectedProduct } })}
         productName={selectedProduct ? selectedProduct.charAt(0).toUpperCase() + selectedProduct.slice(1).toLowerCase() : ''}
         isCourtika={isCourtikaModal}
-      />
-
-      <LifeInsurancePersonalizer
-        isOpen={isPersonalizerOpen}
-        onClose={() => setIsPersonalizerOpen(false)}
-        onApply={(selection) => {
-          console.log('Life insurance personalizer selection:', selection);
-          setIsPersonalizerOpen(false);
-        }}
       />
     </div>
   );
