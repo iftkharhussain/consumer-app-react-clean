@@ -610,7 +610,7 @@ export const getLengthOfAlphabetsAndNumbers = (htmlString) => {
 
 export const getFormattedDateTime = (inputDate) => {
   const currentDate = dayjs();
-  const inputDateTime = dayjs.utc(inputDate); // Parse inputDate as UTC
+  const inputDateTime = dayjs.utc(inputDate).local(); // Parse inputDate as UTC, display in local time
 
   if (inputDateTime.isSame(currentDate, 'day')) {
     return 'Today at ' + inputDateTime.format('HH:mm'); // Today at 12:30
