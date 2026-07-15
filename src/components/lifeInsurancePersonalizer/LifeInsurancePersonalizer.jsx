@@ -12,6 +12,10 @@ const COVERAGE_TYPES = [
 
 const PAYMENT_FREQUENCIES = ['Mensuel', 'Annuel'];
 
+// WinQuote carriers only price coverage within this band.
+const MIN_COVERAGE = 25000;
+const MAX_COVERAGE = 2000000;
+
 const LifeInsurancePersonalizer = ({
   isOpen,
   onClose,
@@ -42,7 +46,17 @@ const LifeInsurancePersonalizer = ({
     setCoverageAmount(digits === '' ? '' : Number(digits));
   };
 
+  // Coverage-amount validation ($25,000 – $2,000,000).
+  const amountNum = Number(coverageAmount) || 0;
+  const amountError =
+    coverageAmount === '' || amountNum < MIN_COVERAGE
+      ? `Le montant minimum est de ${MIN_COVERAGE.toLocaleString('fr-CA')} $.`
+      : amountNum > MAX_COVERAGE
+        ? `Le montant maximum est de ${MAX_COVERAGE.toLocaleString('fr-CA')} $.`
+        : '';
+
   const handleApply = () => {
+    if (amountError) return;
     onApply?.({ coverageType, coverageAmount, frequency });
   };
 
@@ -93,6 +107,13 @@ const LifeInsurancePersonalizer = ({
                 onChange={handleAmountChange}
               />
             </div>
+            {amountError ? (
+              <span style={{ display: 'block', marginTop: 6, color: '#d92d20', fontSize: 13 }}>{amountError}</span>
+            ) : (
+              <span style={{ display: 'block', marginTop: 6, color: '#6b7280', fontSize: 12 }}>
+                Entre {MIN_COVERAGE.toLocaleString('fr-CA')} $ et {MAX_COVERAGE.toLocaleString('fr-CA')} $.
+              </span>
+            )}
           </div>
 
           {/* Fréquence de paiement */}
@@ -117,7 +138,7 @@ const LifeInsurancePersonalizer = ({
           <button className={styles.cancelButton} onClick={onClose}>
             Annuler
           </button>
-          <button className={styles.applyButton} onClick={handleApply}>
+          <button className={styles.applyButton} onClick={handleApply} disabled={!!amountError}>
             Appliquer
           </button>
         </div>

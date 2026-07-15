@@ -57,10 +57,12 @@ export function dobGuardError(dob, { minAge, maxAge } = {}) {
   if (maxAge != null && age > maxAge) return `L'estimation en ligne n'est pas disponible au-delà de ${maxAge} ans — parlez à votre conseiller.`;
   return '';
 }
-export function montantGuardError(montant, { minMontant } = {}) {
-  if (!montant || minMontant == null || !isValidAmount(montant)) return '';
+export function montantGuardError(montant, { minMontant, maxMontant } = {}) {
+  if (!montant || !isValidAmount(montant)) return '';
   const n = Number(String(montant).replace(/\D/g, ''));
-  return n < minMontant ? `Le montant minimum est de ${minMontant.toLocaleString('fr-CA')} $.` : '';
+  if (minMontant != null && n < minMontant) return `Le montant minimum est de ${minMontant.toLocaleString('fr-CA')} $.`;
+  if (maxMontant != null && n > maxMontant) return `Le montant maximum est de ${maxMontant.toLocaleString('fr-CA')} $.`;
+  return '';
 }
 
 export function isPersonsComplete(persons, guards = {}) {
@@ -160,9 +162,9 @@ export default function PersonsStep({
   montantLabel = "Montant d'assurance souhaité", montantTip = DEFAULT_MONTANT_TIP,
   montantSuffix, extraFields, reco, suggestion, defaultMontant,
   hideAdd = false, greenNext = false, nextLabel = 'Suivant',
-  minAge, maxAge, minMontant,
+  minAge, maxAge, minMontant, maxMontant,
 }) {
-  const guards = { minAge, maxAge, minMontant };
+  const guards = { minAge, maxAge, minMontant, maxMontant };
   const list = persons && persons.length ? persons : [createPerson(defaultMontant)];
   const complete = isPersonsComplete(list, guards);
 

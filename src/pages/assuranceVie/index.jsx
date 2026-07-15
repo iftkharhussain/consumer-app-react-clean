@@ -166,9 +166,10 @@ const assuranceVieConfig = {
       maxPersons: 10,
       montantLabel: "Montant d'assurance souhaité",
       montantTip: MONTANT_TIP,
-      // WinQuote carriers won't return any product below $25,000 face amount — block
-      // sub-minimum entries so the quote never comes back empty ("Sur demande").
+      // WinQuote carriers only price coverage between $25,000 and $2,000,000 — block
+      // out-of-range entries so the quote never comes back empty ("Sur demande").
       minMontant: 25000,
+      maxMontant: 2000000,
       // Quotable age band at the $25k floor: carriers return products for ~18–74 and
       // nothing at 75+ (or for young children at this coverage). Guard both ends so the
       // online estimate never comes back empty — over-74 is routed to an advisor.

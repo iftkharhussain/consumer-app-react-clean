@@ -111,7 +111,7 @@ export default function FunnelForm({ config, mode = 'public' }) {
     const s = steps[i];
     if (s.type === 'quiz') return isQuizComplete(s.quiz, answers[i]) && !(s.blockIf && s.blockIf(answers[i]));
     if (s.type === 'preferences') return s.fields.every((f) => answers[i][f.key]);
-    if (s.type === 'persons') return isPersonsComplete(answers[i], { minAge: s.minAge, maxAge: s.maxAge, minMontant: s.minMontant });
+    if (s.type === 'persons') return isPersonsComplete(answers[i], { minAge: s.minAge, maxAge: s.maxAge, minMontant: s.minMontant, maxMontant: s.maxMontant });
     return true; // contact step — reachable once prior steps are complete
   }
 
@@ -206,6 +206,7 @@ export default function FunnelForm({ config, mode = 'public' }) {
           minAge={s.minAge}
           maxAge={s.maxAge}
           minMontant={s.minMontant}
+          maxMontant={s.maxMontant}
           nextLabel={internal && isFinal ? 'Obtenir ma soumission' : 'Suivant'}
         />
       );
