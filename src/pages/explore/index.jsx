@@ -4,6 +4,7 @@ import PageHeader from '../../components/pageHeader';
 import InsuranceCard from '../../components/insuranceCard';
 import { Home05, UserCheck01, Car01, Heart, Building05, Shield01, ChevronDown, ChevronUp } from '../../utils/icons';
 import { ExploreModal } from '../../components/courtikaModal';
+import MeetingStatus from '../../components/meetingStatus';
 import styles from './Explore.module.css';
 
 const Explore = () => {
@@ -171,6 +172,12 @@ const Explore = () => {
         onStart={() => navigate('/explore-form', { state: { product: selectedProduct } })}
         productName={selectedProduct ? selectedProduct.charAt(0).toUpperCase() + selectedProduct.slice(1).toLowerCase() : ''}
         isCourtika={isCourtikaModal}
+      />
+      
+      {/* Adding Meeting Status at the end of the page as requested */}
+      <MeetingStatus 
+        onConfirm={() => console.log('Confirmed meeting took place')} 
+        onNotYet={() => console.log('Meeting not yet taken place')} 
       />
     </div>
   );
