@@ -35,6 +35,9 @@ export default function ContactTab({
   const [formError, setFormError] = useState('');
   const [loading, setLoading] = useState(false);
   const [selectedPersonIdx, setSelectedPersonIdx] = useState(0);
+  // SMS verification (OTP) toggle — starts from the funnel config's `otp` default,
+  // and the checkbox on the account step lets the user turn it on/off before submit.
+  const [otpEnabled, setOtpEnabled] = useState(otp);
   const codeRefs = useRef([]);
 
   const hasTwoPersons = !!(persons && persons.length > 1);
@@ -82,8 +85,8 @@ export default function ContactTab({
 
     // API mode.
     setLoading(true);
-    if (!otp) {
-      // 2-step SMS verification off: submit the lead directly, skipping OTP.
+    if (!otpEnabled) {
+      // OTP unchecked: submit the lead directly, skipping SMS verification.
       setVerifyPhone(normalized);
       await submitLead(normalized);
       return;
@@ -355,6 +358,18 @@ export default function ContactTab({
             </div>
             {formError && <p className={styles.errorText} style={{ textAlign: 'left' }}>{formError}</p>}
           </FormGroup>
+
+          {api && (
+            <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13, color: '#364152' }}>
+              <input
+                type="checkbox"
+                checked={otpEnabled}
+                onChange={(e) => setOtpEnabled(e.target.checked)}
+                style={{ width: 16, height: 16, cursor: 'pointer' }}
+              />
+              Vérification par code SMS (OTP)
+            </label>
+          )}
 
           <button type="button" onClick={() => startVerification(tel)} disabled={loading} className={styles.btnGreen}>
             {loading ? <span className={styles.spinner} /> : <>Obtenir mes soumissions <ChevronRight size={16} /></>}

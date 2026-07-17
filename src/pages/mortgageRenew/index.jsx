@@ -8,7 +8,7 @@
  */
 
 import React from 'react';
-import { FunnelForm } from '../../components/funnel';
+import { FunnelForm, customFormPostUrl } from '../../components/funnel';
 
 const mortgageRenewConfig = {
   badge: 'Renouvellement hypothécaire',
@@ -105,9 +105,7 @@ const mortgageRenewConfig = {
   // broker product — NO automated quote; the result page shows a manually-updated
   // rate. Override the URL via env for other environments.
   submit: {
-    postUrl:
-      process.env.REACT_APP_MORTGAGE_RENEW_FORM_POST_URL ||
-      'http://localhost:3024/api/v1/lead/custom-form?auth=REPLACE_WITH_MORTGAGE_RENEW_TOKEN',
+    postUrl: customFormPostUrl(process.env.REACT_APP_MORTGAGE_RENEW_FORM_AUTH),
     buildPayload: ({ answers, contact }) => {
       const num = (v) => (v ? Number(String(v).replace(/\D/g, '')) : null);
       return {

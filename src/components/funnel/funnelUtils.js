@@ -40,6 +40,15 @@ export async function submitFunnelLead(postUrl, payload) {
   return data;
 }
 
+// Build a product's LMS custom-form endpoint from its integration auth key. The base
+// (REACT_APP_SERVER_URL) adapts per environment, so only the per-product key lives in
+// .env (REACT_APP_<PRODUCT>_FORM_AUTH). Returns undefined when no key is set.
+export function customFormPostUrl(authKey) {
+  if (!authKey) return undefined;
+  const base = process.env.REACT_APP_SERVER_URL || 'http://localhost:3024';
+  return `${base}/api/v1/lead/custom-form?auth=${authKey}`;
+}
+
 // Normalize a user-entered phone to E.164 (+1XXXXXXXXXX) for display/validation.
 export function normalizePhone(raw) {
   const digits = (raw || '').replace(/\D/g, '');

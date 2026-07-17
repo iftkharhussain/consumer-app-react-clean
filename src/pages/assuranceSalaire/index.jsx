@@ -10,7 +10,7 @@
  */
 
 import React from 'react';
-import { FunnelForm } from '../../components/funnel';
+import { FunnelForm, customFormPostUrl } from '../../components/funnel';
 
 const DUREE_TIP = (
   <span>
@@ -165,6 +165,8 @@ const assuranceSalaireConfig = {
       otp: false, // 2-step SMS verification off (submit directly), as before
       logLabel: 'assurance-salaire',
       buildPayload: buildSalairePayload,
+      // Disability custom-form endpoint (auth key from .env) — see life/CI.
+      postUrl: customFormPostUrl(process.env.REACT_APP_DISABILITY_FORM_AUTH),
     },
   ],
 };

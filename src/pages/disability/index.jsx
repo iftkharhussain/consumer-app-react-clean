@@ -17,6 +17,18 @@ import styles from './Disability.module.css';
 
 const { Panel } = Collapse;
 
+// Disability (assurance salaire) is advisor-only (no automated price), so there are
+// no quote records to fill "Meilleurs assureurs". Show a default set of major Québec
+// disability insurers instead. Logos live in /public/images/winquote/.
+const DEFAULT_INSURERS = [
+  { file: 'MANULIFE.png', name: 'Manulife' },
+  { file: 'sunlife.png', name: 'Sun Life' },
+  { file: 'CANADALI.png', name: 'Canada Life' },
+  { file: 'IAFINANC.png', name: 'iA Groupe financier' },
+  { file: 'DESJARDI.png', name: 'Desjardins' },
+  { file: 'RBCINSUR.png', name: 'RBC Assurances' },
+];
+
 // Map the salaire form's option codes to display labels (advisor-only product).
 const WAITING_LABELS = { '0-30j': '0 à 30 jours', '30-60j': '30 à 60 jours', '60-90j': '60 à 90 jours', '90j+': '90 jours et plus' };
 const BENEFIT_LABELS = { '2ans': '2 ans', '5ans': '5 ans', retraite: "Jusqu'à ma retraite" };
@@ -290,8 +302,19 @@ const DisabilityPage = () => {
             <CustomInfoIcon />
           </div>
           <div className={styles.insurersGrid}>
-            {[1, 2, 3, 4, 5, 6].map(i => (
-              <div key={i} className={styles.insurerBlank}></div>
+            {DEFAULT_INSURERS.map((ins) => (
+              <div
+                className={styles.insurerBlank}
+                key={ins.file}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 8 }}
+              >
+                <img
+                  src={`/images/winquote/${ins.file}`}
+                  alt={ins.name}
+                  title={ins.name}
+                  style={{ maxWidth: '100%', maxHeight: 28, objectFit: 'contain' }}
+                />
+              </div>
             ))}
           </div>
         </div>

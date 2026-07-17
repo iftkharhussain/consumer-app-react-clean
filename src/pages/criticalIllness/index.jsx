@@ -13,6 +13,18 @@ import styles from './CriticalIllness.module.css';
 
 const { Panel } = Collapse;
 
+// Critical illness is advisor-only (no WinQuote price), so there are no quote
+// records to fill "Meilleurs assureurs". Show a default set of major Québec
+// critical-illness insurers instead. Logos live in /public/images/winquote/.
+const DEFAULT_INSURERS = [
+  { file: 'MANULIFE.png', name: 'Manulife' },
+  { file: 'sunlife.png', name: 'Sun Life' },
+  { file: 'CANADALI.png', name: 'Canada Life' },
+  { file: 'IAFINANC.png', name: 'iA Groupe financier' },
+  { file: 'DESJARDI.png', name: 'Desjardins' },
+  { file: 'BENEVA.png', name: 'Beneva' },
+];
+
 const CustomArrowIcon = ({ rotate = 0, size = '1.2em' }) => (
   <span 
     role="img" 
@@ -231,12 +243,20 @@ const CriticalIllness = () => {
               <CustomInfoIcon />
             </div>
             <div className={styles.insurersGrid}>
-              <div className={styles.insurerBlank}></div>
-              <div className={styles.insurerBlank}></div>
-              <div className={styles.insurerBlank}></div>
-              <div className={styles.insurerBlank}></div>
-              <div className={styles.insurerBlank}></div>
-              <div className={styles.insurerBlank}></div>
+              {DEFAULT_INSURERS.map((ins) => (
+                <div
+                  className={styles.insurerBlank}
+                  key={ins.file}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 8 }}
+                >
+                  <img
+                    src={`/images/winquote/${ins.file}`}
+                    alt={ins.name}
+                    title={ins.name}
+                    style={{ maxWidth: '100%', maxHeight: 28, objectFit: 'contain' }}
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>

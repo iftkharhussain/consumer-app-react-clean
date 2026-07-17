@@ -9,7 +9,7 @@
  */
 
 import React from 'react';
-import { FunnelForm } from '../../components/funnel';
+import { FunnelForm, customFormPostUrl } from '../../components/funnel';
 
 const mortgageInsuranceConfig = {
   badge: 'Assurance hypothécaire',
@@ -83,9 +83,7 @@ const mortgageInsuranceConfig = {
   // ?auth token is this product's custom-form integration key (LMS → Settings →
   // App Config → Custom Form). Override the URL via env for other environments.
   submit: {
-    postUrl:
-      process.env.REACT_APP_MORTGAGE_INSURANCE_FORM_POST_URL ||
-      'http://localhost:3024/api/v1/lead/custom-form?auth=e4127c27c53ce31f0fe220c6fa802ff6a94c8a34',
+    postUrl: customFormPostUrl(process.env.REACT_APP_MORTGAGE_INSURANCE_FORM_AUTH),
     buildPayload: ({ answers, persons, contact }) => {
       const list = persons || [];
       const b1 = list[0] || {};

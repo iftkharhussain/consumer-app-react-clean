@@ -231,7 +231,10 @@ export default function FunnelForm({ config, mode = 'public' }) {
           api={s.api}
           otp={s.otp}
           logLabel={s.logLabel}
-          postUrl={submit?.postUrl}
+          // config.submit.postUrl (mortgage funnels) OR the contact step's own postUrl
+          // (life: s.postUrl). Without the fallback, life posts to the shared
+          // window.FORM_SUBMISSION_API (car token) and lands on the car error page.
+          postUrl={submit?.postUrl || s.postUrl}
           buildPayload={buildPayload}
           persons={personsList}
           answers={mergedAnswers()}

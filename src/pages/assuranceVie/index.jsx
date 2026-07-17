@@ -16,7 +16,7 @@
  */
 
 import React from 'react';
-import { FunnelForm } from '../../components/funnel';
+import { FunnelForm, customFormPostUrl } from '../../components/funnel';
 
 const MONTANT_TIP = (
   <span>
@@ -162,8 +162,9 @@ const assuranceVieConfig = {
       type: 'persons',
       personLabel: 'Assuré',
       firstPersonLabel: 'Assuré principal',
-      addLabel: 'Ajouter un assuré',
-      maxPersons: 10,
+      // Single insured only — WinQuote life prices one life, so no "Ajouter un assuré".
+      // maxPersons: 1 hides the add button (rendered only when list.length < maxPersons).
+      maxPersons: 1,
       montantLabel: "Montant d'assurance souhaité",
       montantTip: MONTANT_TIP,
       // WinQuote carriers only price coverage between $25,000 and $2,000,000 — block
@@ -187,11 +188,9 @@ const assuranceVieConfig = {
       otp: true, // life sends the SMS verification code
       logLabel: 'assurance-vie',
       buildPayload: buildViePayload,
-      // Post to the LIFE custom-form endpoint (its own token) rather than the shared
-      // window.FORM_SUBMISSION_API — which the car funnel points at its own endpoint.
-      postUrl:
-        process.env.REACT_APP_LIFE_FORM_POST_URL ||
-        'http://localhost:3024/api/v1/lead/custom-form?auth=e8659bcfade113f081575a0b47af777ee3c0c321',
+      // Post to the LIFE custom-form endpoint (its own auth key from .env) rather than
+      // the shared window.FORM_SUBMISSION_API — which the car funnel points at.
+      postUrl: customFormPostUrl(process.env.REACT_APP_LIFE_FORM_AUTH),
     },
   ],
 };

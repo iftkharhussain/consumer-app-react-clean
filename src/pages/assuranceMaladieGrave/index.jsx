@@ -10,7 +10,7 @@
  */
 
 import React from 'react';
-import { FunnelForm } from '../../components/funnel';
+import { FunnelForm, customFormPostUrl } from '../../components/funnel';
 
 const PROTECTION_TIP = (
   <span>
@@ -126,6 +126,9 @@ const assuranceMaladieGraveConfig = {
       otp: false, // 2-step SMS verification off (submit directly), as before
       logLabel: 'assurance-maladie-grave',
       buildPayload: buildMaladieGravePayload,
+      // Post to the critical-illness custom-form endpoint (its own auth key from .env)
+      // rather than the shared window.FORM_SUBMISSION_API (car token) — same as life.
+      postUrl: customFormPostUrl(process.env.REACT_APP_CRITICAL_ILLNESS_FORM_AUTH),
     },
   ],
 };
