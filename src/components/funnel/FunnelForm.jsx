@@ -282,7 +282,7 @@ export default function FunnelForm({ config, mode = 'public' }) {
   return (
     <div className={styles.root}>
       {/* ═══ DESKTOP ═══ */}
-      <div className={styles.desktop}>
+      <div className={`${styles.desktop} ${internal ? styles.desktopInternal : ''}`}>
         <div className={styles.main}>
           <div className={styles.mainInner}>
             <div style={{ marginBottom: 20 }}>

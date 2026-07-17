@@ -137,6 +137,6 @@ const mortgageRenewConfig = {
   },
 };
 
-export default function MortgageRenew() {
-  return <FunnelForm config={mortgageRenewConfig} />;
+export default function MortgageRenew({ mode }) {
+  return <FunnelForm config={mortgageRenewConfig} mode={mode} />;
 }

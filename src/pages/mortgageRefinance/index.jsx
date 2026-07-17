@@ -82,6 +82,6 @@ const mortgageRefinanceConfig = {
   contact: { collectName: true },
 };
 
-export default function MortgageRefinance() {
-  return <FunnelForm config={mortgageRefinanceConfig} />;
+export default function MortgageRefinance({ mode }) {
+  return <FunnelForm config={mortgageRefinanceConfig} mode={mode} />;
 }

@@ -116,6 +116,6 @@ const mortgageBuyConfig = {
   contact: { collectName: true },
 };
 
-export default function MortgageBuy() {
-  return <FunnelForm config={mortgageBuyConfig} />;
+export default function MortgageBuy({ mode }) {
+  return <FunnelForm config={mortgageBuyConfig} mode={mode} />;
 }

@@ -17,6 +17,12 @@ const AssuranceVie = React.lazy(() => import('../assuranceVie/index'));
 const AssuranceMaladieGrave = React.lazy(() => import('../assuranceMaladieGrave/index'));
 const AssuranceSalaire = React.lazy(() => import('../assuranceSalaire/index'));
 const MortgageInsurance = React.lazy(() => import('../mortgageInsurance/index'));
+// Mortgage-broker forms reused internally: mode="internal" drops the contact
+// (name/email/phone) step since the user is already logged in.
+const MortgageRenew = React.lazy(() => import('../mortgageRenew/index'));
+const MortgageRefinance = React.lazy(() => import('../mortgageRefinance/index'));
+const MortgageBuy = React.lazy(() => import('../mortgageBuy/index'));
+const MortgageConsolidate = React.lazy(() => import('../mortgageConsolidate/index'));
 // Ported auto-insurance funnel — self-contained module in src/**/carFunnel.
 const CarInsuranceFunnel = React.lazy(() => import('../../components/carFunnel/CarInsuranceFunnel'));
 
@@ -29,6 +35,10 @@ const FORMS = {
   'critical-illness': AssuranceMaladieGrave,
   'disability': AssuranceSalaire,
   'mortgage-insurance': MortgageInsurance,
+  'mortgage-renew': MortgageRenew,
+  'mortgage-refinance': MortgageRefinance,
+  'mortgage-buy': MortgageBuy,
+  'mortgage-consolidate': MortgageConsolidate,
   'car-insurance': CarInsuranceFunnel,
 };
 

@@ -52,6 +52,6 @@ const mortgageConsolidateConfig = {
   contact: { collectName: true },
 };
 
-export default function MortgageConsolidate() {
-  return <FunnelForm config={mortgageConsolidateConfig} />;
+export default function MortgageConsolidate({ mode }) {
+  return <FunnelForm config={mortgageConsolidateConfig} mode={mode} />;
 }

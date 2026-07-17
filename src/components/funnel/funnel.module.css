@@ -40,6 +40,11 @@
   background: var(--page);
 }
 
+/* Internal (logged-in) funnels render inside the app shell — no page background. */
+.desktopInternal {
+  background: none;
+}
+
 .mobile {
   display: flex;
   flex-direction: column;

@@ -10,6 +10,13 @@ import styles from './Explore.module.css';
 // Car & home are "Courtika" (damage-insurance broker) products; everything else is
 // an advisor product. Mortgage renewal is a special broker card (Buy/Renew/Refinance).
 const COURTIKA_SLUGS = ['car-insurance', 'home-insurance'];
+// The mortgage card's action buttons each map to their own internal quick-quote form.
+const MORTGAGE_ACTION_SLUG = {
+  Buy: 'mortgage-buy',
+  Renew: 'mortgage-renew',
+  Refinance: 'mortgage-refinance',
+  Consolidate: 'mortgage-consolidate',
+};
 // Which "Mes conseillers" cabinet each product's advisor belongs to — used to blink
 // the relevant row when the user clicks "Speak with an advisor".
 const ADVISOR_BUCKET = {
@@ -87,12 +94,11 @@ const Explore = () => {
       // Go to "Mes conseillers" and blink the relevant cabinet's row (Courtika for
       // car/home; the financial/mortgage cabinet for the other products).
       navigate('/my-advisors', { state: { highlightBucket: ADVISOR_BUCKET[product.slug] } });
-    } else if (label === 'Refinance') {
-      setSelectedProduct('REFINANCEMENT HYPOTHÉCAIRE');
-      setIsCourtikaModal(false);
-      setIsModalOpen(true);
+    } else if (MORTGAGE_ACTION_SLUG[label]) {
+      // Buy / Renew / Refinance / Consolidate -> that product's internal quick-quote form.
+      navigate(`/explore/getquote/${MORTGAGE_ACTION_SLUG[label]}`);
     } else if (product.slug) {
-      // Get Quote / Buy / Renew -> open the internal quick-quote form for this product.
+      // Get Quote -> open the internal quick-quote form for this product.
       navigate(`/explore/getquote/${product.slug}`);
     } else {
       console.log(`Navigating to funnel for: ${product.title}`);
