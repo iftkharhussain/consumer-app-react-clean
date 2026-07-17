@@ -13,7 +13,7 @@
 
 # misc
 .DS_Store
-.env.local
+temp_auto_push.bat
 .env.development.local
 .env.test.local
 .env.production.local
@@ -28,3 +28,6 @@ yarn-error.log*
 graphify-out/
 .claude
 CLAUDE.md
+.gitignore
+branch_structure.json
+config.bat

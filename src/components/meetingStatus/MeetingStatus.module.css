@@ -255,12 +255,6 @@
   height: 18px;
 }
 
-@media (max-width: 640px) {
-  .buttonGroup {
-    flex-direction: column;
-  }
-}
-
 .feedbackHeader {
   display: flex;
   width: 882px;
@@ -439,58 +433,106 @@
     width: 100%;
     max-width: 100%;
     padding: 24px 16px;
+    margin: 24px auto;
+  }
+
+  .headerIcon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+
+  .headerIcon svg {
+    width: 24px;
+    height: 24px;
   }
 
   .headerTitle {
     font-size: 20px;
-    font-style: normal;
     line-height: 26px;
-    width: 292px;
+    width: auto;
+    max-width: 280px;
+    margin-bottom: 12px;
   }
 
   .headerSubtitle {
-    font-size: 13.771px;
-    width: 362px;
-
+    font-size: 13px;
+    line-height: 20px;
+    width: auto;
+    max-width: 100%;
+    margin-bottom: 24px;
   }
 
-  .main_div {
-    width: 361.481px;
-    height: 262.151px;
-  }
-
+  .main_div,
+  .feedback_main_div,
   .success_main_div {
-    min-height: 270px;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    min-height: 0;
+    box-sizing: border-box;
   }
 
   .inner_container,
   .feedback_inner_container,
   .success_inner_container {
-    width: 100% !important;
-    height: auto !important;
-    padding: 24px 16px;
-    box-sizing: border-box !important;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 20px 16px;
+    box-sizing: border-box;
+  }
+
+  .buttonGroup {
+    flex-direction: row;
+    height: auto;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .btn {
+    padding: 12px 8px;
+    min-width: 0;
   }
 
   .btnPrimary,
   .btnSecondary {
-    width: 100% !important;
-    box-sizing: border-box !important;
+    width: auto;
+    min-width: 0;
+    height: 44px;
+    flex: 1;
+    font-size: 13px;
+    box-sizing: border-box;
+  }
+
+  .btn svg {
+    width: 16px;
+    height: 16px;
   }
 
   .feedbackHeader {
-    width: 100% !important;
-    height: auto !important;
-    box-sizing: border-box !important;
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
   }
 
   .textarea {
-    width: 100% !important;
-    box-sizing: border-box !important;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .btnSubmit {
-    width: 100% !important;
-    box-sizing: border-box !important;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .successContainer {
+    width: 100%;
+    padding: 16px 0;
+  }
+
+  .successSubtitle {
+    width: auto;
+    max-width: 260px;
   }
 }
