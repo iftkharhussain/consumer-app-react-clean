@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { PageContent, AdvisorTypeBadge, PageHeader, RequestAdvisorModal } from 'components';
+import { PageContent, AdvisorTypeBadge, PageHeader, RequestAdvisorModal, RequestAdvisorConfirmationPopup } from 'components';
 import { Button, Table, Spin, Tooltip } from 'antd';
 import { ArrowRightIcon, XIcon, MailIcon, PhoneIcon } from '../../components/icon';
 import { CalendarOutlined } from '@ant-design/icons';
@@ -25,7 +25,9 @@ const MyAdvisors = () => {
   const [loading, setLoading] = useState(true);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+  const [isQuestionnaireModalOpen, setIsQuestionnaireModalOpen] = useState(false);
   const [selectedAdvisorForRequest, setSelectedAdvisorForRequest] = useState(null);
+  const [selectedProductForRequest, setSelectedProductForRequest] = useState(null);
 
   // The 3 mandatory categories (products fetched from central master file)
   const MANDATORY_CATEGORIES = [
@@ -420,11 +422,28 @@ const MyAdvisors = () => {
       </div>
       <ScheduleModal isOpen={isScheduleOpen} onClose={() => setIsScheduleOpen(false)} />
 
-      {/* Request Advisor Modal Component */}
+      {/* Step 1: Product Selection Modal */}
       <RequestAdvisorModal
         isOpen={isRequestModalOpen}
         onClose={() => setIsRequestModalOpen(false)}
         advisorRecord={selectedAdvisorForRequest}
+        onSelectProduct={(product) => {
+          setIsRequestModalOpen(false);
+          setSelectedProductForRequest(product);
+          setIsQuestionnaireModalOpen(true);
+        }}
+      />
+
+      {/* Step 2: Request Advisor Confirmation Popup */}
+      <RequestAdvisorConfirmationPopup
+        isOpen={isQuestionnaireModalOpen}
+        onClose={() => setIsQuestionnaireModalOpen(false)}
+        onBack={() => {
+          setIsQuestionnaireModalOpen(false);
+          setIsRequestModalOpen(true);
+        }}
+        advisorRecord={selectedAdvisorForRequest}
+        selectedProduct={selectedProductForRequest}
       />
     </PageContent>
   );

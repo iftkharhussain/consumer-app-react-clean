@@ -1,0 +1,141 @@
+/* Request Advisor Confirmation Popup Styles */
+.confirmationModal :global(.ant-modal-content) {
+  border-radius: 16px !important;
+  padding: 24px 28px !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+}
+
+.confirmationContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+.backButton {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: #475467;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 12px;
+  transition: color 0.2s ease;
+}
+
+.backButton:hover {
+  color: #101828;
+}
+
+.iconCircle {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: #F0F3FF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.clipboardIcon {
+  width: 32px;
+  height: 32px;
+  color: #2121DD;
+}
+
+.title {
+  font-family: Inter, sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #101828;
+  line-height: 30px;
+  margin: 0 0 10px 0;
+}
+
+.description {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #475467;
+  line-height: 22px;
+  max-width: 380px;
+  margin: 0 0 20px 0;
+}
+
+.advisorHighlight {
+  font-weight: 700;
+  color: #101828;
+}
+
+.productPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #F8F9FC;
+  border: 1px solid #EAECF0;
+  border-radius: 24px;
+  padding: 8px 18px;
+  margin-bottom: 28px;
+}
+
+.productPillIcon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.productPillText {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #344054;
+}
+
+.primaryButton {
+  width: 100%;
+  height: 48px;
+  background: #2121DD !important;
+  border: none !important;
+  border-radius: 10px !important;
+  color: #FFFFFF !important;
+  font-family: Inter, sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 6px rgba(33, 33, 221, 0.2) !important;
+}
+
+.primaryButton:hover {
+  background: #1A1ABA !important;
+  box-shadow: 0 4px 12px rgba(33, 33, 221, 0.3) !important;
+}
+
+.secondaryLink {
+  background: none;
+  border: none;
+  color: #667085;
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 14px;
+  transition: color 0.2s ease;
+}
+
+.secondaryLink:hover {
+  color: #344054;
+  text-decoration: underline;
+}

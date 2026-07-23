@@ -84,6 +84,7 @@ export { default as Text } from './text';
 
 // Modal Components
 export { default as RequestAdvisorModal } from './requestAdvisorModal';
+export { default as RequestAdvisorConfirmationPopup } from './requestAdvisorConfirmationPopup';
 
 // Demo Component
 export { default as ComponentsDemo } from './demo/ComponentsDemo';

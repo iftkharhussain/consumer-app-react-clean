@@ -5,7 +5,7 @@ import { XIcon } from '../icon';
 import { getProductsForAdvisorType } from '../../constants/advisorCategories';
 import styles from './RequestAdvisorModal.module.css';
 
-const RequestAdvisorModal = ({ isOpen, onClose, advisorRecord }) => {
+const RequestAdvisorModal = ({ isOpen, onClose, advisorRecord, onSelectProduct }) => {
   const navigate = useNavigate();
 
   const getAdvisorProducts = () => {
@@ -42,8 +42,12 @@ const RequestAdvisorModal = ({ isOpen, onClose, advisorRecord }) => {
               key={product.key}
               className={styles.productCard}
               onClick={() => {
-                onClose();
-                navigate(product.path);
+                if (onSelectProduct) {
+                  onSelectProduct(product);
+                } else {
+                  onClose();
+                  navigate(product.path);
+                }
               }}
             >
               <div className={styles.productIconWrapper}>
