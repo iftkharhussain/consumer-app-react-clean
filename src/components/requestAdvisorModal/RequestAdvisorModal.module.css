@@ -1,0 +1,78 @@
+/* Request Advisor Pop-up Modal Styles */
+.requestModal :global(.ant-modal-content) {
+  border-radius: 16px !important;
+  padding: 24px 28px !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+}
+
+.requestModalContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.requestModalTitle {
+  font-family: Inter, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #101828;
+  line-height: 28px;
+  margin: 0 0 20px 0;
+  padding-right: 24px;
+}
+
+.requestModalGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.productCard {
+  background: #FFFFFF;
+  border: 1px solid #EAECF0;
+  border-radius: 12px;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.productCard:hover {
+  border-color: #1A1ABA;
+  box-shadow: 0 4px 14px rgba(26, 26, 186, 0.12);
+  transform: translateY(-2px);
+}
+
+.productIconWrapper {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.productIcon {
+  max-width: 44px;
+  max-height: 44px;
+  object-fit: contain;
+}
+
+.productTitle {
+  font-family: Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #101828;
+  line-height: 22px;
+  margin-bottom: 4px;
+}
+
+.productSubtitle {
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #667085;
+  line-height: 18px;
+}

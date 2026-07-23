@@ -82,6 +82,9 @@ export { default as Heading } from './heading';
 export { default as Section } from './section';
 export { default as Text } from './text';
 
+// Modal Components
+export { default as RequestAdvisorModal } from './requestAdvisorModal';
+
 // Demo Component
 export { default as ComponentsDemo } from './demo/ComponentsDemo';
 
