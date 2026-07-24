@@ -18,7 +18,6 @@
 
 .modalCard {
   display: flex;
-  width: 480px;
   height: auto;
   flex-direction: column;
   align-items: flex-start;
@@ -54,8 +53,8 @@
 
 .closeButton {
   position: absolute;
-  top: 20px;
-  right: 24px;
+  top: 28px;
+  right: 37px;
   width: 16px;
   height: 16px;
   flex-shrink: 0;
@@ -84,34 +83,31 @@
 .requestModalGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  width: 100%;
+  gap: 11px;
 }
 
 .productCard {
-  background: #FFFFFF;
-  border: 1px solid #EAECF0;
-  border-radius: 12px;
-  padding: 16px 14px;
+  border-radius: 14px;
+  border: 1px solid #E9EAEB;
+  background: #FFF;
+  box-shadow: 0 1px 3px 0 rgba(10, 13, 18, 0.07);
   display: flex;
+  width: 215px;
+  padding: 20px;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  text-align: center;
   cursor: pointer;
-  min-height: 130px;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .productCard:hover {
   border-color: #1A1ABA;
-  box-shadow: 0 4px 14px rgba(26, 26, 186, 0.12);
-  transform: translateY(-2px);
+
 }
 
 .productIconWrapper {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,20 +121,24 @@
 }
 
 .productTitle {
+  color: #181D27;
+  text-align: center;
   font-family: Inter, sans-serif;
-  font-size: 15px;
+  font-size: 13px;
+  font-style: normal;
   font-weight: 600;
-  color: #101828;
-  line-height: 22px;
+  line-height: 18px;
   margin-bottom: 4px;
 }
 
 .productSubtitle {
+  color: #9AA0AB;
+  text-align: center;
   font-family: Inter, sans-serif;
-  font-size: 12px;
+  font-size: 11px;
+  font-style: normal;
   font-weight: 400;
-  color: #667085;
-  line-height: 18px;
+  line-height: 16px;
 }
 
 @keyframes fadeIn {
@@ -174,40 +174,61 @@
     max-width: 100vw;
     width: 100vw;
     height: auto;
-    border-radius: 24px 24px 0 0;
+    border-radius: 18px 18px 0 0;
     padding: 0;
     box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.15);
     animation: slideUp 0.25s ease-out;
   }
 
   .modalHeader {
-    padding: 20px;
+    padding: 20px 20px 16px 20px;
   }
 
   .requestModalTitle {
+    width: 291px;
+    color: #121926;
+    font-family: Inter, sans-serif;
     font-size: 18px;
-    line-height: 26px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 28px;
+  }
+
+  .closeButton {
+    width: 15.988px;
+    height: 15.988px;
   }
 
   .productsContainer {
     height: auto;
-    padding: 20px;
+    padding: 16px 16px 24px 16px;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .requestModalGrid {
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-    height: auto;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .productCard {
+    width: 100%;
+    box-sizing: border-box;
     padding: 16px 10px;
-    border-radius: 16px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   .productIconWrapper {
-    width: 44px;
-    height: 44px;
+    width: 39.986px;
+    height: 39.986px;
+    flex-shrink: 0;
     margin-bottom: 8px;
   }
 
@@ -217,13 +238,23 @@
   }
 
   .productTitle {
-    font-size: 14px;
-    line-height: 19px;
+    color: #181D27;
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 4px;
   }
 
   .productSubtitle {
+    color: #9AA0AB;
+    text-align: center;
+    font-family: Inter, sans-serif;
     font-size: 11px;
-    line-height: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    /* width: 129px; */
   }
 
   @keyframes slideUp {

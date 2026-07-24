@@ -1,13 +1,13 @@
 /* Request Advisor Confirmation Popup Styles (100% Pure Custom Div Modal - Zero Ant Design Classes) */
 
-.modalOverlay {
+.confirmationOverlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background: rgba(16, 24, 40, 0.5);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(1px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,150 +16,212 @@
   animation: fadeIn 0.2s ease-out;
 }
 
-.modalCard {
-  background: #FFFFFF;
+.confirmationCard {
+  display: flex;
+  width: 480px;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-shrink: 0;
   border-radius: 16px;
-  width: 100%;
-  max-width: 480px;
-  padding: 20px 24px 24px 24px;
-  position: relative;
+  background: #FFF;
   box-shadow: 0 20px 60px 0 rgba(10, 13, 18, 0.18);
-  animation: scaleUp 0.2s ease-out;
 }
 
-.confirmationContainer {
+.confirmationContent {
   display: flex;
+  padding: 20px 32px 32px 32px;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-  position: relative;
+  align-self: stretch;
 }
 
-.backButton {
+.confirmationHeader {
+  display: flex;
+  width: 416px;
+  height: 40px;
+  padding-bottom: 20px;
+  align-items: center;
+}
+
+.confirmationBackButton {
   align-self: flex-start;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   background: none;
   border: none;
-  color: #475467;
-  font-family: Inter, sans-serif;
-  font-size: 14px;
-  font-weight: 500;
   cursor: pointer;
   padding: 0;
-  margin-bottom: 12px;
-  transition: color 0.2s ease;
 }
 
-.backButton:hover {
-  color: #101828;
+.backButtonText {
+  color: #717680;
+  text-align: center;
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 19.5px;
 }
 
-.iconCircle {
-  width: 68px;
-  height: 68px;
-  border-radius: 50%;
-  background: #F0F3FF;
+
+
+.iconSection {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
+  padding-bottom: 24px;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-.clipboardIcon {
+.confirmationIconCircle {
+  display: flex;
+  width: 72px;
+  height: 72px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 33554400px;
+  background: #EEF0FD;
+}
+
+.confirmationClipboardIcon {
   width: 32px;
   height: 32px;
-  color: #2121DD;
+  flex-shrink: 0;
 }
 
-.title {
+.confirmationTitle {
+  color: #121926;
+  text-align: center;
   font-family: Inter, sans-serif;
   font-size: 22px;
-  font-weight: 700;
-  color: #101828;
-  line-height: 30px;
-  margin: 0 0 10px 0;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 32px;
+  margin: 0 0 12px 0;
 }
 
-.description {
+.confirmationDescription {
+  width: 320px;
+  color: #535862;
+  text-align: center;
   font-family: Inter, sans-serif;
-  font-size: 14px;
+  font-size: 15px;
+  font-style: normal;
   font-weight: 400;
-  color: #475467;
-  line-height: 22px;
-  max-width: 380px;
-  margin: 0 0 20px 0;
+  line-height: 24px;
+  margin: 0;
 }
 
-.advisorHighlight {
-  font-weight: 700;
-  color: #101828;
+.confirmationAdvisorHighlight {
+  color: #181D27;
+  font-family: Inter, sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px;
 }
 
-.productPill {
-  display: inline-flex;
+.pillSection {
+  display: flex;
+  padding-top: 20px;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.confirmationProductPill {
+  display: flex;
+  padding: 10px 14px;
   align-items: center;
   gap: 8px;
-  background: #F8F9FC;
-  border: 1px solid #EAECF0;
-  border-radius: 24px;
-  padding: 8px 18px;
-  margin-bottom: 28px;
+  border-radius: 10px;
+  background: #F3F4F6;
+  border: none;
+  cursor: pointer;
 }
 
-.productPillIcon {
+.confirmationProductPillIcon {
   width: 20px;
   height: 20px;
   object-fit: contain;
 }
 
-.productPillText {
+.confirmationProductPillText {
+  color: #414651;
+  text-align: center;
   font-family: Inter, sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: #344054;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 19.5px;
 }
 
-.primaryButton {
-  width: 100%;
-  height: 48px;
+.dividerSection {
+  display: flex;
+  padding: 28px 0;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.confirmationDivider {
+  width: 416px;
+  height: 1px;
+  border-top: 1px solid #E9EAEB;
+}
+
+.buttonWrapper {
+  display: flex;
+  padding-bottom: 12px;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.confirmationPrimaryBtn {
+  display: flex;
+  width: 416px;
+  padding: 12px 14px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
   background: #2121DD;
   border: none;
-  border-radius: 10px;
   color: #FFFFFF;
   font-family: Inter, sans-serif;
   font-size: 15px;
   font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(33, 33, 221, 0.2);
+  box-shadow: 0 0 0 1px rgba(10, 13, 18, 0.18) inset, 0 -2px 0 0 rgba(10, 13, 18, 0.08) inset;
 }
 
-.primaryButton:hover {
-  background: #1A1ABA;
-  box-shadow: 0 4px 12px rgba(33, 33, 221, 0.3);
+.confirmationPrimaryBtn:hover {
+  background: #13139E;
+  box-shadow: 0 4px 12px rgba(26, 26, 186, 0.3);
 }
 
-.secondaryLink {
+.primaryBtnText {
+  color: #FFF;
+  text-align: center;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.confirmationSecondaryBtn {
   background: none;
   border: none;
-  color: #667085;
+  color: #717680;
+  text-align: center;
   font-family: Inter, sans-serif;
   font-size: 13px;
-  font-weight: 500;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 19.5px;
+  text-decoration: none;
   cursor: pointer;
-  margin-top: 14px;
   transition: color 0.2s ease;
-}
-
-.secondaryLink:hover {
-  color: #344054;
-  text-decoration: underline;
 }
 
 @keyframes fadeIn {
@@ -186,70 +248,134 @@
 
 /* Mobile Screen Styles (<= 768px) - Taller Bottom Sheet Popup matching design */
 @media (max-width: 768px) {
-  .modalOverlay {
+  .confirmationOverlay {
     padding: 0;
     align-items: flex-end;
   }
 
-  .modalCard {
+  .confirmationCard {
     max-width: 100vw;
     width: 100vw;
-    border-radius: 28px 28px 0 0;
-    padding: 28px 24px 32px 24px;
+    height: auto;
+    border-radius: 18px 18px 0 0;
+    padding: 24px 20px 28px 20px;
     box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
-    min-height: 500px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     animation: slideUp 0.25s ease-out;
+    box-sizing: border-box;
   }
 
-  .confirmationContainer {
-    height: 100%;
-    justify-content: space-between;
+  .confirmationContent {
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .backButton {
-    margin-bottom: 16px;
-    font-size: 14px;
+  .confirmationHeader {
+    width: 100%;
+    height: auto;
+    padding-bottom: 16px;
+    align-items: flex-start;
   }
 
-  .iconCircle {
-    width: 72px;
-    height: 72px;
-    margin-bottom: 20px;
+  .iconSection {
+    padding-bottom: 20px;
+    align-items: center;
   }
 
-  .clipboardIcon {
-    width: 32px;
-    height: 32px;
+  .confirmationIconCircle {
+    width: 71.995px;
+    height: 71.995px;
   }
 
-  .title {
+  .confirmationClipboardIcon {
+    width: 31.992px;
+    height: 31.992px;
+    flex-shrink: 0;
+  }
+
+  .confirmationTitle {
+    color: #121926;
+    text-align: center;
+    font-family: Inter, sans-serif;
     font-size: 22px;
-    line-height: 30px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 32px;
     margin-bottom: 10px;
   }
 
-  .description {
-    font-size: 14px;
-    line-height: 22px;
-    margin-bottom: 24px;
-  }
-
-  .productPill {
-    padding: 8px 18px;
-    margin-bottom: 32px;
-  }
-
-  .primaryButton {
-    height: 48px;
+  .confirmationDescription {
+    width: 320px;
+    max-width: 100%;
+    color: #535862;
+    text-align: center;
+    font-family: Inter, sans-serif;
     font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    margin-bottom: 20px;
   }
 
-  .secondaryLink {
-    margin-top: 16px;
+  .pillSection {
+    width: 100%;
+    padding-top: 0;
+    margin-bottom: 0;
+    align-items: center;
+  }
+
+  .confirmationProductPillText {
+    color: #414651;
+    text-align: center;
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 19.5px;
+  }
+
+  .dividerSection {
+    width: 100%;
+    padding: 20px 0;
+    align-items: center;
+  }
+
+  .confirmationDivider {
+    width: 100%;
+  }
+
+  .buttonWrapper {
+    width: 100%;
+    align-items: center;
+  }
+
+  .confirmationPrimaryBtn {
+    width: 100%;
+    height: 48px;
+  }
+
+  .primaryBtnText {
+    color: #FFF;
+    text-align: center;
+    font-family: Inter, sans-serif;
     font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+  }
+
+  .confirmationSecondaryBtn {
+    color: #717680;
+    text-align: center;
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19.5px;
   }
 
   @keyframes slideUp {
