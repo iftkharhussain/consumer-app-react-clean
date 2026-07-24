@@ -7,16 +7,18 @@ import { CheckCircleOutlined, CheckCircleFilled } from '@ant-design/icons';
 import { Types } from '../../utils/helper';
 import styles from './Overview.module.css';
 import OtherProducts from '../../components/otherProducts';
+import LifeInsuranceResult from '../../components/lifeInsuranceResult';
+import InsurerOptionsList from '../../components/insurerOptionsList';
 
 const { Panel } = Collapse;
 
 const CustomArrowIcon = ({ rotate = 0, size = '1.2em' }) => (
-  <span 
-    role="img" 
-    aria-label="arrow" 
-    className="anticon" 
-    style={{ 
-      display: 'inline-flex', 
+  <span
+    role="img"
+    aria-label="arrow"
+    className="anticon"
+    style={{
+      display: 'inline-flex',
       alignItems: 'center',
       transform: `rotate(${rotate}deg)`,
       transition: 'transform 0.3s',
@@ -96,7 +98,7 @@ const Overview = () => {
   return (
     <PageContent pageType="overview">
       <div className={styles.overviewPage}>
-        
+
         {/* Banner Card */}
         <div className={styles.bannerCard}>
           <div className={styles.freeBadge}>
@@ -113,8 +115,8 @@ const Overview = () => {
           </div>
           <div className={styles.bannerContent}>
             <h2 className={styles.bannerHead}>
-              {customerName}, voici votre conseiller <br></br>pour <span style={{ color: '#2121DD' }}>établir</span> 
-              <span style={{ color: '#2121DD' }}>votre stratégie</span> et finaliser votre  
+              {customerName}, voici votre conseiller <br></br>pour <span style={{ color: '#2121DD' }}>établir</span>
+              <span style={{ color: '#2121DD' }}>votre stratégie</span> et finaliser votre
               soumission gratuite
             </h2>
             <p className={styles.bannerDesc}>
@@ -134,14 +136,14 @@ const Overview = () => {
               <CheckCircleOutlined className={styles.checkIcon} />
               <span>Prix estimé</span>
             </div>
-            
+
             <div className={styles.priceWrapper}>
               <h2 className={styles.priceBig}>24.33$ - 27.14$</h2>
               <p className={styles.priceNote}>Obtenez votre prix final avec le conseiller</p>
             </div>
-            
+
             <div className={styles.priceDivider}></div>
-            
+
             <div className={styles.priceRow}>
               <span className={styles.rowLabel}>Type de protection</span>
               <span className={styles.rowValue}>Temporaire 10 ans</span>
@@ -179,10 +181,10 @@ const Overview = () => {
             <h2 className={styles.faqTitle}>Foire aux questions</h2>
             <p className={styles.faqSub}>Tout ce que vous devez savoir sur le produit et la facturation.</p>
           </div>
-          
-          <Collapse 
-            className={styles.faqCollapse} 
-            defaultActiveKey={[]} 
+
+          <Collapse
+            className={styles.faqCollapse}
+            defaultActiveKey={[]}
             expandIconPosition="end"
             expandIcon={({ isActive }) => <CustomArrowIcon rotate={isActive ? 180 : 0} />}
           >
@@ -204,6 +206,12 @@ const Overview = () => {
         </div>
 
         <OtherProducts className={styles.fullWidthProducts} currentKey="life" />
+
+        {/* Life Insurance Results Component */}
+        <LifeInsuranceResult />
+
+        {/* Insurer Options List Component */}
+        <InsurerOptionsList />
 
       </div>
     </PageContent>
