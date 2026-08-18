@@ -11,7 +11,7 @@
  * createPerson() and isPersonsComplete() are exported for it to use.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
 import { Field, FormGroup, Input, DateInput, BoxSelect, PillToggle, Select, YesNoToggle, ChevronRight, ChevronLeft } from './primitives';
 import { isValidName, isValidAmount } from '../../pages/assuranceVie/formValidation';
@@ -72,7 +72,7 @@ export function isPersonsComplete(persons, guards = {}) {
   );
 }
 
-function PersonCard({ person, index, personLabel, firstPersonLabel, montantLabel, montantTip, montantSuffix, extraFields, reco, suggestion, guards, onChange, onRemove, canRemove }) {
+function PersonCard({ person, index, personLabel, firstPersonLabel, montantLabel, montantTip, montantSuffix, extraFields, reco, suggestion, guards, onChange, onRemove, canRemove, lockName }) {
   const set = (f) => (v) => onChange({ ...person, [f]: v });
   const header = index === 0 && firstPersonLabel ? firstPersonLabel : `${personLabel} ${index + 1}`;
   const dobErr = dobGuardError(person.dateNaissance, guards);
@@ -95,10 +95,10 @@ function PersonCard({ person, index, personLabel, firstPersonLabel, montantLabel
         <FormGroup>
           <div className={styles.grid2}>
             <Field label="Nom" error={person.nom && !isValidName(person.nom) ? 'Entrez un nom valide' : ''}>
-              <Input value={person.nom} onChange={set('nom')} placeholder="Dupont" filter="name" error={!!(person.nom && !isValidName(person.nom))} />
+              <Input value={person.nom} onChange={set('nom')} placeholder="Dupont" filter="name" disabled={lockName} error={!!(person.nom && !isValidName(person.nom))} />
             </Field>
             <Field label="Prénom" error={person.prenom && !isValidName(person.prenom) ? 'Entrez un prénom valide' : ''}>
-              <Input value={person.prenom} onChange={set('prenom')} placeholder="Marie" filter="name" error={!!(person.prenom && !isValidName(person.prenom))} />
+              <Input value={person.prenom} onChange={set('prenom')} placeholder="Marie" filter="name" disabled={lockName} error={!!(person.prenom && !isValidName(person.prenom))} />
             </Field>
           </div>
 
@@ -163,10 +163,22 @@ export default function PersonsStep({
   montantSuffix, extraFields, reco, suggestion, defaultMontant,
   hideAdd = false, greenNext = false, nextLabel = 'Suivant',
   minAge, maxAge, minMontant, maxMontant,
+  lockName = false, lockedNom = '', lockedPrenom = '',
 }) {
   const guards = { minAge, maxAge, minMontant, maxMontant };
   const list = persons && persons.length ? persons : [createPerson(defaultMontant)];
   const complete = isPersonsComplete(list, guards);
+
+  // Internal forms: the primary insured's name comes from the logged-in account —
+  // pre-fill Nom/Prénom on the first person and render them read-only (lock name only).
+  useEffect(() => {
+    if (!lockName || (!lockedNom && !lockedPrenom)) return;
+    const p0 = list[0];
+    if (p0 && (p0.nom !== lockedNom || p0.prenom !== lockedPrenom)) {
+      onChange(list.map((x, i) => (i === 0 ? { ...x, nom: lockedNom, prenom: lockedPrenom } : x)));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lockName, lockedNom, lockedPrenom]);
 
   const updatePerson = (id, u) => onChange(list.map((x) => (x.id === id ? u : x)));
   const removePerson = (id) => onChange(list.filter((x) => x.id !== id));
@@ -182,14 +194,17 @@ export default function PersonsStep({
           onChange={(u) => updatePerson(p.id, u)}
           onRemove={() => removePerson(p.id)}
           canRemove={list.length > 1}
+          lockName={lockName && i === 0}
         />
       ))}
 
+      {/* "Ajouter un assuré" button hidden on every form (internal + external) per request.
       {!hideAdd && list.length < maxPersons && (
         <button type="button" onClick={addPerson} className={styles.addBtn}>
           <PlusOutlined style={{ fontSize: 12 }} /> {addLabel || `Ajouter un ${personLabel.toLowerCase()}`}
         </button>
       )}
+      */}
 
       {greenNext ? (
         // Short-form (internal) step 1: a single big green CTA, no back button.
