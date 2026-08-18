@@ -92,13 +92,14 @@ export function InfoTooltip({ content }) {
 
 // ── Field primitives ──────────────────────────────────────────────────────────
 
-export function Input({ value, onChange, placeholder, type = 'text', prefix, suffix, filter, error, inputMode }) {
+export function Input({ value, onChange, placeholder, type = 'text', prefix, suffix, filter, error, inputMode, disabled }) {
   const handle = (raw) => {
     if (filter === 'name') return onChange(sanitizeName(raw));
     if (filter === 'digits') return onChange(sanitizeDigits(raw));
     if (filter === 'phone') return onChange(formatCAPhone(raw));
     return onChange(raw);
   };
+  const disabledStyle = { background: '#f2f4f7', color: '#697586', cursor: 'not-allowed' };
   return (
     <div className={styles.inputWrap}>
       {prefix && <span className={styles.inputAffix} style={{ left: 12 }}>{prefix}</span>}
@@ -108,8 +109,9 @@ export function Input({ value, onChange, placeholder, type = 'text', prefix, suf
         value={value}
         onChange={(e) => handle(e.target.value)}
         placeholder={placeholder}
+        disabled={disabled}
         className={`${styles.input} ${prefix ? styles.hasPrefix : ''} ${suffix ? styles.hasSuffix : ''}`}
-        style={error ? { borderColor: '#ef4444', boxShadow: '0 0 0 2px rgba(239,68,68,0.12)' } : undefined}
+        style={disabled ? disabledStyle : (error ? { borderColor: '#ef4444', boxShadow: '0 0 0 2px rgba(239,68,68,0.12)' } : undefined)}
       />
       {suffix && <span className={styles.inputAffix} style={{ right: 12 }}>{suffix}</span>}
     </div>

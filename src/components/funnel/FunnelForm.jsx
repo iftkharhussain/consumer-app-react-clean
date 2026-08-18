@@ -207,6 +207,10 @@ export default function FunnelForm({ config, mode = 'public' }) {
           maxAge={s.maxAge}
           minMontant={s.minMontant}
           maxMontant={s.maxMontant}
+          // Internal (logged-in) forms: lock the primary insured's name to the account.
+          lockName={internal}
+          lockedNom={userProfile.lastName || ''}
+          lockedPrenom={userProfile.firstName || ''}
           nextLabel={internal && isFinal ? 'Obtenir ma soumission' : 'Suivant'}
         />
       );
