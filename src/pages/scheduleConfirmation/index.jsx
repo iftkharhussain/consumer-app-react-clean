@@ -5,6 +5,7 @@ import { Spin, Button, message } from 'antd';
 import styles from './ScheduleConfirmation.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { getFormattedTodayHours } from '../../utils/businessHours';
+import { useOfficeHours } from '../../hooks/useOfficeHours';
 import { getOrderDetails, checkPendingOrder, sendConfirmationEmail } from '../../services/api/productOrderService';
 import fortusService from '../../services/api/fortusService';
 import { trackPixelEventOnce } from '../../utils/pixel';
@@ -17,6 +18,7 @@ const sentEmailCache = new Set();
 const ScheduleConfirmation = () => {
   const navigate = useNavigate();
   const { userProductId: urlUserProductId } = useParams();
+  useOfficeHours({ userProductId: urlUserProductId });
   const initialized = useRef(false);
   const ezLeadSent = useRef(false);
   const meetingTracked = useRef(false);

@@ -27,7 +27,62 @@ const PROD_BUSINESS_HOURS = {
 const isLocalhost = typeof window !== 'undefined' &&
     (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
-const BUSINESS_HOURS = isLocalhost ? TEST_BUSINESS_HOURS : PROD_BUSINESS_HOURS;
+// Fallback used until (or unless) the LMS returns configured office hours.
+// `let` + a copy so setBusinessHours() can replace it without touching the fallback.
+let BUSINESS_HOURS = isLocalhost ? { ...TEST_BUSINESS_HOURS } : { ...PROD_BUSINESS_HOURS };
+
+const EN_TO_FR = {
+  Sunday: 'Dimanche', Monday: 'Lundi', Tuesday: 'Mardi', Wednesday: 'Mercredi',
+  Thursday: 'Jeudi', Friday: 'Vendredi', Saturday: 'Samedi'
+};
+const NUM_TO_FR = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+
+/**
+ * Loads the advisor's real office hours (from the LMS) into BUSINESS_HOURS.
+ * Handles all three schedule types: everyday, weekdays and custom.
+ * A null day means "Fermé".
+ *
+ * If the advisor has no configured schedule, the hardcoded fallback stays in place.
+ *
+ * @param {Object|null} officeHours - fortusConfig.scheduleControl as returned by the API
+ */
+export const setBusinessHours = (officeHours) => {
+  if (!officeHours || officeHours.enabled === false) {
+    console.warn('[businessHours] No configured office hours - keeping fallback');
+    return;
+  }
+
+  const next = {
+    Dimanche: null, Lundi: null, Mardi: null, Mercredi: null,
+    Jeudi: null, Vendredi: null, Samedi: null
+  };
+
+  if (officeHours.type === 'custom' && officeHours.weekly) {
+    // Custom Days - every day carries its own hours
+    for (const [enDay, cfg] of Object.entries(officeHours.weekly)) {
+      const fr = EN_TO_FR[enDay];
+      if (!fr || !cfg || cfg.closed === true) continue; // closed stays null -> "Fermé"
+      if (!cfg.notifyFrom || !cfg.notifyTo) continue;
+      next[fr] = {
+        start: cfg.notifyFrom,
+        end: cfg.notifyTo,
+        label: `${cfg.notifyFrom} - ${cfg.notifyTo}`
+      };
+    }
+  } else {
+    // Every Day / Weekdays Only - one pair of times applied to the listed days
+    const { openTime, closeTime } = officeHours;
+    if (!openTime || !closeTime) return;
+
+    (officeHours.businessDays || [1, 2, 3, 4, 5]).forEach((dayNum) => {
+      const fr = NUM_TO_FR[dayNum];
+      if (!fr) return;
+      next[fr] = { start: openTime, end: closeTime, label: `${openTime} - ${closeTime}` };
+    });
+  }
+
+  BUSINESS_HOURS = next;
+};
 
 /**
  * Gets the current date/time in Montreal timezone

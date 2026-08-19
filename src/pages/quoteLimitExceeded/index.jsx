@@ -13,6 +13,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import styles from './QuoteLimitExceeded.module.css';
 import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
+import { useOfficeHours } from '../../hooks/useOfficeHours';
 import { getOrderDetails, checkPendingOrder } from '../../services/api/productOrderService';
 import fortusService from '../../services/api/fortusService';
 import { fetchQuote } from '../../services/api/quoteService';
@@ -22,7 +23,8 @@ const QuoteLimitExceeded = () => {
   const initialized = useRef(false);
   const navigate = useNavigate();
   const { userProductId: urlUserProductId } = useParams();
-  
+  useOfficeHours({ userProductId: urlUserProductId });
+
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);

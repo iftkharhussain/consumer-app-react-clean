@@ -5,10 +5,12 @@ import ExploreProducts from '../../components/exploreProducts';
 import FAQ from '../../components/faq';
 import { getOrderDetails } from '../../services/api/productOrderService';
 import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
+import { useOfficeHours } from '../../hooks/useOfficeHours';
 import styles from './ProductOrder.module.css';
 
 const OrderProduct = () => {
     const { userProductId } = useParams();
+    useOfficeHours({ userProductId });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [orderData, setOrderData] = useState(null);

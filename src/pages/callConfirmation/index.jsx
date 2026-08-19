@@ -12,6 +12,7 @@ import {
 import styles from './CallConfirmation.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
+import { useOfficeHours } from '../../hooks/useOfficeHours';
 import { getOrderDetails, checkPendingOrder, sendConfirmationEmail } from '../../services/api/productOrderService';
 import { trackPixelEventOnce } from '../../utils/pixel';
 import { trackTikTokEventOnce } from '../../utils/tiktokPixel';
@@ -21,6 +22,7 @@ import { buildProtections } from '../../utils/quoteProtections';
 const CallConfirmation = () => {
   const navigate = useNavigate();
   const { userProductId: urlUserProductId } = useParams();
+  useOfficeHours({ userProductId: urlUserProductId });
   const initialized = useRef(false);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [loading, setLoading] = useState(true);

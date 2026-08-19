@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import styles from './FallbackNoQuotes.module.css';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
 import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
+import { useOfficeHours } from '../../hooks/useOfficeHours';
 import fortusService from '../../services/api/fortusService';
 import { checkPendingOrder } from '../../services/api/productOrderService';
 import { trackPixelEvent } from '../../utils/pixel';
@@ -31,6 +32,8 @@ const FallbackNoQuotes = () => {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
   const [userProductId, setUserProductId] = useState(null);
+
+  useOfficeHours({ userProductId });
 
   // Get user info from Redux to pass in URL
   const userProfile = useSelector(state => state.app?.user_profile);
