@@ -15,11 +15,11 @@ const TEST_BUSINESS_HOURS = {
 };
 
 const PROD_BUSINESS_HOURS = {
-  'Lundi': { start: '08:30', end: '17:00', label: '8:30 - 17:00' },
-  'Mardi': { start: '08:30', end: '17:00', label: '8:30 - 17:00' },
-  'Mercredi': { start: '08:30', end: '17:00', label: '8:30 - 17:00' },
-  'Jeudi': { start: '08:30', end: '17:00', label: '8:30 - 17:00' },
-  'Vendredi': { start: '08:30', end: '16:30', label: '8:30 - 16:30' },
+  'Lundi': { start: '08:30', end: '19:00', label: '8:30 - 19:00' },
+  'Mardi': { start: '08:30', end: '19:00', label: '8:30 - 19:00' },
+  'Mercredi': { start: '08:30', end: '19:00', label: '8:30 - 19:00' },
+  'Jeudi': { start: '08:30', end: '19:00', label: '8:30 - 19:00' },
+  'Vendredi': { start: '08:30', end: '18:00', label: '8:30 - 18:00' },
   'Samedi': null,
   'Dimanche': null,
 };
