@@ -72,10 +72,14 @@ const CourtikaModal = ({ isOpen, onClose, userProductId, productSlug = 'car-insu
         try {
             const carrierCode = submissionQuote?.carrierCode;
             
+            // Human-readable tracking fields (feed quote-analytics "Button/Flow" display + kill undefined logs).
+            // CourtikaModal serves both the "Parler à Courtika" and the "Choisir" (explicit) flows.
+            const trackingButtonName = submissionQuote?.selectionType === 'courtika' ? 'Parler à courtika' : 'Choisir';
+
             // Prefer userProductId over productSlug for more reliable matching
-            const params = userProductId 
-                ? { userProductId, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, emailType: 'call' } 
-                : { productSlug, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, emailType: 'call' };
+            const params = userProductId
+                ? { userProductId, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, emailType: 'call', buttonName: trackingButtonName, position: 'Results Page' }
+                : { productSlug, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, emailType: 'call', buttonName: trackingButtonName, position: 'Results Page' };
             
             // Call Fortus API to send the lead
             const result = await fortusService.requestCall(params);

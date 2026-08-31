@@ -78,10 +78,11 @@ const PersonalizeModal = ({ isOpen, onClose, userProductId, productSlug = 'car-i
                 isCustomizeRequest: true
             });
             
+            // Human-readable tracking fields (feed quote-analytics "Button/Flow" display + kill undefined logs).
             // Prefer userProductId over productSlug for more reliable matching
-            const params = userProductId 
-                ? { userProductId, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, isCustomizeRequest: true, emailType: 'call' } 
-                : { productSlug, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, isCustomizeRequest: true, emailType: 'call' };
+            const params = userProductId
+                ? { userProductId, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, isCustomizeRequest: true, emailType: 'call', buttonName: 'Personnaliser', position: 'Results Page' }
+                : { productSlug, selectedQuote: submissionQuote, recalculatedQuote, carrierCode, isCustomizeRequest: true, emailType: 'call', buttonName: 'Personnaliser', position: 'Results Page' };
             
             console.log('[CourtikaModal] Request params:', params);
             
