@@ -447,28 +447,27 @@
   margin: 0;
 }
 
-/* Loading Modal Overlay */
+/* Loading state — mirrors the Courtika modal loader: a translucent mask that
+   leaves the page readable behind it, with the card centred on top. */
 .loadingOverlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.98) !important;
-  z-index: 9999;
-  pointer-events: all;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1000;
+  padding: 20px;
 }
 
 .loadingContent {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #ffffff !important;
+  background: #ffffff;
   border-radius: 12px;
-  padding: 40px;
+  padding: 24px 40px;
+  max-width: 100%;
 }
 
 .loadingText {
@@ -476,11 +475,9 @@
   font-family: Inter, sans-serif;
   font-size: 25px;
   font-weight: 700;
-  line-height: 1.3;
+  line-height: 1;
   text-align: center;
   margin: 0 0 20px 0;
-  opacity: 1 !important;
-  background: #ffffff;
   padding: 8px 16px;
   border-radius: 8px;
 }
@@ -489,10 +486,8 @@
   width: 250px;
   height: auto;
   display: block;
-  background: #ffffff !important;
   border-radius: 10px;
   padding: 16px;
-  opacity: 1 !important;
 }
 
 /* --- Visibility Utilities --- */

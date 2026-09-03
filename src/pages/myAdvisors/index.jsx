@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { PageContent, AdvisorTypeBadge, PageHeader } from 'components';
+import { PageContent, AdvisorTypeBadge, PageHeader, RequestAdvisorModal, RequestAdvisorConfirmationPopup } from 'components';
 import { Button, Table, Spin, Tooltip } from 'antd';
 import { ArrowRightIcon, XIcon, MailIcon, PhoneIcon } from '../../components/icon';
 import { CalendarOutlined } from '@ant-design/icons';
@@ -11,6 +12,7 @@ import { Types, requestHelper } from '../../utils/helper';
 import { getAllAdvisorsUrl } from '../../apis/sharedApi';
 import { isOpenNow, getFormattedTodayHours } from '../../utils/businessHours';
 import ScheduleModal from '../../components/fallbackquote/ScheduleModal';
+import { getProductsForAdvisorType } from '../../constants/advisorCategories';
 import styles from './MyAdvisors.module.css';
 
 const MyAdvisors = () => {
@@ -18,28 +20,32 @@ const MyAdvisors = () => {
   const dispatch = useDispatch();
   const initialized = useRef(false);
   const userProfile = useSelector(state => state.app?.user_profile);
-  
+
   const [advisorsData, setAdvisorsData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+  const [isQuestionnaireModalOpen, setIsQuestionnaireModalOpen] = useState(false);
+  const [selectedAdvisorForRequest, setSelectedAdvisorForRequest] = useState(null);
+  const [selectedProductForRequest, setSelectedProductForRequest] = useState(null);
 
-  // The 3 mandatory categories we always want to show
+  // The 3 mandatory categories (products fetched from central master file)
   const MANDATORY_CATEGORIES = [
-    { 
-      key: 'insurance', 
-      type: 'Cabinet en assurance de dommages', 
+    {
+      key: 'insurance',
+      type: 'Cabinet en assurance de dommages',
       specialties: ['Assurance auto et habitation'],
       matchKeywords: ['insurance', 'auto', 'habitation', 'broker', 'courtier', 'dommage']
     },
-    { 
-      key: 'mortgage', 
-      type: 'Courtier hypothécaire', 
+    {
+      key: 'mortgage',
+      type: 'Courtier hypothécaire',
       specialties: ['Hypothèque'],
       matchKeywords: ['mortgage', 'hypothecaire', 'hypothèque', 'loan', 'prêt']
     },
-    { 
-      key: 'financial', 
-      type: 'Conseiller en sécurité financière', 
+    {
+      key: 'financial',
+      type: 'Conseiller en sécurité financière',
       specialties: ['Vie & Placements'],
       matchKeywords: ['financial', 'life', 'investment', 'vie', 'sécurité', 'placements', 'épargne']
     }
@@ -63,42 +69,46 @@ const MyAdvisors = () => {
   useEffect(() => {
     const fetchAdvisors = async () => {
       if (!userProfile?.email) return;
-      
+
       try {
         setLoading(true);
         const url = `${getAllAdvisorsUrl}?email=${userProfile.email}`;
         const response = await requestHelper(url, 'GET');
-        
+
         if (!response || !response.ok) {
           throw new Error(`HTTP error! status: ${response?.status}`);
         }
 
         const responseData = await response.json();
         const rawAdvisors = (responseData?.success && responseData.data) ? responseData.data : [];
-        
+
         // Map real data to the 3 mandatory categories
         const finalDisplayData = MANDATORY_CATEGORIES.map(cat => {
           // Find a real advisor that matches this category
-          // We check the category name/slug AND the advisor's profession (type)
           const realAdvisor = rawAdvisors.find(item => {
             const categoryName = (item.categoryName || '').toLowerCase();
             const categorySlug = (item.categorySlug || '').toLowerCase();
             const advisorType = (item.advisor?.type || '').toLowerCase();
-            
-            return cat.matchKeywords.some(keyword => 
-              categoryName.includes(keyword) || 
-              categorySlug.includes(keyword) || 
+
+            return cat.matchKeywords.some(keyword =>
+              categoryName.includes(keyword) ||
+              categorySlug.includes(keyword) ||
               advisorType.includes(keyword)
             );
           });
 
+          // Fetch products directly from central master file by advisor type
+          const assignedProducts = getProductsForAdvisorType(cat.type);
+
           if (realAdvisor) {
             return {
               key: realAdvisor.advisor?._id || cat.key,
+              categoryKey: cat.key,
               name: realAdvisor.advisor?.name,
               license: 'Active',
               type: cat.type,
               specialties: cat.specialties,
+              products: assignedProducts,
               email: realAdvisor.advisor?.email,
               phone: realAdvisor.advisor?.phone,
               calendarLink: realAdvisor.advisor?.calendarLink || '',
@@ -111,10 +121,12 @@ const MyAdvisors = () => {
             // Return empty row for this category
             return {
               key: `empty-${cat.key}`,
+              categoryKey: cat.key,
               name: null,
               license: null,
               type: cat.type,
               specialties: cat.specialties,
+              products: assignedProducts,
               email: null,
               phone: null,
               avatar: null,
@@ -123,8 +135,8 @@ const MyAdvisors = () => {
           }
         });
 
-        // Only show advisors that are NOT empty (hide unassigned categories)
-        setAdvisorsData(finalDisplayData.filter(item => !item.isEmpty));
+        // Show all mandatory categories including unassigned ones with "Demander un conseiller" button
+        setAdvisorsData(finalDisplayData);
       } catch (error) {
         console.error('Error fetching advisors:', error);
         // If error, show no advisors (hide empty categories)
@@ -141,6 +153,8 @@ const MyAdvisors = () => {
     console.log('Search register clicked');
   };
 
+  const navigate = useNavigate();
+
   const handleMessage = (advisorName) => {
     console.log(`Message ${advisorName} clicked`);
   };
@@ -150,12 +164,12 @@ const MyAdvisors = () => {
       window.open(record.calendarLink, '_blank');
     } else {
       console.log(`Book meeting with ${record?.name} clicked, but no link found`);
-      // Optional: show a message to user
     }
   };
 
-  const handleRequestAdvisor = () => {
-    console.log('Request an advisor clicked');
+  const handleRequestAdvisor = (record) => {
+    setSelectedAdvisorForRequest(record);
+    setIsRequestModalOpen(true);
   };
 
   const handleCloseAlert = () => {
@@ -180,10 +194,10 @@ const MyAdvisors = () => {
           <div className={styles.nameCell}>
             <div className={styles.avatar}>
               {record.avatar || (
-                <img 
-                  src="/images/user-placeholder.png" 
-                  alt="Avatar" 
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} 
+                <img
+                  src="/images/user-placeholder.png"
+                  alt="Avatar"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
                 />
               )}
             </div>
@@ -222,9 +236,9 @@ const MyAdvisors = () => {
       render: (text, record) => {
         if (record.isEmpty) {
           return (
-            <Button 
+            <Button
               type="default"
-              onClick={handleRequestAdvisor}
+              onClick={() => handleRequestAdvisor(record)}
               className={styles.requestButton}
             >
               Demander un conseiller
@@ -262,8 +276,8 @@ const MyAdvisors = () => {
             </svg>
             <div>
               <span className={styles.infoText}>{getFormattedTodayHours()}</span>
-              <span 
-                className={styles.infoLink} 
+              <span
+                className={styles.infoLink}
                 onClick={() => setIsScheduleOpen(true)}
               >
                 Voir l'horaire complet
@@ -280,8 +294,8 @@ const MyAdvisors = () => {
         if (record.isEmpty) return null;
         return (
           <div className={styles.actionButtons}>
-            <Button 
-              type="primary" 
+            <Button
+              type="primary"
               onClick={() => handleBookMeeting(record)}
               className={styles.bookButton}
               disabled={!record.calendarLink}
@@ -298,8 +312,8 @@ const MyAdvisors = () => {
     <PageContent pageType="myAdvisors">
       <div className={styles.myAdvisorsPage}>
         {/* Main Header */}
-        <PageHeader 
-          title="Mes conseillers" 
+        <PageHeader
+          title="Mes conseillers"
           subtitle="Voici les conseillers qui vous accompagnent."
           className={styles.header}
         />
@@ -309,7 +323,7 @@ const MyAdvisors = () => {
           {loading ? (
             <div style={{ padding: '50px', textAlign: 'center' }}><Spin size="large" /></div>
           ) : (
-            <Table 
+            <Table
               columns={columns}
               dataSource={advisorsData}
               pagination={false}
@@ -318,7 +332,7 @@ const MyAdvisors = () => {
             />
           )}
         </div>
-        
+
         {/* Mobile Advisor Cards */}
         {!loading && (
           <div className={styles.mobileCards}>
@@ -327,17 +341,17 @@ const MyAdvisors = () => {
                 <div className={styles.cardHeader}>
                   <div className={styles.avatar}>
                     {advisor.isEmpty ? (
-                      <img 
-                        src="/images/user-placeholder.png" 
-                        alt="Placeholder" 
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} 
+                      <img
+                        src="/images/user-placeholder.png"
+                        alt="Placeholder"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
                       />
                     ) : (
                       advisor.avatar || (
-                        <img 
-                          src="/images/user-placeholder.png" 
-                          alt="Placeholder" 
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} 
+                        <img
+                          src="/images/user-placeholder.png"
+                          alt="Placeholder"
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
                         />
                       )
                     )}
@@ -359,7 +373,7 @@ const MyAdvisors = () => {
                   <div className={styles.cardBadge}>
                     <AdvisorTypeBadge type={advisor.type} />
                   </div>
-                  
+
                   <div className={styles.cardSpecialties}>
                     {Array.isArray(advisor.specialties) ? advisor.specialties.join(', ') : advisor.specialties}
                   </div>
@@ -367,7 +381,7 @@ const MyAdvisors = () => {
                   {!advisor.isEmpty && (
                     <div className={styles.cardContact}>
                       <div className={styles.contactItem}>
-                         <MailIcon size={14} />
+                        <MailIcon size={14} />
                         <span>{advisor.email}</span>
                       </div>
                       <div className={styles.contactItem}>
@@ -384,17 +398,17 @@ const MyAdvisors = () => {
 
                 <div className={styles.cardFooter}>
                   {advisor.isEmpty ? (
-                    <Button 
+                    <Button
                       type="default"
-                      onClick={handleRequestAdvisor}
+                      onClick={() => handleRequestAdvisor(advisor)}
                       className={styles.mobileRequestButton}
                     >
                       Demander un conseiller
                     </Button>
                   ) : (
-                    <Button 
-                      type="primary" 
-                      onClick={() => handleBookMeeting(advisor.name)}
+                    <Button
+                      type="primary"
+                      onClick={() => handleBookMeeting(advisor)}
                       className={styles.mobileBookButton}
                     >
                       Réserver une rencontre
@@ -407,6 +421,30 @@ const MyAdvisors = () => {
         )}
       </div>
       <ScheduleModal isOpen={isScheduleOpen} onClose={() => setIsScheduleOpen(false)} />
+
+      {/* Step 1: Product Selection Modal */}
+      <RequestAdvisorModal
+        isOpen={isRequestModalOpen}
+        onClose={() => setIsRequestModalOpen(false)}
+        advisorRecord={selectedAdvisorForRequest}
+        onSelectProduct={(product) => {
+          setIsRequestModalOpen(false);
+          setSelectedProductForRequest(product);
+          setIsQuestionnaireModalOpen(true);
+        }}
+      />
+
+      {/* Step 2: Request Advisor Confirmation Popup */}
+      <RequestAdvisorConfirmationPopup
+        isOpen={isQuestionnaireModalOpen}
+        onClose={() => setIsQuestionnaireModalOpen(false)}
+        onBack={() => {
+          setIsQuestionnaireModalOpen(false);
+          setIsRequestModalOpen(true);
+        }}
+        advisorRecord={selectedAdvisorForRequest}
+        selectedProduct={selectedProductForRequest}
+      />
     </PageContent>
   );
 };

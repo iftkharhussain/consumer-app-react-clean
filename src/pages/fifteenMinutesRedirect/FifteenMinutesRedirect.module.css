@@ -134,9 +134,11 @@
   0% {
     box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
   }
+
   70% {
     box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
   }
+
   100% {
     box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
   }
@@ -146,9 +148,11 @@
   0% {
     box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
   }
+
   70% {
     box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
   }
+
   100% {
     box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
   }
@@ -205,28 +209,42 @@
 }
 
 .primaryButton {
+  display: flex;
   width: 100%;
-  height: 56px;
-  border-radius: 8px;
-  background-color: #1f01c8 !important;
-  font-size: 16px;
-  font-weight: 600;
-  display: flex !important;
+  padding: 14px 16px;
+  align-items: flex-start;
+  gap: 8.039px;
+  border-radius: 10px;
+  background: #1A1ABA;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.10), 0 1px 2px -1px rgba(0, 0, 0, 0.10);
+  border: none;
+  cursor: pointer;
+}
+
+.primaryButtonText {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: white !important;
-  border: none;
   gap: 8px;
+  color: #FFF;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 22.5px;
+  letter-spacing: -0.234px;
 }
 
-.primaryButton:hover {
-  background-color: #18009e !important;
-}
 
 .buttonSubtext {
-  font-size: 12px;
-  color: #6b7280;
+  color: #697586;
   text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 19.5px;
   margin-top: 12px;
 }
 
@@ -360,13 +378,17 @@
   white-space: normal !important;
   border-radius: 8px;
   background-color: white !important;
+  font-family: 'Inter', sans-serif;
   font-size: 15px;
+  font-style: normal;
   font-weight: 600;
+  line-height: 22.5px;
+  letter-spacing: -0.234px;
   display: flex !important;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  color: #374151 !important;
+  color: #121926 !important;
   border: 1px solid #d1d5db !important;
   box-shadow: none !important;
 }
@@ -542,27 +564,29 @@
   .desktopOnly {
     display: none !important;
   }
-  
+
   .mobileOnly {
     display: flex !important;
   }
 
   .container {
-    padding: 24px 16px;
+    padding: 20px 14px;
     box-sizing: border-box;
     width: 100%;
     overflow-x: hidden;
   }
 
-  .card, .aboutCard {
-    padding: 16px 12px;
+  .card,
+  .aboutCard {
+    padding: 20px 14px;
     box-sizing: border-box;
     width: 100%;
+    border-radius: 12px;
   }
 
   .clockIconWrapper {
-    width: 48px;
-    height: 48px;
+    width: 52px;
+    height: 52px;
     margin-bottom: 16px;
   }
 
@@ -571,22 +595,26 @@
   }
 
   .mainTitle {
-    font-size: 20px; /* Reduced further to stop forced stretching */
+    font-size: 22px;
+    line-height: 1.3;
+    margin-bottom: 12px;
   }
 
   .subTitle {
-    font-size: 13px;
-    margin-bottom: 24px;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 20px;
     word-break: break-word;
     white-space: normal;
   }
 
   .infoButton {
     display: flex;
-    flex-wrap: wrap; /* Allows text and icon to wrap instead of overflowing */
+    flex-wrap: wrap;
     font-size: 13px;
-    padding: 12px;
-    margin-bottom: 24px;
+    line-height: 1.4;
+    padding: 10px 14px;
+    margin-bottom: 20px;
     width: 100%;
     box-sizing: border-box;
     justify-content: center;
@@ -595,87 +623,465 @@
     word-break: break-word;
   }
 
-  .cardTitleCenter, .submittedCardTitle {
-    font-size: 16px;
+  .cardTitleCenter,
+  .submittedCardTitle {
+    font-size: 17px;
     text-align: center;
+    line-height: 1.3;
+    margin-bottom: 18px;
   }
 
-  .brokerHeader, .statusSectionLeft {
-    flex-direction: column;
+  .brokerHeader {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .courtikaLogoBox,
+  .courtikaLogoBoxLeft {
+    width: auto;
+    max-width: 160px;
+    height: 44px;
+    padding: 6px 14px;
+  }
+
+  .statusInfo,
+  .statusInfoLeft {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .statusSectionLeft {
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
     gap: 12px;
-  }
-
-  .courtikaLogoBox, .courtikaLogoBoxLeft {
-    width: 100%;
-    max-width: 100%; /* Better scaling below 200px */
-  }
-
-  .statusInfo, .statusInfoLeft {
-    align-items: center;
-    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 18px;
   }
 
   .successBanner {
-    padding: 16px;
+    padding: 14px 16px;
     align-items: flex-start;
+    margin-bottom: 20px;
+    gap: 10px;
   }
 
-  .primaryButton, .secondaryOutlineButton {
-    min-height: 44px;
-    padding: 8px 12px;
+  .successTitle {
     font-size: 14px;
-    text-wrap: wrap;
-    white-space: normal;
-    height: auto;
   }
 
-  .buttonSubtext {
-    font-size: 11px;
-    margin-top: 8px;
-  }
-
-  .aboutTitle {
-    font-size: 16px;
-  }
-
-  .aboutText, .infoText {
+  .successText {
     font-size: 13px;
+    line-height: 1.4;
   }
 
+  .reasonsBox,
   .benefitsBox {
-    padding: 16px;
+    padding: 16px 14px;
     box-sizing: border-box;
     width: 100%;
+    margin-bottom: 20px;
+    border-radius: 8px;
+  }
+
+  .reasonsTitle,
+  .benefitsBoxTitle {
+    font-size: 14px;
+    margin-bottom: 12px;
   }
 
   .reasonsList li,
   .benefitsBoxList li {
     font-size: 13px;
+    line-height: 1.45;
     align-items: flex-start;
+    gap: 10px;
+  }
+
+  .primaryButton,
+  .secondaryOutlineButton {
+    min-height: 48px;
+    height: auto !important;
+    padding: 12px 16px;
+    font-size: 15px;
+    white-space: normal;
+    text-wrap: wrap;
+    border-radius: 10px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .primaryButtonText {
+    font-size: 15px;
+    justify-content: center;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .buttonSubtext {
+    color: #697586;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 19.5px;
+    margin-top: 10px;
+  }
+
+  .aboutTitle {
+    font-size: 17px;
+    margin-bottom: 8px;
+  }
+
+  .aboutText,
+  .infoText {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .infoList {
+    gap: 14px;
+    margin-bottom: 24px;
   }
 
   .certificationSection {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    padding-top: 18px;
   }
 
   .amfImageLogo {
     max-width: 100px;
+    max-height: 40px;
   }
-  
+
+  .certTitle {
+    font-size: 13px;
+  }
+
+  .certSubtitle {
+    font-size: 12px;
+  }
+
   .loadingText {
     font-size: 20px;
     padding: 6px 12px;
   }
-  
+
   .loadingGif {
     width: 180px;
     padding: 12px;
   }
-  
+
   .loadingContent {
     padding: 24px;
+  }
+}
+
+/* ===== OPTION CARDS (Radio Selection UI) ===== */
+
+.proceedTitle {
+  color: #121926;
+  font-family: 'Inter';
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: -0.31px;
+  /* margin: 28px 0 14px 0;
+  text-align: left; */
+}
+
+.optionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.optionCard {
+  display: flex;
+  height: 78px;
+  padding: 18px 25.633px 18px 18px;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  align-self: stretch;
+  border-radius: 10px;
+  border: 2px solid #E9EAEB;
+  background: #FFF;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+
+.optionCardSelected {
+  display: flex;
+  padding: 18px 25.633px 18px 18px;
+  align-items: center;
+  justify-content: space-between;
+  align-self: stretch;
+  border-radius: 10px;
+  border: 2px solid #1A1ABA;
+  background: rgba(26, 26, 186, 0.05);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.optionLeftGroup {
+  display: flex;
+  height: 42px;
+  align-items: center;
+  gap: 12px;
+}
+
+.optionRadio {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16777200px;
+  border: 2px solid #D5D7DA;
+  background: transparent;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.optionCardSelected .optionRadio {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16777200px;
+  border: 2px solid #1A1ABA;
+  background: #1A1ABA;
+}
+
+.optionRadioDot {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border-radius: 16777200px;
+  background: transparent;
+}
+
+.optionRadioDotSelected {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border-radius: 16777200px;
+  background: #FFF;
+}
+
+.optionIcon {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background: #f3f4f6;
+  color: #6b7280;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.optionIconSelected {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background: #1A1ABA;
+  color: #ffffff;
+}
+
+.optionText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+
+.optionLabel {
+  color: #121926;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 22.5px;
+  letter-spacing: -0.234px;
+}
+
+.optionSubLabel {
+  color: #535862;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 19.5px;
+  letter-spacing: -0.076px;
+}
+
+.optionBadge {
+  display: flex;
+  width: 172.367px;
+  height: 26px;
+  padding: 4px 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 16777200px;
+  background: #DCFCE7;
+  color: #008236;
+  font-family: 'Inter';
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 18px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: auto;
+  box-sizing: border-box;
+}
+
+.optionBadgeDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  display: inline-block;
+  animation: pulseOpen 2s infinite;
+}
+
+.btnLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .proceedTitle {
+    font-size: 15px;
+    margin: 20px 0 12px 0;
+    text-align: left;
+  }
+
+  .optionsContainer {
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .optionCard,
+  .optionCardSelected {
+    height: auto !important;
+    min-height: 64px;
+    padding: 12px 14px;
+    gap: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .optionLeftGroup {
+    height: auto !important;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .optionText {
+    flex: 1;
+    min-width: 0;
+    word-break: break-word;
+  }
+
+  .optionLabel {
+    font-size: 14px;
+    line-height: 1.3;
+    font-weight: 600;
+  }
+
+  .optionSubLabel {
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  .optionBadge {
+    width: auto !important;
+    height: auto !important;
+    max-width: 100%;
+    font-size: 11px;
+    padding: 4px 10px;
+    margin-left: auto;
+    flex-shrink: 0;
+    white-space: nowrap;
+    border-radius: 20px;
+  }
+
+  .optionIcon,
+  .optionIconSelected {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 16px 10px;
+  }
+
+  .card,
+  .aboutCard {
+    padding: 16px 12px;
+  }
+
+  .mainTitle {
+    font-size: 19px;
+  }
+
+  .optionCard,
+  .optionCardSelected {
+    padding: 10px 12px;
+  }
+
+  .optionLabel {
+    font-size: 13px;
+  }
+
+  .optionSubLabel {
+    font-size: 11px;
+  }
+
+  .optionBadge {
+    font-size: 10px;
+    padding: 3px 8px;
   }
 }

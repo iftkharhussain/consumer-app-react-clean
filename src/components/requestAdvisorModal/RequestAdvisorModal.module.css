@@ -1,0 +1,267 @@
+/* Request Advisor Pop-up Modal Styles (100% Pure Custom Div Modal - Zero Ant Design Classes) */
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(16, 24, 40, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modalCard {
+  display: flex;
+  height: auto;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-shrink: 0;
+  border-radius: 16px;
+  background: #FFF;
+  box-shadow: 0 20px 60px 0 rgba(10, 13, 18, 0.18);
+  animation: scaleUp 0.2s ease-out;
+}
+
+/* Div 1: Header (Title Text & Cross Icon in one Div) */
+.modalHeader {
+  display: flex;
+  padding: 20px 24px;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  border-bottom: 1.084px solid #E9EAEB;
+  position: relative;
+  width: 100%;
+}
+
+.requestModalTitle {
+  color: #121926;
+  font-family: Inter;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px;
+  width: 388px;
+  margin: 0;
+}
+
+.closeButton {
+  position: absolute;
+  top: 28px;
+  right: 37px;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.closeButton:hover {
+  opacity: 0.7;
+}
+
+/* Div 2: Products Selection Container */
+.productsContainer {
+  width: 100%;
+  padding: 24px;
+  flex-shrink: 0;
+  align-self: stretch;
+}
+
+.requestModalGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 11px;
+}
+
+.productCard {
+  border-radius: 14px;
+  border: 1px solid #E9EAEB;
+  background: #FFF;
+  box-shadow: 0 1px 3px 0 rgba(10, 13, 18, 0.07);
+  display: flex;
+  width: 215px;
+  padding: 20px;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.productCard:hover {
+  border-color: #1A1ABA;
+
+}
+
+.productIconWrapper {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.productIcon {
+  max-width: 44px;
+  max-height: 44px;
+  object-fit: contain;
+}
+
+.productTitle {
+  color: #181D27;
+  text-align: center;
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 18px;
+  margin-bottom: 4px;
+}
+
+.productSubtitle {
+  color: #9AA0AB;
+  text-align: center;
+  font-family: Inter, sans-serif;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleUp {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Mobile Screen Styles (<= 768px) - Bottom Sheet Popup matching design */
+@media (max-width: 768px) {
+  .modalOverlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .modalCard {
+    max-width: 100vw;
+    width: 100vw;
+    height: auto;
+    border-radius: 18px 18px 0 0;
+    padding: 0;
+    box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.15);
+    animation: slideUp 0.25s ease-out;
+  }
+
+  .requestModalTitle {
+    width: 291px;
+    color: #121926;
+    font-family: Inter, sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 28px;
+  }
+
+  .closeButton {
+    width: 15.988px;
+    height: 15.988px;
+  }
+
+  .productsContainer {
+    height: auto;
+    padding: 16px 16px 24px 16px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .requestModalGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .productCard {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 16px 10px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .productIconWrapper {
+    width: 39.986px;
+    height: 39.986px;
+    flex-shrink: 0;
+    margin-bottom: 8px;
+  }
+
+  .productIcon {
+    max-width: 38px;
+    max-height: 38px;
+  }
+
+  .productTitle {
+    color: #181D27;
+    text-align: center;
+    font-family: Inter;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 18px;
+    /* 138.462% */
+  }
+
+  .productSubtitle {
+    color: #9AA0AB;
+    text-align: center;
+    font-family: Inter, sans-serif;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    /* width: 129px; */
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+
+    to {
+      transform: translateY(0);
+    }
+  }
+}

@@ -708,20 +708,21 @@ const ScheduleConfirmation = () => {
         </div>
       </div>
       
-      {/* Loading Modal Overlay */}
+      {/* Transmitting the lead to the broker. Modal-style mask so the page stays
+          readable behind it, matching the Courtika modal loader. */}
       {isLoading && (
-        <div className={styles.loadingOverlay} style={{ background: '#ffffff' }}>
-          <div className={styles.loadingContent} style={{ background: '#ffffff' }}>
+        <div className={styles.loadingOverlay}>
+          <div className={styles.loadingContent}>
             <h3 className={styles.loadingText}>Nous transmettons vos informations au courtier..</h3>
-            <img 
-              src="/images/39259805852ef0453b2b0f98eee91406934e42f6.gif" 
-              alt="Loading" 
+            <img
+              src="/images/39259805852ef0453b2b0f98eee91406934e42f6.gif"
+              alt="Chargement"
               className={styles.loadingGif}
             />
           </div>
         </div>
       )}
-      
+
       <ScheduleModal isOpen={isScheduleOpen} onClose={() => setIsScheduleOpen(false)} />
     </PageContent>
   );

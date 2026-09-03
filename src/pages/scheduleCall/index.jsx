@@ -45,6 +45,45 @@ const ScheduleCall = () => {
     }
   }, [userProductId]);
 
+  // Keep this page pinned to the top. React Router carries the previous page's
+  // scroll offset over, and on history-back the browser restores its own saved
+  // offset -- both drop the user into the middle of this very tall page.
+  // Taking scroll restoration over while we're here covers the "Retour" case
+  // without touching the page we return to.
+  useEffect(() => {
+    const supportsRestoration = 'scrollRestoration' in window.history;
+    const previousRestoration = supportsRestoration ? window.history.scrollRestoration : null;
+
+    if (supportsRestoration) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
+    return () => {
+      if (!supportsRestoration) return;
+      // Hand control back only once the pending navigation has settled -- restoring
+      // it synchronously here lets the browser re-apply the old offset on the way out.
+      setTimeout(() => {
+        window.history.scrollRestoration = previousRestoration;
+      }, 1000);
+    };
+  }, []);
+
+  // Chrome applies its saved scroll offset *after* the history traversal, so a
+  // single scrollTo before navigating gets overwritten. Re-assert the top across
+  // the next few frames; these callbacks outlive this component on purpose.
+  const goBackToTop = () => {
+    const toTop = () => window.scrollTo(0, 0);
+
+    toTop();
+    navigate(-1);
+
+    requestAnimationFrame(toTop);
+    setTimeout(toTop, 0);
+    setTimeout(toTop, 120);
+    setTimeout(toTop, 300);
+  };
+
   useEffect(() => {
     // Load Calendly script dynamically (only once)
     if (!calendlyLoaded.current) {
@@ -75,8 +114,16 @@ const ScheduleCall = () => {
 
     // Always register event listener to detect when user schedules a meeting
     const handleCalendlyEvent = (e) => {
+      if (e.origin !== 'https://calendly.com' || !e.data) return;
+
+      // Calendly swaps steps inside the iframe without a route change, so the
+      // page keeps whatever offset it had and the new step renders off-screen.
+      if (typeof e.data.event === 'string' && e.data.event.startsWith('calendly.')) {
+        window.scrollTo(0, 0);
+      }
+
       // Check if message is from Calendly
-      if (e.origin === 'https://calendly.com' && e.data && e.data.event === 'calendly.event_scheduled') {
+      if (e.data.event === 'calendly.event_scheduled') {
         console.log('[ScheduleCall] Event scheduled detected from Calendly postMessage');
         // We set redirected to true to avoid duplicate logic
         if (!redirected.current) {
@@ -98,7 +145,7 @@ const ScheduleCall = () => {
   return (
     <PageContent pageType="overview">
       <div className={styles.container}>
-        <button className={styles.backButton} onClick={() => navigate(-1)}>
+        <button className={styles.backButton} onClick={goBackToTop}>
           <img src="/images/left-arrow.svg" alt="Back" className={styles.backIcon} /> Retour
         </button>
 
